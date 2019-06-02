@@ -3,9 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.0.1",
+    "@material-ui/icons": "^4.0.1",
     "nw-react-scripts": "2.0.0",
+    "prettier": "^1.17.1",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-logger": "^1.1.0",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-starter-kit": "^0.5.1",
+    "typeface-raleway": "^0.0.54",
+    "typeface-roboto": "^0.0.54"
   },
   "scripts": {
     "start": "nw-react-scripts start",
@@ -35,5 +45,11 @@
     "buildDir": "./build",
     "cacheDir": "./cache",
     "macIcns": "./src/logo.icns"
-  }
+  },
+  "window": {
+    "width": 1080,
+    "height": 720,
+    "resizable": false
+  },
+  "chromium-args": "--enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0'"
 }

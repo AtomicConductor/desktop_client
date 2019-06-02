@@ -1,0 +1,12 @@
+downloader.
+
+NON-daemon mode:
+
+
+
+
+1. I can specify a list of job_ids to download.
+2. If I specify a task_id, I must specify exactly ONE job_id.
+3. 
+
+
