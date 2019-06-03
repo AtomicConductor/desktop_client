@@ -16,6 +16,8 @@ import Power from "@material-ui/icons/Power";
 
 import ListIcon from "@material-ui/icons/List";
 import HelpIcon from "@material-ui/icons/Help";
+import CtDrawerMenuItem from  "./CtDrawerMenuItem"
+
 
 
 import "typeface-raleway";
@@ -81,24 +83,11 @@ function CtDrawer() {
           <ListItemText primary="Login" />
         </ListItem>
         <Divider />
-        <ListItem button key="Downloader" dense selected>
-          <ListItemIcon>
-            <CloudDownload />
-          </ListItemIcon>
-          <ListItemText primary="Downloader" />
-        </ListItem>
-        <ListItem button key="Uploader" dense>
-          <ListItemIcon>
-            <CloudUpload />
-          </ListItemIcon>
-          <ListItemText primary="Uploader" />
-        </ListItem>
-        <ListItem button key="Plugins" dense>
-          <ListItemIcon>
-            <Power />
-          </ListItemIcon>
-          <ListItemText primary="Plugins" />
-        </ListItem>
+
+        <CtDrawerMenuItem url="/downloader" label="Downloader" icon={<CloudDownload />} />
+        <CtDrawerMenuItem url="/uploader" label="Uploader" icon={<CloudUpload />} />
+        <CtDrawerMenuItem url="/plugins" label="Plugins" icon={<Power />} />
+      
       </List>
       <Divider />
       <List>

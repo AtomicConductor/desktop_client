@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtAppBar = props => {
+const CtPluginsAppBar = props => {
   const classes = useStyles();
 
   const {drawerIsOpen, onToggleDrawer} = props
@@ -47,7 +47,7 @@ const CtAppBar = props => {
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          Downloader
+          Plugins
         </Typography>
         <IconButton
           color="inherit"
@@ -71,15 +71,15 @@ const CtAppBar = props => {
 
 
 
-CtAppBar.propTypes = {
+CtPluginsAppBar.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
   onToggleDrawer: PropTypes.func.isRequired
 };
 
-// CtAppBar.defaultProps = {
+// CtPluginsAppBar.defaultProps = {
 //   drawerIsOpen: false
 // };
 
 
 
-export default CtAppBar;
+export default CtPluginsAppBar;
