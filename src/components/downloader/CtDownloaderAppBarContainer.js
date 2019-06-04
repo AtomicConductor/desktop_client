@@ -1,17 +1,17 @@
 import { connect } from "react-redux";
 import CtDownloaderAppBar from "./CtDownloaderAppBar";
-import { toggleDrawer } from "../../actions/ui";
+import { dlToggleDrawer } from "../../_actions/downloader";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    drawerIsOpen:  state.ui.downloader.drawerOpen
+    drawerIsOpen:  state.downloader.drawerOpen
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onToggleDrawer: () => {
-      dispatch(toggleDrawer());
+      dispatch(dlToggleDrawer());
     }
   };
 };

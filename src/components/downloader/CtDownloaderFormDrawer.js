@@ -13,12 +13,10 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-
-
+ 
 import ListItemText from '@material-ui/core/ListItemText' 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction' 
-
+import CtDlFormJobFieldContainer from "./CtDlFormJobFieldContainer"
 
 const drawerWidth = 400;
 
@@ -92,24 +90,20 @@ const CtDownloaderFormDrawer = props => {
   const classes = useStyles();
   // const [open, setOpen] = React.useState(true);
 
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true
-  });
+  // const [state, setState] = React.useState({
+  //   checkedA: true,
+  //   checkedB: true
+  // });
 
-  // function handleDrawerOpen() {
-  //   setOpen(true);
-  // }
 
-  // function handleDrawerClose() {
-  //   setOpen(false);
-  // }
+  // const handleChange = name => event => {
 
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
-  };
+  //   setState({ ...state, [name]: event.target.checked });
+  // };
 
-  const {drawerIsOpen} = props
+
+
+  const {drawerIsOpen, useDaemon, onToggleUseDaemon} = props
 
   return (
     <div className={classes.root}>
@@ -131,41 +125,35 @@ const CtDownloaderFormDrawer = props => {
             <ListItemText primary="Use Daemon" />
             <ListItemSecondaryAction>
               <Switch
-                checked={state.checkedA}
-                onChange={handleChange("checkedA")}
-                value="checkedA"
+                checked={useDaemon}
+                onChange={onToggleUseDaemon}
+                
               />
             </ListItemSecondaryAction>
           </ListItem>
 
           <ListItem dense>
             <TextField
-
+              disabled={useDaemon}
               fullWidth
               id="standard-with-placeholder"
               label="Task Id"
-              placeholder="e.g 010"
+              placeholder="Leave blank to download all files"
               className={classes.textField}
               margin="normal"
             />
           </ListItem>
-          <ListItem dense>
-            <TextField
-              fullWidth
-              id="standard-with-placeholder"
-              label="Job Id"
-              placeholder="e.g 00873"
-              className={classes.textField}
-              margin="normal"
-            />
-          </ListItem>
+ 
 
+            <CtDlFormJobFieldContainer disabled={useDaemon} placeholder="Enter one or more Job Ids"/>
+ 
           <ListItem  dense>
             <TextField
-              fullWidth
+            disabled={useDaemon}
+             fullWidth
               id="standard-with-placeholder"
               label="Project"
-              placeholder="e.g Spiderman"
+              placeholder="Conductor project (optional)"
               className={classes.textField}
               margin="normal"
             />
@@ -173,10 +161,11 @@ const CtDownloaderFormDrawer = props => {
 
           <ListItem dense>
             <TextField
+            disabled={useDaemon}
               fullWidth
               id="standard-with-placeholder"
-              label="Location"
-              placeholder="e.g Montreal"
+              label="Location tag"
+              placeholder="Download jobs tagged with a location (optional)"
               className={classes.textField}
               margin="normal"
             />
@@ -184,10 +173,11 @@ const CtDownloaderFormDrawer = props => {
 
           <ListItem dense>
             <TextField
+            disabled={useDaemon}
               fullWidth
               id="standard-with-placeholder"
               label="Output path"
-              placeholder="e.g /usr/tmp"
+              placeholder="Override the output path (optional)"
               className={classes.textField}
               margin="normal"
             />
@@ -195,6 +185,7 @@ const CtDownloaderFormDrawer = props => {
 
           <Box className={classes.box}>
             <Button
+            disabled={useDaemon}
               variant="outlined"
               className={classes.button}
               color="secondary"
@@ -210,7 +201,10 @@ const CtDownloaderFormDrawer = props => {
 
 
 CtDownloaderFormDrawer.propTypes = {
-  drawerIsOpen: PropTypes.bool.isRequired 
+  drawerIsOpen: PropTypes.bool.isRequired,
+  useDaemon: PropTypes.bool.isRequired,
+  onToggleUseDaemon: PropTypes.func.isRequired
+   
 };
 
 

@@ -4,10 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-import clsx from "clsx";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -56,7 +53,7 @@ const CtDownloaderAppBar = props => {
           // className={clsx(open && classes.hide)}
           onClick={onToggleDrawer}
         >
-          {props.drawerIsOpen ? (
+          {drawerIsOpen ? (
           <ChevronRightIcon />
         ) : (
           <MenuIcon  />

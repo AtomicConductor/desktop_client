@@ -8,6 +8,7 @@
     "nw-react-scripts": "2.0.0",
     "prettier": "^1.17.1",
     "react": "^16.8.6",
+    "react-autosuggest": "^9.4.3",
     "react-dom": "^16.8.6",
     "react-logger": "^1.1.0",
     "react-redux": "^7.0.3",
@@ -45,10 +46,10 @@
     "flavor": "normal",
     "buildDir": "./build",
     "cacheDir": "./cache",
-    "macIcns": "./src/logo.icns"
+    "macIcns": "./src/conductor.icns"
   },
   "window": {
-    "width": 1080,
+    "width": 1280,
     "height": 720,
     "resizable": false
   },

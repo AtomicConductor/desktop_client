@@ -7,8 +7,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import { withRouter } from "react-router-dom";
 
-
-
 /*
   A single menu item.
   The component is wrapped in a withRouter HOC which
@@ -19,14 +17,12 @@ import { withRouter } from "react-router-dom";
 
 const CtDrawerMenuItem = props => {
   const { url, label, icon, history } = props;
-
   const onClick = () => {
-    console.log(`Pushing ${url}`)
     history.push(url);
   };
 
   return (
-    <ListItem button dense onClick={onClick}>
+    <ListItem button dense selected={history.location.pathname === url} onClick={onClick}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={label} />
     </ListItem>

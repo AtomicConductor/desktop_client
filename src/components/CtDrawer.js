@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -12,6 +11,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import CloudDownload from "@material-ui/icons/CloudDownload";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+
 import Power from "@material-ui/icons/Power";
 
 import ListIcon from "@material-ui/icons/List";
@@ -76,29 +77,24 @@ function CtDrawer() {
 
       <Divider />
       <List>
-        <ListItem button key="Login" dense>
-          <ListItemIcon>
-            <AccountCircle />
-          </ListItemIcon>
-          <ListItemText primary="Login" />
-        </ListItem>
-        <Divider />
-
+ 
+        <CtDrawerMenuItem url="/dashboard" label="Dashboard" icon={<DashboardIcon />} />
         <CtDrawerMenuItem url="/downloader" label="Downloader" icon={<CloudDownload />} />
         <CtDrawerMenuItem url="/uploader" label="Uploader" icon={<CloudUpload />} />
         <CtDrawerMenuItem url="/plugins" label="Plugins" icon={<Power />} />
+        <CtDrawerMenuItem url="/account" label="Account" icon={<AccountCircle />} />
       
       </List>
       <Divider />
       <List>
-        <ListItem button key="Logs" dense>
+        <ListItem dense>
           <ListItemIcon>
             <ListIcon />
           </ListItemIcon>
           <ListItemText primary="Logs" />
         </ListItem>
 
-        <ListItem button key="Help" dense>
+        <ListItem  dense>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>

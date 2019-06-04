@@ -10,3 +10,4 @@ NON-daemon mode:
 3. 
 
 
+  "chromium-args": "--enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0'"
