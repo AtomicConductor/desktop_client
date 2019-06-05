@@ -5,14 +5,13 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
- 
+
   title: {
     flexGrow: 1
   },
@@ -21,7 +20,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: drawerWidth,
     zIndex: 1301
   }
-  
 }));
 
 const CtPluginsAppBar = props => {
@@ -36,9 +34,6 @@ const CtPluginsAppBar = props => {
       </Toolbar>
     </AppBar>
   );
-}
-
-
-
+};
 
 export default CtPluginsAppBar;

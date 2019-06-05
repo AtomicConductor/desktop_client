@@ -1,11 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import CtDrawer from "./CtDrawer";
-import CtDownloader from "./downloader/CtDownloader";
-import CtUploader from "./uploader/CtUploader";
-import CtPlugins from "./plugins/CtPlugins";
-import CtDashboard from "./dashboard/CtDashboard";
+import CtDownloader from "../downloader/CtDownloader";
+import CtUploader from "../uploader/CtUploader";
+import CtPlugins from "../plugins/CtPlugins";
+import CtDashboard from "../dashboard/CtDashboard";
 import {
   BrowserRouter as Router,
   Route,
@@ -36,19 +38,19 @@ function CtLayout() {
             path="/downloader"
             render={props => <CtDownloader {...props} />}
           />
-          <Route
-            path="/uploader"
-            render={props => <CtUploader {...props} />}
-          />
-          <Route
-            path="/plugins"
-            render={props => <CtPlugins {...props} />}
-          />
+          <Route path="/uploader" render={props => <CtUploader {...props} />} />
+          <Route path="/plugins" render={props => <CtPlugins {...props} />} />
           <Redirect push to="/dashboard" />
         </Switch>
       </div>
     </Router>
   );
 }
+
+CtLayout.propTypes = {
+  // url: PropTypes.string.isRequired,
+  // label: PropTypes.string.isRequired,
+  // icon: PropTypes.element.isRequired
+};
 
 export default CtLayout;

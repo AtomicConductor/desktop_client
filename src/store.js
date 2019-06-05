@@ -1,9 +1,9 @@
-import { configureStore } from 'redux-starter-kit'
+import { configureStore } from "redux-starter-kit";
 import ctReducer from "./_reducers/root";
-
+// import loggerMiddleware from "./middleware/logger";
 
 const store = configureStore({
-  reducer: ctReducer
-})
+    reducer: ctReducer
+});
 
-export default store
+export default store;
