@@ -1,6 +1,7 @@
 {
-  "short_name": "NW.js React App",
-  "name": "Create NW.js React App Sample",
+  "short_name": "Conductor",
+  "name": "ConductorClient",
+  "nodejs": true,
   "icons": [
     {
       "src": "favicon.ico",

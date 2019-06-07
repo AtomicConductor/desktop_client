@@ -1,13 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import CtDrawer from "./CtDrawer";
+import CtDrawerContainer from "./CtDrawerContainer";
 import CtDownloader from "../downloader/CtDownloader";
 import CtUploader from "../uploader/CtUploader";
 import CtPlugins from "../plugins/CtPlugins";
+import CtAccountContainer from "../account/CtAccountContainer";
+
 import CtDashboard from "../dashboard/CtDashboard";
+import CtInfo from "../info/CtInfo";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -21,14 +24,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CtLayout() {
+const CtLayout = () => {
   const classes = useStyles();
 
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <CtDrawer />
+        <CtDrawerContainer />
+
         <Switch>
           <Route
             path="/dashboard"
@@ -40,17 +44,17 @@ function CtLayout() {
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
           <Route path="/plugins" render={props => <CtPlugins {...props} />} />
+          <Route path="/info" render={props => <CtInfo {...props} />} />
+          <Route
+            path="/account"
+            render={props => <CtAccountContainer {...props} />}
+          />
+
           <Redirect push to="/dashboard" />
         </Switch>
       </div>
     </Router>
   );
-}
-
-CtLayout.propTypes = {
-  // url: PropTypes.string.isRequired,
-  // label: PropTypes.string.isRequired,
-  // icon: PropTypes.element.isRequired
 };
 
 export default CtLayout;

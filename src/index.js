@@ -6,9 +6,12 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { fetchEnvironment } from "./_actions/environment";
+import { provision } from "./_actions/environment";
+import { fetchProfile } from "./_actions/profile";
 
-store.dispatch(fetchEnvironment());
+store.dispatch(provision());
+
+store.dispatch(fetchProfile());
 
 ReactDOM.render(
     <Provider store={store}>

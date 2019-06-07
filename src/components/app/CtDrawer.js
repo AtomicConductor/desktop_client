@@ -1,25 +1,27 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
+
 import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
-import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import CloudDownload from "@material-ui/icons/CloudDownload";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 
 import Power from "@material-ui/icons/Power";
 
-import ListIcon from "@material-ui/icons/List";
 import HelpIcon from "@material-ui/icons/Help";
-import CtDrawerMenuItem from  "./CtDrawerMenuItem"
+import InfoIcon from "@material-ui/icons/Info";
 
-
+import CtDrawerMenuItem from "./CtDrawerMenuItem";
+import CtDrawerAccountMenuItem from "./CtDrawerAccountMenuItem";
 
 import "typeface-raleway";
 
@@ -56,11 +58,19 @@ const useStyles = makeStyles(theme => ({
 
     verticalAlign: "middle",
     m: 1
+  },
+  spacer: {
+    display: "flex",
+    flexGrow: "1",
+    flexDirection: "column"
   }
 }));
 
-function CtDrawer() {
+const CtDrawer = props => {
   const classes = useStyles();
+
+  const { profile } = props;
+  const loggedIn = !!Object.entries(profile.user).length;
 
   return (
     <Drawer
@@ -76,35 +86,64 @@ function CtDrawer() {
       </ListItem>
 
       <Divider />
-      <List>
- 
-        <CtDrawerMenuItem url="/dashboard" label="Dashboard" icon={<DashboardIcon />} />
-        <CtDrawerMenuItem url="/downloader" label="Downloader" icon={<CloudDownload />} />
-        <CtDrawerMenuItem url="/uploader" label="Uploader" icon={<CloudUpload />} />
-        <CtDrawerMenuItem url="/plugins" label="Plugins" icon={<Power />} />
-        <CtDrawerMenuItem url="/account" label="Account" icon={<AccountCircle />} />
-      
-      </List>
-      <Divider />
-      <List>
-        <ListItem dense>
-          <ListItemIcon>
-            <ListIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logs" />
-        </ListItem>
+      <List className={classes.list}>
+        <CtDrawerMenuItem
+          url="/dashboard"
+          text_props={{
+            primary: "Dashboard"
+          }}
+          icon={<DashboardIcon />}
+        />
+        <CtDrawerMenuItem
+          url="/downloader"
+          text_props={{
+            primary: "Downloader"
+          }}
+          icon={<CloudDownload />}
+        />
+        <CtDrawerMenuItem
+          url="/uploader"
+          text_props={{
+            primary: "Uploader"
+          }}
+          icon={<CloudUpload />}
+        />
+        <CtDrawerMenuItem
+          url="/plugins"
+          text_props={{
+            primary: "Plugins"
+          }}
+          icon={<Power />}
+        />
 
-        <ListItem  dense>
+        <CtDrawerMenuItem
+          text_props={{
+            primary: "Info"
+          }}
+          url="/info"
+          label="Info"
+          icon={<InfoIcon />}
+        />
+
+        <ListItem dense>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>
           <ListItemText primary="Help" />
         </ListItem>
+
+        <Divider />
       </List>
+
+      <CtDrawerAccountMenuItem
+        currentUser={loggedIn ? profile.user.data : {}}
+      />
     </Drawer>
   );
-}
+};
 
-
+CtDrawer.propTypes = {
+  profile: PropTypes.object.isRequired
+};
 
 export default CtDrawer;

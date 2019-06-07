@@ -1,6 +1,6 @@
 import { createReducer } from "redux-starter-kit";
-
-import { requestEnv, receiveEnv } from "../_actions/environment";
+import { provision } from "../_actions/environment";
+import config from "../../config";
 
 const checkEnv = env => {
   // console.log(env);
@@ -14,17 +14,18 @@ const checkEnv = env => {
 };
 
 const initialState = {
-  environment: ""
+  data: ""
 };
 
 const environment = createReducer(initialState, {
-  [requestEnv]: (state, action) => {
-    state.status = "Loading";
-  },
-
-  [receiveEnv]: (state, action) => {
-    state.status = checkEnv(action.payload);
-    state.data = action.payload;
+  [provision]: (state, action) => {
+    const node_env = process.env["NODE_ENV"];
+    let env = {
+      mode: node_env,
+      ...config.default,
+      ...config[node_env]
+    };
+    state.data = env;
   }
 });
 

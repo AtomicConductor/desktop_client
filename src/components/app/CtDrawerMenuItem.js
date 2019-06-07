@@ -16,22 +16,26 @@ import { withRouter } from "react-router-dom";
 */
 
 const CtDrawerMenuItem = props => {
-  const { url, label, icon, history } = props;
+  const { text_props, url, icon, history } = props;
   const onClick = () => {
     history.push(url);
   };
 
   return (
-    <ListItem button dense selected={history.location.pathname === url} onClick={onClick}>
+    <ListItem
+      button
+      selected={history.location.pathname === url}
+      onClick={onClick}
+    >
       <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={label} />
+      <ListItemText {...text_props} />
     </ListItem>
   );
 };
 
 CtDrawerMenuItem.propTypes = {
   url: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  text_props: PropTypes.object.isRequired,
   icon: PropTypes.element.isRequired
 };
 
