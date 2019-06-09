@@ -6,16 +6,16 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { provision } from "./_actions/environment";
+import { provision, setPythonSy, readSettings } from "./_actions/environment";
 import { fetchProfile } from "./_actions/profile";
 
-store.dispatch(provision());
+store.dispatch(readSettings());
 
-store.dispatch(fetchProfile());
+// store.dispatch(setPythonSys());
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />{" "}
+        <App />
     </Provider>,
     document.getElementById("root")
 );

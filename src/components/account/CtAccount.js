@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import CtAccountContent from "./CtAccountContent";
-import CtAccountSignIn from "./CtAccountSignIn";
+import CtAccountSignInContainer from "./CtAccountSignInContainer";
 
 const CtAccount = props => {
     const { profile } = props;
@@ -12,7 +12,7 @@ const CtAccount = props => {
         return <CtAccountContent />;
     }
 
-    return <CtAccountSignIn />;
+    return <CtAccountSignInContainer />;
 };
 
 CtAccount.propTypes = {

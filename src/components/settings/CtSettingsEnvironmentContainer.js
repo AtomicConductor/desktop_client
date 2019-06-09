@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import CtInfoAppBar from "./CtInfoAppBar";
+import CtSettingsEnvironment from "./CtSettingsEnvironment";
 // import { toggleDrawer } from "../../_actions/ui";
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        // drawerIsOpen:  state.ui.downloader.drawerOpen
+        environment: state.environment
     };
 };
 
@@ -16,9 +16,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-const CtInfoAppBarContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(CtInfoAppBar);
+const CtSettingsEnvironmentContainer = connect(mapStateToProps)(
+    CtSettingsEnvironment
+);
 
-export default CtInfoAppBarContainer;
+export default CtSettingsEnvironmentContainer;

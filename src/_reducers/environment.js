@@ -1,9 +1,8 @@
 import { createReducer } from "redux-starter-kit";
-import { provision } from "../_actions/environment";
-import config from "../../config";
+import { provision, setPySys, saveSettings } from "../_actions/environment";
+import { googleProjects } from "../helpers/constants";
 
 const checkEnv = env => {
-  // console.log(env);
   if (!env) {
     return "Can't get environment";
   }
@@ -14,18 +13,37 @@ const checkEnv = env => {
 };
 
 const initialState = {
-  data: ""
+  settings: {
+    googleProjectName: "production",
+    pythonPath: ""
+  },
+  project: {}
 };
 
 const environment = createReducer(initialState, {
+  [saveSettings]: (state, action) => {
+    state.settings = action.payload;
+    state.project = {
+      ...state.project,
+      ...googleProjects.find(
+        env => env.name === action.payload.googleProjectName
+      )
+    };
+  },
+
   [provision]: (state, action) => {
     const node_env = process.env["NODE_ENV"];
-    let env = {
-      mode: node_env,
-      ...config.default,
-      ...config[node_env]
+    state.project = {
+      ...state.project,
+      ...googleProjects.find(
+        env => env.name === state.settings.googleProjectName
+      ),
+      NODE_ENV: process.env["NODE_ENV"]
     };
-    state.data = env;
+  },
+
+  [setPySys]: (state, action) => {
+    state.data.pysys = action.payload;
   }
 });
 

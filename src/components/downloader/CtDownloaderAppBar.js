@@ -10,9 +10,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 // import IconButton from '@material-ui/icons/IconButton';
 import IconButton from "@material-ui/core/IconButton";
-
-
-const drawerWidth = 240;
+import { drawerWidth } from "../../helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,17 +26,16 @@ const useStyles = makeStyles(theme => ({
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
     zIndex: 1301
-  }
-  ,
-   hide: {
-    display: 'none',
+  },
+  hide: {
+    display: "none"
   }
 }));
 
 const CtDownloaderAppBar = props => {
   const classes = useStyles();
 
-  const {drawerIsOpen, onToggleDrawer} = props
+  const { drawerIsOpen, onToggleDrawer } = props;
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
@@ -53,20 +50,12 @@ const CtDownloaderAppBar = props => {
           // className={clsx(open && classes.hide)}
           onClick={onToggleDrawer}
         >
-          {drawerIsOpen ? (
-          <ChevronRightIcon />
-        ) : (
-          <MenuIcon  />
-        )}
-
- 
+          {drawerIsOpen ? <ChevronRightIcon /> : <MenuIcon />}
         </IconButton>
       </Toolbar>
     </AppBar>
   );
-}
-
-
+};
 
 CtDownloaderAppBar.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
@@ -76,7 +65,5 @@ CtDownloaderAppBar.propTypes = {
 // CtDownloaderAppBar.defaultProps = {
 //   drawerIsOpen: false
 // };
-
-
 
 export default CtDownloaderAppBar;

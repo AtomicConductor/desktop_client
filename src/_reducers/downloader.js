@@ -22,6 +22,7 @@ for (var i = 876; i < 908; i++) {
 
 const downloader = createReducer(initialState, {
   [toggleDrawer]: (state, action) => {
+    // console.log("HHHHHHHHEEEEEEEE");
     state.drawerOpen = !state.drawerOpen;
   },
 

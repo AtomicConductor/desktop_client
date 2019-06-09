@@ -13,12 +13,11 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
- 
-import ListItemText from '@material-ui/core/ListItemText' 
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction' 
-import CtDlFormJobFieldContainer from "./CtDlFormJobFieldContainer"
 
-const drawerWidth = 400;
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import CtDlFormJobFieldContainer from "./CtDlFormJobFieldContainer";
+import { drawerWidth } from "../../helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -95,15 +94,12 @@ const CtDownloaderFormDrawer = props => {
   //   checkedB: true
   // });
 
-
   // const handleChange = name => event => {
 
   //   setState({ ...state, [name]: event.target.checked });
   // };
 
-
-
-  const {drawerIsOpen, useDaemon, onToggleUseDaemon} = props
+  const { drawerIsOpen, useDaemon, onToggleUseDaemon } = props;
 
   return (
     <div className={classes.root}>
@@ -119,16 +115,11 @@ const CtDownloaderFormDrawer = props => {
         <div className={classes.drawerHeader} />
         <Divider />
 
- 
         <List>
           <ListItem divider>
             <ListItemText primary="Use Daemon" />
             <ListItemSecondaryAction>
-              <Switch
-                checked={useDaemon}
-                onChange={onToggleUseDaemon}
-                
-              />
+              <Switch checked={useDaemon} onChange={onToggleUseDaemon} />
             </ListItemSecondaryAction>
           </ListItem>
 
@@ -143,14 +134,16 @@ const CtDownloaderFormDrawer = props => {
               margin="normal"
             />
           </ListItem>
- 
 
-            <CtDlFormJobFieldContainer disabled={useDaemon} placeholder="Enter one or more Job Ids"/>
- 
-          <ListItem  dense>
-            <TextField
+          <CtDlFormJobFieldContainer
             disabled={useDaemon}
-             fullWidth
+            placeholder="Enter one or more Job Ids"
+          />
+
+          <ListItem dense>
+            <TextField
+              disabled={useDaemon}
+              fullWidth
               id="standard-with-placeholder"
               label="Project"
               placeholder="Conductor project (optional)"
@@ -161,7 +154,7 @@ const CtDownloaderFormDrawer = props => {
 
           <ListItem dense>
             <TextField
-            disabled={useDaemon}
+              disabled={useDaemon}
               fullWidth
               id="standard-with-placeholder"
               label="Location tag"
@@ -173,7 +166,7 @@ const CtDownloaderFormDrawer = props => {
 
           <ListItem dense>
             <TextField
-            disabled={useDaemon}
+              disabled={useDaemon}
               fullWidth
               id="standard-with-placeholder"
               label="Output path"
@@ -185,7 +178,7 @@ const CtDownloaderFormDrawer = props => {
 
           <Box className={classes.box}>
             <Button
-            disabled={useDaemon}
+              disabled={useDaemon}
               variant="outlined"
               className={classes.button}
               color="secondary"
@@ -197,15 +190,12 @@ const CtDownloaderFormDrawer = props => {
       </Drawer>
     </div>
   );
-}
-
+};
 
 CtDownloaderFormDrawer.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
   useDaemon: PropTypes.bool.isRequired,
   onToggleUseDaemon: PropTypes.func.isRequired
-   
 };
-
 
 export default CtDownloaderFormDrawer;

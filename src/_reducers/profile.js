@@ -29,9 +29,9 @@ const profile = createReducer(initialState, {
   },
 
   [receiveUser]: (state, action) => {
-    state.user = action.payload;
     state.loadingProfile = false;
-    state.error = null;
+    state.error = "";
+    state.user = action.payload;
   },
 
   [profileFailure]: (state, action) => {

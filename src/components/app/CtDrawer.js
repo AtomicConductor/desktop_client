@@ -18,14 +18,13 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import Power from "@material-ui/icons/Power";
 
 import HelpIcon from "@material-ui/icons/Help";
-import InfoIcon from "@material-ui/icons/Info";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 import CtDrawerMenuItem from "./CtDrawerMenuItem";
 import CtDrawerAccountMenuItem from "./CtDrawerAccountMenuItem";
 
 import "typeface-raleway";
-
-const drawerWidth = 240;
+import { drawerWidth } from "../../helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -118,11 +117,11 @@ const CtDrawer = props => {
 
         <CtDrawerMenuItem
           text_props={{
-            primary: "Info"
+            primary: "Settings"
           }}
-          url="/info"
-          label="Info"
-          icon={<InfoIcon />}
+          url="/settings"
+          label="Settings"
+          icon={<SettingsIcon />}
         />
 
         <ListItem dense>

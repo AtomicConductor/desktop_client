@@ -9,7 +9,9 @@ import CtPlugins from "../plugins/CtPlugins";
 import CtAccountContainer from "../account/CtAccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
-import CtInfo from "../info/CtInfo";
+import CtSettings from "../settings/CtSettings";
+
+import CtSnackbarContainer from "../notification/CtSnackbarContainer";
 
 import {
   BrowserRouter as Router,
@@ -44,7 +46,7 @@ const CtLayout = () => {
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
           <Route path="/plugins" render={props => <CtPlugins {...props} />} />
-          <Route path="/info" render={props => <CtInfo {...props} />} />
+          <Route path="/settings" render={props => <CtSettings {...props} />} />
           <Route
             path="/account"
             render={props => <CtAccountContainer {...props} />}
@@ -53,6 +55,7 @@ const CtLayout = () => {
           <Redirect push to="/dashboard" />
         </Switch>
       </div>
+      <CtSnackbarContainer />
     </Router>
   );
 };
