@@ -10,6 +10,7 @@ const setup = overrides => {
     icon: <div />,
     ...overrides
   };
+
   const wrapper = shallow(<CtDrawerMenuItem {...props} />);
   return {
     props,
