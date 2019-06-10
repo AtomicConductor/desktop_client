@@ -67,10 +67,6 @@ const CtSettingsEdit = props => {
     pythonPath: settings.pythonPath
   });
 
-  console.log(`settings.pythonPath ${settings.pythonPath}`);
-
-  console.log(`values.pythonPath ${values.pythonPath}`);
-
   useEffect(() => {
     setValues({
       googleProjectName: project.name,

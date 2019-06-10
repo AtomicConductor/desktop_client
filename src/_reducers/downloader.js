@@ -15,7 +15,6 @@ const initialState = {
   useDaemon: false,
   jobSuggestions: [],
   jobValue: "",
-
   taskValue: "",
   outputPathValue: ""
 };
