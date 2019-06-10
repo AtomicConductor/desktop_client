@@ -17,7 +17,10 @@ import Switch from "@material-ui/core/Switch";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import CtDlFormJobFieldContainer from "./CtDlFormJobFieldContainer";
-import { drawerWidth } from "../../helpers/constants";
+
+import CtDlFormOutputPathFieldContainer from "./CtDlFormOutputPathFieldContainer";
+
+const drawerWidth = 440;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,27 +82,20 @@ const useStyles = makeStyles(theme => ({
   },
   box: {
     display: "flex",
-    // alignItems: "flex-end",
     justifyContent: "flex-end",
-    marginRight: "2em"
+    marginRight: 8,
+    marginTop: 16
   }
 }));
 
 const CtDownloaderFormDrawer = props => {
   const classes = useStyles();
-  // const [open, setOpen] = React.useState(true);
-
-  // const [state, setState] = React.useState({
-  //   checkedA: true,
-  //   checkedB: true
-  // });
-
-  // const handleChange = name => event => {
-
-  //   setState({ ...state, [name]: event.target.checked });
-  // };
 
   const { drawerIsOpen, useDaemon, onToggleUseDaemon } = props;
+
+  const handleSelectDirectory = event => {
+    console.log(event.target.files);
+  };
 
   return (
     <div className={classes.root}>
@@ -107,7 +103,7 @@ const CtDownloaderFormDrawer = props => {
         className={classes.drawer}
         variant="persistent"
         anchor="right"
-        open={drawerIsOpen}
+        open={true}
         classes={{
           paper: classes.drawerPaper
         }}
@@ -131,50 +127,12 @@ const CtDownloaderFormDrawer = props => {
               label="Task Id"
               placeholder="Leave blank to download all files"
               className={classes.textField}
-              margin="normal"
             />
           </ListItem>
 
-          <CtDlFormJobFieldContainer
-            disabled={useDaemon}
-            placeholder="Enter one or more Job Ids"
-          />
+          <CtDlFormJobFieldContainer disabled={useDaemon} />
 
-          <ListItem dense>
-            <TextField
-              disabled={useDaemon}
-              fullWidth
-              id="standard-with-placeholder"
-              label="Project"
-              placeholder="Conductor project (optional)"
-              className={classes.textField}
-              margin="normal"
-            />
-          </ListItem>
-
-          <ListItem dense>
-            <TextField
-              disabled={useDaemon}
-              fullWidth
-              id="standard-with-placeholder"
-              label="Location tag"
-              placeholder="Download jobs tagged with a location (optional)"
-              className={classes.textField}
-              margin="normal"
-            />
-          </ListItem>
-
-          <ListItem dense>
-            <TextField
-              disabled={useDaemon}
-              fullWidth
-              id="standard-with-placeholder"
-              label="Output path"
-              placeholder="Override the output path (optional)"
-              className={classes.textField}
-              margin="normal"
-            />
-          </ListItem>
+          <CtDlFormOutputPathFieldContainer disabled={useDaemon} />
 
           <Box className={classes.box}>
             <Button

@@ -3,7 +3,9 @@ import { createReducer } from "redux-starter-kit";
 import {
   toggleDrawer,
   toggleUseDaemon,
-  setJobInputValue,
+  setTaskValue,
+  setJobValue,
+  setOutputPathValue,
   setJobSuggestions,
   clearJobSuggestions
 } from "../_actions/downloader";
@@ -12,7 +14,10 @@ const initialState = {
   drawerOpen: false,
   useDaemon: false,
   jobSuggestions: [],
-  jobInputValue: ""
+  jobValue: "",
+
+  taskValue: "",
+  outputPathValue: ""
 };
 
 const jobids = [];
@@ -21,18 +26,26 @@ for (var i = 876; i < 908; i++) {
 }
 
 const downloader = createReducer(initialState, {
-  [toggleDrawer]: (state, action) => {
-    // console.log("HHHHHHHHEEEEEEEE");
+  [toggleDrawer]: state => {
     state.drawerOpen = !state.drawerOpen;
   },
 
-  [toggleUseDaemon]: (state, action) => {
+  [toggleUseDaemon]: state => {
     state.useDaemon = !state.useDaemon;
   },
 
-  [setJobInputValue]: (state, action) => {
+  [setTaskValue]: (state, action) => {
     console.log(action.payload);
-    state.jobInputValue = action.payload;
+    state.taskInputValue = action.payload;
+  },
+
+  [setJobValue]: (state, action) => {
+    console.log(action.payload);
+    state.jobValue = action.payload;
+  },
+  [setOutputPathValue]: (state, action) => {
+    console.log(action.payload);
+    state.outputPathValue = action.payload;
   },
 
   [setJobSuggestions]: (state, action) => {
@@ -45,7 +58,7 @@ const downloader = createReducer(initialState, {
     state.jobSuggestions = jobSuggestions;
   },
 
-  [clearJobSuggestions]: (state, action) => {
+  [clearJobSuggestions]: state => {
     state.jobSuggestions = [];
   }
 });

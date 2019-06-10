@@ -93,7 +93,7 @@ const CtAccountSignIn = props => {
           </FormControl>
           <FormControl className={classes.formControl}>
             <Box className={classes.buttonBox}>
-              <Button onClick={onSignIn} variant="contained" color="secondary">
+              <Button onClick={onSignIn} variant="outlined" color="secondary">
                 Submit
               </Button>
             </Box>

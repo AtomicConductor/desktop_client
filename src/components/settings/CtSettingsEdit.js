@@ -120,7 +120,7 @@ const CtSettingsEdit = props => {
         </FormControl>
         <FormControl className={classes.formControl}>
           <Box className={classes.buttonBox}>
-            <Button onClick={handleSave} variant="contained" color="secondary">
+            <Button onClick={handleSave} variant="outlined" color="secondary">
               Save
             </Button>
           </Box>

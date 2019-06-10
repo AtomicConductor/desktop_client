@@ -5,6 +5,9 @@ import { promisify } from "util";
 import { promises as fsp } from "fs";
 import path from "path";
 import { settingsFilename } from "../helpers/constants";
+
+import { setNotification } from "../_actions/notification";
+
 /* config based stuff */
 export const provision = createAction("env/provision");
 export const setPySys = createAction("env/setPySys");
@@ -46,6 +49,9 @@ export function writeSettings(settings) {
       .writeFile(filePath, JSON.stringify(settings, null, "\t"))
       .then(() => {
         dispatch(saveSettings(settings));
+        dispatch(
+          setNotification({ snackbar: "Saved settings", type: "success" })
+        );
       })
       .catch(err => {
         dispatch(envFailure(err.message));

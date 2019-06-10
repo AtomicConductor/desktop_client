@@ -1,7 +1,8 @@
 import { createReducer } from "redux-starter-kit";
 import {
   clearNotification,
-  showNotificationDetails
+  showNotificationDetails,
+  setNotification
 } from "../_actions/notification";
 
 import { receiveUser, profileFailure } from "../_actions/profile";
@@ -29,6 +30,13 @@ const notification = createReducer(initialState, {
     state.show = !!action.payload.detail ? "detail" : "none";
   },
 
+  [setNotification]: (state, action) => {
+    state.snackbar = action.payload.snackbar;
+    state.detail = action.payload.detail || "";
+    state.show = !!action.payload ? "snackbar" : "none";
+    state.type = action.payload.type;
+  },
+
   [profileFailure]: (state, action) => {
     state.snackbar = action.payload;
     state.detail = `Some more details ${action.payload}`;
@@ -54,13 +62,13 @@ const notification = createReducer(initialState, {
     state.detail = "";
     state.show = "snackbar";
     state.type = "success";
-  },
-  [saveSettings]: (state, action) => {
-    state.snackbar = `Saved settings`;
-    state.detail = "";
-    state.show = "snackbar";
-    state.type = "success";
   }
+  // [saveSettings]: (state, action) => {
+  //   state.snackbar = `Saved settings`;
+  //   state.detail = "";
+  //   state.show = "snackbar";
+  //   state.type = "success";
+  // }
 });
 
 export default notification;
