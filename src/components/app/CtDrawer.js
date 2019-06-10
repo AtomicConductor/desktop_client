@@ -69,7 +69,7 @@ const CtDrawer = props => {
   const classes = useStyles();
 
   const { profile } = props;
-  const loggedIn = !!Object.entries(profile.user).length;
+  const loggedIn = !!Object.entries(profile.user).length && !!profile.user.data;
 
   return (
     <Drawer
