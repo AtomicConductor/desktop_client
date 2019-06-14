@@ -24,7 +24,7 @@ import CtDrawerMenuItem from "./CtDrawerMenuItem";
 import CtDrawerAccountMenuItem from "./CtDrawerAccountMenuItem";
 
 import "typeface-raleway";
-import { drawerWidth } from "../../helpers/constants";
+import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {

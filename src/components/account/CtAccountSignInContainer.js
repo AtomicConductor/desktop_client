@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import CtAccountSignIn from "./CtAccountSignIn";
-
 import { fetchProfile } from "../../_actions/profile";
 
 const mapStateToProps = (state, ownProps) => {

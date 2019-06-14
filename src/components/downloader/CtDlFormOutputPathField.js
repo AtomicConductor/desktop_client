@@ -18,8 +18,9 @@ const CtDlFormOutputPathField = props => {
   const { disabled, value, setValue } = props;
 
   const handleSelectDirectory = event => {
-    // console.log(event.target.files[0].path);
-    setValue(event.target.files[0].path);
+    if (event.target.files && event.target.files[0]) {
+      setValue(event.target.files[0].path);
+    }
   };
   const handleEdit = event => {
     setValue(event.target.value);

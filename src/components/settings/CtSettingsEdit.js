@@ -12,7 +12,7 @@ import Box from "@material-ui/core/Box";
 import FilledInput from "@material-ui/core/FilledInput";
 import Button from "@material-ui/core/Button";
 
-import { googleProjects } from "../../helpers/constants";
+import { googleProjects } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   container: {

@@ -7,21 +7,32 @@ import {
   setJobValue,
   setOutputPathValue,
   setJobSuggestions,
-  clearJobSuggestions
+  clearJobSuggestions,
+  setTaskSuggestions,
+  clearTaskSuggestions,
+  runDownloadJobs,
+  downloadProgress
 } from "../_actions/downloader";
 
 const initialState = {
-  drawerOpen: false,
+  drawerOpen: true,
   useDaemon: false,
   jobSuggestions: [],
-  jobValue: "",
+  jobValue: "00702",
   taskValue: "",
-  outputPathValue: ""
+  taskSuggestions: [],
+  outputPathValue: "",
+  downloadProgress: []
 };
 
 const jobids = [];
 for (var i = 876; i < 908; i++) {
   jobids.push(("00000" + i).substr(-5, 5));
+}
+
+const taskids = [];
+for (var i = 0; i < 30; i++) {
+  taskids.push(("000" + i).substr(-3, 3));
 }
 
 const downloader = createReducer(initialState, {
@@ -33,18 +44,8 @@ const downloader = createReducer(initialState, {
     state.useDaemon = !state.useDaemon;
   },
 
-  [setTaskValue]: (state, action) => {
-    console.log(action.payload);
-    state.taskInputValue = action.payload;
-  },
-
   [setJobValue]: (state, action) => {
-    console.log(action.payload);
     state.jobValue = action.payload;
-  },
-  [setOutputPathValue]: (state, action) => {
-    console.log(action.payload);
-    state.outputPathValue = action.payload;
   },
 
   [setJobSuggestions]: (state, action) => {
@@ -59,6 +60,34 @@ const downloader = createReducer(initialState, {
 
   [clearJobSuggestions]: state => {
     state.jobSuggestions = [];
+  },
+
+  [setTaskValue]: (state, action) => {
+    state.taskValue = action.payload;
+  },
+
+  [setTaskSuggestions]: (state, action) => {
+    const inputValue = action.payload.value.trim();
+    const inputLength = inputValue.length;
+    const taskSuggestions =
+      inputLength === 0
+        ? []
+        : taskids.filter(taskid => taskid.slice(0, inputLength) === inputValue);
+    state.taskSuggestions = taskSuggestions;
+  },
+
+  [clearTaskSuggestions]: state => {
+    state.taskSuggestions = [];
+  },
+
+  [setOutputPathValue]: (state, action) => {
+    console.log(action.payload);
+    state.outputPathValue = action.payload;
+  },
+
+  [downloadProgress]: (state, action) => {
+    console.log(action.payload);
+    state.downloadProgress.push(action.payload);
   }
 });
 

@@ -13,7 +13,7 @@ import Box from "@material-ui/core/Box";
 import CtSettingsEnvironmentContainer from "./CtSettingsEnvironmentContainer";
 
 import CtSettingsEditContainer from "./CtSettingsEditContainer";
-import { drawerWidth } from "../../helpers/constants";
+import { drawerWidth } from "../../_helpers/constants";
 
 function TabContainer(props) {
   return (

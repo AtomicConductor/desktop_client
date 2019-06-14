@@ -1,6 +1,7 @@
 import { createReducer } from "redux-starter-kit";
-import { provision, setPySys, saveSettings } from "../_actions/environment";
-import { googleProjects } from "../helpers/constants";
+import { updateSettings } from "../_actions/environment";
+import { googleProjects } from "../_helpers/constants";
+import path from "upath";
 
 const checkEnv = env => {
   if (!env) {
@@ -17,33 +18,39 @@ const initialState = {
     googleProjectName: "production",
     pythonPath: ""
   },
-  project: {}
+  project: {},
+  process: {},
+  python: {}
 };
 
 const environment = createReducer(initialState, {
-  [saveSettings]: (state, action) => {
-    state.settings = action.payload;
-    state.project = {
-      ...state.project,
-      ...googleProjects.find(
-        env => env.name === action.payload.googleProjectName
-      )
-    };
-  },
-
-  [provision]: (state, action) => {
+  [updateSettings]: (state, action) => {
     const node_env = process.env["NODE_ENV"];
+
+    if (action.payload) {
+      state.settings = action.payload;
+    }
+
     state.project = {
       ...state.project,
       ...googleProjects.find(
         env => env.name === state.settings.googleProjectName
-      ),
-      NODE_ENV: process.env["NODE_ENV"]
+      )
     };
-  },
+    state.process = {
+      cwd: process.cwd(),
+      execPath: process.execPath,
+      NODE_ENV: node_env
+    };
 
-  [setPySys]: (state, action) => {
-    state.data.pysys = action.payload;
+    // const filePath = path.join(nw.App.dataPath, settingsFilename);
+
+    state.python = {
+      scriptsPath:
+        node_env === "development"
+          ? path.join(path.dirname(process.cwd()), "public", "scripts")
+          : path.join(process.cwd(), "scripts")
+    };
   }
 });
 

@@ -9,6 +9,9 @@
       "type": "image/x-icon"
     }
   ],
+  "permissions": [
+    "downloads"
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

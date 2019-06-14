@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 const CtSettingsEnvironment = props => {
   const classes = useStyles();
 
-  const { settings, project } = props.environment;
+  const { settings, project, process, python } = props.environment;
   console.log(settings);
 
   const settingsArray = Object.keys(settings).map(k => ({
@@ -41,6 +41,9 @@ const CtSettingsEnvironment = props => {
     <div className={classes.root}>
       <CtSettingsTable data={settings} title="Settings" />
       <CtSettingsTable data={project} title="Google project" />
+
+      <CtSettingsTable data={process} title="Process" />
+      <CtSettingsTable data={python} title="Python" />
     </div>
   );
 };

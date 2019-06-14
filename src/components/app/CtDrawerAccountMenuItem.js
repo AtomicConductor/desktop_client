@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { avatarInitials } from "../../helpers/presentation";
+import { avatarInitials } from "../../_helpers/presentation";
 
 const useStyles = makeStyles(theme => ({
   in: {

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import CtDownloaderFormDrawer from "./CtDownloaderFormDrawer";
-import { toggleUseDaemon } from "../../_actions/downloader";
-
+import { toggleUseDaemon, runDownloadJobs } from "../../_actions/downloader";
+import { fetchJobs } from "../../_actions/jobs";
 const mapStateToProps = (state, ownProps) => {
   return {
     drawerIsOpen: state.downloader.drawerOpen,
@@ -13,7 +13,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onToggleUseDaemon: () => {
       dispatch(toggleUseDaemon());
-    }
+    },
+    run: () => {
+      dispatch(runDownloadJobs());
+    },
+    refreshJobList: () => dispatch(fetchJobs())
   };
 };
 

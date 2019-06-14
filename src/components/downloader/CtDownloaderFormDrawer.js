@@ -17,6 +17,7 @@ import Switch from "@material-ui/core/Switch";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import CtDlFormJobFieldContainer from "./CtDlFormJobFieldContainer";
+import CtDlFormTaskFieldContainer from "./CtDlFormTaskFieldContainer";
 
 import CtDlFormOutputPathFieldContainer from "./CtDlFormOutputPathFieldContainer";
 
@@ -91,7 +92,13 @@ const useStyles = makeStyles(theme => ({
 const CtDownloaderFormDrawer = props => {
   const classes = useStyles();
 
-  const { drawerIsOpen, useDaemon, onToggleUseDaemon } = props;
+  const {
+    drawerIsOpen,
+    useDaemon,
+    onToggleUseDaemon,
+    run,
+    refreshJobList
+  } = props;
 
   const handleSelectDirectory = event => {
     console.log(event.target.files);
@@ -103,7 +110,7 @@ const CtDownloaderFormDrawer = props => {
         className={classes.drawer}
         variant="persistent"
         anchor="right"
-        open={true}
+        open={drawerIsOpen}
         classes={{
           paper: classes.drawerPaper
         }}
@@ -119,19 +126,8 @@ const CtDownloaderFormDrawer = props => {
             </ListItemSecondaryAction>
           </ListItem>
 
-          <ListItem dense>
-            <TextField
-              disabled={useDaemon}
-              fullWidth
-              id="standard-with-placeholder"
-              label="Task Id"
-              placeholder="Leave blank to download all files"
-              className={classes.textField}
-            />
-          </ListItem>
-
+          <CtDlFormTaskFieldContainer disabled={useDaemon} />
           <CtDlFormJobFieldContainer disabled={useDaemon} />
-
           <CtDlFormOutputPathFieldContainer disabled={useDaemon} />
 
           <Box className={classes.box}>
@@ -140,6 +136,7 @@ const CtDownloaderFormDrawer = props => {
               variant="outlined"
               className={classes.button}
               color="secondary"
+              onClick={refreshJobList}
             >
               Download
             </Button>
@@ -153,7 +150,9 @@ const CtDownloaderFormDrawer = props => {
 CtDownloaderFormDrawer.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
   useDaemon: PropTypes.bool.isRequired,
-  onToggleUseDaemon: PropTypes.func.isRequired
+  onToggleUseDaemon: PropTypes.func.isRequired,
+  run: PropTypes.func.isRequired,
+  refreshJobList: PropTypes.func.isRequired
 };
 
 export default CtDownloaderFormDrawer;

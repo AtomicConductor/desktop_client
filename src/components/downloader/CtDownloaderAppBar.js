@@ -10,7 +10,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 // import IconButton from '@material-ui/icons/IconButton';
 import IconButton from "@material-ui/core/IconButton";
-import { drawerWidth } from "../../helpers/constants";
+import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {

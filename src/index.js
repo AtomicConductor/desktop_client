@@ -6,18 +6,17 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { provision, setPythonSy, readSettings } from "./_actions/environment";
-import { fetchProfile } from "./_actions/profile";
+import { readSettings } from "./_actions/environment";
+// import { fetchProfile } from "./_actions/profile";
 
 store.dispatch(readSettings());
-
-// store.dispatch(setPythonSys());
+// store.dispatch(fetchProfile());
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById("root")
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
