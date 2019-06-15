@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex"
   },
 
-  toolbar: theme.mixins.toolbar,
+  toolbar: { height: 48 },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -34,7 +34,7 @@ const CtAccountContent = props => {
   return (
     <React.Fragment>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar variant="dense">
           <Typography variant="h6" className={classes.title}>
             Account
           </Typography>

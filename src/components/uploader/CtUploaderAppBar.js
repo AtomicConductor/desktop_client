@@ -24,7 +24,7 @@ const CtUploaderAppBar = props => {
   const classes = useStyles();
   return (
     <AppBar position="fixed" className={classes.appBar}>
-      <Toolbar>
+      <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
           Uploader
         </Typography>

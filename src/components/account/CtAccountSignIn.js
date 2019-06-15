@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1)
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: { height: 48 },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -64,7 +64,7 @@ const CtAccountSignIn = props => {
   return (
     <React.Fragment>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar variant="dense">
           <Typography variant="h6" className={classes.title}>
             Account
           </Typography>

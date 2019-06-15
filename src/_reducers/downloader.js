@@ -15,7 +15,7 @@ import {
 } from "../_actions/downloader";
 
 const initialState = {
-  drawerOpen: true,
+  drawerOpen: false,
   useDaemon: false,
   jobSuggestions: [],
   jobValue: "00702",

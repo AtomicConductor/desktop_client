@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtDlFormOutputPathField = props => {
+const FormOutputPathField = props => {
   const classes = useStyles();
 
   const { disabled, value, setValue } = props;
@@ -62,10 +62,10 @@ const CtDlFormOutputPathField = props => {
   );
 };
 
-CtDlFormOutputPathField.propTypes = {
+FormOutputPathField.propTypes = {
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired
 };
 
-export default CtDlFormOutputPathField;
+export default FormOutputPathField;

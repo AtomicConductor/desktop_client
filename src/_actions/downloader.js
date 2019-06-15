@@ -11,6 +11,7 @@ import { setPythonScriptResponse, pythonScriptFailure } from "./python";
 import { DownloaderHelper } from "node-downloader-helper";
 
 export const toggleDrawer = createAction("downloader/toggleDrawer");
+
 export const toggleUseDaemon = createAction("downloader/toggleUseDaemon");
 
 export const setJobValue = createAction("downloader/setJobValue");

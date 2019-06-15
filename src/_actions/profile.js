@@ -13,7 +13,7 @@ in a profileFailure action being dispatched.
 */
 export function fetchProfile(params) {
   return (dispatch, getState) => {
-    const apiserver = getState().environment.project.apiServer;
+    const apiServer = getState().environment.project.apiServer;
 
     dispatch(requestProfile());
 
@@ -25,7 +25,7 @@ export function fetchProfile(params) {
         const obj = JSON.parse(credentials);
         dispatch(receiveCredentials(obj));
 
-        return fetch(`${apiserver}/api/v1/profile`, {
+        return fetch(`${apiServer}/api/v1/profile`, {
           headers: {
             Authorization: `Bearer ${obj.access_token}`
           }

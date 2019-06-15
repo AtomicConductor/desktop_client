@@ -41,7 +41,9 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: {
+    height: 48
+  },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -94,7 +96,7 @@ const CtDrawer = props => {
           icon={<DashboardIcon />}
         />
         <CtDrawerMenuItem
-          url="/downloader"
+          url="/downloader/jobs"
           text_props={{
             primary: "Downloader"
           }}

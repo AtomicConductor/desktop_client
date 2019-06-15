@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import CtDlFormJobField from "./CtDlFormJobField";
+import FormJobField from "./FormJobField";
 
 import {
   setJobValue,
@@ -28,9 +28,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const CtDlFormJobFieldContainer = connect(
+const FormJobFieldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CtDlFormJobField);
+)(FormJobField);
 
-export default CtDlFormJobFieldContainer;
+export default FormJobFieldContainer;

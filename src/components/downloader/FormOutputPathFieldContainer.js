@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import CtDlFormOutputPathField from "./CtDlFormOutputPathField";
+import FormOutputPathField from "./FormOutputPathField";
 import { setOutputPathValue } from "../../_actions/downloader";
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,9 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const CtDlFormOutputPathFieldContainer = connect(
+const FormOutputPathFieldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CtDlFormOutputPathField);
+)(FormOutputPathField);
 
-export default CtDlFormOutputPathFieldContainer;
+export default FormOutputPathFieldContainer;

@@ -71,7 +71,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
   );
 }
 
-const CtDlFormTaskField = props => {
+const FormJobField = props => {
   const classes = useStyles();
 
   const {
@@ -93,9 +93,9 @@ const CtDlFormTaskField = props => {
       renderSuggestion={renderSuggestion}
       inputProps={{
         classes,
-        placeholder: "Leave blank to download all tasks",
+        placeholder: "Enter one or more Job Ids",
         disabled,
-        label: "Task Id(s)",
+        label: "Job Id(s)",
         value: inputValue,
         onChange: setInputValue
       }}
@@ -114,7 +114,7 @@ const CtDlFormTaskField = props => {
   );
 };
 
-CtDlFormTaskField.propTypes = {
+FormJobField.propTypes = {
   inputValue: PropTypes.string.isRequired,
   suggestions: PropTypes.array,
   setInputValue: PropTypes.func.isRequired,
@@ -122,4 +122,4 @@ CtDlFormTaskField.propTypes = {
   onSuggestionsClearRequested: PropTypes.func.isRequired
 };
 
-export default CtDlFormTaskField;
+export default FormJobField;

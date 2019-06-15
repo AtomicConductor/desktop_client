@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import CtDownloaderFormDrawer from "./CtDownloaderFormDrawer";
+import DownloaderFilterDrawer from "./DownloaderFilterDrawer";
 import { toggleUseDaemon, runDownloadJobs } from "../../_actions/downloader";
 import { fetchJobs } from "../../_actions/jobs";
 const mapStateToProps = (state, ownProps) => {
@@ -21,9 +21,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const CtDownloaderFormDrawerContainer = connect(
+const DownloaderFilterDrawerContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CtDownloaderFormDrawer);
+)(DownloaderFilterDrawer);
 
-export default CtDownloaderFormDrawerContainer;
+export default DownloaderFilterDrawerContainer;

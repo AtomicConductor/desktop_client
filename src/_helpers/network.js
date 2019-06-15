@@ -6,10 +6,13 @@ const params = {
   apiurl: "http://api.conductortech.com/api/v1",
   webtoken: "abc123",
   path: "/accounts/:id",
-  filters: {
+  filters: [
+
+    
+  ]
     status: "active",
     role: 2
-  },
+  }
   limit: 200,
   fields: ["lastname", "firstname"],
   pageToken: "token",
@@ -49,16 +52,17 @@ function createRequestUrl(state, params) {
   const cleanPath = params.path.replace(/^\/+/g, "");
   const apiurl =
     (params && params.apiurl) ||
-    `${state.prerequisites.config.APISERVER}/api/v1`;
+    `${state.environment.project.apiServer}/api/v1`;
   return `${apiurl}/${cleanPath}${query}`;
 }
 
 function createRequestOptions(state, params) {
-  const webtoken = (params && params.webtoken) || state.prerequisites.webtoken;
+  const token =
+    (params && params.access_token) || state.profile.credentials.access_token;
 
   const options = {
     headers: {
-      Authorization: `Bearer ${webtoken}`,
+      Authorization: `Bearer ${token}`,
       Accept: "application/json",
       "Content-Type": "application/json"
     },

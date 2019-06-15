@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import CtDlFormTaskField from "./CtDlFormTaskField";
+import FormTaskField from "./FormTaskField";
 
 import {
   setTaskValue,
@@ -28,9 +28,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const CtDlFormTaskFieldContainer = connect(
+const FormTaskFieldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CtDlFormTaskField);
+)(FormTaskField);
 
-export default CtDlFormTaskFieldContainer;
+export default FormTaskFieldContainer;

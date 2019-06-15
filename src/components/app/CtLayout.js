@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import CtDrawerContainer from "./CtDrawerContainer";
-import CtDownloader from "../downloader/CtDownloader";
+import Downloader from "../downloader/Downloader";
 import CtUploader from "../uploader/CtUploader";
 import CtPlugins from "../plugins/CtPlugins";
 import CtAccountContainer from "../account/CtAccountContainer";
@@ -41,8 +41,16 @@ const CtLayout = () => {
             render={props => <CtDashboard {...props} />}
           />
           <Route
+            path="/downloader/jobs"
+            render={props => <Downloader {...props} />}
+          />
+          <Route
+            path="/downloader/queue"
+            render={props => <Downloader {...props} />}
+          />
+          <Route
             path="/downloader"
-            render={props => <CtDownloader {...props} />}
+            render={props => <Downloader {...props} />}
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
           <Route path="/plugins" render={props => <CtPlugins {...props} />} />

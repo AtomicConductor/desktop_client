@@ -5,6 +5,11 @@ export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
 export const requestJob = createAction("downloader/requestJob");
 
+export const receiveDownloadElement = createAction(
+  "downloader/receiveDownloadElement"
+);
+export const endDownloadRequest = createAction("downloader/endDownloadRequest");
+
 export function fetchJobs(params) {
   return function(dispatch, getState) {
     dispatch(requestJobs());
@@ -14,7 +19,14 @@ export function fetchJobs(params) {
 
     const access_token = state.profile.credentials.access_token;
     const url = `${apiServer}/api/v1/jobs`;
-    const options = { headers: { Authorization: `Bearer ${access_token}` } };
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    };
 
     const limit = 10;
 
@@ -29,14 +41,61 @@ export function fetchJobs(params) {
         if (typeof json.status_code === "number" && json.status_code >= 400) {
           throw new Error(json);
         }
-        // get the 100th <limit> entries
-        // console.log(json.jids.map(o => Object.keys(o)[0]);
-        const ids = json.jids
+        // get the  <limit> most recent entries
+
+        const id = json.jids
           .map(o => Object.keys(o)[0])
           .sort()
-          .slice(-limit);
-        return dispatch(receiveJobs(ids));
+          .slice(-limit)[0];
+
+        return fetch(
+          `${apiServer}/api/v1/jobs?limit=2000&filter=jobLabel_gt_${id}`,
+          options
+        );
       })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Authentication error: ${response.statusText}`);
+        }
+
+        return response.json();
+      })
+      .then(json => {
+        // try to get available downloadable files for these jobs
+        //  https://eloquent-vector-104019.appspot.com/downloads/00913
+
+        dispatch(receiveJobs(json));
+
+        return Promise.all(
+          json.data.map((job, i) => {
+            const url = `${googleProjectApiServer}/downloads/${job.jobLabel}`;
+            // const count = i + 1;
+            return (
+              fetch(url, options)
+                .then(
+                  response => {
+                    if (!response.ok) {
+                      throw Error(response.statusText);
+                    }
+                    return response.json();
+                  } //, error => dispatch(httpError(error))
+                )
+                .then(json => {
+                  dispatch(receiveDownloadElement(json));
+                })
+                // Catch the error so that the promise.all doesn't reject.
+                // Error is most likely no content, but maybe some other
+                // problem. Either way, catch so we can continue to attempt
+                // other fetches,
+                .catch(() => {})
+            );
+          })
+        ).then(() => {
+          console.log("Done promise all");
+          dispatch(endDownloadRequest());
+        });
+      })
+
       .catch(function(err) {
         dispatch(
           setNotification({

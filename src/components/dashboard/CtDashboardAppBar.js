@@ -25,7 +25,7 @@ const CtDashboardAppBar = props => {
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
-      <Toolbar>
+      <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
           Dashboard
         </Typography>
