@@ -21,7 +21,7 @@ import FormTaskFieldContainer from "./FormTaskFieldContainer";
 
 import FormOutputPathFieldContainer from "./FormOutputPathFieldContainer";
 
-const drawerWidth = 440;
+const drawerWidth = 140;
 
 const useStyles = makeStyles(theme => ({
   root: {

@@ -1,6 +1,6 @@
 import React from "react";
 
-import DownloaderJobs from "./DownloaderJobs";
+import DownloaderJobsContainer from "./DownloaderJobsContainer";
 import DownloaderQueue from "./DownloaderQueue";
 
 import DownloaderAppBarContainer from "./DownloaderAppBarContainer";
@@ -21,7 +21,7 @@ function Downloader() {
       <Switch>
         <Route
           path="/downloader/jobs"
-          render={props => <DownloaderJobs {...props} />}
+          render={props => <DownloaderJobsContainer {...props} />}
         />
         <Route
           path="/downloader/queue"

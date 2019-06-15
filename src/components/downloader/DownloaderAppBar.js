@@ -122,15 +122,11 @@ const DownloaderAppBar = props => {
         </div>
         <div className={classes.grow} />
 
-        <IconButton
-          aria-label="Show 4 new mails"
-          color="inherit"
-          onClick={onToggleQueue}
-        >
+        <IconButton color="inherit" onClick={onToggleQueue}>
           {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
         </IconButton>
 
-        <IconButton aria-label="Show 17 new notifications" color="inherit" />
+        <IconButton color="inherit" />
 
         <IconButton
           color="inherit"
