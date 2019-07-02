@@ -8,8 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { drawerWidth } from "../../_helpers/constants";
 
-import DownloaderTabs from "./DownloaderTabs";
-
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 
@@ -27,13 +25,10 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
-  title: {
-    // flexGrow: 1
-  },
+
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth
-    // zIndex: 1301
   },
   hide: {
     display: "none"
@@ -79,17 +74,13 @@ const useStyles = makeStyles(theme => ({
 const DownloaderAppBar = props => {
   const classes = useStyles();
 
-  const { drawerIsOpen, onToggleDrawer, history } = props;
+  const { history } = props;
 
   const locationIsJobs = history.location.pathname !== "/downloader/queue";
 
   const onToggleQueue = () => {
     const url = locationIsJobs ? "/downloader/queue" : "/downloader/jobs";
     history.push(url);
-  };
-
-  const onSync = () => {
-    console.log("sync button");
   };
 
   return (
@@ -122,28 +113,6 @@ const DownloaderAppBar = props => {
   );
 };
 
-DownloaderAppBar.propTypes = {
-  drawerIsOpen: PropTypes.bool.isRequired,
-  onToggleDrawer: PropTypes.func.isRequired
-};
-
-// <Badge badgeContent={17} color="secondary">
-// <NotificationsIcon />
-// </Badge>
-
-DownloaderAppBar.defaultProps = {
-  drawerIsOpen: false
-};
-
 export { DownloaderAppBar };
 
 export default withRouter(DownloaderAppBar);
-
-// <IconButton
-// color="inherit"
-// aria-label="Open drawer"
-// edge="end"
-// // className={clsx(open && classes.hide)}
-// onClick={onToggleDrawer}
-// >
-// <FilterListIcon />

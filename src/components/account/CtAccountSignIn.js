@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 
 const CtAccountSignIn = props => {
   const classes = useStyles();
-  const { onSignIn, profile } = props;
+  const { onSignIn } = props;
 
   return (
     <React.Fragment>

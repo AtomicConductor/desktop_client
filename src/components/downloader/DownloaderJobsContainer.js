@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import DownloaderJobs from "./DownloaderJobs";
-import { addResourcesToQueue, add } from "../../_actions/downloader";
+import { addResourcesToQueue } from "../../_actions/downloader";
+
 const mapStateToProps = (state, ownProps) => {
   const jobs = Object.values(state.entities.jobs || {}).sort((a, b) =>
     b["jobLabel"].localeCompare(a["jobLabel"])

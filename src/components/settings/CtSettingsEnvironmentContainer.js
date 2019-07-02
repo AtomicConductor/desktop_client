@@ -3,21 +3,13 @@ import CtSettingsEnvironment from "./CtSettingsEnvironment";
 // import { toggleDrawer } from "../../_actions/ui";
 
 const mapStateToProps = (state, ownProps) => {
-    return {
-        environment: state.environment
-    };
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        // onToggleDrawer: () => {
-        //   dispatch(toggleDrawer());
-        // }
-    };
+  return {
+    environment: state.environment
+  };
 };
 
 const CtSettingsEnvironmentContainer = connect(mapStateToProps)(
-    CtSettingsEnvironment
+  CtSettingsEnvironment
 );
 
 export default CtSettingsEnvironmentContainer;

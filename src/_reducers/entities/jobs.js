@@ -1,7 +1,6 @@
 import { createReducer } from "redux-starter-kit";
 
 import {
-  requestJobs,
   receiveJobs,
   receiveDownloadFiles,
   requestDownloadFiles,

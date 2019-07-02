@@ -1,32 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
 
 import List from "@material-ui/core/List";
 
-import Divider from "@material-ui/core/Divider";
 import SyncIcon from "@material-ui/icons/Sync";
 
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
 
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import FormJobFieldContainer from "./FormJobFieldContainer";
-import FormTaskFieldContainer from "./FormTaskFieldContainer";
 
-import FormOutputPathFieldContainer from "./FormOutputPathFieldContainer";
 import {
   filterDrawerWidth,
-  drawerWidth,
   appBarHeight,
   statusLineHeight
 } from "../../_helpers/constants";
@@ -64,9 +55,9 @@ const DownloaderFilterDrawer = props => {
     refreshJobList
   } = props;
 
-  const handleSelectDirectory = event => {
-    console.log(event.target.files);
-  };
+  // const handleSelectDirectory = event => {
+  //   console.log(event.target.files);
+  // };
   // const onSync = () => {
   //   console.log("sync button");
   // };
@@ -110,8 +101,8 @@ DownloaderFilterDrawer.propTypes = {
 
 export default DownloaderFilterDrawer;
 
-{
-  /* <Box className={classes.box}>
+/* 
+  <Box className={classes.box}>
   <Button
     disabled={useDaemon}
     variant="outlined"
@@ -121,8 +112,8 @@ export default DownloaderFilterDrawer;
   >
     Download
   </Button>
-</Box>; */
-}
+</Box>; 
+*/
 
 // <FormTaskFieldContainer disabled={useDaemon} />
 // <FormJobFieldContainer disabled={useDaemon} />

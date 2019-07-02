@@ -6,7 +6,7 @@ import {
 } from "../_actions/notification";
 
 import { receiveUser, profileFailure } from "../_actions/profile";
-import { envFailure, setPySys, updateSettings } from "../_actions/environment";
+import { envFailure } from "../_actions/environment";
 // import { runDownloadJobs } from "../_actions/downloader";
 
 import {

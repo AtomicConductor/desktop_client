@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import DownloaderFilterDrawer from "./DownloaderFilterDrawer";
-import { toggleUseDaemon, downloadAFile } from "../../_actions/downloader";
+import { toggleUseDaemon } from "../../_actions/downloader";
 import {
   fetchJobs
   // receiveMockJobs,

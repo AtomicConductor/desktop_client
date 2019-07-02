@@ -2,7 +2,7 @@ import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
-import fs, { promises as fsp } from "fs";
+import fs from "fs";
 import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
 

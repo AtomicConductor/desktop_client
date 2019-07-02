@@ -13,7 +13,7 @@ The main box also contains the router.
 Other elements live outside the router. 
 */
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";

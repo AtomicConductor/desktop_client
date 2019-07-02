@@ -11,23 +11,17 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Box from "@material-ui/core/Box";
-import AddToQueueIcon from "@material-ui/icons/AddToQueue";
 import Typography from "@material-ui/core/Typography";
 import DownloaderJobItemDetailsContainer from "./DownloaderJobItemDetailsContainer";
 
 const useStyles = makeStyles(theme => ({
   summary: {
     height: 20
-    // display: "flex"
-    // justifyContent: "space-between"
-    // border: "1px solid red"
   },
 
   summaryLeft: {
     height: 30,
     display: "flex",
-    // border: "1px solid yellow",
-    // flexGrow: 1,
     width: "100%"
   },
 
@@ -63,22 +57,13 @@ const useStyles = makeStyles(theme => ({
 
 const DownloaderJobItem = props => {
   const { job, onPanelClick, expanded } = props;
-
-  // console.log(job);
-
   const projectLabel = job.projectId
     ? job.projectId.split("|").reverse()[0]
     : "NULL";
   const jobLabel = job.jobLabel;
   const jobTitle = job.title;
 
-  // console.log(count);
-
   const classes = useStyles();
-
-  // const addJobToQueue = label => () => {
-  //   addToQueue(label);
-  // };
 
   return (
     <ExpansionPanel
