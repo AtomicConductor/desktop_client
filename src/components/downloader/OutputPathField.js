@@ -12,30 +12,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const FormOutputPathField = props => {
+const OutputPathField = props => {
   const classes = useStyles();
 
-  const { disabled, value, setValue } = props;
+  // const { disabled, value, setValue } = props;
 
   const handleSelectDirectory = event => {
     if (event.target.files && event.target.files[0]) {
-      setValue(event.target.files[0].path);
+      // setValue(event.target.files[0].path);
     }
   };
   const handleEdit = event => {
-    setValue(event.target.value);
+    // setValue(event.target.value);
   };
 
   return (
     <ListItem dense>
       <TextField
-        disabled={disabled}
         fullWidth
+        // dense
         id="standard-with-placeholder"
         label="Output path"
         placeholder="Override the output path (optional)"
-        value={value}
+        value={"/some/project/output/path"}
         onChange={handleEdit}
+        variant="outlined"
       />
 
       <input
@@ -49,7 +50,7 @@ const FormOutputPathField = props => {
 
       <label htmlFor="icon-button-file">
         <IconButton
-          disabled={disabled}
+          // disabled={disabled}
           color="primary"
           className={classes.button}
           aria-label="Upload picture"
@@ -62,10 +63,10 @@ const FormOutputPathField = props => {
   );
 };
 
-FormOutputPathField.propTypes = {
-  value: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired
+OutputPathField.propTypes = {
+  // value: PropTypes.string.isRequired,
+  // setValue: PropTypes.func.isRequired,
+  // disabled: PropTypes.bool.isRequired
 };
 
-export default FormOutputPathField;
+export default OutputPathField;

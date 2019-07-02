@@ -1,24 +1,24 @@
 import { connect } from "react-redux";
-import FormOutputPathField from "./FormOutputPathField";
-import { setOutputPathValue } from "../../_actions/downloader";
+import OutputPathField from "./OutputPathField";
+// import { setOutputPathValue } from "../../_actions/downloader";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    value: state.downloader.outputPathValue
+    // value: state.downloader.outputPathValue
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setValue: value => {
-      dispatch(setOutputPathValue(value));
-    }
+    // setValue: value => {
+    //   dispatch(setOutputPathValue(value));
+    // }
   };
 };
 
 const FormOutputPathFieldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(FormOutputPathField);
+)(OutputPathField);
 
 export default FormOutputPathFieldContainer;

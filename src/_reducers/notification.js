@@ -7,7 +7,7 @@ import {
 
 import { receiveUser, profileFailure } from "../_actions/profile";
 import { envFailure, setPySys, updateSettings } from "../_actions/environment";
-import { runDownloadJobs } from "../_actions/downloader";
+// import { runDownloadJobs } from "../_actions/downloader";
 
 import {
   pythonScriptFailure,
@@ -64,12 +64,12 @@ const notification = createReducer(initialState, {
     state.type = "error";
   },
 
-  [runDownloadJobs]: (state, action) => {
-    state.snackbar = `Starting download`;
-    state.detail = "";
-    state.show = "snackbar";
-    state.type = "success";
-  },
+  // [runDownloadJobs]: (state, action) => {
+  //   state.snackbar = `Starting download`;
+  //   state.detail = "";
+  //   state.show = "snackbar";
+  //   state.type = "success";
+  // },
 
   [pythonScriptFailure]: (state, action) => {
     state.snackbar = `Python script failed ${action.payload}`;

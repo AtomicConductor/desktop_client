@@ -6,13 +6,17 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 
 import Divider from "@material-ui/core/Divider";
+import SyncIcon from "@material-ui/icons/Sync";
 
 import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
 
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -20,72 +24,32 @@ import FormJobFieldContainer from "./FormJobFieldContainer";
 import FormTaskFieldContainer from "./FormTaskFieldContainer";
 
 import FormOutputPathFieldContainer from "./FormOutputPathFieldContainer";
-
-const drawerWidth = 140;
+import {
+  filterDrawerWidth,
+  drawerWidth,
+  appBarHeight,
+  statusLineHeight
+} from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
-  },
-  appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginRight: drawerWidth
-  },
-  title: {
-    flexGrow: 1
-  },
-  hide: {
-    display: "none"
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  drawerHeader: {
     display: "flex",
-    alignItems: "center",
-    padding: "0 8px",
-    // marginTop:  '80px',
-    ...{ height: 48 },
-    justifyContent: "flex-start"
+    flexDirection: "column",
+    // border: "1px solid yellow",
+    width: filterDrawerWidth,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    marginTop: appBarHeight,
+    height: `calc(100% - ${appBarHeight + statusLineHeight}px)`
   },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginRight: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginRight: 0
-  },
+
   button: {
     margin: theme.spacing(1)
   },
-  box: {
-    display: "flex",
-    justifyContent: "flex-end",
-    marginRight: 8,
-    marginTop: 16
+
+  paper: {
+    height: "100%"
   }
 }));
 
@@ -93,57 +57,46 @@ const DownloaderFilterDrawer = props => {
   const classes = useStyles();
 
   const {
-    drawerIsOpen,
+    // drawerIsOpen,
     useDaemon,
     onToggleUseDaemon,
-    run,
+    downloadNext,
     refreshJobList
   } = props;
 
   const handleSelectDirectory = event => {
     console.log(event.target.files);
   };
-
+  // const onSync = () => {
+  //   console.log("sync button");
+  // };
   return (
-    <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="right"
-        open={drawerIsOpen}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.drawerHeader} />
-        <Divider />
-
+    <Box className={classes.root}>
+      <Paper className={classes.paper}>
         <List>
+          <ListItem button divider onClick={refreshJobList}>
+            <ListItemIcon>
+              <SyncIcon color="secondary" />
+            </ListItemIcon>
+            <ListItemText primary="Sync jobs" />
+          </ListItem>
+
+          <ListItem button divider onClick={downloadNext}>
+            <ListItemIcon>
+              <SyncIcon color="secondary" />
+            </ListItemIcon>
+            <ListItemText primary="Download next" />
+          </ListItem>
+
           <ListItem divider>
             <ListItemText primary="Use Daemon" />
             <ListItemSecondaryAction>
               <Switch checked={useDaemon} onChange={onToggleUseDaemon} />
             </ListItemSecondaryAction>
           </ListItem>
-
-          <FormTaskFieldContainer disabled={useDaemon} />
-          <FormJobFieldContainer disabled={useDaemon} />
-          <FormOutputPathFieldContainer disabled={useDaemon} />
-
-          <Box className={classes.box}>
-            <Button
-              disabled={useDaemon}
-              variant="outlined"
-              className={classes.button}
-              color="secondary"
-              onClick={refreshJobList}
-            >
-              Download
-            </Button>
-          </Box>
         </List>
-      </Drawer>
-    </div>
+      </Paper>
+    </Box>
   );
 };
 
@@ -151,8 +104,38 @@ DownloaderFilterDrawer.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
   useDaemon: PropTypes.bool.isRequired,
   onToggleUseDaemon: PropTypes.func.isRequired,
-  run: PropTypes.func.isRequired,
   refreshJobList: PropTypes.func.isRequired
+  // downloadNext: PropTypes.func.isRequired
 };
 
 export default DownloaderFilterDrawer;
+
+{
+  /* <Box className={classes.box}>
+  <Button
+    disabled={useDaemon}
+    variant="outlined"
+    className={classes.button}
+    color="secondary"
+    onClick={refreshJobList}
+  >
+    Download
+  </Button>
+</Box>; */
+}
+
+// <FormTaskFieldContainer disabled={useDaemon} />
+// <FormJobFieldContainer disabled={useDaemon} />
+// <FormOutputPathFieldContainer disabled={useDaemon} />
+
+// <Drawer
+// className={classes.drawer}
+// variant="persistent"
+// anchor="right"
+// open={drawerIsOpen}
+// classes={{
+//   paper: classes.drawerPaper
+// }}
+// >
+
+// </Drawer>

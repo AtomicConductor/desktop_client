@@ -5,10 +5,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-import MenuIcon from "@material-ui/icons/Menu";
-
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-// import IconButton from '@material-ui/icons/IconButton';
 import IconButton from "@material-ui/core/IconButton";
 import { drawerWidth } from "../../_helpers/constants";
 
@@ -16,16 +12,12 @@ import DownloaderTabs from "./DownloaderTabs";
 
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
 
 import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import FilterListIcon from "@material-ui/icons/FilterList";
+
 import QueueIcon from "@material-ui/icons/Queue";
 import ViewListIcon from "@material-ui/icons/ViewList";
 
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -40,8 +32,8 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    zIndex: 1301
+    marginLeft: drawerWidth
+    // zIndex: 1301
   },
   hide: {
     display: "none"
@@ -95,9 +87,9 @@ const DownloaderAppBar = props => {
     const url = locationIsJobs ? "/downloader/queue" : "/downloader/jobs";
     history.push(url);
   };
-  const onGoQueue = () => {
-    const url = "/downloader/queue";
-    history.push(url);
+
+  const onSync = () => {
+    console.log("sync button");
   };
 
   return (
@@ -125,18 +117,6 @@ const DownloaderAppBar = props => {
         <IconButton color="inherit" onClick={onToggleQueue}>
           {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
         </IconButton>
-
-        <IconButton color="inherit" />
-
-        <IconButton
-          color="inherit"
-          aria-label="Open drawer"
-          edge="end"
-          // className={clsx(open && classes.hide)}
-          onClick={onToggleDrawer}
-        >
-          <FilterListIcon />
-        </IconButton>
       </Toolbar>
     </AppBar>
   );
@@ -158,3 +138,12 @@ DownloaderAppBar.defaultProps = {
 export { DownloaderAppBar };
 
 export default withRouter(DownloaderAppBar);
+
+// <IconButton
+// color="inherit"
+// aria-label="Open drawer"
+// edge="end"
+// // className={clsx(open && classes.hide)}
+// onClick={onToggleDrawer}
+// >
+// <FilterListIcon />

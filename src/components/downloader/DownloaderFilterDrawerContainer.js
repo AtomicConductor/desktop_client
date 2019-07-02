@@ -1,7 +1,12 @@
 import { connect } from "react-redux";
 import DownloaderFilterDrawer from "./DownloaderFilterDrawer";
-import { toggleUseDaemon, runDownloadJobs } from "../../_actions/downloader";
-import { fetchJobs } from "../../_actions/jobs";
+import { toggleUseDaemon, downloadAFile } from "../../_actions/downloader";
+import {
+  fetchJobs
+  // receiveMockJobs,
+  // receiveMockDownloads
+} from "../../_actions/jobs";
+
 const mapStateToProps = (state, ownProps) => {
   return {
     drawerIsOpen: state.downloader.drawerOpen,
@@ -14,9 +19,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onToggleUseDaemon: () => {
       dispatch(toggleUseDaemon());
     },
-    run: () => {
-      dispatch(runDownloadJobs());
-    },
+    // downloadNext: () => {
+    //   dispatch(downloadAFile());
+    // },
     refreshJobList: () => dispatch(fetchJobs())
   };
 };

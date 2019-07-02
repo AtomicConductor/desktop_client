@@ -3,37 +3,20 @@ import { createReducer } from "redux-starter-kit";
 import {
   toggleDrawer,
   toggleUseDaemon,
-  setTaskValue,
-  setJobValue,
-  setOutputPathValue,
-  setJobSuggestions,
-  clearJobSuggestions,
-  setTaskSuggestions,
-  clearTaskSuggestions,
   runDownloadJobs,
-  downloadProgress
+  downloadProgress,
+  addFileToQueue
 } from "../_actions/downloader";
 
+import { requestJobs, receiveJobs } from "../_actions/jobs";
+
 const initialState = {
-  drawerOpen: false,
+  drawerOpen: true,
   useDaemon: false,
-  jobSuggestions: [],
-  jobValue: "00702",
-  taskValue: "",
-  taskSuggestions: [],
-  outputPathValue: "",
-  downloadProgress: []
+  queue: [],
+  downloadProgress: [],
+  loadingJobs: false
 };
-
-const jobids = [];
-for (var i = 876; i < 908; i++) {
-  jobids.push(("00000" + i).substr(-5, 5));
-}
-
-const taskids = [];
-for (var i = 0; i < 30; i++) {
-  taskids.push(("000" + i).substr(-3, 3));
-}
 
 const downloader = createReducer(initialState, {
   [toggleDrawer]: state => {
@@ -44,45 +27,18 @@ const downloader = createReducer(initialState, {
     state.useDaemon = !state.useDaemon;
   },
 
-  [setJobValue]: (state, action) => {
-    state.jobValue = action.payload;
+  [requestJobs]: state => {
+    state.loadingJobs = true;
   },
 
-  [setJobSuggestions]: (state, action) => {
-    const inputValue = action.payload.value.trim();
-    const inputLength = inputValue.length;
-    const jobSuggestions =
-      inputLength === 0
-        ? []
-        : jobids.filter(jobid => jobid.slice(0, inputLength) === inputValue);
-    state.jobSuggestions = jobSuggestions;
+  [receiveJobs]: state => {
+    state.loadingJobs = false;
   },
 
-  [clearJobSuggestions]: state => {
-    state.jobSuggestions = [];
-  },
-
-  [setTaskValue]: (state, action) => {
-    state.taskValue = action.payload;
-  },
-
-  [setTaskSuggestions]: (state, action) => {
-    const inputValue = action.payload.value.trim();
-    const inputLength = inputValue.length;
-    const taskSuggestions =
-      inputLength === 0
-        ? []
-        : taskids.filter(taskid => taskid.slice(0, inputLength) === inputValue);
-    state.taskSuggestions = taskSuggestions;
-  },
-
-  [clearTaskSuggestions]: state => {
-    state.taskSuggestions = [];
-  },
-
-  [setOutputPathValue]: (state, action) => {
-    console.log(action.payload);
-    state.outputPathValue = action.payload;
+  [addFileToQueue]: (state, action) => {
+    if (!state.queue.some(qel => qel.md5 === action.payload.md5)) {
+      state.queue.push(action.payload);
+    }
   },
 
   [downloadProgress]: (state, action) => {
@@ -92,3 +48,57 @@ const downloader = createReducer(initialState, {
 });
 
 export default downloader;
+
+// setTaskValue,
+// setJobValue,
+// setOutputPathValue,
+// setJobSuggestions,
+// clearJobSuggestions,
+// setTaskSuggestions,
+// clearTaskSuggestions,
+
+// jobSuggestions: [],
+// jobValue: "00702",
+// taskValue: "",
+// taskSuggestions: [],
+// outputPathValue: "",
+// [setJobValue]: (state, action) => {
+//   state.jobValue = action.payload;
+// },
+
+// [setJobSuggestions]: (state, action) => {
+//   const inputValue = action.payload.value.trim();
+//   const inputLength = inputValue.length;
+//   const jobSuggestions =
+//     inputLength === 0
+//       ? []
+//       : jobids.filter(jobid => jobid.slice(0, inputLength) === inputValue);
+//   state.jobSuggestions = jobSuggestions;
+// },
+
+// [clearJobSuggestions]: state => {
+//   state.jobSuggestions = [];
+// },
+
+// [setTaskValue]: (state, action) => {
+//   state.taskValue = action.payload;
+// },
+
+// [setTaskSuggestions]: (state, action) => {
+//   const inputValue = action.payload.value.trim();
+//   const inputLength = inputValue.length;
+//   const taskSuggestions =
+//     inputLength === 0
+//       ? []
+//       : taskids.filter(taskid => taskid.slice(0, inputLength) === inputValue);
+//   state.taskSuggestions = taskSuggestions;
+// },
+
+// [clearTaskSuggestions]: state => {
+//   state.taskSuggestions = [];
+// },
+
+// [setOutputPathValue]: (state, action) => {
+//   console.log(action.payload);
+//   state.outputPathValue = action.payload;
+// },

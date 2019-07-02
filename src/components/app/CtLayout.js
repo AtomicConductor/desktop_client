@@ -1,7 +1,23 @@
+/* 
+Manage high level layout of page.
+
+All top level components exist here.
+Main box
+
+Drawer
+Status line
+Snackbars
+Modals
+
+The main box also contains the router.
+Other elements live outside the router. 
+*/
+
 import React, { useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import Box from "@material-ui/core/Box";
+
 import CtDrawerContainer from "./CtDrawerContainer";
 import Downloader from "../downloader/Downloader";
 import CtUploader from "../uploader/CtUploader";
@@ -10,8 +26,10 @@ import CtAccountContainer from "../account/CtAccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
 import CtSettings from "../settings/CtSettings";
+import StatusLine from "./StatusLine";
 
 import CtSnackbarContainer from "../notification/CtSnackbarContainer";
+import { drawerWidth, statusLineHeight } from "../../_helpers/constants";
 
 import {
   BrowserRouter as Router,
@@ -21,8 +39,10 @@ import {
 } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex"
+  box: {
+    // border: "1px solid #0f0",
+    height: window.innerHeight - statusLineHeight,
+    marginLeft: drawerWidth
   }
 }));
 
@@ -31,10 +51,8 @@ const CtLayout = () => {
 
   return (
     <Router>
-      <div className={classes.root}>
-        <CssBaseline />
-        <CtDrawerContainer />
-
+      <CtDrawerContainer />
+      <Box className={classes.box}>
         <Switch>
           <Route
             path="/dashboard"
@@ -62,8 +80,9 @@ const CtLayout = () => {
 
           <Redirect push to="/dashboard" />
         </Switch>
-      </div>
+      </Box>
       <CtSnackbarContainer />
+      <StatusLine />
     </Router>
   );
 };

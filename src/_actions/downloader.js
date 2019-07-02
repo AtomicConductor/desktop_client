@@ -1,39 +1,212 @@
 import { promisify } from "util";
-// import axios from "axios";
 
 import fs, { promises as fsp } from "fs";
 
 import { createAction } from "redux-starter-kit";
 // import { PythonShell as ps } from "python-shell";
 
+import { setNotification } from "../_actions/notification";
 import { setPythonScriptResponse, pythonScriptFailure } from "./python";
 
 import { DownloaderHelper } from "node-downloader-helper";
+
+const Queue = require("better-queue");
+
+const MemoryStore = require("better-queue-memory");
 
 export const toggleDrawer = createAction("downloader/toggleDrawer");
 
 export const toggleUseDaemon = createAction("downloader/toggleUseDaemon");
 
-export const setJobValue = createAction("downloader/setJobValue");
-export const setJobSuggestions = createAction("downloader/setJobSuggestions");
-export const clearJobSuggestions = createAction(
-  "downloader/clearJobSuggestions"
-);
+export const downloadProgress = createAction("downloader/downloadProgress");
 
-export const setTaskValue = createAction("downloader/setTaskValue");
-export const setTaskSuggestions = createAction("downloader/setTaskSuggestions");
-export const clearTaskSuggestions = createAction(
-  "downloader/clearTaskSuggestions"
-);
+export const addFileToQueue = createAction("downloader/addFileToQueue");
 
-export const setOutputPathValue = createAction("downloader/setOutputPathValue");
-
-// export const runDownloadJobs = createAction("downloader/runDownloadJobs");
 export const startDownloadDaemon = createAction(
   "downloader/startDownloadDaemon"
 );
 
-export const downloadProgress = createAction("downloader/downloadProgress");
+const options = {
+  concurrent: 4,
+  setImmediate: fn => {
+    setTimeout(fn, 0);
+  },
+  store: new MemoryStore()
+};
+
+let qqq = null;
+export const startDownloadQueue = params => {
+  return (dispatch, getState) => {
+    qqq = new Queue(function(file, callback) {
+      // console.log(file.url);
+      const dl = new DownloaderHelper(
+        file.url,
+        "/Users/julian/Downloads/cnw_temp"
+      )
+        .on("end", () => {
+          const msg = `Download Completed`;
+          console.log(msg);
+          callback();
+        })
+        .on("progress", stats => {
+          // dispatch(downloadProgress(stats));
+          console.log(stats);
+        })
+        .on("error", error => {
+          console.log(error);
+          callback();
+          // dispatch(setNotification({ snackbar: error.message, type: "error" }));
+        })
+        .start();
+    }, options);
+    dispatch(
+      setNotification({ snackbar: "Started download queue", type: "success" })
+    );
+    console.log("Started download queue");
+  };
+};
+
+// export function downloadAFile() {
+//   return (dispatch, getState) => {
+//     const state = getState();
+
+//     if (!state.downloader.queue) {
+//       dispatch(
+//         setNotification({ snackbar: "Nothing to download", type: "warning" })
+//       );
+//       return;
+//     }
+
+//     const file = state.downloader.queue[0];
+
+//     qqq.push(file);
+//   };
+// }
+
+const test_options = {
+  concurrent: 3,
+  setImmediate: fn => {
+    setTimeout(fn, 0);
+  },
+  store: new MemoryStore()
+};
+
+let test_qqq = null;
+export const startDownloadQueueTest = params => {
+  return (dispatch, getState) => {
+    test_qqq = new Queue(function(file, callback) {
+      // console.log(file.url);
+
+      console.log("!!!:" + file.relative_path);
+      callback();
+    }, options);
+
+    console.log("Started TEST queue");
+  };
+};
+
+export const addResourcesToQueue = params => {
+  return (dispatch, getState) => {
+    console.log("HERE addResourcesToQueue !!!! ");
+    const downloadables = getState().entities.downloads;
+    // add files by md5 or jobs by label.
+    let keys = params;
+    if (!Array.isArray(params)) {
+      keys = [params];
+    }
+    // console.log(keys);
+    keys.forEach(key => {
+      if (key.match(/^\d{5}$/)) {
+        // its a jobId
+        // console.log(`its a jobId ${Object.entries(downloadables).length}`);
+
+        // let arr = Object.entries(downloadables).filter(
+        //   dl => dl[1]["job_id"] === key
+        // );
+        // console.log(arr);
+
+        Object.entries(downloadables)
+          .filter(dl => dl[1]["job_id"] === key)
+          .map(dl => dl[1])
+          .sort((a, b) => (a["task_id"] > b["task_id"] ? 1 : -1))
+          .forEach(dl => {
+            console.log(dl.url);
+            // console.log(dl["task_id"]);
+            qqq.push(dl, () => {
+              console.log("DONE:" + dl.url);
+            });
+            // dispatch(addFileToQueue(dl));
+          });
+      } else {
+        // its an md5
+        qqq.push(downloadables[key], () => {
+          console.log("DONE:" + downloadables[key].url);
+        });
+        // dispatch(addFileToQueue(downloadables[key]));
+      }
+    });
+  };
+};
+
+// export const setJobValue = createAction("downloader/setJobValue");
+// export const setJobSuggestions = createAction("downloader/setJobSuggestions");
+// export const clearJobSuggestions = createAction(
+//   "downloader/clearJobSuggestions"
+// );
+
+// export const setTaskValue = createAction("downloader/setTaskValue");
+// export const setTaskSuggestions = createAction("downloader/setTaskSuggestions");
+// export const clearTaskSuggestions = createAction(
+//   "downloader/clearTaskSuggestions"
+// );
+
+// export const setOutputPathValue = createAction("downloader/setOutputPathValue");
+
+// export const runDownloadJobs = createAction("downloader/runDownloadJobs");
+
+// const initializeQueue = params => {
+//   return (dispatch, getState) => {
+//     Q = new Queue(function(file, cb) {
+//       // Some processing here ...
+
+//       const dl = new DownloaderHelper(
+//         file.url,
+//         "/Users/julian/Downloads/cnw_temp"
+//       );
+
+//       // cb(null, result);
+//     });
+//   };
+// };
+
+// const setImm =  fn => {
+//   setTimeout(fn,0)
+// }
+// setImmediate(() => {
+//   i18n.off('initialized', initialized);
+// });
+// setTimeout(() => {
+//   i18n.off('initialized', initialized);
+// }, 0);
+
+// const cb = dl => {
+//   dl.on("end", () => {
+//     const msg = `Download Completed`;
+//     console.log(msg);
+//   });
+
+//   dl.on("progress", stats => {
+//     // dispatch(downloadProgress(stats));
+//     console.log(stats);
+//   });
+
+//   dl.on("error", error => {
+//     console.log(error);
+//     // dispatch(setNotification({ snackbar: error.message, type: "error" }));
+//   });
+
+//   dl.start();
+// };
 
 // export function runDownloadJobs() {
 //   return (dispatch, getState) => {
@@ -65,13 +238,13 @@ export const downloadProgress = createAction("downloader/downloadProgress");
 // const img_url =
 //   "https://upload.wikimedia.org/wikipedia/commons/c/cc/ESC_large_ISS022_ISS022-E-11387-edit_01.JPG";
 
-const img_url = "http://ipv4.download.thinkbroadband.com/1GB.zip";
-const medium_file_url = "http://ipv4.download.thinkbroadband.com/200MB.zip";
-const large_img =
-  "https://upload.wikimedia.org/wikipedia/commons/e/e3/Large_and_small_magellanic_cloud_from_new_zealand.jpg";
+// const img_url = "http://ipv4.download.thinkbroadband.com/1GB.zip";
+// const medium_file_url = "http://ipv4.download.thinkbroadband.com/200MB.zip";
+// const large_img =
+//   "https://upload.wikimedia.org/wikipedia/commons/e/e3/Large_and_small_magellanic_cloud_from_new_zealand.jpg";
 
-const cimg_url =
-  "https://storage.googleapis.com/eloquent-vector-104019/accounts/5175325533143040/hashstore/f36f77b05499993b9afbe1063eeea101?Expires=1563033082&GoogleAccessId=eloquent-vector-104019%40appspot.gserviceaccount.com&Signature=BnIYzUwlZ04tk5HRfxq1Fp0%2FpNmRlB567k2OWsXhpIcFifzrnxhkjHxud4VmprJeJGthroi81W2jcnPz3t%2Fe1%2FGWTFF0k93edGYMlAGfbF%2FdC3ZyQ%2FdUBqQJlQedwR8LzKVt83ebtHQAolqAcIKP04HfLczXYcoltQZqyU7EvQUATaFj7iUeJFeUWoK6PDT%2F%2FF4vEYb7oNjqbPghayZxgmtEG85eigdcAePjp3%2BkQPImyjk%2F9XSSih57QNRNHG0r1gSPBOpyJ%2BjKmM4s8zhSLugfdS4SqTqQ43APvEC8lvjjvB2ExyL%2B18LwKckiaPOEHAXBKexDXG%2BX0T38oVqWeQ%3D%3D";
+// const cimg_url =
+//   "https://storage.googleapis.com/eloquent-vector-104019/accounts/5175325533143040/hashstore/f36f77b05499993b9afbe1063eeea101?Expires=1563033082&GoogleAccessId=eloquent-vector-104019%40appspot.gserviceaccount.com&Signature=BnIYzUwlZ04tk5HRfxq1Fp0%2FpNmRlB567k2OWsXhpIcFifzrnxhkjHxud4VmprJeJGthroi81W2jcnPz3t%2Fe1%2FGWTFF0k93edGYMlAGfbF%2FdC3ZyQ%2FdUBqQJlQedwR8LzKVt83ebtHQAolqAcIKP04HfLczXYcoltQZqyU7EvQUATaFj7iUeJFeUWoK6PDT%2F%2FF4vEYb7oNjqbPghayZxgmtEG85eigdcAePjp3%2BkQPImyjk%2F9XSSih57QNRNHG0r1gSPBOpyJ%2BjKmM4s8zhSLugfdS4SqTqQ43APvEC8lvjjvB2ExyL%2B18LwKckiaPOEHAXBKexDXG%2BX0T38oVqWeQ%3D%3D";
 
 //www.googleapis.com/storage/v1/b/[BUCKET_NAME]/o/[OBJECT_NAME]?alt=media
 
@@ -98,50 +271,6 @@ const cimg_url =
 
 // dl.on("end", () => console.log("Download Completed"));
 // dl.start();
-
-export function runDownloadJobs() {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    // def get_jobs_downloads(self, job_ids, task_id):
-
-    //     for job_id in job_ids:
-    //         endpoint = self.endpoint_downloads_job % job_id
-    //         downloads = _get_job_download(endpoint, self.api_client, job_id, task_id)
-    //         if downloads:
-    //             for task_download in downloads.get("downloads", []):
-    //                 print "putting in queue: %s" % task_download
-    //                 self.pending_queue.put(task_download, block=True)
-
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijo1MTc1MzI1NTMzMTQzMDQwLCJyb2xlIjowLCJzdWIiOiI1NzE2Mzg3NTI3OTE3NTY4IiwiZXhwIjoxNTYwNTI2NDgxLCJzY29wZSI6InVzZXIiLCJpc3MiOiJodHRwczovL2lkLmRldi1jb25kdWN0b3J0ZWNoLmNvbSIsImlhdCI6MTU2MDQzOTMwMywiaWQiOjU3MTYzODc1Mjc5MTc1NjgsImVtYWlsIjoianVsaWFuLm1hbm5AYWRtaW9zLXNhLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLmRldi1jb25kdWN0b3J0ZWNoLmNvbSJ9.E3uqgN49MZThx0U4oSuuZXM0Rl-x0Spwucu1Vh3eXfy_RLxpXp71y-L3KAM38ExAyD394i8Tb2VpZcjA-B7DwDzY5zhkz-3assepIVoGDeAEtsqvyvfMXFg9tdvjpFs70n7iuDe0uQz3cwyKhNCftpzDMBt96jLNsApW1P8VMP2wjoDJf3kI57cjtXsXLEsIqmIRz0lO3iWIdKrS_B4rXQLItoK2dPJXmCm5-Yan_uHbTSEcwI0OiAbSMRcRAP6F_AAiZm4fUFKUwDRc78ZGmKK8PrdVtQCa3gySR27x5NrNw2aqu5AEgS6Youjc0WWmE_p_8ce4rnJ1DvHT8uZQYA",
-        Accept: "application/json"
-      }
-    };
-
-    const dl = new DownloaderHelper(cimg_url, "/Users/julian/Downloads");
-    console.log("SETTING UP EVENT HANDLERS");
-    dl.on("end", () => {
-      console.log("Download Completed");
-      dispatch(downloadProgress("COMPLETE"));
-    });
-
-    dl.on("progress", stats => {
-      dispatch(downloadProgress(stats));
-      console.log("Progress");
-    });
-
-    dl.on("error", error => {
-      console.log(error);
-    });
-
-    dl.start();
-  };
-}
 
 // export function runDownloadJobs() {
 //   return (dispatch, getState) => {

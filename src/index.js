@@ -7,6 +7,11 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import { readSettings } from "./_actions/environment";
+import {
+  startDownloadQueue,
+  startDownloadQueueTest
+} from "./_actions/downloader";
+
 // import { fetchProfile } from "./_actions/profile";
 
 store.dispatch(readSettings());
@@ -18,6 +23,9 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+
+store.dispatch(startDownloadQueue());
+store.dispatch(startDownloadQueueTest());
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
