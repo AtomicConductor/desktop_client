@@ -1,17 +1,16 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
+import MuiTabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // backgroundColor: theme.palette.background.default,
     flexGrow: 1,
     borderStyle: "solid",
     margin: 0
   }
 }));
-const DownloaderTabs = () => {
+const Tabs = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -20,7 +19,7 @@ const DownloaderTabs = () => {
   }
 
   return (
-    <Tabs
+    <MuiTabs
       className={classes.root}
       value={value}
       onChange={handleChange}
@@ -30,8 +29,8 @@ const DownloaderTabs = () => {
     >
       <Tab className={classes.tab} label="Item One" />
       <Tab className={classes.tab} label="Item Two" />
-    </Tabs>
+    </MuiTabs>
   );
 };
 
-export default DownloaderTabs;
+export default Tabs;

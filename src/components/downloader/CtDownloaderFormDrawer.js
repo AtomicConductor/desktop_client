@@ -89,7 +89,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DownloaderFilterDrawer = props => {
+const FilterDrawer = props => {
   const classes = useStyles();
 
   const {
@@ -147,7 +147,7 @@ const DownloaderFilterDrawer = props => {
   );
 };
 
-DownloaderFilterDrawer.propTypes = {
+FilterDrawer.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
   useDaemon: PropTypes.bool.isRequired,
   onToggleUseDaemon: PropTypes.func.isRequired,
@@ -155,4 +155,4 @@ DownloaderFilterDrawer.propTypes = {
   refreshJobList: PropTypes.func.isRequired
 };
 
-export default DownloaderFilterDrawer;
+export default FilterDrawer;

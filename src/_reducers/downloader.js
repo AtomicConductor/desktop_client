@@ -97,8 +97,3 @@ export default downloader;
 // [clearTaskSuggestions]: state => {
 //   state.taskSuggestions = [];
 // },
-
-// [setOutputPathValue]: (state, action) => {
-//   console.log(action.payload);
-//   state.outputPathValue = action.payload;
-// },

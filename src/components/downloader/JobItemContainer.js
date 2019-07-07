@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
-import DownloaderJobItem from "./DownloaderJobItem";
-import { addResourcesToQueue, add } from "../../_actions/downloader";
+import JobItem from "./JobItem";
+import { addToQueue } from "../../_actions/files";
 
 const mapStateToProps = (state, ownProps) => {
   // const { job } = ownProps;
@@ -12,16 +12,17 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const { job } = ownProps;
   return {
-    // addToQueue: keys => {
-    //   dispatch(addResourcesToQueue(keys));
-    // }
+    addToQueue: () => {
+      dispatch(addToQueue(job.jobLabel));
+    }
   };
 };
 
-const DownloaderJobItemContainer = connect(
+const JobItemContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(DownloaderJobItem);
+)(JobItem);
 
-export default DownloaderJobItemContainer;
+export default JobItemContainer;

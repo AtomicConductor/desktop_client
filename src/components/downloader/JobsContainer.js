@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import DownloaderJobs from "./DownloaderJobs";
+import Jobs from "./Jobs";
 import { addResourcesToQueue } from "../../_actions/downloader";
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,17 +16,17 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    addToQueue: keys => {
-      dispatch(addResourcesToQueue(keys));
-    }
-  };
-};
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   return {
+//     addToQueue: keys => {
+//       dispatch(addResourcesToQueue(keys));
+//     }
+//   };
+// };
 
-const DownloaderJobsContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DownloaderJobs);
+const JobsContainer = connect(
+  mapStateToProps
+  // mapDispatchToProps
+)(Jobs);
 
-export default DownloaderJobsContainer;
+export default JobsContainer;

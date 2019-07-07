@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import AppBar from "@material-ui/core/AppBar";
+import MuiAppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DownloaderAppBar = props => {
+const AppBar = props => {
   const classes = useStyles();
 
   const { history } = props;
@@ -84,7 +84,7 @@ const DownloaderAppBar = props => {
   };
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <MuiAppBar position="fixed" className={classes.appBar}>
       <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
           Downloader
@@ -109,10 +109,10 @@ const DownloaderAppBar = props => {
           {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
         </IconButton>
       </Toolbar>
-    </AppBar>
+    </MuiAppBar>
   );
 };
 
-export { DownloaderAppBar };
+export { AppBar };
 
-export default withRouter(DownloaderAppBar);
+export default withRouter(AppBar);

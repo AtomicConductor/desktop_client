@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import DownloaderAppBar from "./DownloaderAppBar";
+import AppBar from "./AppBar";
 import { toggleDrawer } from "../../_actions/downloader";
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,9 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const DownloaderAppBarContainer = connect(
+const AppBarContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(DownloaderAppBar);
+)(AppBar);
 
-export default DownloaderAppBarContainer;
+export default AppBarContainer;

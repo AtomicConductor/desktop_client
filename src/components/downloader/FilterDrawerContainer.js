@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import DownloaderFilterDrawer from "./DownloaderFilterDrawer";
+import FilterDrawer from "./FilterDrawer";
 import { toggleUseDaemon } from "../../_actions/downloader";
 import {
   fetchJobs
@@ -26,9 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const DownloaderFilterDrawerContainer = connect(
+const FilterDrawerContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(DownloaderFilterDrawer);
+)(FilterDrawer);
 
-export default DownloaderFilterDrawerContainer;
+export default FilterDrawerContainer;

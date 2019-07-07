@@ -5,24 +5,32 @@ import path from "upath";
 import fs from "fs";
 import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
+import { directoryExists, exactFileExists } from "../_helpers/fileSystem";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
+
 export const requestJob = createAction("downloader/requestJob");
+export const setOutputPathValue = createAction("downloader/setOutputPathValue");
+export const resetOutputPathValue = createAction(
+  "downloader/resetOutputPathValue"
+);
 
 export const endDownloadRequest = createAction("downloader/endDownloadRequest");
-
 export const setFileExistsLocally = createAction(
   "downloader/setFileExistsLocally"
 );
-
-export const requestDownloadFiles = createAction(
-  "downloader/requestDownloadFiles"
+export const requestDownloadData = createAction(
+  "downloader/requestDownloadData"
+);
+export const receiveDownloadSummary = createAction(
+  "downloader/receiveDownloadSummary"
 );
 
-export const receiveDownloadFiles = createAction(
-  "downloader/receiveDownloadFiles"
+export const receiveExistingFilesInfo = createAction(
+  "downloader/receiveExistingFilesInfo"
 );
+
 /*
 Takes an array of objects whose keys are IDs, and returns the 
 Id of the Nth item 
@@ -37,7 +45,10 @@ const getPartitionId = (data, n) => {
 };
 
 /* 
-A thunk that wraps getRecentJobs().  
+A thunk that wraps getRecentJobs(). 
+1. dispatch(requestJobs()); - maybe start a spinner
+2. call getRecentJobs
+3. dispatch(receiveJobs(data)); - add data to store, kill the spinner etc.
 */
 export function fetchJobs() {
   return async function(dispatch, getState) {
@@ -73,7 +84,7 @@ async function getRecentJobs(limit, state) {
 
   let data = await response.json();
   const oldestId = getPartitionId(data.jids, limit);
-
+  console.log(oldestId);
   url = `${apiServer}/api/v1/jobs?limit=2000&filter=jobLabel_gt_${oldestId}`;
   response = await fetch(url, options);
   checkResponse(response);
@@ -83,23 +94,121 @@ async function getRecentJobs(limit, state) {
 }
 
 /////////////////////////////////////
+/////////////////////////////////////
+/////////////////////////////////////
 
-export function fetchDownloadFiles(jobLabel) {
+export function fetchDownloadSummary(jobLabel) {
   return async function(dispatch, getState) {
-    dispatch(requestDownloadFiles(jobLabel));
+    dispatch(requestDownloadData(jobLabel));
     try {
+      // const data = await getDownloadSummary(jobLabel, getState());
+
       const data = await getDownloadFiles(jobLabel, getState());
-      dispatch(receiveDownloadFiles(data));
+
+      dispatch(receiveDownloadSummary(data));
+
+      const numExisting = checkExistingFilesInfo(
+        data.files,
+        data.outputDirectory
+      );
+      console.log("numExisting: " + numExisting);
+      dispatch(receiveExistingFilesInfo({ jobLabel, numExisting }));
     } catch (error) {
       dispatch(
         setNotification({
-          type: "error",
-          snackbar: error.message
+          type: "info",
+          snackbar: "Can't fetch download data for this job."
+        })
+      );
+      dispatch(
+        receiveDownloadSummary({
+          jobLabel
         })
       );
     }
   };
 }
+
+const checkExistingFilesInfo = (files, outputDirectory) => {
+  // const { files } = data;
+
+  const dExist = directoryExists(outputDirectory);
+  // console.log("D EXISTS: " + dExist);
+  if (!dExist) {
+    return 0;
+  }
+  if (!files) {
+    return 0;
+  }
+  return files.filter(f => {
+    const fullPath = path.join(outputDirectory, f.relativePath);
+    const md5 = f.md5;
+    // console.log("fullPath: " + fullPath + "  --  md5: " + md5);
+    return exactFileExists(fullPath, md5);
+  }).length;
+};
+
+async function getDownloadFiles(jobLabel, state) {
+  const options = createRequestOptions(state);
+  const { projectUrl } = state.environment.project;
+  const url = `${projectUrl}/downloads/${jobLabel}`;
+  let response = await fetch(url, options);
+  checkResponse(response);
+  let data = await response.json();
+
+  let outputDirectory = null;
+  let files = [];
+  let first = true;
+
+  const downloads = data.downloads || [];
+
+  files = downloads.flatMap(task => {
+    return task.files.map(file => {
+      if (first) {
+        outputDirectory = file["output_dir"];
+        first = false;
+      }
+      return {
+        relativePath: file["relative_path"],
+        md5: file["md5"]
+      };
+    });
+  });
+  return { files, jobLabel, outputDirectory };
+}
+
+/**
+ We don't want the filenames and stuff. 
+ Wejust want the minimum information necessary to display the panel.
+*/
+// async function getDownloadSummary(jobLabel, state) {
+//   // options is just headers, content type etc.
+//   const options = createRequestOptions(state);
+
+//   const { projectUrl } = state.environment.project;
+//   const url = `${projectUrl}/downloads/${jobLabel}`;
+//   let response = await fetch(url, options);
+//   checkResponse(response);
+
+//   let data = await response.json();
+
+//   let outputDirectory = null;
+//   let first = true;
+//   let fileCount = 0;
+
+//   const downloads = data.downloads || [];
+
+//   downloads.forEach(task => {
+//     task.files.forEach(file => {
+//       if (first) {
+//         outputDirectory = file["output_dir"];
+//         first = false;
+//       }
+//     });
+//     fileCount += task.files.length || 0;
+//   });
+//   return { fileCount, jobLabel, outputDirectory };
+// }
 
 // const oldestId = getPartitionId(data.jids, limit);
 
@@ -110,95 +219,68 @@ export function fetchDownloadFiles(jobLabel) {
 // data = await response.json();
 // return data;
 
-async function getDownloadFiles(jobLabel, state) {
-  // options is just headers, content type etc.
-  const options = createRequestOptions(state);
+/*
 
-  const { projectUrl } = state.environment.project;
-  const url = `${projectUrl}/downloads/${jobLabel}`;
-  let response = await fetch(url, options);
-  checkResponse(response);
 
-  let data = await response.json();
+*/
 
-  let outputDirectory = null;
-  let files = [];
-  let first = true;
+// const checkExactFileExists = (md5, filePath) => {
+//   return new Promise(function(resolve, reject) {
+//     try {
+//       fs.statSync(filePath).isFile();
+//       resolve(Buffer.from(md5File.sync(filePath)).toString("base64") === md5);
+//     } catch (err) {
+//       resolve(false);
+//     }
+//   });
+// };
 
-  files = data.downloads
-    ? data.downloads.flatMap(task => {
-        return task.files.map(file => {
-          if (first) {
-            outputDirectory = file["output_dir"];
-            first = false;
-          }
-          return {
-            relativePath: file["relative_path"],
-            md5: file["md5"]
-          };
-        });
-      })
-    : [];
-  return { files, jobLabel, outputDirectory };
-}
+// const checkExactFileExistsThunk = (
+//   jobLabel,
+//   md5,
+//   relativePath,
+//   outputDirectory
+// ) => {
+//   return function(dispatch, getState) {
+//     const filePath = path.join(outputDirectory, relativePath);
+//     return checkExactFileExists(md5, filePath).then(exists =>
+//       dispatch(setFileExistsLocally({ jobLabel, relativePath, exists }))
+//     );
+//   };
+// };
 
-const checkExactFileExists = (md5, filePath) => {
-  return new Promise(function(resolve, reject) {
-    try {
-      fs.statSync(filePath).isFile();
-      resolve(Buffer.from(md5File.sync(filePath)).toString("base64") === md5);
-    } catch (err) {
-      resolve(false);
-    }
-  });
-};
+// export function betterFetchJobs() {
+//   return async function(dispatch, getState) {
+//     dispatch(requestJobs());
+//     const state = getState();
+//     const options = createRequestOptions(state);
+//     // const { apiServer, projectUrl } = state.environment.project;
+//     const limit = 3;
 
-const checkExactFileExistsThunk = (
-  jobLabel,
-  md5,
-  relativePath,
-  outputDirectory
-) => {
-  return function(dispatch, getState) {
-    const filePath = path.join(outputDirectory, relativePath);
-    return checkExactFileExists(md5, filePath).then(exists =>
-      dispatch(setFileExistsLocally({ jobLabel, relativePath, exists }))
-    );
-  };
-};
+//     const url = `${state.environment.project.projectUrl}/jobs`;
 
-export function betterFetchJobs() {
-  return async function(dispatch, getState) {
-    dispatch(requestJobs());
-    const state = getState();
-    const options = createRequestOptions(state);
-    // const { apiServer, projectUrl } = state.environment.project;
-    const limit = 3;
+//     try {
+//       const response = await fetch(url, options);
+//       if (!response.ok) {
+//         throw new Error(response.statusText);
+//       }
+//       const data = await response.json();
 
-    const url = `${state.environment.project.projectUrl}/jobs`;
+//       const jid = getPartitionId(data.jids, limit);
 
-    try {
-      const response = await fetch(url, options);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const data = await response.json();
-
-      const jid = getPartitionId(data.jids, limit);
-
-      console.log("DATA!");
-      console.log(jid);
-    } catch (error) {
-      dispatch(
-        setNotification({
-          type: "error",
-          snackbar: error.message,
-          detail: { url, options }
-        })
-      );
-    }
-  };
-}
+//       console.log("DATA!");
+//       console.log(jid);
+//     } catch (error) {
+//       dispatch(
+//         setNotification({
+//           type: "error",
+//           snackbar: error.message,
+//           detail: { url, options }
+//         })
+//       );
+//     }
+//   };
+// }
 
 /* 
 

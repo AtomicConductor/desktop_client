@@ -12,7 +12,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import DownloaderJobItemDetailsContainer from "./DownloaderJobItemDetailsContainer";
+import JobItemDetailsContainer from "./JobItemDetailsContainer";
 
 const useStyles = makeStyles(theme => ({
   summary: {
@@ -55,13 +55,16 @@ const useStyles = makeStyles(theme => ({
   button: {}
 }));
 
-const DownloaderJobItem = props => {
-  const { job, onPanelClick, expanded } = props;
+const JobItem = props => {
+  const { job, onPanelClick, expanded, addToQueue } = props;
+
   const projectLabel = job.projectId
     ? job.projectId.split("|").reverse()[0]
     : "NULL";
+
   const jobLabel = job.jobLabel;
   const jobTitle = job.title;
+  const downloadable = job.fileCount > 0;
 
   const classes = useStyles();
 
@@ -94,11 +97,17 @@ const DownloaderJobItem = props => {
       </ExpansionPanelSummary>
 
       <ExpansionPanelDetails>
-        <DownloaderJobItemDetailsContainer job={job} />
+        <JobItemDetailsContainer job={job} />
       </ExpansionPanelDetails>
       <Divider />
       <ExpansionPanelActions>
-        <Button size="small" color="secondary" variant="outlined">
+        <Button
+          disabled={!downloadable}
+          size="small"
+          color="secondary"
+          variant="outlined"
+          onClick={addToQueue}
+        >
           Download
         </Button>
       </ExpansionPanelActions>
@@ -106,13 +115,14 @@ const DownloaderJobItem = props => {
   );
 };
 
-DownloaderJobItem.propTypes = {
+JobItem.propTypes = {
   expanded: PropTypes.string.isRequired,
   onPanelClick: PropTypes.func.isRequired,
-  job: PropTypes.object.isRequired
+  job: PropTypes.object.isRequired,
+  addToQueue: PropTypes.func.isRequired
 };
 
-export default DownloaderJobItem;
+export default JobItem;
 
 /* 
 

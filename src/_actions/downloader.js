@@ -8,11 +8,9 @@ import { createAction } from "redux-starter-kit";
 import { setNotification } from "../_actions/notification";
 import { setPythonScriptResponse, pythonScriptFailure } from "./python";
 
-import { DownloaderHelper } from "node-downloader-helper";
-
-const Queue = require("better-queue");
-
-const MemoryStore = require("better-queue-memory");
+// import { DownloaderHelper } from "node-downloader-helper";
+// const Queue = require("better-queue");
+// const MemoryStore = require("better-queue-memory");
 
 export const toggleDrawer = createAction("downloader/toggleDrawer");
 
@@ -26,45 +24,45 @@ export const startDownloadDaemon = createAction(
   "downloader/startDownloadDaemon"
 );
 
-const options = {
-  concurrent: 4,
-  setImmediate: fn => {
-    setTimeout(fn, 0);
-  },
-  store: new MemoryStore()
-};
+// const options = {
+//   concurrent: 4,
+//   setImmediate: fn => {
+//     setTimeout(fn, 0);
+//   },
+//   store: new MemoryStore()
+// };
 
-let qqq = null;
-export const startDownloadQueue = params => {
-  return (dispatch, getState) => {
-    qqq = new Queue(function(file, callback) {
-      // console.log(file.url);
-      const dl = new DownloaderHelper(
-        file.url,
-        "/Users/julian/Downloads/cnw_temp"
-      )
-        .on("end", () => {
-          const msg = `Download Completed`;
-          console.log(msg);
-          callback();
-        })
-        .on("progress", stats => {
-          // dispatch(downloadProgress(stats));
-          console.log(stats);
-        })
-        .on("error", error => {
-          console.log(error);
-          callback();
-          // dispatch(setNotification({ snackbar: error.message, type: "error" }));
-        })
-        .start();
-    }, options);
-    dispatch(
-      setNotification({ snackbar: "Started download queue", type: "success" })
-    );
-    console.log("Started download queue");
-  };
-};
+// let qqq = null;
+// export const startDownloadQueue = params => {
+//   return (dispatch, getState) => {
+//     qqq = new Queue(function(file, callback) {
+//       // console.log(file.url);
+//       const dl = new DownloaderHelper(
+//         file.url,
+//         "/Users/julian/Downloads/cnw_temp"
+//       )
+//         .on("end", () => {
+//           const msg = `Download Completed`;
+//           console.log(msg);
+//           callback();
+//         })
+//         .on("progress", stats => {
+//           // dispatch(downloadProgress(stats));
+//           console.log(stats);
+//         })
+//         .on("error", error => {
+//           console.log(error);
+//           callback();
+//           // dispatch(setNotification({ snackbar: error.message, type: "error" }));
+//         })
+//         .start();
+//     }, options);
+//     dispatch(
+//       setNotification({ snackbar: "Started download queue", type: "success" })
+//     );
+//     console.log("Started download queue");
+//   };
+// };
 
 // export function downloadAFile() {
 //   return (dispatch, getState) => {
@@ -83,70 +81,70 @@ export const startDownloadQueue = params => {
 //   };
 // }
 
-const test_options = {
-  concurrent: 3,
-  setImmediate: fn => {
-    setTimeout(fn, 0);
-  },
-  store: new MemoryStore()
-};
+// const test_options = {
+//   concurrent: 3,
+//   setImmediate: fn => {
+//     setTimeout(fn, 0);
+//   },
+//   store: new MemoryStore()
+// };
 
-let test_qqq = null;
-export const startDownloadQueueTest = params => {
-  return (dispatch, getState) => {
-    test_qqq = new Queue(function(file, callback) {
-      // console.log(file.url);
+// let test_qqq = null;
+// export const startDownloadQueueTest = params => {
+//   return (dispatch, getState) => {
+//     test_qqq = new Queue(function(file, callback) {
+//       // console.log(file.url);
 
-      console.log("!!!:" + file.relative_path);
-      callback();
-    }, options);
+//       console.log("!!!:" + file.relative_path);
+//       callback();
+//     }, options);
 
-    console.log("Started TEST queue");
-  };
-};
+//     console.log("Started TEST queue");
+//   };
+// };
 
-export const addResourcesToQueue = params => {
-  return (dispatch, getState) => {
-    console.log("HERE addResourcesToQueue !!!! ");
-    const downloadables = getState().entities.downloads;
-    // add files by md5 or jobs by label.
-    let keys = params;
-    if (!Array.isArray(params)) {
-      keys = [params];
-    }
-    // console.log(keys);
-    keys.forEach(key => {
-      if (key.match(/^\d{5}$/)) {
-        // its a jobId
-        // console.log(`its a jobId ${Object.entries(downloadables).length}`);
+// export const addResourcesToQueue = jobLabel => {
+//   return (dispatch, getState) => {
+//     console.log("HERE addResourcesToQueue !!!! ");
+//     const downloadables = getState().entities.downloads;
+//     // add files by md5 or jobs by label.
+//     let keys = params;
+//     if (!Array.isArray(params)) {
+//       keys = [params];
+//     }
+//     // console.log(keys);
+//     keys.forEach(key => {
+//       if (key.match(/^\d{5}$/)) {
+//         // its a jobId
+//         // console.log(`its a jobId ${Object.entries(downloadables).length}`);
 
-        // let arr = Object.entries(downloadables).filter(
-        //   dl => dl[1]["job_id"] === key
-        // );
-        // console.log(arr);
+//         // let arr = Object.entries(downloadables).filter(
+//         //   dl => dl[1]["job_id"] === key
+//         // );
+//         // console.log(arr);
 
-        Object.entries(downloadables)
-          .filter(dl => dl[1]["job_id"] === key)
-          .map(dl => dl[1])
-          .sort((a, b) => (a["task_id"] > b["task_id"] ? 1 : -1))
-          .forEach(dl => {
-            console.log(dl.url);
-            // console.log(dl["task_id"]);
-            qqq.push(dl, () => {
-              console.log("DONE:" + dl.url);
-            });
-            // dispatch(addFileToQueue(dl));
-          });
-      } else {
-        // its an md5
-        qqq.push(downloadables[key], () => {
-          console.log("DONE:" + downloadables[key].url);
-        });
-        // dispatch(addFileToQueue(downloadables[key]));
-      }
-    });
-  };
-};
+//         Object.entries(downloadables)
+//           .filter(dl => dl[1]["job_id"] === key)
+//           .map(dl => dl[1])
+//           .sort((a, b) => (a["task_id"] > b["task_id"] ? 1 : -1))
+//           .forEach(dl => {
+//             console.log(dl.url);
+//             // console.log(dl["task_id"]);
+//             qqq.push(dl, () => {
+//               console.log("DONE:" + dl.url);
+//             });
+//             // dispatch(addFileToQueue(dl));
+//           });
+//       } else {
+//         // its an md5
+//         qqq.push(downloadables[key], () => {
+//           console.log("DONE:" + downloadables[key].url);
+//         });
+//         // dispatch(addFileToQueue(downloadables[key]));
+//       }
+//     });
+//   };
+// };
 
 // export const setJobValue = createAction("downloader/setJobValue");
 // export const setJobSuggestions = createAction("downloader/setJobSuggestions");

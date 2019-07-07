@@ -23,11 +23,6 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     height: `calc(100% - ${appBarHeight + statusLineHeight}px)`
   },
-  listBox: {
-    // display: "flex",
-    // width: "100%",
-    // height: "100%"
-  },
 
   centeredBox: {
     border: "1px solid red",
@@ -53,10 +48,10 @@ const Jobs = props => {
   };
 
   // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    // Update the document title using the browser API
-    // setExpanded("00912");
-  }, []);
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   // setExpanded("00912");
+  // }, []);
 
   let content;
   if (loading) {
@@ -82,7 +77,7 @@ const Jobs = props => {
     } else {
       content = (
         <Box className={classes.centeredBox}>
-          <Typography variant="h6">No jobs</Typography>
+          <Typography variant="h6">No jobs match the current filter</Typography>
         </Box>
       );
     }
