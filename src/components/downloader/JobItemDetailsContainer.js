@@ -32,11 +32,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const { jobLabel } = ownProps.job;
   return {
     fetchFilesInfo: () => {
-      console.log("-------------");
-      console.log("HERE 1");
+      // console.log("-------------");
+      // console.log("HERE 1");
 
       dispatch(fetchDownloadSummary(jobLabel));
-      console.log("HERE 2");
+      // console.log("HERE 2");
       // dispatch(updateExistingFilesInfo({ jobLabel }));
       // console.log("HERE 3");
     }
