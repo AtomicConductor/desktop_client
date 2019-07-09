@@ -1,7 +1,11 @@
 import { connect } from "react-redux";
 import OutputPathField from "./OutputPathField";
 
-import { setOutputPathValue, resetOutputPathValue } from "../../_actions/jobs";
+import {
+  setOutputPathValue,
+  resetOutputPathValue,
+  updateExistingFilesInfo
+} from "../../_actions/jobs";
 
 const mapStateToProps = (state, ownProps) => {
   const { jobLabel } = ownProps;
@@ -22,9 +26,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setValue: value => {
       dispatch(setOutputPathValue({ jobLabel, value }));
+      dispatch(updateExistingFilesInfo({ jobLabel }));
     },
     resetValue: () => {
       dispatch(resetOutputPathValue({ jobLabel }));
+      dispatch(updateExistingFilesInfo({ jobLabel }));
     }
   };
 };

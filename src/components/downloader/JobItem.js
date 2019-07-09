@@ -58,19 +58,25 @@ const useStyles = makeStyles(theme => ({
 const JobItem = props => {
   const { job, onPanelClick, expanded, addToQueue } = props;
 
+  const downloadable = Boolean(
+    job.files &&
+      Object.values(job.files).some(f => {
+        return f.exists !== true;
+      })
+  );
+
   const projectLabel = job.projectId
     ? job.projectId.split("|").reverse()[0]
     : "NULL";
 
   const jobLabel = job.jobLabel;
   const jobTitle = job.title;
-  const downloadable = job.fileCount > 0;
 
   const classes = useStyles();
 
   return (
     <ExpansionPanel
-      TransitionProps={{ unmountOnExit: true }}
+      TransitionProps={{ mountOnEnter: true }}
       expanded={expanded === job.jobLabel}
       onChange={onPanelClick(job.jobLabel)}
     >

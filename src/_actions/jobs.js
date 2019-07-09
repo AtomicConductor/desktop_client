@@ -5,7 +5,10 @@ import path from "upath";
 import fs from "fs";
 import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
-import { directoryExists, exactFileExists } from "../_helpers/fileSystem";
+import {
+  directoryExistsSync,
+  exactFileExistsSync
+} from "../_helpers/fileSystem";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -25,6 +28,10 @@ export const requestDownloadData = createAction(
 );
 export const receiveDownloadSummary = createAction(
   "downloader/receiveDownloadSummary"
+);
+
+export const requestExistingFilesInfo = createAction(
+  "downloader/requestExistingFilesInfo"
 );
 
 export const receiveExistingFilesInfo = createAction(
@@ -84,7 +91,7 @@ async function getRecentJobs(limit, state) {
 
   let data = await response.json();
   const oldestId = getPartitionId(data.jids, limit);
-  console.log(oldestId);
+  // console.log(oldestId);
   url = `${apiServer}/api/v1/jobs?limit=2000&filter=jobLabel_gt_${oldestId}`;
   response = await fetch(url, options);
   checkResponse(response);
@@ -103,16 +110,58 @@ export function fetchDownloadSummary(jobLabel) {
     try {
       // const data = await getDownloadSummary(jobLabel, getState());
 
+      console.log("getDownloadFiles");
+      var startTime = new Date();
       const data = await getDownloadFiles(jobLabel, getState());
+      const downloadTime = new Date();
+      // console.log("DONE getDownloadFiles");
 
       dispatch(receiveDownloadSummary(data));
+      const receiveDownloadTime = new Date();
+      // console.log("DONE receiveDownloadSummary");
 
-      const numExisting = checkExistingFilesInfo(
-        data.files,
-        data.outputDirectory
+      dispatch(updateExistingFilesInfo({ jobLabel }));
+      const updateExistingTime = new Date();
+      // console.log("DONE updateExistingFilesInfo");
+
+      const downloadDuration = downloadTime - startTime;
+      const receiveDownloadDuration = receiveDownloadTime - downloadTime;
+      const updateExistingDuration = updateExistingTime - receiveDownloadTime;
+
+      const total =
+        downloadDuration + receiveDownloadDuration + updateExistingDuration;
+
+      console.log(
+        "! downloadDuration= " +
+          downloadDuration +
+          " = " +
+          (downloadDuration * 100) / parseFloat(total) +
+          "%"
       );
-      console.log("numExisting: " + numExisting);
-      dispatch(receiveExistingFilesInfo({ jobLabel, numExisting }));
+
+      console.log(
+        "! receiveDownloadDuration= " +
+          receiveDownloadDuration +
+          " = " +
+          (receiveDownloadDuration * 100) / parseFloat(total) +
+          "%"
+      );
+
+      console.log(
+        "! updateExistingDuration= " +
+          updateExistingDuration +
+          " = " +
+          (updateExistingDuration * 100) / parseFloat(total) +
+          "%"
+      );
+
+      // const numExisting = checkExistingFilesInfo(
+      //   data.files,
+      //   data.outputDirectory
+      // );
+
+      // console.log("numExisting: " + numExisting);
+      // dispatch(receiveExistingFilesInfo({ jobLabel, numExisting }));
     } catch (error) {
       dispatch(
         setNotification({
@@ -129,47 +178,86 @@ export function fetchDownloadSummary(jobLabel) {
   };
 }
 
-const checkExistingFilesInfo = (files, outputDirectory) => {
-  // const { files } = data;
+export function updateExistingFilesInfo({ jobLabel }) {
+  return async function(dispatch, getState) {
+    dispatch(requestExistingFilesInfo(jobLabel));
+    const jobs = getState().entities.jobs;
 
-  const dExist = directoryExists(outputDirectory);
-  // console.log("D EXISTS: " + dExist);
-  if (!dExist) {
-    return 0;
+    // console.log("JOB LABEL: " + jobLabel);
+
+    // console.log("numExisting: " + numExisting);
+    const start = new Date();
+    const existing = await checkExistingFilesInfo(jobs[jobLabel]);
+    dispatch(receiveExistingFilesInfo({ jobLabel, existing }));
+    const end = new Date();
+
+    console.log("TIMING - updateExistingFilesInfo: " + (end - start));
+
+    // dispatch(receiveExistingFilesInfo({ jobLabel, existing }));
+  };
+}
+
+const checkExistingFilesInfo = job => {
+  // return an array that contains only relative paths of the files that exist
+  // in the output directory on disk
+  const result = [];
+  if (!job) {
+    return result;
+  }
+
+  const { outputDirectory, files } = job;
+
+  if (!directoryExistsSync(outputDirectory)) {
+    return result;
   }
   if (!files) {
-    return 0;
+    return result;
   }
-  return files.filter(f => {
+
+  Object.values(files).forEach(f => {
     const fullPath = path.join(outputDirectory, f.relativePath);
     const md5 = f.md5;
     // console.log("fullPath: " + fullPath + "  --  md5: " + md5);
-    return exactFileExists(fullPath, md5);
-  }).length;
+    if (exactFileExistsSync(fullPath, md5)) {
+      result.push(f.relativePath);
+    }
+  });
+  return result;
 };
 
 async function getDownloadFiles(jobLabel, state) {
+  /**
+   * Return an object containing a list of files and a download directory.
+   * Also tag on the jobLabel
+   */
+
   const options = createRequestOptions(state);
   const { projectUrl } = state.environment.project;
   const url = `${projectUrl}/downloads/${jobLabel}`;
   let response = await fetch(url, options);
-  checkResponse(response);
-  let data = await response.json();
+  console.log(url);
+  console.log(options);
 
+  checkResponse(response);
+  console.log(response);
+  let data = await response.json();
+  console.log(data);
   let outputDirectory = null;
-  let files = [];
   let first = true;
+  const files = {};
 
   const downloads = data.downloads || [];
 
-  files = downloads.flatMap(task => {
-    return task.files.map(file => {
+  downloads.forEach(task => {
+    return task.files.forEach(file => {
       if (first) {
         outputDirectory = file["output_dir"];
         first = false;
       }
-      return {
-        relativePath: file["relative_path"],
+      const rp = file["relative_path"];
+
+      files[rp] = {
+        relativePath: rp,
         md5: file["md5"]
       };
     });
@@ -224,7 +312,7 @@ async function getDownloadFiles(jobLabel, state) {
 
 */
 
-// const checkExactFileExists = (md5, filePath) => {
+// const checkexactFileExistsSync = (md5, filePath) => {
 //   return new Promise(function(resolve, reject) {
 //     try {
 //       fs.statSync(filePath).isFile();
@@ -235,7 +323,7 @@ async function getDownloadFiles(jobLabel, state) {
 //   });
 // };
 
-// const checkExactFileExistsThunk = (
+// const checkexactFileExistsSyncThunk = (
 //   jobLabel,
 //   md5,
 //   relativePath,
@@ -243,7 +331,7 @@ async function getDownloadFiles(jobLabel, state) {
 // ) => {
 //   return function(dispatch, getState) {
 //     const filePath = path.join(outputDirectory, relativePath);
-//     return checkExactFileExists(md5, filePath).then(exists =>
+//     return checkexactFileExistsSync(md5, filePath).then(exists =>
 //       dispatch(setFileExistsLocally({ jobLabel, relativePath, exists }))
 //     );
 //   };
@@ -322,7 +410,7 @@ export function old_fetchJobs(params) {
                   return Promise.all(
                     files.map(file => {
                       return dispatch(
-                        checkExactFileExistsThunk(
+                        checkexactFileExistsSyncThunk(
                           jobLabel,
                           file.md5,
                           file.relativePath,
@@ -357,7 +445,7 @@ export function old_fetchJobs(params) {
         //     .filter(j => Boolean(j.outputDirectory && j.files))
         //     .flatMap(job => {
         //       return Object.values(job.files).map(file => {
-        //         return dispatch(checkExactFileExists(job.jobLabel, file.md5, {}));
+        //         return dispatch(checkexactFileExistsSync(job.jobLabel, file.md5, {}));
         //       });
         //     });
         //   console.log(promises);
@@ -510,7 +598,7 @@ function fetchFilesForJob(url, options) {
 // })
 // .catch(() => {});
 
-// export function checkExactFileExists(jobLabel, md5, opts) {
+// export function checkexactFileExistsSync(jobLabel, md5, opts) {
 //   return function(dispatch, getState) {
 //     const state = getState();
 //     const job = state.entities.jobs[jobLabel];
@@ -535,9 +623,9 @@ function fetchFilesForJob(url, options) {
 //   };
 // }
 
-// const checkJobDirectoryExists = directory
+// const checkJobdirectoryExistsSync = directory
 
-// export function checkJobDirectoryExists(jobLabel) {
+// export function checkJobdirectoryExistsSync(jobLabel) {
 //   return function(dispatch, getState) {
 //     const state = getState();
 //     const job = state.entities.jobs[jobLabel];

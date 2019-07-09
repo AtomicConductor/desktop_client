@@ -2,7 +2,7 @@ import fs from "fs";
 import md5File from "md5-file";
 import path from "upath";
 
-export const exactFileExists = (filePath, md5) => {
+export const exactFileExistsSync = (filePath, md5) => {
   try {
     fs.statSync(filePath).isFile();
   } catch (err) {
@@ -30,7 +30,7 @@ export const ensureDirectoryReadyFor = filePath => {
   }
 };
 
-export const directoryExists = directory => {
+export const directoryExistsSync = directory => {
   try {
     fs.accessSync(directory, fs.constants.W_OK);
     return true;

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 // import clsx from "clsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 
 import Box from "@material-ui/core/Box";
 import OutputPathFieldContainer from "./OutputPathFieldContainer";
@@ -32,6 +33,9 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
     width: "100%",
     height: "100%"
+  },
+  messageText: {
+    paddingRight: theme.spacing(2)
   }
 }));
 
@@ -42,7 +46,7 @@ const JobItemDetails = props => {
     fileCount,
     existingFileCount,
     jobLabel,
-    loading
+    loadingMessage
   } = props;
 
   /** Side effect to fetch files on first mount */
@@ -50,9 +54,12 @@ const JobItemDetails = props => {
     fetchFilesInfo();
   }, []);
 
-  if (loading) {
+  if (loadingMessage.length > 0) {
     return (
       <Box className={classes.centeredBox}>
+        <Typography className={classes.messageText}>
+          {loadingMessage}
+        </Typography>
         <CircularProgress className={classes.progress} color="secondary" />
       </Box>
     );
@@ -64,7 +71,9 @@ const JobItemDetails = props => {
         <OutputPathFieldContainer jobLabel={jobLabel} />
       </Box>
       <Box className={classes.rightColumn}>
-        {`${existingFileCount} / ${fileCount}`}
+        <Typography variant="h5">
+          {`${existingFileCount} / ${fileCount}`}
+        </Typography>
       </Box>
     </React.Fragment>
   );
@@ -76,17 +85,6 @@ JobItemDetails.propTypes = {
   fetchFilesInfo: PropTypes.func.isRequired,
   fileCount: PropTypes.number.isRequired,
   existingFileCount: PropTypes.number.isRequired,
-
-  // outputPath: PropTypes.string.isRequired,
   jobLabel: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired
-  //   setValue: PropTypes.func.isRequired
+  loadingMessage: PropTypes.string.isRequired
 };
-
-// <Typography variant="caption">
-//   Select your destination of choice
-//   <br />
-//   <a href="#sub-labels-and-columns" className={classes.link}>
-//     Learn more
-//   </a>
-// </Typography>;

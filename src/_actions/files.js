@@ -6,11 +6,17 @@ import fs from "fs";
 import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
 import {
-  exactFileExists,
+  exactFileExistsSync,
   ensureDirectoryReadyFor
 } from "../_helpers/fileSystem";
 
 import { DownloaderHelper } from "node-downloader-helper";
+
+import { receiveDownloadSummary, updateExistingFilesInfo } from "./jobs";
+
+export const updateFileDownloaded = createAction(
+  "downloader/updateFileDownloaded"
+);
 
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
@@ -32,7 +38,7 @@ const MemoryStore = require("better-queue-memory");
 // };
 
 const canAndShouldDownload = (file, callback) => {
-  if (exactFileExists(file.fullPath, file.md5)) {
+  if (exactFileExistsSync(file.fullPath, file.md5)) {
     return callback("file already exists");
   }
   if (!ensureDirectoryReadyFor(file.fullPath)) {
@@ -59,8 +65,10 @@ const canAndShouldDownload = (file, callback) => {
  * duplicate tasks, so we have to map the fullPath to id.
  * */
 
-const options = {
-  concurrent: 4,
+const downloaderOptions = { override: true };
+
+const queueOptions = {
+  concurrent: 2,
   setImmediate: fn => {
     setTimeout(fn, 0);
   },
@@ -87,19 +95,20 @@ export const startDownloadQueue = () => {
       // console.log(file.url);
       const directory = path.dirname(file.fullPath);
 
-      const dh = new DownloaderHelper(file.url, directory);
+      const dh = new DownloaderHelper(file.url, directory, downloaderOptions);
 
       dh.on("end", () => {
         rename(file);
 
-        const msg = `Download Completed !!!!!!!!`;
-        console.log(msg);
+        // dispatch(updateExists(file))
+        // const msg = `Download Completed !!!!!!!!`;
+        // console.log(msg);
         onDone();
       });
 
       dh.on("progress", stats => {
         // dispatch(downloadProgress(stats));
-        console.log(stats);
+        // console.log(stats);
       });
 
       dh.on("error", error => {
@@ -109,7 +118,7 @@ export const startDownloadQueue = () => {
       });
 
       dh.start();
-    }, options);
+    }, queueOptions);
 
     // dispatch(
     //   setNotification({ snackbar: "Started download queue", type: "success" })
@@ -118,16 +127,28 @@ export const startDownloadQueue = () => {
   };
 };
 
-/** Wraps the fetch and download operations */
+// const downloadComplete = (jobLabel, file) => {
+//   dispatch(updateFileDownloaded({ jobLabel, file }));
+// }
+
+/** Thunk that wraps the fetch and download operations */
 export function addToQueue(jobLabel) {
   return async function(dispatch, getState) {
     //   dispatch(requestDownloadData()); - spinner possibly?
     try {
       const data = await fetchDownloadData(jobLabel, getState());
+
+      // add the summary data to the redux store
+      // and flag the entries for which files already exist
+      const summaryData = extractSummaryFileData(jobLabel, data);
+      dispatch(receiveDownloadSummary(summaryData));
+      dispatch(updateExistingFilesInfo({ jobLabel }));
+
       console.log(data);
       data.forEach(file => {
         TheDownloadQueue.push(file, () => {
-          console.log("DONE:" + file.md5);
+          dispatch(updateFileDownloaded({ jobLabel, file }));
+          // console.log("DONE:" + file.md5);
         });
       });
 
@@ -155,6 +176,8 @@ async function fetchDownloadData(jobLabel, state) {
 
   // We use the full pathname for the ID, which is used by the
   // queue to ignore duplicates.
+  // Duplicates could happen if the user clicks the download
+  // button twice really fast
 
   return data.downloads
     .flatMap(task =>
@@ -164,11 +187,32 @@ async function fetchDownloadData(jobLabel, state) {
         url: file["url"],
         taskId: file["task_id"],
         fullPath: path.join(outputDirectory, file["relative_path"]),
-        outputDirectory
+        outputDirectory,
+        jobLabel
       }))
     )
     .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1));
 }
+
+const extractSummaryFileData = (jobLabel, data) => {
+  let outputDirectory = null;
+  let first = true;
+  const files = {};
+
+  data.forEach(file => {
+    if (first) {
+      outputDirectory = file["outputDirectory"];
+      first = false;
+    }
+    const rp = file["relativePath"];
+
+    files[rp] = {
+      relativePath: rp,
+      md5: file["md5"]
+    };
+  });
+  return { files, jobLabel, outputDirectory };
+};
 
 // export const addFilesToQueue = jobLabel => {
 //   return (dispatch, getState) => {

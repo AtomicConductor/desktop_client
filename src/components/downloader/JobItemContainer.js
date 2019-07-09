@@ -2,15 +2,6 @@ import { connect } from "react-redux";
 import JobItem from "./JobItem";
 import { addToQueue } from "../../_actions/files";
 
-const mapStateToProps = (state, ownProps) => {
-  // const { job } = ownProps;
-
-  return {
-    // projectLabel: job.projectId.split("|").reverse()[0],
-    // jobLabel: job.jobLabel
-  };
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { job } = ownProps;
   return {
@@ -21,7 +12,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const JobItemContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(JobItem);
 
