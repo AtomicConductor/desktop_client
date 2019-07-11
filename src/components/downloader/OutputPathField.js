@@ -46,6 +46,7 @@ const OutputPathField = props => {
         onChange={handleEdit}
         variant="outlined"
       />
+
       <Box className={classes.iconStack}>
         <Tooltip title="Reset output directory" placement="top">
           <IconButton

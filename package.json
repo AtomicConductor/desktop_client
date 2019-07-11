@@ -11,6 +11,7 @@
     "md5-file": "^4.0.0",
     "node-downloader-helper": "^1.0.10",
     "nw-react-scripts": "2.0.0",
+    "open": "^6.4.0",
     "python-shell": "^1.0.7",
     "react": "^16.8.6",
     "react-autosuggest": "^9.4.3",

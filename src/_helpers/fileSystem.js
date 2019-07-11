@@ -6,22 +6,22 @@ export const exactFileExistsSync = (filePath, md5) => {
   try {
     fs.statSync(filePath).isFile();
   } catch (err) {
-    console.log(filePath + " is not a file");
+    // console.log(filePath + " is not a file");
     return false;
   }
   const calcMd5 = Buffer.from(md5File.sync(filePath), "hex").toString("base64");
-  console.log(calcMd5 + " === " + md5);
+  // console.log(calcMd5 + " === " + md5);
   return calcMd5 === md5;
 };
 
-export const ensureDirectoryReadyFor = filePath => {
-  const directory = path.dirname(filePath);
+export const ensureDirectoryReady = directory => {
   try {
     fs.accessSync(directory, fs.constants.W_OK);
     return true;
   } catch (err) {
-    fs.mkdirSync(directory, { recursive: true });
     try {
+      fs.mkdirSync(directory, { recursive: true });
+      // make sure mkdir worked
       fs.accessSync(directory, fs.constants.W_OK);
       return true;
     } catch (err) {
@@ -30,7 +30,16 @@ export const ensureDirectoryReadyFor = filePath => {
   }
 };
 
+export const ensureDirectoryReadyFor = filePath => {
+  return ensureDirectoryReady(path.dirname(filePath));
+};
+
+// if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
+//   directory = filePath;
+// }
+
 export const directoryExistsSync = directory => {
+  /** exists and is writable */
   try {
     fs.accessSync(directory, fs.constants.W_OK);
     return true;

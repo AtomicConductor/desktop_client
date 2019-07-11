@@ -12,6 +12,9 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import SyncIcon from "@material-ui/icons/Sync";
+import IconButton from "@material-ui/core/IconButton";
+
 import JobItemDetailsContainer from "./JobItemDetailsContainer";
 
 const useStyles = makeStyles(theme => ({
@@ -55,9 +58,38 @@ const useStyles = makeStyles(theme => ({
   button: {}
 }));
 
-const JobItem = props => {
-  const { job, onPanelClick, expanded, addToQueue } = props;
+const SyncButton = props => {
+  const classes = useStyles();
+  console.log(props.show);
 
+  if (!props.show) {
+    return null;
+  }
+
+  return (
+    <IconButton
+      color="primary"
+      className={classes.syncButton}
+      component="span"
+      size="small"
+      onClick={props.onClick}
+    >
+      <SyncIcon color="secondary" />
+    </IconButton>
+  );
+};
+
+const JobItem = props => {
+  const {
+    job,
+    onPanelClick,
+    expanded,
+    addToQueue,
+    fetchFilesInfo,
+    loadingKey
+  } = props;
+
+  // const loadingKey = { job };
   const downloadable = Boolean(
     job.files &&
       Object.values(job.files).some(f => {
@@ -107,6 +139,8 @@ const JobItem = props => {
       </ExpansionPanelDetails>
       <Divider />
       <ExpansionPanelActions>
+        <SyncButton show={loadingKey === 0} onClick={fetchFilesInfo} />
+
         <Button
           disabled={!downloadable}
           size="small"
@@ -122,6 +156,8 @@ const JobItem = props => {
 };
 
 JobItem.propTypes = {
+  loadingKey: PropTypes.number.isRequired,
+  fetchFilesInfo: PropTypes.func.isRequired,
   expanded: PropTypes.string.isRequired,
   onPanelClick: PropTypes.func.isRequired,
   job: PropTypes.object.isRequired,

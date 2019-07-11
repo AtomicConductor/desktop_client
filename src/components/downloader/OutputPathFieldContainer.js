@@ -26,18 +26,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setValue: value => {
       dispatch(setOutputPathValue({ jobLabel, value }));
-      dispatch(updateExistingFilesInfo({ jobLabel }));
+      dispatch(updateExistingFilesInfo(jobLabel));
     },
     resetValue: () => {
       dispatch(resetOutputPathValue({ jobLabel }));
-      dispatch(updateExistingFilesInfo({ jobLabel }));
+      dispatch(updateExistingFilesInfo(jobLabel));
     }
   };
 };
 
-const FormOutputPathFieldContainer = connect(
+const OutputPathFieldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(OutputPathField);
 
-export default FormOutputPathFieldContainer;
+export default OutputPathFieldContainer;

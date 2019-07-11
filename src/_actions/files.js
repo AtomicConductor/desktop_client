@@ -7,35 +7,18 @@ import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
 import {
   exactFileExistsSync,
-  ensureDirectoryReadyFor
+  ensureDirectoryReadyFor,
+  ensureDirectoryReady
 } from "../_helpers/fileSystem";
 
 import { DownloaderHelper } from "node-downloader-helper";
 
 import { receiveDownloadSummary, updateExistingFilesInfo } from "./jobs";
 
-export const updateFileDownloaded = createAction(
-  "downloader/updateFileDownloaded"
-);
+export const setFileExists = createAction("downloader/setFileExists");
 
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
-
-// const ensureDirectoryReadyFor = file => {
-//   const directory = path.dirname(file.fullPath);
-//   try {
-//     fs.accessSync(directory, fs.constants.W_OK);
-//     return true;
-//   } catch (err) {
-//     fs.mkdirSync(directory, { recursive: true });
-//     try {
-//       fs.accessSync(directory, fs.constants.W_OK);
-//       return true;
-//     } catch (err) {
-//       return false;
-//     }
-//   }
-// };
 
 const canAndShouldDownload = (file, callback) => {
   if (exactFileExistsSync(file.fullPath, file.md5)) {
@@ -68,7 +51,7 @@ const canAndShouldDownload = (file, callback) => {
 const downloaderOptions = { override: true };
 
 const queueOptions = {
-  concurrent: 2,
+  concurrent: 8,
   setImmediate: fn => {
     setTimeout(fn, 0);
   },
@@ -127,32 +110,36 @@ export const startDownloadQueue = () => {
   };
 };
 
-// const downloadComplete = (jobLabel, file) => {
-//   dispatch(updateFileDownloaded({ jobLabel, file }));
-// }
-
 /** Thunk that wraps the fetch and download operations */
 export function addToQueue(jobLabel) {
   return async function(dispatch, getState) {
     //   dispatch(requestDownloadData()); - spinner possibly?
     try {
+      // Before anything, check the validity of the outputDirectory,
+      // unless of course it is not set yet.
+      const { outputDirectory } = getState().entities.jobs[jobLabel];
+      if (!ensureDirectoryReady(outputDirectory)) {
+        console.log("NOT ensureDirectoryReady");
+        throw new Error(
+          `Can't create or access directory:  ${outputDirectory}`
+        );
+      }
+
       const data = await fetchDownloadData(jobLabel, getState());
 
       // add the summary data to the redux store
       // and flag the entries for which files already exist
       const summaryData = extractSummaryFileData(jobLabel, data);
       dispatch(receiveDownloadSummary(summaryData));
-      dispatch(updateExistingFilesInfo({ jobLabel }));
+      dispatch(updateExistingFilesInfo(jobLabel));
 
-      console.log(data);
       data.forEach(file => {
         TheDownloadQueue.push(file, () => {
-          dispatch(updateFileDownloaded({ jobLabel, file }));
-          // console.log("DONE:" + file.md5);
+          dispatch(
+            setFileExists({ jobLabel, relativePath: file.relativePath })
+          );
         });
       });
-
-      //   dispatch(receiveJobs(data));
     } catch (error) {
       dispatch(
         setNotification({

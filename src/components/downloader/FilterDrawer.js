@@ -69,14 +69,7 @@ const FilterDrawer = props => {
             <ListItemIcon>
               <SyncIcon color="secondary" />
             </ListItemIcon>
-            <ListItemText primary="Sync jobs" />
-          </ListItem>
-
-          <ListItem button divider onClick={downloadNext}>
-            <ListItemIcon>
-              <SyncIcon color="secondary" />
-            </ListItemIcon>
-            <ListItemText primary="Download next" />
+            <ListItemText primary="Sync jobs list" />
           </ListItem>
 
           <ListItem divider>
@@ -101,7 +94,18 @@ FilterDrawer.propTypes = {
 
 export default FilterDrawer;
 
-/* 
+/*
+
+          <ListItem button divider onClick={downloadNext}>
+            <ListItemIcon>
+              <SyncIcon color="secondary" />
+            </ListItemIcon>
+            <ListItemText primary="Download next" />
+          </ListItem>
+
+
+
+
   <Box className={classes.box}>
   <Button
     disabled={useDaemon}

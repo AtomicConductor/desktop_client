@@ -104,10 +104,6 @@ const AppBar = props => {
           />
         </div>
         <div className={classes.grow} />
-
-        <IconButton color="inherit" onClick={onToggleQueue}>
-          {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
-        </IconButton>
       </Toolbar>
     </MuiAppBar>
   );
@@ -116,3 +112,7 @@ const AppBar = props => {
 export { AppBar };
 
 export default withRouter(AppBar);
+
+// <IconButton color="inherit" onClick={onToggleQueue}>
+// {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
+// </IconButton>

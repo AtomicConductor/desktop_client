@@ -12,12 +12,32 @@ import {
   receiveExistingFilesInfo
 } from "../../_actions/jobs";
 
-import { updateFileDownloaded } from "../../_actions/files";
+import { setFileExists } from "../../_actions/files";
+
+import os from "os";
 
 import mock from "../../_helpers/mockEntities";
 
+export const LOADING_KEYS = {
+  NONE: 0,
+  DOWNLOAD_DETAILS: 1,
+  EXISTING_FILES: 2
+};
+
+const PLATFORM = os.platform();
+const WIN32 = PLATFORM === "win32";
+const MAC = PLATFORM === "darwin";
+const LINUX = PLATFORM === "linux";
+
 const initialState = mock["jobs"];
 // const initialState = {};
+
+const prepareForPlatform = directory => {
+  if (WIN32) {
+    return directory;
+  }
+  return directory.replace(/^[a-zA-Z]:/, "");
+};
 
 const jobs = createReducer(initialState, {
   [receiveJobs]: (state, action) => {
@@ -29,7 +49,9 @@ const jobs = createReducer(initialState, {
   },
 
   [receiveDownloadSummary]: (state, action) => {
-    const { jobLabel, outputDirectory, files } = action.payload;
+    const { jobLabel, files } = action.payload;
+
+    const outputDirectory = prepareForPlatform(action.payload.outputDirectory);
 
     if (jobLabel in state) {
       Object.assign(state[jobLabel], {
@@ -37,14 +59,14 @@ const jobs = createReducer(initialState, {
           state[jobLabel].originalOutputDirectory || outputDirectory,
         outputDirectory: state[jobLabel].outputDirectory || outputDirectory,
         files,
-        loadingMessage: ""
+        loadingKey: LOADING_KEYS.NONE
       });
     }
   },
 
   [requestExistingFilesInfo]: (state, action) => {
     const jobLabel = action.payload;
-    state[jobLabel]["loadingMessage"] = "Checking for existing files";
+    // state[jobLabel]["loadingKey"] = LOADING_KEYS.EXISTING_FILES;
   },
 
   [receiveExistingFilesInfo]: (state, action) => {
@@ -68,16 +90,14 @@ const jobs = createReducer(initialState, {
         state[jobLabel]["files"][relativePath].exists = true;
       });
 
-      state[jobLabel]["loadingMessage"] = "";
+      state[jobLabel]["loadingKey"] = LOADING_KEYS.NONE;
     }
   },
 
-  [updateFileDownloaded]: (state, action) => {
-    const { jobLabel, file } = action.payload;
-    if (jobLabel in state) {
-      if (file.relativePath in state[jobLabel]["files"]) {
-        state[jobLabel]["files"][file.relativePath]["exists"] = true;
-      }
+  [setFileExists]: (state, action) => {
+    const { jobLabel, relativePath } = action.payload;
+    if (jobLabel in state && relativePath in state[jobLabel]["files"]) {
+      state[jobLabel]["files"][relativePath]["exists"] = true;
     }
   },
 
@@ -93,13 +113,13 @@ const jobs = createReducer(initialState, {
 
   [requestDownloadData]: (state, action) => {
     const jobLabel = action.payload;
-    state[jobLabel]["loadingMessage"] = "Fetching download information";
+    state[jobLabel]["loadingKey"] = LOADING_KEYS.DOWNLOAD_DETAILS;
   },
 
-  [setFileExistsLocally]: (state, action) => {
-    const { jobLabel, relativePath, exists } = action.payload;
-    state[jobLabel].files[relativePath].exists = exists;
-  },
+  // [setFileExistsLocally]: (state, action) => {
+  //   const { jobLabel, relativePath, exists } = action.payload;
+  //   state[jobLabel].files[relativePath].exists = exists;
+  // },
 
   [setOutputPathValue]: (state, action) => {
     const { jobLabel, value } = action.payload;

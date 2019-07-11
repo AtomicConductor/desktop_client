@@ -1,10 +1,9 @@
 import { connect } from "react-redux";
 import JobItemDetails from "./JobItemDetails";
 
-import {
-  fetchDownloadSummary,
-  updateExistingFilesInfo
-} from "../../_actions/jobs";
+import { fetchDownloadSummary } from "../../_actions/jobs";
+
+import { LOADING_KEYS } from "../../_reducers/entities/jobs";
 
 const mapStateToProps = (state, ownProps) => {
   const { job } = ownProps;
@@ -18,13 +17,13 @@ const mapStateToProps = (state, ownProps) => {
   }
   const { outputPath, jobLabel } = job;
 
-  const loadingMessage = job.loadingMessage || "";
+  const loadingKey = job.loadingKey || LOADING_KEYS.NONE;
   return {
     fileCount,
     existingFileCount,
     outputPath,
     jobLabel,
-    loadingMessage
+    loadingKey
   };
 };
 
@@ -32,13 +31,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const { jobLabel } = ownProps.job;
   return {
     fetchFilesInfo: () => {
-      // console.log("-------------");
-      // console.log("HERE 1");
-
       dispatch(fetchDownloadSummary(jobLabel));
-      // console.log("HERE 2");
-      // dispatch(updateExistingFilesInfo({ jobLabel }));
-      // console.log("HERE 3");
     }
   };
 };
