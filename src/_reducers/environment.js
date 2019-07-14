@@ -44,7 +44,7 @@ const environment = createReducer(initialState, {
       NODE_ENV: node_env
     };
 
-    // const filePath = path.join(nw.App.dataPath, settingsFilename);
+    // const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
 
     state.python = {
       scriptsPath:

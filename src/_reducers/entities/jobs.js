@@ -36,7 +36,7 @@ const prepareForPlatform = directory => {
   if (WIN32) {
     return directory;
   }
-  return directory.replace(/^[a-zA-Z]:/, "");
+  return directory ? directory.replace(/^[a-zA-Z]:/, "") : "";
 };
 
 const jobs = createReducer(initialState, {

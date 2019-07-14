@@ -2,7 +2,7 @@ import { createAction } from "redux-starter-kit";
 
 import { promises as fsp } from "fs";
 import path from "path";
-import { settingsFilename } from "../_helpers/constants";
+import { SETTINGS_FILENAME } from "../_helpers/constants";
 
 import { setNotification } from "../_actions/notification";
 import { fetchProfile } from "../_actions/profile";
@@ -42,7 +42,7 @@ Thunk to save Settings to persistent storage.
 
 export function writeSettings(settings) {
   return (dispatch, getState) => {
-    const filePath = path.join(nw.App.dataPath, settingsFilename);
+    const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
 
     fsp
       .writeFile(filePath, JSON.stringify(settings, null, "\t"))
@@ -60,7 +60,7 @@ export function writeSettings(settings) {
 
 export function readSettings() {
   return (dispatch, getState) => {
-    const filePath = path.join(nw.App.dataPath, settingsFilename);
+    const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
 
     fsp
       .readFile(filePath, {
@@ -69,7 +69,7 @@ export function readSettings() {
       .then(settings => {
         const obj = JSON.parse(settings);
         dispatch(updateSettings(obj));
-        return dispatch(fetchProfile());
+        // return dispatch(fetchProfile());
       })
       .catch(err => {
         dispatch(updateSettings());

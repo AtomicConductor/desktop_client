@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
+import FilledInput from "@material-ui/core/FilledInput";
 import TextField from "@material-ui/core/TextField";
 
 import InputLabel from "@material-ui/core/InputLabel";
@@ -9,7 +10,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
-import FilledInput from "@material-ui/core/FilledInput";
 import Button from "@material-ui/core/Button";
 
 import { googleProjects } from "../../_helpers/constants";
@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtSettingsEdit = props => {
+const Edit = props => {
   const classes = useStyles();
 
   const { onSave, settings } = props;
@@ -59,8 +59,6 @@ const CtSettingsEdit = props => {
   const project = googleProjects.find(
     p => p.name === settings.googleProjectName
   );
-
-  // const [values, setValues] = React.useState(false);
 
   const [values, setValues] = React.useState({
     googleProjectName: project.name,
@@ -126,9 +124,9 @@ const CtSettingsEdit = props => {
   );
 };
 
-CtSettingsEdit.propTypes = {
+Edit.propTypes = {
   settings: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired
 };
 
-export default CtSettingsEdit;
+export default Edit;

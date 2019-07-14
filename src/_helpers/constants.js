@@ -23,4 +23,5 @@ export const googleProjects = [
   }
 ];
 
-export const settingsFilename = "settings.json";
+export const SETTINGS_FILENAME = "settings.json";
+export const CREDENTIALS_FILENAME = "credentials.json";

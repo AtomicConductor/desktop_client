@@ -1,12 +1,12 @@
-import { promisify } from "util";
+// import { promisify } from "util";
 
-import fs, { promises as fsp } from "fs";
+// import fs, { promises as fsp } from "fs";
 
 import { createAction } from "redux-starter-kit";
 // import { PythonShell as ps } from "python-shell";
 
-import { setNotification } from "../_actions/notification";
-import { setPythonScriptResponse, pythonScriptFailure } from "./python";
+// import { setNotification } from "../_actions/notification";
+// import { setPythonScriptResponse, pythonScriptFailure } from "./python";
 
 // import { DownloaderHelper } from "node-downloader-helper";
 // const Queue = require("better-queue");
@@ -356,7 +356,7 @@ export function runDownloadJobs() {
         dispatch(pythonScriptFailure(err.message));
       });
 
-    // const filePath = path.join(nw.App.dataPath, settingsFilename);
+    // const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
   };
 }
 */

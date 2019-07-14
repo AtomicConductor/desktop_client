@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
-import CtSettingsTable from "./CtSettingsTable";
+import Table from "./Table";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtSettingsEnvironment = props => {
+const Environment = props => {
   const classes = useStyles();
 
   const { settings, project, process, python } = props.environment;
@@ -29,16 +29,16 @@ const CtSettingsEnvironment = props => {
 
   return (
     <div className={classes.root}>
-      <CtSettingsTable data={settings} title="Settings" />
-      <CtSettingsTable data={project} title="Google project" />
-      <CtSettingsTable data={process} title="Process" />
-      <CtSettingsTable data={python} title="Python" />
+      <Table data={settings} title="Settings" />
+      <Table data={project} title="Google project" />
+      <Table data={process} title="Process" />
+      <Table data={python} title="Python" />
     </div>
   );
 };
 
-CtSettingsEnvironment.propTypes = {
+Environment.propTypes = {
   environment: PropTypes.object.isRequired
 };
 
-export default CtSettingsEnvironment;
+export default Environment;

@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtAccountAppBar = props => {
+const AppBar = props => {
   const classes = useStyles();
 
   return (
@@ -35,4 +35,4 @@ const CtAccountAppBar = props => {
   );
 };
 
-export default CtAccountAppBar;
+export default AppBar;

@@ -34,14 +34,46 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtDrawerAccountMenuItem = props => {
+const DrawerAccountMenuItem = props => {
   const classes = useStyles();
-  const { history, currentUser } = props;
-  const initials = avatarInitials(currentUser);
+  const { history, email, loggedIn, accountName } = props;
+  const initials = avatarInitials({ email });
 
   const onClick = () => {
     history.push("/account");
   };
+
+  if (loggedIn) {
+    return (
+      <React.Fragment>
+        <div className={classes.spacer} />
+        <List>
+          <Divider />
+          <ListItem
+            button
+            selected={history.location.pathname === "/account"}
+            onClick={onClick}
+          >
+            <ListItemAvatar>
+              <Avatar className={classes.in}>
+                <Typography variant="body2">{initials}</Typography>
+              </Avatar>
+            </ListItemAvatar>
+
+            <ListItemText primary={accountName} />
+          </ListItem>
+
+          <Typography
+            display="block"
+            variant="caption"
+            className={classes.email}
+          >
+            {email}
+          </Typography>
+        </List>
+      </React.Fragment>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -53,39 +85,23 @@ const CtDrawerAccountMenuItem = props => {
           selected={history.location.pathname === "/account"}
           onClick={onClick}
         >
-          {currentUser.email ? (
-            <ListItemAvatar>
-              <Avatar className={classes.in}>
-                <Typography variant="body2">{initials}</Typography>
-              </Avatar>
-            </ListItemAvatar>
-          ) : (
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-          )}
+          <ListItemIcon>
+            <AccountCircleIcon />
+          </ListItemIcon>
 
           <ListItemText primary="Account" />
         </ListItem>
-
-        {currentUser.email ? (
-          <Typography
-            display="block"
-            variant="caption"
-            className={classes.email}
-          >
-            {currentUser.email}
-          </Typography>
-        ) : null}
       </List>
     </React.Fragment>
   );
 };
 
-CtDrawerAccountMenuItem.propTypes = {
-  currentUser: PropTypes.object.isRequired
+DrawerAccountMenuItem.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  accountName: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired
 };
 
-export { CtDrawerAccountMenuItem };
+export { DrawerAccountMenuItem };
 
-export default withRouter(CtDrawerAccountMenuItem);
+export default withRouter(DrawerAccountMenuItem);

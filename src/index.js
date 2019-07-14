@@ -15,6 +15,7 @@ import {
 // import { fetchProfile } from "./_actions/profile";
 
 store.dispatch(readSettings());
+
 // store.dispatch(fetchProfile());
 
 ReactDOM.render(
@@ -25,7 +26,6 @@ ReactDOM.render(
 );
 
 store.dispatch(startDownloadQueue());
-// store.dispatch(startDownloadQueueTest());
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

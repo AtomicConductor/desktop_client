@@ -57,7 +57,6 @@ const MoreMenu = props => {
   const handleViewInFinder = () => {
     setAnchorEl(null);
     viewInFinder();
-    // refreshAll();
   };
 
   return (

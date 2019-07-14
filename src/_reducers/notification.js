@@ -9,10 +9,10 @@ import { receiveUser, profileFailure } from "../_actions/profile";
 import { envFailure } from "../_actions/environment";
 // import { runDownloadJobs } from "../_actions/downloader";
 
-import {
-  pythonScriptFailure,
-  setPythonScriptResponse
-} from "../_actions/python";
+// import {
+//   pythonScriptFailure,
+//   setPythonScriptResponse
+// } from "../_actions/python";
 
 const initialState = {
   snackbar: "",
@@ -50,19 +50,19 @@ const notification = createReducer(initialState, {
     state.type = "error";
   },
 
-  [receiveUser]: (state, action) => {
-    state.snackbar = "Successfully signed in";
-    state.detail = "";
-    state.show = "snackbar";
-    state.type = "success";
-  },
+  // [receiveUser]: (state, action) => {
+  //   state.snackbar = "Successfully signed in";
+  //   state.detail = "";
+  //   state.show = "snackbar";
+  //   state.type = "success";
+  // },
 
   [envFailure]: (state, action) => {
     state.snackbar = action.payload;
     state.detail = `Some more details ${action.payload}`;
     state.show = !!action.payload ? "snackbar" : "none";
     state.type = "error";
-  },
+  }
 
   // [runDownloadJobs]: (state, action) => {
   //   state.snackbar = `Starting download`;
@@ -71,19 +71,19 @@ const notification = createReducer(initialState, {
   //   state.type = "success";
   // },
 
-  [pythonScriptFailure]: (state, action) => {
-    state.snackbar = `Python script failed ${action.payload}`;
-    state.detail = "";
-    state.show = "snackbar";
-    state.type = "error";
-  },
+  // [pythonScriptFailure]: (state, action) => {
+  //   state.snackbar = `Python script failed ${action.payload}`;
+  //   state.detail = "";
+  //   state.show = "snackbar";
+  //   state.type = "error";
+  // },
 
-  [setPythonScriptResponse]: (state, action) => {
-    state.snackbar = `Python script success ${action.payload}`;
-    state.detail = "";
-    state.show = "snackbar";
-    state.type = "info";
-  }
+  // [setPythonScriptResponse]: (state, action) => {
+  //   state.snackbar = `Python script success ${action.payload}`;
+  //   state.detail = "";
+  //   state.show = "snackbar";
+  //   state.type = "info";
+  // }
   // [updateSettings]: (state, action) => {
   //   state.snackbar = `Saved settings`;
   //   state.detail = "";

@@ -15,15 +15,6 @@ import Button from "@material-ui/core/Button";
 import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
-  },
-  toolbar: { height: 48 },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -35,31 +26,33 @@ const useStyles = makeStyles(theme => ({
     margin: "auto",
     marginTop: "100px"
   },
-  title: {
-    flexGrow: 1
-  },
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    zIndex: 1301
-  },
+
   formControl: {
     margin: theme.spacing(1),
     width: "100%"
   },
   buttonBox: {
-    // marginTop: 20,
-    // borderColor: "red",
-    // borderWidth: 1,
-    // borderStyle: "solid",
     display: "flex",
     justifyContent: "flex-end"
   }
 }));
 
-const CtAccountSignIn = props => {
+const SignIn = props => {
   const classes = useStyles();
   const { onSignIn } = props;
+
+  const [values, setValues] = React.useState({
+    email: "julian.mann@admios-sa.com",
+    password: "G9oZ#f92PBrc"
+  });
+
+  const handleSignIn = () => {
+    onSignIn(values);
+  };
+
+  const handleChange = name => event => {
+    setValues({ ...values, [name]: event.target.value });
+  };
 
   return (
     <React.Fragment>
@@ -80,6 +73,8 @@ const CtAccountSignIn = props => {
               id="email-input"
               label="Email"
               variant="filled"
+              value={values.email}
+              onChange={handleChange("email")}
             />
           </FormControl>
           <FormControl className={classes.formControl}>
@@ -89,11 +84,17 @@ const CtAccountSignIn = props => {
               id="password-input"
               label="Password"
               type="password"
+              value={values.password}
+              onChange={handleChange("password")}
             />
           </FormControl>
           <FormControl className={classes.formControl}>
             <Box className={classes.buttonBox}>
-              <Button onClick={onSignIn} variant="outlined" color="secondary">
+              <Button
+                onClick={handleSignIn}
+                variant="outlined"
+                color="secondary"
+              >
                 Submit
               </Button>
             </Box>
@@ -104,9 +105,9 @@ const CtAccountSignIn = props => {
   );
 };
 
-CtAccountSignIn.propTypes = {
+SignIn.propTypes = {
   error: PropTypes.string.isRequired,
   onSignIn: PropTypes.func.isRequired
 };
 
-export default CtAccountSignIn;
+export default SignIn;

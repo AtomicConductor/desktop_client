@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import CtDrawer from "./CtDrawer";
+import Drawer from "./Drawer";
 
 const mapStateToProps = state => ({ profile: state.profile });
 
-const CtDrawerContainer = connect(mapStateToProps)(CtDrawer);
+const DrawerContainer = connect(mapStateToProps)(Drawer);
 
 export { mapStateToProps };
 
-export default CtDrawerContainer;
+export default DrawerContainer;

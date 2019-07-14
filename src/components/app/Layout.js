@@ -18,14 +18,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 
-import CtDrawerContainer from "./CtDrawerContainer";
+import DrawerContainer from "./DrawerContainer";
 import Downloader from "../downloader/Downloader";
 import CtUploader from "../uploader/CtUploader";
 import CtPlugins from "../plugins/CtPlugins";
-import CtAccountContainer from "../account/CtAccountContainer";
+import AccountContainer from "../account/AccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
-import CtSettings from "../settings/CtSettings";
+import Settings from "../settings/Settings";
 import StatusLine from "./StatusLine";
 
 import CtSnackbarContainer from "../notification/CtSnackbarContainer";
@@ -46,12 +46,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtLayout = () => {
+const Layout = () => {
   const classes = useStyles();
 
   return (
     <Router>
-      <CtDrawerContainer />
+      <DrawerContainer />
       <Box className={classes.box}>
         <Switch>
           <Route
@@ -72,10 +72,10 @@ const CtLayout = () => {
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
           <Route path="/plugins" render={props => <CtPlugins {...props} />} />
-          <Route path="/settings" render={props => <CtSettings {...props} />} />
+          <Route path="/settings" render={props => <Settings {...props} />} />
           <Route
             path="/account"
-            render={props => <CtAccountContainer {...props} />}
+            render={props => <AccountContainer {...props} />}
           />
 
           <Redirect push to="/dashboard" />
@@ -87,4 +87,4 @@ const CtLayout = () => {
   );
 };
 
-export default CtLayout;
+export default Layout;

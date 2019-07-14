@@ -139,8 +139,6 @@ const JobItem = props => {
       </ExpansionPanelDetails>
       <Divider />
       <ExpansionPanelActions>
-        <SyncButton show={loadingKey === 0} onClick={fetchFilesInfo} />
-
         <Button
           disabled={!downloadable}
           size="small"
@@ -157,7 +155,7 @@ const JobItem = props => {
 
 JobItem.propTypes = {
   loadingKey: PropTypes.number.isRequired,
-  fetchFilesInfo: PropTypes.func.isRequired,
+
   expanded: PropTypes.string.isRequired,
   onPanelClick: PropTypes.func.isRequired,
   job: PropTypes.object.isRequired,

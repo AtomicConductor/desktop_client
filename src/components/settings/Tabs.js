@@ -10,9 +10,9 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import CtSettingsEnvironmentContainer from "./CtSettingsEnvironmentContainer";
+import EnvironmentContainer from "./EnvironmentContainer";
 
-import CtSettingsEditContainer from "./CtSettingsEditContainer";
+import EditContainer from "./EditContainer";
 import { drawerWidth } from "../../_helpers/constants";
 
 function TabContainer(props) {
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
   // },
 }));
 
-function CtSettingsTabs() {
+function Tabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -82,10 +82,10 @@ function CtSettingsTabs() {
           </Tabs>
         </Paper>
       </Box>
-      {value === 0 && <CtSettingsEditContainer />}
-      {value === 1 && <CtSettingsEnvironmentContainer />}
+      {value === 0 && <EditContainer />}
+      {value === 1 && <EnvironmentContainer />}
     </React.Fragment>
   );
 }
 
-export default CtSettingsTabs;
+export default Tabs;

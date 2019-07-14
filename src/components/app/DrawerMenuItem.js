@@ -15,7 +15,7 @@ import { withRouter } from "react-router-dom";
   stack.
 */
 
-const CtDrawerMenuItem = props => {
+const DrawerMenuItem = props => {
   const { text_props, url, icon, history } = props;
   const onClick = () => {
     history.push(url);
@@ -33,12 +33,12 @@ const CtDrawerMenuItem = props => {
   );
 };
 
-CtDrawerMenuItem.propTypes = {
+DrawerMenuItem.propTypes = {
   url: PropTypes.string.isRequired,
   text_props: PropTypes.object.isRequired,
   icon: PropTypes.element.isRequired
 };
 
-export { CtDrawerMenuItem };
+export { DrawerMenuItem };
 
-export default withRouter(CtDrawerMenuItem);
+export default withRouter(DrawerMenuItem);

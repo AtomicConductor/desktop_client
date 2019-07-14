@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
+import MuiTable from "@material-ui/core/Table";
 import Typography from "@material-ui/core/Typography";
 
 import TableBody from "@material-ui/core/TableBody";
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   title: { padding: 16 }
 }));
 
-const CtSettingsTable = props => {
+const Table = props => {
   const classes = useStyles();
 
   const { data, title } = props;
@@ -44,7 +44,7 @@ const CtSettingsTable = props => {
       <Typography variant="h6" className={classes.title}>
         {title}
       </Typography>
-      <Table className={classes.table} size="small">
+      <MuiTable className={classes.table} size="small">
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableKey}>Key</TableCell>
@@ -61,14 +61,14 @@ const CtSettingsTable = props => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </MuiTable>
     </Paper>
   );
 };
 
-CtSettingsTable.propTypes = {
+Table.propTypes = {
   data: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired
 };
 
-export default CtSettingsTable;
+export default Table;

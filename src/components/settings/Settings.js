@@ -8,9 +8,9 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import CtSettingsEnvironmentContainer from "./CtSettingsEnvironmentContainer";
+import EnvironmentContainer from "./EnvironmentContainer";
 
-import CtSettingsEditContainer from "./CtSettingsEditContainer";
+import EditContainer from "./EditContainer";
 import { drawerWidth } from "../../_helpers/constants";
 
 function TabContainer(props) {
@@ -41,14 +41,11 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth
-    // ,zIndex: 1301
   },
   paper: {
     margin: "auto"
-    // height: 30
   },
   tabBox: {
-    // borderStyle: "solid",
     height: 30,
     width: `calc(100% - ${drawerWidth}px)`,
     display: "flex",
@@ -57,12 +54,9 @@ const useStyles = makeStyles(theme => ({
     marginLeft: drawerWidth,
     marginTop: 16
   }
-  // tabbar: {
-  //   marginTop: "62px"
-  // },
 }));
 
-const CtSettings = () => {
+const Settings = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -80,10 +74,10 @@ const CtSettings = () => {
           </Tabs>
         </Paper>
       </Box>
-      {value === 0 && <CtSettingsEditContainer />}
-      {value === 1 && <CtSettingsEnvironmentContainer />}
+      {value === 0 && <EditContainer />}
+      {value === 1 && <EnvironmentContainer />}
     </React.Fragment>
   );
 };
 
-export default CtSettings;
+export default Settings;

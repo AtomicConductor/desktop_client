@@ -6,7 +6,6 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import FolderIcon from "@material-ui/icons/Folder";
-import ResetIcon from "@material-ui/icons/Undo";
 
 import PropTypes from "prop-types";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -48,20 +47,6 @@ const OutputPathField = props => {
       />
 
       <Box className={classes.iconStack}>
-        <Tooltip title="Reset output directory" placement="top">
-          <IconButton
-            color="primary"
-            className={classes.button}
-            aria-label="Undo"
-            component="span"
-            size="small"
-            onClick={resetValue}
-            disabled={!resettable}
-          >
-            <ResetIcon />
-          </IconButton>
-        </Tooltip>
-
         <label htmlFor="icon-button-file">
           <input
             hidden
@@ -90,10 +75,7 @@ const OutputPathField = props => {
 
 OutputPathField.propTypes = {
   value: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired,
-  resetValue: PropTypes.func.isRequired,
-  resettable: PropTypes.bool.isRequired
-  // disabled: PropTypes.bool.isRequired
+  setValue: PropTypes.func.isRequired
 };
 
 export default OutputPathField;
