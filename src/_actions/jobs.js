@@ -2,8 +2,6 @@ import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
-import fs from "fs";
-import md5File from "md5-file";
 import open from "open";
 
 import { checkResponse } from "../_helpers/network";
@@ -15,13 +13,13 @@ import {
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
 
-export const requestJob = createAction("downloader/requestJob");
+// export const requestJob = createAction("downloader/requestJob");
 export const setOutputPathValue = createAction("downloader/setOutputPathValue");
 export const resetOutputPathValue = createAction(
   "downloader/resetOutputPathValue"
 );
 
-export const endDownloadRequest = createAction("downloader/endDownloadRequest");
+// export const endDownloadRequest = createAction("downloader/endDownloadRequest");
 export const setFileExists = createAction("downloader/setFileExists");
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
@@ -42,7 +40,6 @@ export const receiveExistingFilesInfo = createAction(
 Takes an array of objects whose keys are IDs, and returns the 
 Id of the Nth item 
 */
-
 const getPartitionId = (data, n) => {
   const sorted = data.map(o => Object.keys(o)[0]).sort();
   if (data.length <= n) {
@@ -99,10 +96,6 @@ async function getRecentJobs(limit, state) {
   data = await response.json();
   return data;
 }
-
-/////////////////////////////////////
-/////////////////////////////////////
-/////////////////////////////////////
 
 export function fetchDownloadSummary(jobLabel) {
   return async function(dispatch, getState) {

@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
 
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Toolbar from "@material-ui/core/Toolbar";
 
 import EnvironmentContainer from "./EnvironmentContainer";
 
@@ -42,17 +44,17 @@ const useStyles = makeStyles(theme => ({
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth
   },
-  paper: {
-    margin: "auto"
-  },
+  // paper: {
+  //   margin: "auto"
+  // },
   tabBox: {
-    height: 30,
-    width: `calc(100% - ${drawerWidth}px)`,
+    // height: 30,
+    // width: `calc(100% - ${drawerWidth}px)`,
     display: "flex",
-    justifyContent: "center",
-    position: "fixed",
-    marginLeft: drawerWidth,
-    marginTop: 16
+    justifyContent: "center"
+    // position: "fixed",
+    // marginLeft: drawerWidth,
+    // marginTop: 16
   }
 }));
 
@@ -66,14 +68,22 @@ const Settings = () => {
 
   return (
     <React.Fragment>
-      <Box className={classes.tabBox}>
-        <Paper className={classes.paper}>
-          <Tabs value={value} onChange={handleChange}>
-            <Tab label="Edit Settings" />
+      <AppBar position="static" variant="dense">
+        <Toolbar variant="dense">
+          <Typography variant="h6" className={classes.title}>
+            Settings
+          </Typography>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            className={classes.tabBox}
+            color="inherit"
+          >
+            <Tab label="Edit Settings" color="inherit" />
             <Tab label="Environment" />
           </Tabs>
-        </Paper>
-      </Box>
+        </Toolbar>
+      </AppBar>
       {value === 0 && <EditContainer />}
       {value === 1 && <EnvironmentContainer />}
     </React.Fragment>

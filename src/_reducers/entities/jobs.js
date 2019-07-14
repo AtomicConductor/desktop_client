@@ -29,8 +29,8 @@ const WIN32 = PLATFORM === "win32";
 const MAC = PLATFORM === "darwin";
 const LINUX = PLATFORM === "linux";
 
-const initialState = mock["jobs"];
-// const initialState = {};
+// const initialState = mock["jobs"];
+const initialState = {};
 
 const prepareForPlatform = directory => {
   if (WIN32) {
