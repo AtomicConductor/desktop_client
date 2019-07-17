@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
-import CtPluginsAppBar from "./CtPluginsAppBar";
+import AppBar from "./AppBar";
 // import { toggleDrawer } from "../../_actions/ui";
 
 const mapStateToProps = (state, ownProps) => {
-  return { 
+  return {
     // drawerIsOpen:  state.ui.downloader.drawerOpen
   };
 };
@@ -16,8 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const CtPluginsAppBarContainer = connect(mapStateToProps, mapDispatchToProps)(
-  CtPluginsAppBar
-);
+const AppBarContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppBar);
 
-export default CtPluginsAppBarContainer;
+export default AppBarContainer;

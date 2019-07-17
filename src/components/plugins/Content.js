@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CtPluginsContent() {
+function Content() {
   const classes = useStyles();
 
   return (
@@ -27,4 +27,4 @@ function CtPluginsContent() {
   );
 }
 
-export default CtPluginsContent;
+export default Content;

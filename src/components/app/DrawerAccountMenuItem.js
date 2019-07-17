@@ -62,7 +62,6 @@ const DrawerAccountMenuItem = props => {
 
             <ListItemText primary={accountName} />
           </ListItem>
-
           <Typography
             display="block"
             variant="caption"

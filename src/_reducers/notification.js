@@ -26,12 +26,6 @@ const notification = createReducer(initialState, {
     Object.assign(state, initialState);
   },
 
-  // [setNotification]: (state, action) => {
-  //     state.snackbar = action.payload.snackbar;
-  //     state.detail = action.payload.detail;
-  //     state.show = !!action.payload.snackbar ? "snackbar" : "none";
-  // },
-
   [showNotificationDetails]: (state, action) => {
     state.show = !!action.payload.detail ? "detail" : "none";
   },
@@ -63,33 +57,6 @@ const notification = createReducer(initialState, {
     state.show = !!action.payload ? "snackbar" : "none";
     state.type = "error";
   }
-
-  // [runDownloadJobs]: (state, action) => {
-  //   state.snackbar = `Starting download`;
-  //   state.detail = "";
-  //   state.show = "snackbar";
-  //   state.type = "success";
-  // },
-
-  // [pythonScriptFailure]: (state, action) => {
-  //   state.snackbar = `Python script failed ${action.payload}`;
-  //   state.detail = "";
-  //   state.show = "snackbar";
-  //   state.type = "error";
-  // },
-
-  // [setPythonScriptResponse]: (state, action) => {
-  //   state.snackbar = `Python script success ${action.payload}`;
-  //   state.detail = "";
-  //   state.show = "snackbar";
-  //   state.type = "info";
-  // }
-  // [updateSettings]: (state, action) => {
-  //   state.snackbar = `Saved settings`;
-  //   state.detail = "";
-  //   state.show = "snackbar";
-  //   state.type = "success";
-  // }
 });
 
 export default notification;

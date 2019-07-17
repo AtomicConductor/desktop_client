@@ -25,3 +25,14 @@ export const googleProjects = [
 
 export const SETTINGS_FILENAME = "settings.json";
 export const CREDENTIALS_FILENAME = "credentials.json";
+
+export const TIMESPANS = {
+  TODAY: "Today",
+  THISWEEK: "This Week",
+  LASTWEEK: "Last Week",
+  THISMONTH: "This Month",
+  LASTMONTH: "Last Month",
+  THISYEAR: "This Year",
+  LASTYEAR: "Last Year",
+  ALLTIME: "All Time"
+};

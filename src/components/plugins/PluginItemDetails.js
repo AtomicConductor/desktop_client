@@ -8,13 +8,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 import Box from "@material-ui/core/Box";
-import OutputPathFieldContainer from "./OutputPathFieldContainer";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import InstallPathFieldContainer from "./InstallPathFieldContainer";
 
-import MoreMenuContainer from "./MoreMenuContainer";
+// import MoreMenuContainer from "./MoreMenuContainer";
 
 import { LOADING_KEYS } from "../../_reducers/entities/jobs";
 
@@ -61,7 +57,7 @@ const ExistingFilesProgress = withStyles(
   { withTheme: true }
 )(LinearProgress);
 
-const JobItemDetails = props => {
+const PluginItemDetails = props => {
   const classes = useStyles();
   const {
     fetchFilesInfo,
@@ -95,7 +91,7 @@ const JobItemDetails = props => {
   return (
     <React.Fragment>
       <Box className={classes.leftColumn}>
-        <OutputPathFieldContainer jobLabel={jobLabel} />
+        <InstallPathFieldContainer jobLabel={jobLabel} />
       </Box>
       <Box className={classes.rightColumn}>
         <Tooltip title="existing files / available to download" placement="top">
@@ -109,18 +105,19 @@ const JobItemDetails = props => {
           value={progress}
         />
       </Box>
-
-      <MoreMenuContainer jobLabel={jobLabel} />
     </React.Fragment>
   );
 };
 
-export default JobItemDetails;
+export default PluginItemDetails;
 
-JobItemDetails.propTypes = {
-  fetchFilesInfo: PropTypes.func.isRequired,
-  fileCount: PropTypes.number.isRequired,
-  existingFileCount: PropTypes.number.isRequired,
-  jobLabel: PropTypes.string.isRequired,
-  loadingKey: PropTypes.number.isRequired
+PluginItemDetails.propTypes = {
+  // fetchFilesInfo: PropTypes.func.isRequired,
+  // fileCount: PropTypes.number.isRequired,
+  // existingFileCount: PropTypes.number.isRequired,
+  // jobLabel: PropTypes.string.isRequired,
+  // loadingKey: PropTypes.number.isRequired
 };
+{
+  /* <MoreMenuContainer jobLabel={jobLabel} /> */
+}

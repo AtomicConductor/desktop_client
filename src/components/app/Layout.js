@@ -21,7 +21,7 @@ import Box from "@material-ui/core/Box";
 import DrawerContainer from "./DrawerContainer";
 import Downloader from "../downloader/Downloader";
 import CtUploader from "../uploader/CtUploader";
-import CtPlugins from "../plugins/CtPlugins";
+import Plugins from "../plugins/Plugins";
 import AccountContainer from "../account/AccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
@@ -71,7 +71,7 @@ const Layout = () => {
             render={props => <Downloader {...props} />}
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
-          <Route path="/plugins" render={props => <CtPlugins {...props} />} />
+          <Route path="/plugins" render={props => <Plugins {...props} />} />
           <Route path="/settings" render={props => <Settings {...props} />} />
           <Route
             path="/account"

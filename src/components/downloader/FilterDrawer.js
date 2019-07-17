@@ -16,6 +16,8 @@ import Paper from "@material-ui/core/Paper";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
+import DateRangeMenuContainer from "./DateRangeMenuContainer";
+
 import {
   filterDrawerWidth,
   appBarHeight,
@@ -69,15 +71,10 @@ const FilterDrawer = props => {
             <ListItemIcon>
               <SyncIcon color="secondary" />
             </ListItemIcon>
-            <ListItemText primary="Sync jobs list" />
+            <ListItemText primary="Refresh jobs list" />
           </ListItem>
 
-          <ListItem divider>
-            <ListItemText primary="Use Daemon" />
-            <ListItemSecondaryAction>
-              <Switch checked={useDaemon} onChange={onToggleUseDaemon} />
-            </ListItemSecondaryAction>
-          </ListItem>
+          <DateRangeMenuContainer />
         </List>
       </Paper>
     </Box>
@@ -96,6 +93,20 @@ export default FilterDrawer;
 
 /*
 
+
+
+
+          <ListItem divider>
+            <ListItemText primary="Use Daemon" />
+            <ListItemSecondaryAction>
+              <Switch checked={useDaemon} onChange={onToggleUseDaemon} />
+            </ListItemSecondaryAction>
+          </ListItem>
+
+
+
+
+          
           <ListItem button divider onClick={downloadNext}>
             <ListItemIcon>
               <SyncIcon color="secondary" />

@@ -27,6 +27,8 @@ const environment = createReducer(initialState, {
   [updateSettings]: (state, action) => {
     const node_env = process.env["NODE_ENV"];
 
+    // console.log("[updateSettings]:");
+    // console.log(action.payload);
     if (action.payload) {
       state.settings = action.payload;
     }

@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   centeredBox: {
-    border: "1px solid red",
+    // border: "1px solid red",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Jobs = props => {
-  const { jobs, loading } = props;
+  const { jobs, loading, fetchJobs } = props;
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState("panel1");
 
@@ -48,9 +48,14 @@ const Jobs = props => {
   };
 
   // Similar to componentDidMount and componentDidUpdate:
+
   // useEffect(() => {
   //   setExpanded("00921");
   // }, []);
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   let content;
   if (loading) {
@@ -76,7 +81,7 @@ const Jobs = props => {
     } else {
       content = (
         <Box className={classes.centeredBox}>
-          <Typography variant="h6">No jobs match the current filter</Typography>
+          <Typography variant="h6">No jobs</Typography>
         </Box>
       );
     }
@@ -92,7 +97,8 @@ const Jobs = props => {
 
 Jobs.propTypes = {
   jobs: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  fetchJobs: PropTypes.func.isRequired
 };
 
 export default Jobs;

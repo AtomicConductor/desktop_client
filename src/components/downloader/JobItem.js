@@ -97,8 +97,8 @@ const JobItem = props => {
       })
   );
 
-  const projectLabel = job.projectId
-    ? job.projectId.split("|").reverse()[0]
+  const projectLabel = job.project
+    ? job.project.split("|").reverse()[0]
     : "NULL";
 
   const jobLabel = job.jobLabel;

@@ -15,7 +15,7 @@ import CloudUpload from "@material-ui/icons/CloudUpload";
 import CloudDownload from "@material-ui/icons/CloudDownload";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 
-import Power from "@material-ui/icons/Power";
+import PowerIcon from "@material-ui/icons/Power";
 
 import HelpIcon from "@material-ui/icons/Help";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -114,7 +114,7 @@ const Drawer = props => {
           text_props={{
             primary: "Plugins"
           }}
-          icon={<Power />}
+          icon={<PowerIcon />}
         />
 
         <DrawerMenuItem

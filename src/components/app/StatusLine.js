@@ -23,7 +23,10 @@ const useStyles = makeStyles(theme => ({
     borderWidth: 1,
     zIndex: 1301
   },
-  text: {}
+  statusText: {
+    paddingLeft: theme.spacing(1),
+    color: theme.palette.text.hint
+  }
 }));
 
 const StatusLine = props => {
@@ -32,7 +35,9 @@ const StatusLine = props => {
   return (
     <Box className={classes.root}>
       <Paper className={classes.paper}>
-        <Typography variant="body2">Status</Typography>
+        <Typography className={classes.statusText} variant="body2">
+          Status
+        </Typography>
       </Paper>
     </Box>
   );

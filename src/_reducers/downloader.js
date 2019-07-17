@@ -9,13 +9,18 @@ import {
 } from "../_actions/downloader";
 
 import { requestJobs, receiveJobs } from "../_actions/jobs";
+import { setJobQuery } from "../_actions/jobs";
+import { TIMESPANS } from "../_helpers/constants";
 
 const initialState = {
   drawerOpen: true,
   useDaemon: false,
   queue: [],
   downloadProgress: [],
-  loadingJobs: false
+  loadingJobs: false,
+  jobQueryParams: {
+    span: TIMESPANS.THISMONTH
+  }
 };
 
 const downloader = createReducer(initialState, {
@@ -44,6 +49,9 @@ const downloader = createReducer(initialState, {
   [downloadProgress]: (state, action) => {
     console.log(action.payload);
     state.downloadProgress.push(action.payload);
+  },
+  [setJobQuery]: (state, action) => {
+    state["jobQueryParams"] = { ...state["jobQueryParams"], ...action.payload };
   }
 });
 

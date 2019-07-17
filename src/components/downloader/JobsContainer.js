@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import Jobs from "./Jobs";
 import { addResourcesToQueue } from "../../_actions/downloader";
+import { fetchJobs } from "../../_actions/jobs";
 
 const mapStateToProps = (state, ownProps) => {
   const jobs = Object.values(state.entities.jobs || {}).sort((a, b) =>
@@ -16,17 +17,17 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//   return {
-//     addToQueue: keys => {
-//       dispatch(addResourcesToQueue(keys));
-//     }
-//   };
-// };
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    fetchJobs: keys => {
+      dispatch(fetchJobs());
+    }
+  };
+};
 
 const JobsContainer = connect(
-  mapStateToProps
-  // mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Jobs);
 
 export default JobsContainer;

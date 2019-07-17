@@ -43,21 +43,49 @@ const jobs = createReducer(initialState, {
   [receiveJobs]: (state, action) => {
     const data = action.payload.data;
     const newJobs = Array.isArray(data) ? data : data ? [data] : [];
+    for (const k in state) {
+      if (state.hasOwnProperty(k)) {
+        delete state[k];
+      }
+    }
+
     newJobs.forEach(job => {
-      state[job.jobLabel] = { ...job, ...state[job.jobLabel] };
+      /**
+       * If job exists already, dont overwrite the output directory.
+       * It may have been edited.
+       * */
+
+      const outputDirectory = prepareForPlatform(job.output_path);
+      const jobLabel = job.jid;
+      const jobSummary = {
+        title: job.title,
+        submitter: job.submittedBy,
+        jobLabel,
+        project: job.project,
+        created: job.created,
+        id: job.id,
+        location: job.location,
+        originalOutputDirectory: outputDirectory,
+        outputDirectory:
+          (state[jobLabel] && state[jobLabel].outputDirectory) ||
+          outputDirectory,
+        owner: job.user
+      };
+
+      state[jobLabel] = jobSummary;
     });
   },
 
   [receiveDownloadSummary]: (state, action) => {
     const { jobLabel, files } = action.payload;
 
-    const outputDirectory = prepareForPlatform(action.payload.outputDirectory);
+    // const outputDirectory = prepareForPlatform(action.payload.outputDirectory);
 
     if (jobLabel in state) {
       Object.assign(state[jobLabel], {
-        originalOutputDirectory:
-          state[jobLabel].originalOutputDirectory || outputDirectory,
-        outputDirectory: state[jobLabel].outputDirectory || outputDirectory,
+        // originalOutputDirectory:
+        //   state[jobLabel].originalOutputDirectory || outputDirectory,
+        // outputDirectory: state[jobLabel].outputDirectory || outputDirectory,
         files,
         loadingKey: LOADING_KEYS.NONE
       });
@@ -72,14 +100,14 @@ const jobs = createReducer(initialState, {
   [receiveExistingFilesInfo]: (state, action) => {
     const { jobLabel, existing } = action.payload;
     /**
-     * existing is an array of relativePaths (file keys) that exist
+     * existing is an array of relativePaths (file keys) that exist on disk
      * [ folder1/file.1.exr,
      *  folder1/file.2.exr,
      * folder1/file.3.exr
      * ]
      *
      * They are the only files that exist for this job.
-     * Therefore, set all files to not existi8ng first
+     * Therefore, set all files to not existing first
      */
     if (jobLabel in state) {
       Object.keys(state[jobLabel]["files"]).forEach(relativePath => {
