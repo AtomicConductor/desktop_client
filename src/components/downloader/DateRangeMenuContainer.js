@@ -4,7 +4,9 @@ import DateRangeMenu from "./DateRangeMenu";
 import { fetchJobs, setJobQuery } from "../../_actions/jobs";
 
 const mapStateToProps = (state, ownProps) => {
-  return {};
+  return {
+    span: state.downloader.jobQueryParams.span
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {

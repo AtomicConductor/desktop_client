@@ -1,9 +1,11 @@
 import { createAction } from "redux-starter-kit";
-
+import fs from "fs";
+import path from "upath";
 import { checkResponse } from "../_helpers/network";
 import { createRequestOptions } from "../_helpers/network";
 
 import { setNotification } from "./notification";
+import { CREDENTIALS_FILENAME } from "../_helpers/constants";
 
 export const requestProfile = createAction("profile/requestProfile");
 export const receiveCredentials = createAction("profile/receiveCredentials");
@@ -25,13 +27,65 @@ export function signIn(params) {
 
       dispatch(receiveAccounts(data));
 
-      // We have the accounts, choose one
+      let accountId;
+      try {
+        const creds = JSON.parse(
+          fs.readFileSync(path.join(nw.App.dataPath, CREDENTIALS_FILENAME), {
+            encoding: "utf8"
+          }) || {}
+        );
+        const { lastAccount } = creds;
+        if (
+          lastAccount &&
+          data.accounts.some(acc => {
+            return acc.account === lastAccount;
+          })
+        ) {
+          accountId = lastAccount;
+        }
+      } catch {
+        // If anything goes wrong, just leave accountId undefined for now
+      }
+      if (!accountId) {
+        accountId = data.accounts.sort((a, b) => (a.role > b.role ? 1 : -1))[0]
+          .account;
+      }
+
+      // We have the accounts, choose one.
       // For now, choose the one with highest access rights.
       // In future, save the last used account name in settings.
-      const accountId = data.accounts.sort((a, b) =>
-        a.role > b.role ? 1 : -1
-      )[0].account;
-      dispatch(chooseAccount(accountId));
+
+      await dispatch(chooseAccount(accountId));
+    } catch (error) {
+      dispatch(
+        setNotification({
+          type: "error",
+          snackbar: error.message
+        })
+      );
+    }
+  };
+}
+
+export function deleteSession() {
+  return async function(dispatch, getState) {
+    try {
+      dispatch(signOut());
+
+      const creds = fs.readFileSync(
+        path.join(nw.App.dataPath, CREDENTIALS_FILENAME),
+        { encoding: "utf8" }
+      );
+      const { lastAccount } = JSON.parse(creds);
+      let result = {};
+      if (lastAccount) {
+        result = { lastAccount };
+      }
+
+      fs.writeFileSync(
+        path.join(nw.App.dataPath, CREDENTIALS_FILENAME),
+        JSON.stringify(result)
+      );
     } catch (error) {
       dispatch(
         setNotification({
@@ -72,6 +126,9 @@ export function chooseAccount(accountId) {
 
       const data = await getChosenUser(getState());
       dispatch(receiveUser(data));
+
+      /** Write to disk so we may auto sign in next time*/
+      dispatch(writeAccounts());
     } catch (error) {
       dispatch(receiveUser({}));
       dispatch(
@@ -91,4 +148,53 @@ async function getChosenUser(state) {
   let response = await fetch(url, options);
   checkResponse(response);
   return await response.json();
+}
+
+export function writeAccounts() {
+  return async (dispatch, getState) => {
+    const state = getState();
+    try {
+      const filePath = path.join(nw.App.dataPath, CREDENTIALS_FILENAME);
+      const data = {
+        lastAccount: state.profile.user.data.account,
+        accounts: Object.values(state.entities.accounts)
+      };
+      fs.writeFileSync(filePath, JSON.stringify(data, null, "\t"));
+    } catch (error) {
+      dispatch(
+        setNotification({
+          type: "error",
+          snackbar: error.message
+        })
+      );
+    }
+  };
+}
+
+export function signInFromSaved() {
+  return async (dispatch, getState) => {
+    // const state = getState();
+    try {
+      const filePath = path.join(nw.App.dataPath, CREDENTIALS_FILENAME);
+      const creds = fs.readFileSync(filePath, { encoding: "utf8" });
+      const { lastAccount, accounts } = JSON.parse(creds);
+
+      // console.log(lastAccount, accounts);
+
+      if (!accounts.length) {
+        throw Error("No accounts in credentials file");
+      }
+
+      dispatch(receiveAccounts({ accounts }));
+      dispatch(chooseAccount(lastAccount));
+    } catch (error) {
+      console.log("Couldn't sign in from saved credentials.");
+      // dispatch(
+      //   setNotification({
+      //     type: "info",
+      //     snackbar: "Couldn't sign in from saved credentials."
+      //   })
+      // );
+    }
+  };
 }

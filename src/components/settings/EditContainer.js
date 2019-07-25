@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import Edit from "./Edit";
 import { writeSettings } from "../../_actions/environment";
-import { signOut } from "../../_actions/profile";
+import { deleteSession } from "../../_actions/profile";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSave: settings => {
-      dispatch(signOut());
+      dispatch(deleteSession());
       dispatch(writeSettings(settings));
     }
   };

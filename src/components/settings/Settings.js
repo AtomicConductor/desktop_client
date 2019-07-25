@@ -32,35 +32,22 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper
   },
-  tabsContainer: {
-    height: 30,
-    width: 600,
-    marginTop: 200
-  },
   title: {
     flexGrow: 1
   },
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth
+    width: "100%"
   },
-  // paper: {
-  //   margin: "auto"
-  // },
+
   tabBox: {
-    // height: 30,
-    // width: `calc(100% - ${drawerWidth}px)`,
     display: "flex",
     justifyContent: "center"
-    // position: "fixed",
-    // marginLeft: drawerWidth,
-    // marginTop: 16
   }
 }));
 
 const Settings = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -68,7 +55,7 @@ const Settings = () => {
 
   return (
     <React.Fragment>
-      <AppBar position="static" variant="dense">
+      <AppBar position="fixed" variant="dense">
         <Toolbar variant="dense">
           <Typography variant="h6" className={classes.title}>
             Settings

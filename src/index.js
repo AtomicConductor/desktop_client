@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import { readSettings } from "./_actions/environment";
+import { signInFromSaved } from "./_actions/profile";
+
 import {
   startDownloadQueue
   // startDownloadQueueTest
@@ -15,6 +17,7 @@ import {
 // import { fetchProfile } from "./_actions/profile";
 
 store.dispatch(readSettings());
+store.dispatch(signInFromSaved());
 
 // store.dispatch(fetchProfile());
 

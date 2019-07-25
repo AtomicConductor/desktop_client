@@ -43,6 +43,7 @@ const environment = createReducer(initialState, {
       platform: process.platform,
       cwd: process.cwd(),
       execPath: process.execPath,
+      appDataPath: nw.App.dataPath,
       NODE_ENV: node_env
     };
 

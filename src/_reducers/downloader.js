@@ -5,7 +5,9 @@ import {
   toggleUseDaemon,
   runDownloadJobs,
   downloadProgress,
-  addFileToQueue
+  addFileToQueue,
+  setFilterValue,
+  setExpanded
 } from "../_actions/downloader";
 
 import { requestJobs, receiveJobs } from "../_actions/jobs";
@@ -18,12 +20,18 @@ const initialState = {
   queue: [],
   downloadProgress: [],
   loadingJobs: false,
+  expandedJob: "",
   jobQueryParams: {
-    span: TIMESPANS.THISMONTH
+    span: TIMESPANS.THISMONTH,
+    textFilter: ""
   }
 };
 
 const downloader = createReducer(initialState, {
+  [setExpanded]: (state, action) => {
+    state.expandedJob = action.payload;
+  },
+
   [toggleDrawer]: state => {
     state.drawerOpen = !state.drawerOpen;
   },
@@ -51,6 +59,9 @@ const downloader = createReducer(initialState, {
     state.downloadProgress.push(action.payload);
   },
   [setJobQuery]: (state, action) => {
+    state["jobQueryParams"] = { ...state["jobQueryParams"], ...action.payload };
+  },
+  [setFilterValue]: (state, action) => {
     state["jobQueryParams"] = { ...state["jobQueryParams"], ...action.payload };
   }
 });

@@ -1,129 +1,205 @@
 import React from "react";
+import clsx from "clsx";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Divider from "@material-ui/core/Divider";
+import {
+  makeStyles,
+  useTheme,
+  withStyles,
+  fade
+} from "@material-ui/core/styles";
+import HelpIcon from "@material-ui/icons/HelpOutline";
+import IconButton from "@material-ui/core/IconButton";
 
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import Avatar from "@material-ui/core/Avatar";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+import CardActions from "@material-ui/core/CardActions";
+import Chip from "@material-ui/core/Chip";
 
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import SyncIcon from "@material-ui/icons/Sync";
-import IconButton from "@material-ui/core/IconButton";
-
-import PluginItemDetailsContainer from "./PluginItemDetailsContainer";
+import CodeIcon from "@material-ui/icons/Code";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
+import Tooltip from "@material-ui/core/Tooltip";
+import LinesEllipsis from "react-lines-ellipsis";
 
+import InstallPathFieldContainer from "./InstallPathFieldContainer";
 const useStyles = makeStyles(theme => ({
-  spacer: {
-    flexGrow: 1
-  },
-  button: {},
-  avatar: {
-    width: 32,
-    height: 32,
-    marginBottom: 8,
-    marginRight: 8
-  },
   card: {
-    display: "flex",
-    marginBottom: theme.spacing(1)
-  },
-  details: {
-    display: "flex",
-    flexDirection: "row"
-  },
-  content: {
-    flex: "1 0 auto"
-    // flexBasis: "66.66%"
+    width: 560,
+    marginBottom: theme.spacing(1),
+    position: "relative",
+    margin: theme.spacing(1)
   },
   logo: {
     marginLeft: theme.spacing(2),
     marginTop: theme.spacing(2),
-
+    flexShrink: 0,
     width: 60,
     height: 60
   },
-  controls: {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1)
-  },
-  playIcon: {
-    height: 38,
-    width: 38
-  },
 
-  leftColumn: {
-    flexBasis: "66.66%"
-  },
-  rightColumn: {
+  actionColumn: {
     flexShrink: 0,
-    width: 200,
+    flexGrow: 1,
     borderRight: `2px solid ${theme.palette.divider}`,
     borderLeft: `2px solid ${theme.palette.divider}`
+  },
+  actionRow: {
+    display: "flex",
+
+    justifyContent: "space-between"
+  },
+  top: {
+    height: 100,
+    display: "flex",
+    flexDirection: "row"
+  },
+  bottom: {
+    paddingTop: theme.spacing(2),
+    borderBottom: `2px solid ${theme.palette.divider}`
+  },
+  title: {
+    display: "flex",
+
+    justifyContent: "space-between"
+  },
+  description: {
+    color: theme.palette.text.secondary,
+
+    marginRight: theme.spacing(3)
+  },
+  chip: { color: theme.palette.text.secondary },
+  secondaryActions: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  secondaryIcon: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   }
 }));
 
+const InstallProgress = withStyles(
+  {
+    root: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      height: 3,
+      backgroundColor: fade("#000", 0.0)
+    }
+  },
+  { withTheme: true }
+)(LinearProgress);
+
 const PluginItem = props => {
-  const { expanded, onPanelClick, plugin } = props;
-  const { name, title, description } = plugin;
+  const { plugin, install, uninstall } = props;
+  const { name, title, description, installed } = plugin;
   const theme = useTheme();
-  // const loadingKey = { job };
-  // const downloadable = Boolean(
-  //   job.files &&
-  //     Object.values(job.files).some(f => {
-  //       return f.exists !== true;
-  //     })
-  // );
-
-  // const projectLabel = job.project
-  //   ? job.project.split("|").reverse()[0]
-  //   : "NULL";
-
-  // const jobLabel = job.jobLabel;
-  // const jobTitle = job.title;
 
   const classes = useStyles();
 
+  const [completed, setCompleted] = React.useState(0);
+  let timer = null;
+
+  const toggleInstall = () => {
+    timer = setInterval(() => {
+      setCompleted(oldCompleted => {
+        if (oldCompleted === 100) {
+          if (installed) {
+            uninstall();
+          } else {
+            install();
+          }
+          setCompleted(0);
+          clearInterval(timer);
+        }
+        const diff = Math.random() * (installed ? 40 : 20);
+        return Math.min(oldCompleted + diff, 100);
+      });
+    }, 500);
+  };
+
   return (
     <Card className={classes.card}>
-      <CardMedia
-        className={classes.logo}
-        image={`/images/${name}.png`}
-        title="Live from space album logo"
-      />
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            {`${title} intaller`}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {description}
-          </Typography>
-        </CardContent>
+      <Box className={classes.top}>
+        <CardMedia className={classes.logo} image={`/images/${name}.png`} />
+        <CardContent>
+          <div className={classes.title}>
+            <Typography variant="h6">{title}</Typography>
+            {installed ? (
+              <Chip
+                variant="outlined"
+                size="small"
+                color="secondary"
+                label="Installed"
+                className={classes.chip}
+              />
+            ) : null}
+          </div>
 
-        <CardContent className={classes.rightColumn}>foo</CardContent>
-      </div>
+          <LinesEllipsis
+            className={classes.description}
+            text={description}
+            maxLine="3"
+            ellipsis="..."
+            trimRight
+            basedOn="letters"
+          />
+        </CardContent>
+      </Box>
+      <CardContent className={classes.bottom}>
+        <InstallPathFieldContainer pluginName={name} />
+      </CardContent>
+
+      <CardActions className={classes.actionRow}>
+        <div className={classes.secondaryActions}>
+          <Tooltip title={`Help on ${title}`} placement="top">
+            <IconButton
+              size="small"
+              aria-label="Previous"
+              className={classes.secondaryIcon}
+            >
+              <HelpIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
+            title={`View environment variables and setup details for ${title}`}
+            placement="top"
+          >
+            <IconButton
+              size="small"
+              aria-label="Previous"
+              className={classes.secondaryIcon}
+            >
+              <CodeIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <Button size="small" color="secondary" onClick={toggleInstall}>
+          {installed ? `Uninstall` : `Install`}
+        </Button>
+      </CardActions>
+      {completed > 0 ? (
+        <InstallProgress
+          color="secondary"
+          variant="determinate"
+          value={completed}
+        />
+      ) : null}
     </Card>
   );
 };
 
 PluginItem.propTypes = {
-  expanded: PropTypes.string.isRequired,
-  onPanelClick: PropTypes.func.isRequired,
+  install: PropTypes.func.isRequired,
+  uninstall: PropTypes.func.isRequired,
+
   plugin: PropTypes.object.isRequired
 };
 

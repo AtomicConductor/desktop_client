@@ -7,6 +7,8 @@ import PluginItemContainer from "./PluginItemContainer";
 import AppBarContainer from "./AppBarContainer";
 
 import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
@@ -19,12 +21,15 @@ import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    paddingLeft: 2,
+    display: "flex",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    padding: 2,
     marginTop: appBarHeight,
-    width: `calc(100% - ${drawerWidth}px)`,
-    overflow: "auto",
-    position: "absolute",
-    height: `calc(100% - ${appBarHeight + statusLineHeight}px)`
+    width: `100%`,
+    flexWrap: "wrap",
+    alignContent: "flex-start",
+    overflow: "auto"
   },
 
   centeredBox: {
@@ -41,64 +46,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const plugins = [
-  {
-    title: "Maya Submitter",
-    name: "maya",
-    description:
-      "Installs the Conductor submitter UI for Maya as a module. Once installed, access the UI from the Conductor menu"
-  },
-  {
-    title: "Nuke Submitter",
-    name: "nuke",
-    description:
-      "Installs the Conductor submitter UI for Nuke. Once installed, access the UI from the Plugins menu."
-  },
-  {
-    title: "Clarisse Submitter",
-    name: "clarisse",
-    description:
-      "Installs the Conductor scripted class for Clarisse. Once installed, access the UI from the Create Item menu."
-  },
-  {
-    title: "Silhouette Submitter",
-    name: "silhouette",
-    description:
-      "Installs the Conductor Silhouette. Once installed, access the UI from the Create menu."
-  }
-];
-
 const Plugins = props => {
-  // const { jobs, loading, fetchPlugins } = props;
+  const { plugins } = props;
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState("panel1");
-
-  const onPanelClick = panel => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : "");
-  };
-
-  // Similar to componentDidMount and componentDidUpdate:
-
-  // useEffect(() => {
-  //   setExpanded("00921");
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchPlugins();
-  // }, []);
 
   return (
     <React.Fragment>
       <AppBarContainer />
 
-      <Box className={classes.container}>
+      <Box
+        spacing={1}
+        className={classes.container}
+        // alignItems="flex-start"
+      >
         {plugins.map((plugin, i) => (
-          <PluginItemContainer
-            key={plugin.name}
-            plugin={plugin}
-            expanded={expanded}
-            onPanelClick={onPanelClick}
-          />
+          <PluginItemContainer key={i} plugin={plugin} />
         ))}
       </Box>
     </React.Fragment>
@@ -106,9 +68,7 @@ const Plugins = props => {
 };
 
 Plugins.propTypes = {
-  // jobs: PropTypes.array.isRequired,
-  // loading: PropTypes.bool.isRequired,
-  // fetchPlugins: PropTypes.func.isRequired
+  plugins: PropTypes.array.isRequired
 };
 
 export default Plugins;

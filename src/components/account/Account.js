@@ -13,11 +13,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilledInput from "@material-ui/core/FilledInput";
 
 import Button from "@material-ui/core/Button";
+import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
   container: {
     display: "flex",
     flexWrap: "wrap"
@@ -54,14 +52,18 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth
+    // zIndex: 1301
   }
 }));
 
 const Account = props => {
   const classes = useStyles();
 
-  const { profile, accounts, setAccount, signOut } = props;
-  const loggedIn = !!Object.entries(profile.user).length;
+  const { profile, accounts, setAccount, signOut, loggedIn } = props;
 
   const handleChangeAccount = event => {
     setAccount(event.target.value);
@@ -73,18 +75,16 @@ const Account = props => {
 
   return (
     <React.Fragment>
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar variant="dense">
-            <Typography variant="h6" className={classes.title}>
-              Account
-            </Typography>
-            <Button color="inherit" onClick={signOut}>
-              logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar variant="dense">
+          <Typography variant="h6" className={classes.title}>
+            {`Account: ${profile.user.data.account}`}
+          </Typography>
+          <Button color="inherit" onClick={signOut}>
+            logout
+          </Button>
+        </Toolbar>
+      </AppBar>
       <main className={classes.content}>
         <Card className={classes.card}>
           <Typography variant="h5">Accounts</Typography>
@@ -116,7 +116,8 @@ Account.propTypes = {
   profile: PropTypes.object.isRequired,
   accounts: PropTypes.array.isRequired,
   setAccount: PropTypes.func.isRequired,
-  signOut: PropTypes.func.isRequired
+  signOut: PropTypes.func.isRequired,
+  loggedIn: PropTypes.bool.isRequired
 };
 
 export default Account;

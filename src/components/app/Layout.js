@@ -19,9 +19,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 
 import DrawerContainer from "./DrawerContainer";
-import Downloader from "../downloader/Downloader";
+import DownloaderContainer from "../downloader/DownloaderContainer";
 import CtUploader from "../uploader/CtUploader";
-import Plugins from "../plugins/Plugins";
+import PluginsContainer from "../plugins/PluginsContainer";
 import AccountContainer from "../account/AccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
@@ -40,9 +40,13 @@ import {
 
 const useStyles = makeStyles(theme => ({
   box: {
+    display: "flex",
+    flex: "1 0 auto",
     // border: "1px solid #0f0",
-    height: window.innerHeight - statusLineHeight,
-    marginLeft: drawerWidth
+    marginLeft: drawerWidth,
+    position: "absolute",
+    height: `calc(100% - ${statusLineHeight}px)`,
+    width: `calc(100% - ${drawerWidth}px)`
   }
 }));
 
@@ -60,18 +64,17 @@ const Layout = () => {
           />
           <Route
             path="/downloader/jobs"
-            render={props => <Downloader {...props} />}
-          />
-          <Route
-            path="/downloader/queue"
-            render={props => <Downloader {...props} />}
+            render={props => <DownloaderContainer {...props} />}
           />
           <Route
             path="/downloader"
-            render={props => <Downloader {...props} />}
+            render={props => <DownloaderContainer {...props} />}
           />
           <Route path="/uploader" render={props => <CtUploader {...props} />} />
-          <Route path="/plugins" render={props => <Plugins {...props} />} />
+          <Route
+            path="/plugins"
+            render={props => <PluginsContainer {...props} />}
+          />
           <Route path="/settings" render={props => <Settings {...props} />} />
           <Route
             path="/account"

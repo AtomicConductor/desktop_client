@@ -34,16 +34,14 @@ export function writeSettings(settings) {
 export function readSettings() {
   return (dispatch, getState) => {
     const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
-    console.log("READ SETTINGS");
-    console.log(filePath);
-
-    const settings = fs.readFileSync(filePath, { encoding: "utf8" });
 
     try {
+      const settings = fs.readFileSync(filePath, { encoding: "utf8" });
+      // read in the configs etc.
       dispatch(updateSettings(JSON.parse(settings)));
     } catch (error) {
       dispatch(updateSettings());
-      dispatch(envFailure(error.message));
+      console.log("No settings file");
     }
   };
 }

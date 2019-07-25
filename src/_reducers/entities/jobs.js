@@ -48,7 +48,7 @@ const jobs = createReducer(initialState, {
         delete state[k];
       }
     }
-
+    // console.log(newJobs);
     newJobs.forEach(job => {
       /**
        * If job exists already, dont overwrite the output directory.
@@ -58,7 +58,7 @@ const jobs = createReducer(initialState, {
       const outputDirectory = prepareForPlatform(job.output_path);
       const jobLabel = job.jid;
       const jobSummary = {
-        title: job.title,
+        title: job.title || "- No title -",
         submitter: job.submittedBy,
         jobLabel,
         project: job.project,
@@ -69,7 +69,7 @@ const jobs = createReducer(initialState, {
         outputDirectory:
           (state[jobLabel] && state[jobLabel].outputDirectory) ||
           outputDirectory,
-        owner: job.user
+        owner: job.owner || job.user || "anon"
       };
 
       state[jobLabel] = jobSummary;
@@ -79,13 +79,8 @@ const jobs = createReducer(initialState, {
   [receiveDownloadSummary]: (state, action) => {
     const { jobLabel, files } = action.payload;
 
-    // const outputDirectory = prepareForPlatform(action.payload.outputDirectory);
-
     if (jobLabel in state) {
       Object.assign(state[jobLabel], {
-        // originalOutputDirectory:
-        //   state[jobLabel].originalOutputDirectory || outputDirectory,
-        // outputDirectory: state[jobLabel].outputDirectory || outputDirectory,
         files,
         loadingKey: LOADING_KEYS.NONE
       });
@@ -94,7 +89,6 @@ const jobs = createReducer(initialState, {
 
   [requestExistingFilesInfo]: (state, action) => {
     const jobLabel = action.payload;
-    // state[jobLabel]["loadingKey"] = LOADING_KEYS.EXISTING_FILES;
   },
 
   [receiveExistingFilesInfo]: (state, action) => {
@@ -109,8 +103,8 @@ const jobs = createReducer(initialState, {
      * They are the only files that exist for this job.
      * Therefore, set all files to not existing first
      */
-    if (jobLabel in state) {
-      Object.keys(state[jobLabel]["files"]).forEach(relativePath => {
+    if (jobLabel in state && "files" in state[jobLabel]) {
+      Object.keys(state[jobLabel]["files"] || {}).forEach(relativePath => {
         state[jobLabel]["files"][relativePath].exists = false;
       });
 
@@ -129,25 +123,10 @@ const jobs = createReducer(initialState, {
     }
   },
 
-  // [setFileExists]: (state, action) => {
-  //   const { file, exists } = action.payload;
-
-  //   if (jobLabel in state && relativePath in state[jobLabel]["files"]) {
-  //     if (relativePath in state[jobLabel]) {
-  //       state[jobLabel]["files"].exists = exists;
-  //     }
-  //   }
-  // },
-
   [requestDownloadData]: (state, action) => {
     const jobLabel = action.payload;
     state[jobLabel]["loadingKey"] = LOADING_KEYS.DOWNLOAD_DETAILS;
   },
-
-  // [setFileExistsLocally]: (state, action) => {
-  //   const { jobLabel, relativePath, exists } = action.payload;
-  //   state[jobLabel].files[relativePath].exists = exists;
-  // },
 
   [setOutputPathValue]: (state, action) => {
     const { jobLabel, value } = action.payload;

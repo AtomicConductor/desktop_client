@@ -13,7 +13,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    height: statusLineHeight
+    height: statusLineHeight,
+    bottom: 0
   },
   paper: {
     flexGrow: 1,

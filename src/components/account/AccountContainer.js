@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import Account from "./Account";
-import { chooseAccount, signOut } from "../../_actions/profile";
+import { chooseAccount, deleteSession } from "../../_actions/profile";
 
 const mapStateToProps = (state, ownProps) => {
   const { profile, entities } = state;
@@ -8,10 +8,8 @@ const mapStateToProps = (state, ownProps) => {
     label: account.accountName,
     value: account.account
   }));
-
-  console.log("accounts");
-  console.log(accounts);
-  return { profile, accounts };
+  const loggedIn = Boolean(Object.entries(profile.user).length);
+  return { profile, accounts, loggedIn };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -20,7 +18,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(chooseAccount(accountId));
     },
     signOut: () => {
-      dispatch(signOut());
+      dispatch(deleteSession());
     }
   };
 };

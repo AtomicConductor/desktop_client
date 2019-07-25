@@ -1,95 +1,61 @@
 import React from "react";
+import moment from "moment";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
-
+import Chip from "@material-ui/core/Chip";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import SyncIcon from "@material-ui/icons/Sync";
-import IconButton from "@material-ui/core/IconButton";
 
 import JobItemDetailsContainer from "./JobItemDetailsContainer";
 
 const useStyles = makeStyles(theme => ({
-  summary: {
-    height: 20
+  summaryDate: {
+    width: 170,
+    paddingRight: theme.spacing(1),
+    color: theme.palette.text.secondary
   },
-
-  summaryLeft: {
-    height: 30,
+  title: {
+    fontSize: theme.typography.pxToRem(16)
+  },
+  label: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
+  },
+  labelBox: {
+    width: 80,
     display: "flex",
-    width: "100%"
+    flexShrink: 0,
+    alignItems: "center",
+    marginRight: theme.spacing(1)
+  },
+  meta: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    marginTop: theme.spacing(1)
   },
 
-  summaryLabelText: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: 70,
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
+  main: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column"
   },
-
-  summaryProjectText: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: 100,
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  summaryTitleText: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: 500,
-    fontSize: theme.typography.pxToRem(15)
-  },
-  spacer: {
-    flexGrow: 1
-  },
-  button: {}
+  chip: {
+    marginLeft: theme.spacing(2)
+  }
 }));
 
-const SyncButton = props => {
-  const classes = useStyles();
-  console.log(props.show);
-
-  if (!props.show) {
-    return null;
-  }
-
-  return (
-    <IconButton
-      color="primary"
-      className={classes.syncButton}
-      component="span"
-      size="small"
-      onClick={props.onClick}
-    >
-      <SyncIcon color="secondary" />
-    </IconButton>
-  );
-};
-
 const JobItem = props => {
-  const {
-    job,
-    onPanelClick,
-    expanded,
-    addToQueue,
-    fetchFilesInfo,
-    loadingKey
-  } = props;
+  const { job, onPanelClick, addToQueue, expanded } = props;
 
-  // const loadingKey = { job };
   const downloadable = Boolean(
     job.files &&
       Object.values(job.files).some(f => {
@@ -97,12 +63,11 @@ const JobItem = props => {
       })
   );
 
-  const projectLabel = job.project
-    ? job.project.split("|").reverse()[0]
-    : "NULL";
+  const { jobLabel, title, project, owner, created, location } = job;
 
-  const jobLabel = job.jobLabel;
-  const jobTitle = job.title;
+  const createdTime = moment(created).format("Do MMM YYYY, H:mm");
+
+  const projectLabel = project && project.split("|").reverse()[0];
 
   const classes = useStyles();
 
@@ -117,21 +82,51 @@ const JobItem = props => {
         className={classes.summary}
         id={`${job.jobLabel}-header`}
       >
-        <Box className={classes.summaryLeft}>
+        <Box className={classes.labelBox}>
           <Typography
-            className={classes.summaryLabelText}
+            variant="h6"
+            color="primary"
+            className={classes.label}
           >{`${jobLabel}`}</Typography>
-
-          <Typography
-            className={classes.summaryProjectText}
-          >{`${projectLabel}`}</Typography>
-
-          <Typography
-            className={classes.summaryTitleText}
-          >{`${jobTitle}`}</Typography>
         </Box>
+        <Box className={classes.main}>
+          <Typography className={classes.title}>{title}</Typography>
 
-        <Box className={classes.spacer} />
+          <Box className={classes.meta}>
+            <Typography className={classes.summaryDate}>
+              {createdTime}
+            </Typography>
+            {projectLabel ? (
+              <Chip
+                variant="outlined"
+                size="small"
+                color="primary"
+                label={projectLabel}
+                className={classes.chip}
+              />
+            ) : null}
+
+            {owner ? (
+              <Chip
+                variant="outlined"
+                size="small"
+                color="primary"
+                label={owner}
+                className={classes.chip}
+              />
+            ) : null}
+
+            {location ? (
+              <Chip
+                variant="outlined"
+                size="small"
+                color="primary"
+                label={location}
+                className={classes.chip}
+              />
+            ) : null}
+          </Box>
+        </Box>
       </ExpansionPanelSummary>
 
       <ExpansionPanelDetails>
@@ -143,7 +138,6 @@ const JobItem = props => {
           disabled={!downloadable}
           size="small"
           color="secondary"
-          variant="outlined"
           onClick={addToQueue}
         >
           Download
@@ -154,53 +148,11 @@ const JobItem = props => {
 };
 
 JobItem.propTypes = {
-  loadingKey: PropTypes.number.isRequired,
-
   expanded: PropTypes.string.isRequired,
   onPanelClick: PropTypes.func.isRequired,
+  loadingKey: PropTypes.number.isRequired,
   job: PropTypes.object.isRequired,
   addToQueue: PropTypes.func.isRequired
 };
 
 export default JobItem;
-
-/* 
-
-
-
-        <Box className={classes.summaryRight}>
-          <Typography className={classes.summaryInfoText}>{`${
-            job.title
-          }`}</Typography>
-        </Box>
-
-
-
-
-
-const stopPropagation = e => e.stopPropagation();
-const InputWrapper = ({ children }) => (
-  <div onClick={stopPropagation}>{children}</div>
-);
-
-
-
-<InputWrapper className={classes.summaryActions}>
-<Box className={classes.summaryActions}>
-  <Typography
-    variant="body2"
-    className={classes.d}
-  >{`${count} `}</Typography>
-
-  <IconButton
-    onClick={addJobToQueue(job.jobLabel)}
-    size="small"
-    className={classes.button}
-    aria-label="Add to queue"
-  >
-    <AddToQueueIcon />
-  </IconButton>
-</Box>
-</InputWrapper>
-
-*/

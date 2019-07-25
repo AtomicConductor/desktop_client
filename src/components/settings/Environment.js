@@ -3,11 +3,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Table from "./Table";
-import {
-  appBarHeight,
-  statusLineHeight,
-  drawerWidth
-} from "../../_helpers/constants";
+import { appBarHeight } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,22 +11,16 @@ const useStyles = makeStyles(theme => ({
     padding: "80px",
     margin: "auto"
   },
-  paper: {
-    marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
-    marginBottom: theme.spacing(2)
-  },
+
   table: {
     minWidth: 650
   },
   container: {
+    marginTop: appBarHeight,
+
     paddingLeft: 2,
-    width: `calc(100% - ${drawerWidth}px)`,
-    overflow: "auto",
-    position: "absolute",
-    height: `calc(100% - ${appBarHeight + statusLineHeight}px)`
-    // border: "1px solid red"
+    width: "100%",
+    overflow: "auto"
   }
 }));
 

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const OutputPathField = props => {
   const classes = useStyles();
 
-  const { value, setValue, resetValue, resettable } = props;
+  const { value, setValue, resetValue, resettable, jobLabel } = props;
 
   const handleSelectDirectory = event => {
     if (event.target.files && event.target.files[0]) {
@@ -47,11 +47,11 @@ const OutputPathField = props => {
       />
 
       <Box className={classes.iconStack}>
-        <label htmlFor="icon-button-file">
+        <label htmlFor={`${jobLabel}-icon-button-file`}>
           <input
             hidden
             className={classes.input}
-            id="icon-button-file"
+            id={`${jobLabel}-icon-button-file`}
             type="file"
             nwdirectory="true"
             onChange={handleSelectDirectory}
@@ -75,7 +75,8 @@ const OutputPathField = props => {
 
 OutputPathField.propTypes = {
   value: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired
+  setValue: PropTypes.func.isRequired,
+  jobLabel: PropTypes.string.isRequired
 };
 
 export default OutputPathField;

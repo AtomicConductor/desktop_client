@@ -8,6 +8,6 @@ export const downloadProgress = createAction("downloader/downloadProgress");
 
 export const addFileToQueue = createAction("downloader/addFileToQueue");
 
-export const startDownloadDaemon = createAction(
-  "downloader/startDownloadDaemon"
-);
+export const setFilterValue = createAction("downloader/setFilterValue");
+
+export const setExpanded = createAction("downloader/setExpanded");

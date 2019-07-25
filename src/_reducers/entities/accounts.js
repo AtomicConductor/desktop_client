@@ -7,6 +7,7 @@ const initialState = {};
 const accounts = createReducer(initialState, {
   [receiveAccounts]: (state, action) => {
     const { accounts } = action.payload;
+
     if (!accounts) {
       throw Error("Can't sign in");
     }

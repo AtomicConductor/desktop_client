@@ -1,3 +1,5 @@
+import os from "os";
+
 export const drawerWidth = 240;
 
 export const statusLineHeight = 24;
@@ -36,3 +38,32 @@ export const TIMESPANS = {
   LASTYEAR: "Last Year",
   ALLTIME: "All Time"
 };
+
+const PLATFORM = os.platform();
+const WIN32 = PLATFORM === "win32";
+const MAC = PLATFORM === "darwin";
+const LINUX = PLATFORM === "linux";
+
+// const ALL_DEFAULT_PLUGIN_INSTALL_PATHS = {
+//   win32: {
+//     maya: "%APPDATA%\\Conductor\\maya",
+//     nuke: "%APPDATA%\\Conductor\\nuke",
+//     clarisse: "%APPDATA%\\Conductor\\clarisse",
+//     silhouette: "%APPDATA%\\Conductor\\silhouette"
+//   },
+//   darwin: {
+//     maya: "$HOME/Conductor/maya",
+//     nuke: "$HOME/Conductor/nuke",
+//     clarisse: "$HOME/Conductor/clarisse",
+//     silhouette: "$HOME/Conductor/silhouette"
+//   },
+//   linux: {
+//     maya: "$HOME/Conductor/maya",
+//     nuke: "$HOME/Conductor/nuke",
+//     clarisse: "$HOME/Conductor/clarisse",
+//     silhouette: "$HOME/Conductor/silhouette"
+//   }
+// };
+
+// export const DEFAULT_PLUGIN_INSTALL_PATHS =
+//   ALL_DEFAULT_PLUGIN_INSTALL_PATHS[PLATFORM];

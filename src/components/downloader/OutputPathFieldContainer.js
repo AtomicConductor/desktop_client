@@ -17,7 +17,8 @@ const mapStateToProps = (state, ownProps) => {
     resettable: Boolean(
       outputDirectory && outputDirectory !== originalOutputDirectory
     ),
-    value: outputDirectory || ""
+    value: outputDirectory || "",
+    jobLabel
   };
 };
 

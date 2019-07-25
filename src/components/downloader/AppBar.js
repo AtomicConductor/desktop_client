@@ -3,35 +3,26 @@ import PropTypes from "prop-types";
 
 import MuiAppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 
 import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import SyncIcon from "@material-ui/icons/Sync";
+import Typography from "@material-ui/core/Typography";
 import { drawerWidth } from "../../_helpers/constants";
-
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
-
 import SearchIcon from "@material-ui/icons/Search";
 
-import QueueIcon from "@material-ui/icons/Queue";
-import ViewListIcon from "@material-ui/icons/ViewList";
-
-import { withRouter } from "react-router-dom";
+import DateRangeMenuContainer from "./DateRangeMenuContainer";
 
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1
   },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
 
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth
-  },
-  hide: {
-    display: "none"
   },
 
   search: {
@@ -73,14 +64,10 @@ const useStyles = makeStyles(theme => ({
 
 const AppBar = props => {
   const classes = useStyles();
+  const { refreshJobList, setFilterValue, filterValue } = props;
 
-  const { history } = props;
-
-  const locationIsJobs = history.location.pathname !== "/downloader/queue";
-
-  const onToggleQueue = () => {
-    const url = locationIsJobs ? "/downloader/queue" : "/downloader/jobs";
-    history.push(url);
+  const handleChange = event => {
+    setFilterValue(event.target.value);
   };
 
   return (
@@ -95,24 +82,33 @@ const AppBar = props => {
             <SearchIcon />
           </div>
           <InputBase
+            onChange={handleChange}
             placeholder="Search…"
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput
             }}
             inputProps={{ "aria-label": "Search" }}
+            value={filterValue}
           />
         </div>
         <div className={classes.grow} />
+        <DateRangeMenuContainer />
+
+        <Tooltip title="Refresh jobs list">
+          <IconButton onClick={refreshJobList} color="inherit">
+            <SyncIcon />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </MuiAppBar>
   );
 };
 
-export { AppBar };
+AppBar.propTypes = {
+  refreshJobList: PropTypes.func.isRequired,
+  filterValue: PropTypes.string.isRequired,
+  setFilterValue: PropTypes.func.isRequired
+};
 
-export default withRouter(AppBar);
-
-// <IconButton color="inherit" onClick={onToggleQueue}>
-// {locationIsJobs ? <QueueIcon /> : <ViewListIcon />}
-// </IconButton>
+export default AppBar;

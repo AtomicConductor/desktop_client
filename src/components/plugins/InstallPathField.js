@@ -22,41 +22,44 @@ const useStyles = makeStyles(theme => ({
 const InstallPathField = props => {
   const classes = useStyles();
 
-  const { value, setValue, resetValue, resettable } = props;
+  const { pluginName, value, setValue, resetValue, resettable } = props;
 
   const handleSelectDirectory = event => {
+    console.log("HANDLESELECTDIRECTORY");
     if (event.target.files && event.target.files[0]) {
-      setValue(event.target.files[0].path);
+      console.log(event.target.files[0].path);
+      setValue(pluginName, event.target.files[0].path);
     }
   };
   const handleEdit = event => {
-    setValue(event.target.value);
+    setValue(pluginName, event.target.value);
   };
 
   return (
-    <ListItem dense>
+    <ListItem>
       <TextField
         fullWidth
         // dense
         id="standard-with-placeholder"
-        label="Output path"
-        placeholder="Override the output path (optional)"
+        label="Installation path"
+        placeholder="Set the installation path"
         value={value}
         onChange={handleEdit}
         variant="outlined"
+        disabled={true}
       />
 
       <Box className={classes.iconStack}>
-        <label htmlFor="icon-button-file">
+        <label htmlFor={`${pluginName}-icon-button-file`}>
           <input
             hidden
             className={classes.input}
-            id="icon-button-file"
+            id={`${pluginName}-icon-button-file`}
             type="file"
             nwdirectory="true"
             onChange={handleSelectDirectory}
           />
-          <Tooltip title="Change output directory" placement="top">
+          <Tooltip title="Change installation directory" placement="top">
             <IconButton
               color="primary"
               className={classes.button}
