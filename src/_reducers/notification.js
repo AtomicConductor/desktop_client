@@ -5,14 +5,8 @@ import {
   setNotification
 } from "../_actions/notification";
 
-import { receiveUser, profileFailure } from "../_actions/profile";
+import { profileFailure } from "../_actions/profile";
 import { envFailure } from "../_actions/environment";
-// import { runDownloadJobs } from "../_actions/downloader";
-
-// import {
-//   pythonScriptFailure,
-//   setPythonScriptResponse
-// } from "../_actions/python";
 
 const initialState = {
   snackbar: "",
@@ -43,13 +37,6 @@ const notification = createReducer(initialState, {
     state.show = !!action.payload ? "snackbar" : "none";
     state.type = "error";
   },
-
-  // [receiveUser]: (state, action) => {
-  //   state.snackbar = "Successfully signed in";
-  //   state.detail = "";
-  //   state.show = "snackbar";
-  //   state.type = "success";
-  // },
 
   [envFailure]: (state, action) => {
     state.snackbar = action.payload;

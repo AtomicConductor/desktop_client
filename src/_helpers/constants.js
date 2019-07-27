@@ -1,5 +1,3 @@
-import os from "os";
-
 export const drawerWidth = 240;
 
 export const statusLineHeight = 24;
@@ -13,7 +11,9 @@ export const googleProjects = [
     projectUrl: "https://atomic-light-001.appspot.com",
     dashboardUrl: "https://dashboard.conductortech.com",
     apiServer: "https://api.conductortech.com",
-    onboarding: "https://id.conductortech.com"
+    onboarding: "https://id.conductortech.com",
+    googleClientId:
+      "367447922845-sofnl08cemfm9rf27idhsuo7rsofqftu.apps.googleusercontent.com"
   },
   {
     name: "development",
@@ -21,7 +21,9 @@ export const googleProjects = [
     projectUrl: "https://eloquent-vector-104019.appspot.com",
     dashboardUrl: "https://dashboard.dev-conductortech.com",
     apiServer: "https://api.dev-conductortech.com",
-    onboarding: "https://id.dev-conductortech.com"
+    onboarding: "https://id.dev-conductortech.com",
+    googleClientId:
+      "239744134952-fiikjq85kj2t4eibgvvkocmbe07bopcv.apps.googleusercontent.com"
   }
 ];
 
@@ -38,32 +40,3 @@ export const TIMESPANS = {
   LASTYEAR: "Last Year",
   ALLTIME: "All Time"
 };
-
-const PLATFORM = os.platform();
-const WIN32 = PLATFORM === "win32";
-const MAC = PLATFORM === "darwin";
-const LINUX = PLATFORM === "linux";
-
-// const ALL_DEFAULT_PLUGIN_INSTALL_PATHS = {
-//   win32: {
-//     maya: "%APPDATA%\\Conductor\\maya",
-//     nuke: "%APPDATA%\\Conductor\\nuke",
-//     clarisse: "%APPDATA%\\Conductor\\clarisse",
-//     silhouette: "%APPDATA%\\Conductor\\silhouette"
-//   },
-//   darwin: {
-//     maya: "$HOME/Conductor/maya",
-//     nuke: "$HOME/Conductor/nuke",
-//     clarisse: "$HOME/Conductor/clarisse",
-//     silhouette: "$HOME/Conductor/silhouette"
-//   },
-//   linux: {
-//     maya: "$HOME/Conductor/maya",
-//     nuke: "$HOME/Conductor/nuke",
-//     clarisse: "$HOME/Conductor/clarisse",
-//     silhouette: "$HOME/Conductor/silhouette"
-//   }
-// };
-
-// export const DEFAULT_PLUGIN_INSTALL_PATHS =
-//   ALL_DEFAULT_PLUGIN_INSTALL_PATHS[PLATFORM];

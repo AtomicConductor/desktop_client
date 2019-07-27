@@ -1,5 +1,5 @@
 {
-  "name": "cnw",
+  "name": "conductor",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "python-shell": "^1.0.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-google-login": "^5.0.4",
     "react-lines-ellipsis": "^0.14.1",
     "react-logger": "^1.1.0",
     "react-redux": "^7.0.3",

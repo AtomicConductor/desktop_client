@@ -3,16 +3,6 @@ import { updateSettings } from "../_actions/environment";
 import { googleProjects } from "../_helpers/constants";
 import path from "upath";
 
-const checkEnv = env => {
-  if (!env) {
-    return "Can't get environment";
-  }
-  if (!env.APISERVER) {
-    return "API unavailable";
-  }
-  return "success";
-};
-
 const initialState = {
   settings: {
     googleProjectName: "production",
@@ -27,8 +17,8 @@ const environment = createReducer(initialState, {
   [updateSettings]: (state, action) => {
     const node_env = process.env["NODE_ENV"];
 
-    // console.log("[updateSettings]:");
-    // console.log(action.payload);
+    console.log(JSON.stringify(process));
+
     if (action.payload) {
       state.settings = action.payload;
     }
@@ -43,12 +33,11 @@ const environment = createReducer(initialState, {
       platform: process.platform,
       cwd: process.cwd(),
       execPath: process.execPath,
+      flavor: process.versions["nw-flavor"],
+      // port: process.env["PORT"],
       appDataPath: nw.App.dataPath,
       NODE_ENV: node_env
     };
-
-    // const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
-
     state.python = {
       scriptsPath:
         node_env === "development"

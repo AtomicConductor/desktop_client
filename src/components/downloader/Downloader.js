@@ -1,23 +1,15 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-// import JobsContainer from "./JobsContainer";
-// import DownloaderQueue from "./DownloaderQueue";
 
 import AppBarContainer from "./AppBarContainer";
 import SignInContainer from "../account/SignInContainer";
-import FilterDrawerContainer from "./FilterDrawerContainer";
 import { makeStyles } from "@material-ui/core/styles";
 import JobItemContainer from "./JobItemContainer";
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Typography } from "@material-ui/core";
 
-import {
-  appBarHeight,
-  filterDrawerWidth,
-  statusLineHeight,
-  drawerWidth
-} from "../../_helpers/constants";
+import { appBarHeight } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   container: {

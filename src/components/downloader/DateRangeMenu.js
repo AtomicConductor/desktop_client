@@ -1,27 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-// import clsx from "clsx";
 
-import MoreIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
-
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
-
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 
 import { TIMESPANS } from "../../_helpers/constants";
 
-const useStyles = makeStyles(theme => ({}));
-
 const DateRangeMenu = props => {
-  const classes = useStyles();
-
   const { fetchJobsInSpan, span } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -42,11 +28,10 @@ const DateRangeMenu = props => {
 
   return (
     <React.Fragment>
-      <Tooltip title={`Showing jobs from ${span.toLowerCase()}`}>
-        <IconButton onClick={handleMenuOpen} color="inherit">
-          <CalendarTodayIcon />
-        </IconButton>
-      </Tooltip>
+      <Button onClick={handleMenuOpen} color="inherit">
+        {span}
+      </Button>
+
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

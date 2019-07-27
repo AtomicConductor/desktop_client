@@ -14,8 +14,6 @@ const MESSAGE_MAP = {
 };
 
 const checkResponse = response => {
-  console.log(response);
-
   if (!response.ok) {
     if (response.statusText) {
       throw new Error(response.statusText);

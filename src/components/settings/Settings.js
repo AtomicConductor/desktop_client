@@ -3,17 +3,14 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 
-import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Toolbar from "@material-ui/core/Toolbar";
 
 import EnvironmentContainer from "./EnvironmentContainer";
 
 import EditContainer from "./EditContainer";
-import { drawerWidth } from "../../_helpers/constants";
 
 function TabContainer(props) {
   return (

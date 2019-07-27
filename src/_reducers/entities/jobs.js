@@ -2,11 +2,8 @@ import { createReducer } from "redux-starter-kit";
 
 import {
   receiveJobs,
-  receiveDownloadFiles,
   receiveDownloadSummary,
   requestDownloadData,
-  setFileExistsLocally,
-  requestExistingFilesInfo,
   setOutputPathValue,
   resetOutputPathValue,
   receiveExistingFilesInfo
@@ -16,8 +13,6 @@ import { setFileExists } from "../../_actions/files";
 
 import os from "os";
 
-import mock from "../../_helpers/mockEntities";
-
 export const LOADING_KEYS = {
   NONE: 0,
   DOWNLOAD_DETAILS: 1,
@@ -26,10 +21,7 @@ export const LOADING_KEYS = {
 
 const PLATFORM = os.platform();
 const WIN32 = PLATFORM === "win32";
-const MAC = PLATFORM === "darwin";
-const LINUX = PLATFORM === "linux";
 
-// const initialState = mock["jobs"];
 const initialState = {};
 
 const prepareForPlatform = directory => {
@@ -48,7 +40,6 @@ const jobs = createReducer(initialState, {
         delete state[k];
       }
     }
-    // console.log(newJobs);
     newJobs.forEach(job => {
       /**
        * If job exists already, dont overwrite the output directory.
@@ -85,10 +76,6 @@ const jobs = createReducer(initialState, {
         loadingKey: LOADING_KEYS.NONE
       });
     }
-  },
-
-  [requestExistingFilesInfo]: (state, action) => {
-    const jobLabel = action.payload;
   },
 
   [receiveExistingFilesInfo]: (state, action) => {

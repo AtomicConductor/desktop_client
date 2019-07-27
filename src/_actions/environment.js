@@ -14,8 +14,6 @@ export const updateSettings = createAction("env/updateSettings");
 export function writeSettings(settings) {
   return (dispatch, getState) => {
     const filePath = path.join(nw.App.dataPath, SETTINGS_FILENAME);
-    console.log(filePath);
-    console.log(settings);
 
     fsp
       .writeFile(filePath, JSON.stringify(settings, null, "\t"))

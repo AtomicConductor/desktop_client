@@ -53,7 +53,7 @@
       "default_popup": "window.html#popup",
       "default_title": "Redux DevTools"
    },
-   "permissions": [ "notifications", "contextMenus", "tabs", "storage", "\u003Call_urls>" ],
+   "permissions": [ "chrome-extension://*", "notifications", "contextMenus", "tabs", "storage", "\u003Call_urls>" ],
    "short_name": "Redux DevTools",
    "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "2.17.0",

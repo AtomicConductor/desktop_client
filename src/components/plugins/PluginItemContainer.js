@@ -2,13 +2,6 @@ import { connect } from "react-redux";
 import PluginItem from "./PluginItem";
 import { installPlugin, uninstallPlugin } from "../../_actions/plugins";
 
-const mapStateToProps = (state, ownProps) => {
-  const { name } = ownProps.plugin;
-  return {
-    // drawerIsOpen:  state.ui.downloader.drawerOpen
-  };
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { name } = ownProps.plugin;
   return {
@@ -22,7 +15,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const PluginItemContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(PluginItem);
 

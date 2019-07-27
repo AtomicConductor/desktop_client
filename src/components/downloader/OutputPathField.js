@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const OutputPathField = props => {
   const classes = useStyles();
 
-  const { value, setValue, resetValue, resettable, jobLabel } = props;
+  const { value, setValue, jobLabel } = props;
 
   const handleSelectDirectory = event => {
     if (event.target.files && event.target.files[0]) {

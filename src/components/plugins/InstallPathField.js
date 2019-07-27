@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const InstallPathField = props => {
   const classes = useStyles();
 
-  const { pluginName, value, setValue, resetValue, resettable } = props;
+  const { pluginName, value, setValue } = props;
 
   const handleSelectDirectory = event => {
     console.log("HANDLESELECTDIRECTORY");

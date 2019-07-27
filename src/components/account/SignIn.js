@@ -10,8 +10,13 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
 
 import Button from "@material-ui/core/Button";
+
+import GoogleLogin from "react-google-login";
+import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -30,20 +35,46 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     width: "100%"
   },
-  buttonBox: {
+
+  googleLogo: {
+    flexShrink: 0,
+    marginRight: theme.spacing(2),
+    width: 24,
+    height: 24
+  },
+  signInButton: { width: "100%" },
+
+  dividerGroup: {
     display: "flex",
-    justifyContent: "flex-end"
+    flexDirection: "row",
+    justifyContent: "space-around",
+    color: theme.palette.primary.main,
+    alignItems: "center",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2)
+  },
+  divider: {
+    width: 100
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth
+    // zIndex: 1301
   }
 }));
 
 const SignIn = props => {
   const classes = useStyles();
-  const { onSignIn } = props;
-
+  const { onSignIn, googleClientId } = props;
+  console.log("USING " + googleClientId);
   const [values, setValues] = React.useState({
     email: "julian.mann@admios-sa.com",
     password: "G9oZ#f92PBrc"
   });
+
+  const handleGoogleSignIn = response => {
+    onSignIn(response);
+  };
 
   const handleSignIn = () => {
     onSignIn(values);
@@ -58,14 +89,14 @@ const SignIn = props => {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar variant="dense">
           <Typography variant="h6" className={classes.title}>
-            Account
+            Sign in
           </Typography>
         </Toolbar>
       </AppBar>
 
       <main className={classes.content}>
         <Card className={classes.card}>
-          <Typography variant="h5">Sign in</Typography>
+          {/* <Typography variant="h5">Sign in</Typography> */}
           <FormControl className={classes.formControl}>
             <TextField
               fullWidth
@@ -93,9 +124,41 @@ const SignIn = props => {
                 onClick={handleSignIn}
                 variant="outlined"
                 color="secondary"
+                className={classes.signInButton}
               >
-                Submit
+                Sign in
               </Button>
+            </Box>
+          </FormControl>
+          <Box className={classes.dividerGroup}>
+            <Divider variant="middle" className={classes.divider} />
+            <Typography> Or </Typography>
+            <Divider variant="middle" className={classes.divider} />
+          </Box>
+          <FormControl className={classes.formControl}>
+            <Box>
+              <GoogleLogin
+                clientId={googleClientId}
+                render={renderProps => (
+                  <Button
+                    className={classes.signInButton}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    variant="outlined"
+                    color="secondary"
+                  >
+                    <Avatar
+                      className={classes.googleLogo}
+                      src="/images/google.png"
+                    />
+                    Sign in with google
+                  </Button>
+                )}
+                buttonText="Login"
+                onSuccess={handleGoogleSignIn}
+                onFailure={handleGoogleSignIn}
+                cookiePolicy={"single_host_origin"}
+              />
             </Box>
           </FormControl>
         </Card>
@@ -105,6 +168,7 @@ const SignIn = props => {
 };
 
 SignIn.propTypes = {
+  googleClientId: PropTypes.string.isRequired,
   error: PropTypes.string.isRequired,
   onSignIn: PropTypes.func.isRequired
 };

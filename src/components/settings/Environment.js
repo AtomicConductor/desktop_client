@@ -28,7 +28,7 @@ const Environment = props => {
   const classes = useStyles();
 
   const { settings, project, process, python } = props.environment;
-  console.log(settings);
+  // console.log(JSON.stringify(settings));
 
   return (
     <div className={classes.container}>

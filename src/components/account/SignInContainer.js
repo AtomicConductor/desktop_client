@@ -4,14 +4,14 @@ import { signIn } from "../../_actions/profile";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    error: state.profile.error
+    error: state.profile.error,
+    googleClientId: state.environment.project.googleClientId
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSignIn: params => {
-      // console.log(params);
       dispatch(signIn(params));
     }
   };

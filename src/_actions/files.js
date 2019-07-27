@@ -3,7 +3,6 @@ import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
 import fs from "fs";
-import md5File from "md5-file";
 import { checkResponse } from "../_helpers/network";
 import {
   exactFileExistsSync,
@@ -34,14 +33,14 @@ const canAndShouldDownload = (file, callback) => {
  * QUEUE OPTIONS
  * In the NW.js environment we must provide a setImmediate
  * function because otherwise it borks out because setImmediate
- * is not universally supported.
+ * is not universally supported - i.e. not in this UI.
  *
- * We also have to provide the store to be used - only on NW.js.
+ * We also have to provide the store to be used - again only on NW.js.
  *
  * We provide a merge function that returns nothing because
- * it is run when a duplicate task is in the queue. The idea
- * is it returns a merged version of the 2 tasks when there'
- * s a clash. Since we on't want to run anything in this case,
+ * it is run when a duplicate task is in the queue. The intention
+ * is that it returns a merged version of the 2 tasks when there's
+ * a clash. Since we don't want to run anything at all in this case,
  * we return no task.
  *
  * The merge function uses the "id" property  to identify
@@ -82,30 +81,22 @@ export const startDownloadQueue = () => {
 
       dh.on("end", () => {
         rename(file);
-
-        // dispatch(updateExists(file))
-        // const msg = `Download Completed !!!!!!!!`;
-        // console.log(msg);
         onDone();
       });
 
-      dh.on("progress", stats => {
-        // dispatch(downloadProgress(stats));
-        // console.log(stats);
-      });
+      // We dont need an onProgress handler at the moment
+      // because we don't record sub file progress
+      // Maybe in future we can add it
+      // dh.on("progress", stats => {});
 
       dh.on("error", error => {
         console.log(error);
         onDone();
-        // dispatch(setNotification({ snackbar: error.message, type: "error" }));
       });
 
       dh.start();
     }, queueOptions);
 
-    // dispatch(
-    //   setNotification({ snackbar: "Started download queue", type: "success" })
-    // );
     console.log("Started download queue");
   };
 };
@@ -113,7 +104,6 @@ export const startDownloadQueue = () => {
 /** Thunk that wraps the fetch and download operations */
 export function addToQueue(jobLabel) {
   return async function(dispatch, getState) {
-    //   dispatch(requestDownloadData()); - spinner possibly?
     try {
       // Before anything, check the validity of the outputDirectory,
       // unless of course it is not set yet.
@@ -152,7 +142,6 @@ export function addToQueue(jobLabel) {
 }
 
 async function fetchDownloadData(jobLabel, state) {
-  // options is just headers, content type etc.
   const options = createRequestOptions(state);
   const { projectUrl } = state.environment.project;
   const url = `${projectUrl}/downloads/${jobLabel}`;
@@ -162,7 +151,7 @@ async function fetchDownloadData(jobLabel, state) {
   const { outputDirectory } = state.entities.jobs[jobLabel];
 
   // We use the full pathname for the ID, which is used by the
-  // queue to ignore duplicates.
+  // queue  in order to ignore duplicates.
   // Duplicates could happen if the user clicks the download
   // button twice really fast
 

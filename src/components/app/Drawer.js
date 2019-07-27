@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { makeStyles } from "@material-ui/core/styles";
 import MuiDrawer from "@material-ui/core/Drawer";
@@ -27,13 +26,6 @@ import "typeface-raleway";
 import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex"
-  },
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0
@@ -43,11 +35,6 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     height: 48
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3)
   },
 
   logo: {
@@ -59,19 +46,11 @@ const useStyles = makeStyles(theme => ({
 
     verticalAlign: "middle",
     m: 1
-  },
-  spacer: {
-    display: "flex",
-    flexGrow: "1",
-    flexDirection: "column"
   }
 }));
 
-const Drawer = props => {
+const Drawer = () => {
   const classes = useStyles();
-
-  const { profile } = props;
-  const loggedIn = !!Object.entries(profile.user).length && !!profile.user.data;
 
   return (
     <MuiDrawer
@@ -139,10 +118,6 @@ const Drawer = props => {
       <DrawerAccountMenuItemContainer />
     </MuiDrawer>
   );
-};
-
-Drawer.propTypes = {
-  profile: PropTypes.object.isRequired
 };
 
 export default Drawer;

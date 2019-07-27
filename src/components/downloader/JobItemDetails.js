@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles, fade } from "@material-ui/core/styles";
-// import clsx from "clsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -9,19 +8,12 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 import Box from "@material-ui/core/Box";
 import OutputPathFieldContainer from "./OutputPathFieldContainer";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 
 import MoreMenuContainer from "./MoreMenuContainer";
 
 import { LOADING_KEYS } from "../../_reducers/entities/jobs";
 
 const useStyles = makeStyles(theme => ({
-  details: {
-    alignItems: "flex-start"
-  },
   leftColumn: {
     flexBasis: "66.66%"
   },
@@ -31,11 +23,6 @@ const useStyles = makeStyles(theme => ({
     borderLeft: `2px solid ${theme.palette.divider}`
   },
 
-  helper: {
-    borderRight: `2px solid ${theme.palette.divider}`,
-
-    padding: theme.spacing(1, 2)
-  },
   centeredBox: {
     display: "flex",
     alignItems: "center",

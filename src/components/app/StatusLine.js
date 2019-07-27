@@ -37,7 +37,7 @@ const StatusLine = props => {
     <Box className={classes.root}>
       <Paper className={classes.paper}>
         <Typography className={classes.statusText} variant="body2">
-          Status
+          :
         </Typography>
       </Paper>
     </Box>

@@ -1,23 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-// import FilterDrawerContainer from "./FilterDrawerContainer";
 import PluginItemContainer from "./PluginItemContainer";
-
 import AppBarContainer from "./AppBarContainer";
-
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-
-import CircularProgress from "@material-ui/core/CircularProgress";
-
-import {
-  appBarHeight,
-  filterDrawerWidth,
-  statusLineHeight,
-  drawerWidth
-} from "../../_helpers/constants";
-import { Typography } from "@material-ui/core";
+import { appBarHeight } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -30,19 +17,6 @@ const useStyles = makeStyles(theme => ({
     flexWrap: "wrap",
     alignContent: "flex-start",
     overflow: "auto"
-  },
-
-  centeredBox: {
-    // border: "1px solid red",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%"
-  },
-
-  progress: {
-    margin: "auto"
   }
 }));
 
@@ -53,12 +27,7 @@ const Plugins = props => {
   return (
     <React.Fragment>
       <AppBarContainer />
-
-      <Box
-        spacing={1}
-        className={classes.container}
-        // alignItems="flex-start"
-      >
+      <Box spacing={1} className={classes.container}>
         {plugins.map((plugin, i) => (
           <PluginItemContainer key={i} plugin={plugin} />
         ))}

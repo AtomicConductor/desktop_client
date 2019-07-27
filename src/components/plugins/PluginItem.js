@@ -1,13 +1,7 @@
 import React from "react";
-import clsx from "clsx";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
-import {
-  makeStyles,
-  useTheme,
-  withStyles,
-  fade
-} from "@material-ui/core/styles";
+import { makeStyles, withStyles, fade } from "@material-ui/core/styles";
 import HelpIcon from "@material-ui/icons/HelpOutline";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -42,15 +36,8 @@ const useStyles = makeStyles(theme => ({
     height: 60
   },
 
-  actionColumn: {
-    flexShrink: 0,
-    flexGrow: 1,
-    borderRight: `2px solid ${theme.palette.divider}`,
-    borderLeft: `2px solid ${theme.palette.divider}`
-  },
   actionRow: {
     display: "flex",
-
     justifyContent: "space-between"
   },
   top: {
@@ -64,12 +51,10 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     display: "flex",
-
     justifyContent: "space-between"
   },
   description: {
     color: theme.palette.text.secondary,
-
     marginRight: theme.spacing(3)
   },
   chip: { color: theme.palette.text.secondary },
@@ -100,7 +85,6 @@ const InstallProgress = withStyles(
 const PluginItem = props => {
   const { plugin, install, uninstall } = props;
   const { name, title, description, installed } = plugin;
-  const theme = useTheme();
 
   const classes = useStyles();
 

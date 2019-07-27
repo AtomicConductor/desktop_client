@@ -15,13 +15,11 @@ import { TIMESPANS } from "../_helpers/constants";
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
 
-// export const requestJob = createAction("downloader/requestJob");
 export const setOutputPathValue = createAction("downloader/setOutputPathValue");
 export const resetOutputPathValue = createAction(
   "downloader/resetOutputPathValue"
 );
 
-// export const endDownloadRequest = createAction("downloader/endDownloadRequest");
 export const setFileExists = createAction("downloader/setFileExists");
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
@@ -30,51 +28,13 @@ export const receiveDownloadSummary = createAction(
   "downloader/receiveDownloadSummary"
 );
 
-export const requestExistingFilesInfo = createAction(
-  "downloader/requestExistingFilesInfo"
-);
-
 export const receiveExistingFilesInfo = createAction(
   "downloader/receiveExistingFilesInfo"
 );
 
 export const setJobQuery = createAction("downloader/setJobQuery");
 
-/*
-Takes an array of objects whose keys are IDs, and returns the 
-Id of the Nth item 
-*/
-// const getPartitionId = (data, n) => {
-//   const sorted = data.map(o => Object.keys(o)[0]).sort();
-//   if (data.length <= n) {
-//     return sorted[0] - 1;
-//   }
-//   return sorted.reverse()[n];
-// };
-
-/*
-Example params object
-
-const params = {
-  filters: [  status_lt_gyu,  role_eq_dhfjh ] ,
-  limit: 200,
-  fields: ["lastname", "firstname"],
-}
-*/
-
-// function constructJobsQuery(state) {
-//   console.log(state.profile);
-//   const accountId = state.profile.user.data.account;
-//   const queryParams = state.downloader.jobQueryParams;
-//   const foo = "";
-// }
-
 function spanToDateFilters(key, span) {
-  let d0, d1;
-
-  // console.log("spanToDateFilters" + span);
-
-  // result = [];
   switch (span) {
     case TIMESPANS.TODAY:
       return [`${key}_gt_${moment.utc().format("YYYY-MM-DD")}`];
@@ -123,14 +83,14 @@ function spanToDateFilters(key, span) {
         `${key}_gt_${lastyear.startOf("year").format("YYYY-MM-DD")}`,
         `${key}_lt_${lastyear.endOf("year").format("YYYY-MM-DD")}`
       ];
+    default:
+      return [
+        `${key}_gt_${moment
+          .utc()
+          .startOf("month")
+          .format("YYYY-MM-DD")}`
+      ];
   }
-
-  return [
-    `${key}_gt_${moment
-      .utc()
-      .startOf("week")
-      .format("YYYY-MM-DD")}`
-  ];
 }
 
 function constructJobsQuery(state) {
@@ -158,19 +118,12 @@ function constructJobsQuery(state) {
     "user"
   ];
 
-  // console.log;
-
-  const esc = encodeURIComponent;
   const flat = {};
   if (filter) flat.filter = filter.join(",");
   if (fields) flat.fields = fields.join(",");
   if (limit) flat.limit = limit;
 
   if (Object.keys(flat).length) {
-    // return Object.keys(flat)
-    //   .map(k => `${esc(k)}=${esc(flat[k])}`)
-    //   .join("&");
-
     return Object.keys(flat)
       .map(k => `${k}=${flat[k]}`)
       .join("&");
@@ -193,7 +146,6 @@ export function fetchJobs(params) {
         throw Error("Not logged in");
       }
 
-      const queryString = constructJobsQuery(state);
       const data = await getRecentJobs(state);
       dispatch(receiveJobs(data));
     } catch (error) {
@@ -208,39 +160,19 @@ export function fetchJobs(params) {
   };
 }
 
-// function spanToDateFilters(key, span)
-// {
-
-// }
-// if (span) {
-//   filter.push(...spanToDateFilters("created", span))
-// }
-
 /* 
 Function to do two fetches, one after the other.
 First fetch the summary list and work out the id of the `partition` record.
 Now the second fetch gets the jobs created after that partition job
 */
 async function getRecentJobs(state) {
-  // options is just headers, content type etc.
-
   const options = createRequestOptions(state);
 
-  // const accountId = state.profile.user.data.account;
-  // const
   const queryString = constructJobsQuery(state);
 
   const { dashboardUrl } = state.environment.project;
 
-  //dashboard.conductortech.com/api/v1/jobs?filter=created_gt_2019-01-26,created_lt_2019-02-02,account_id_eq_5669544198668288
   const url = `${dashboardUrl}/api/v1/jobs?${queryString}`;
-
-  console.log(url);
-  console.log(options);
-
-  // const url = `${dashboardUrl}/api/v1/jobs?filter=created_gt_2019-01-26,created_lt_2019-02-02,account_id_eq_${accountId}`;
-  // console.log(url);
-  // console.log(options);
 
   const response = await fetch(url, options);
   checkResponse(response);
@@ -253,8 +185,6 @@ export function fetchDownloadSummary(jobLabel) {
   return async function(dispatch, getState) {
     try {
       await dispatch(getDownloadFiles(jobLabel));
-
-      dispatch(requestExistingFilesInfo(jobLabel));
 
       // Timeout(0) because otherwise redux will batch the
       // actions before updating the component, meaning we don't
@@ -293,18 +223,12 @@ export function getDownloadFiles(jobLabel) {
 
     let data = await response.json();
 
-    let outputDirectory = null;
-    let first = true;
     const files = {};
 
     const downloads = data.downloads || [];
 
     downloads.forEach(task => {
       return task.files.forEach(file => {
-        if (first) {
-          outputDirectory = file["output_dir"];
-          first = false;
-        }
         const rp = file["relative_path"];
 
         files[rp] = {
@@ -314,14 +238,13 @@ export function getDownloadFiles(jobLabel) {
       });
     });
 
-    dispatch(receiveDownloadSummary({ files, jobLabel, outputDirectory }));
+    dispatch(receiveDownloadSummary({ files, jobLabel }));
   };
 }
 
 export function updateExistingFilesInfo(jobLabel) {
   return async function(dispatch, getState) {
     const state = getState();
-    dispatch(requestExistingFilesInfo(jobLabel));
     const job = state.entities.jobs[jobLabel];
 
     const existing = [];
@@ -337,7 +260,6 @@ export function updateExistingFilesInfo(jobLabel) {
         }
       });
     }
-
     dispatch(receiveExistingFilesInfo({ jobLabel, existing }));
   };
 }

@@ -10,15 +10,15 @@ import {
 } from "../../_actions/jobs";
 
 const mapStateToProps = (state, ownProps) => {
-  // const { jobLabel } = ownProps;
-  // const { originalOutputDirectory, outputDirectory } = state.entities.jobs[
-  //   jobLabel
-  // ];
+  const { jobLabel } = ownProps;
+  const { originalOutputDirectory, outputDirectory } = state.entities.jobs[
+    jobLabel
+  ];
 
   return {
-    // resettable: Boolean(
-    //   outputDirectory && outputDirectory !== originalOutputDirectory
-    // ),
+    directoryResettable: Boolean(
+      outputDirectory && outputDirectory !== originalOutputDirectory
+    )
     // value: outputDirectory || ""
   };
 };

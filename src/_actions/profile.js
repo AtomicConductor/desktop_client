@@ -15,15 +15,33 @@ export const receiveAccounts = createAction("profile/receiveAccounts");
 
 export const signOut = createAction("profile/signOut");
 
-/*
-Thunk to authenticate.
-*/
+const validateParams = params => {
+  if (params.error) {
+    console.log("ERROR:" + params.error);
+    throw Error(params.error);
+  }
+
+  if (params.email && params.password) {
+    console.log(params.email + " / " + params.password);
+    return params;
+  }
+
+  try {
+    const id_token = params.getAuthResponse(true).id_token;
+    console.log(id_token);
+    return { id_token };
+  } catch {
+    throw Error("Can't log in with the given parameters");
+  }
+};
 
 export function signIn(params) {
   return async function(dispatch, getState) {
     dispatch(requestProfile());
     try {
-      const data = await authenticate(getState(), params);
+      console.log(JSON.stringify(params));
+      const authParams = validateParams(params);
+      const data = await authenticate(getState(), authParams);
 
       dispatch(receiveAccounts(data));
 
@@ -44,7 +62,8 @@ export function signIn(params) {
           accountId = lastAccount;
         }
       } catch {
-        // If anything goes wrong, just leave accountId undefined for now
+        // If anything goes wrong, just leave accountId undefined.
+        //
       }
       if (!accountId) {
         accountId = data.accounts.sort((a, b) => (a.role > b.role ? 1 : -1))[0]

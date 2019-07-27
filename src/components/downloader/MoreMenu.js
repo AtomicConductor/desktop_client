@@ -1,32 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles, withStyles, fade } from "@material-ui/core/styles";
-// import clsx from "clsx";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
-import LinearProgress from "@material-ui/core/LinearProgress";
 
-import Box from "@material-ui/core/Box";
-import OutputPathFieldContainer from "./OutputPathFieldContainer";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import { LOADING_KEYS } from "../../_reducers/entities/jobs";
-
-const useStyles = makeStyles(theme => ({}));
-
 const MoreMenu = props => {
-  const classes = useStyles();
-
   const {
-    // fetchFilesInfo,
     viewInFinder,
     refreshAll,
     refreshExistingFiles,
-    resetOutputDirectory
+    resetOutputDirectory,
+    directoryResettable
   } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -80,7 +66,10 @@ const MoreMenu = props => {
         <MenuItem onClick={handleRefreshExistingFiles}>
           Refresh existing files
         </MenuItem>
-        <MenuItem onClick={handleResetOutputDirectory}>
+        <MenuItem
+          disabled={!directoryResettable}
+          onClick={handleResetOutputDirectory}
+        >
           Reset output directory
         </MenuItem>
         <MenuItem onClick={handleViewInFinder}>View in finder</MenuItem>
@@ -92,11 +81,9 @@ const MoreMenu = props => {
 export default MoreMenu;
 
 MoreMenu.propTypes = {
+  directoryResettable: PropTypes.bool.isRequired,
   resetOutputDirectory: PropTypes.func.isRequired,
   refreshExistingFiles: PropTypes.func.isRequired,
   refreshAll: PropTypes.func.isRequired,
   viewInFinder: PropTypes.func.isRequired
-  // existingFileCount: PropTypes.number.isRequired,
-  // jobLabel: PropTypes.string.isRequired,
-  // loadingKey: PropTypes.number.isRequired
 };

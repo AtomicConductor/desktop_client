@@ -2,22 +2,12 @@ import os from "os";
 import path from "upath";
 import { createReducer } from "redux-starter-kit";
 
-// import { DEFAULT_PLUGIN_INSTALL_PATHS } from "../_helpers/constants.js";
 import {
   setInstallPathValue,
   resetInstallPathValue,
   installPlugin,
   uninstallPlugin
 } from "../_actions/plugins";
-
-// import { receiveUser, profileFailure } from "../_actions/profile";
-// import { envFailure } from "../_actions/environment";
-// import { runDownloadJobs } from "../_actions/downloader";
-
-// import {
-//   pythonScriptFailure,
-//   setPythonScriptResponse
-// } from "../_actions/python";
 
 const HOME = os.homedir();
 
