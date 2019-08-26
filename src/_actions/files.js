@@ -13,6 +13,7 @@ import {
 import { DownloaderHelper } from "node-downloader-helper";
 
 import { receiveDownloadSummary, updateExistingFilesInfo } from "./jobs";
+import { config } from '../_helpers/constants';
 
 export const setFileExists = createAction("downloader/setFileExists");
 
@@ -55,7 +56,7 @@ const queueOptions = {
     setTimeout(fn, 0);
   },
   id: "fullPath",
-  merge: function() {},
+  merge: function () { },
   filter: canAndShouldDownload,
   store: new MemoryStore()
 };
@@ -73,7 +74,7 @@ const rename = file => {
 let TheDownloadQueue = null;
 export const startDownloadQueue = () => {
   return (dispatch, getState) => {
-    TheDownloadQueue = new Queue(function(file, onDone) {
+    TheDownloadQueue = new Queue(function (file, onDone) {
       // console.log(file.url);
       const directory = path.dirname(file.fullPath);
 
@@ -103,7 +104,7 @@ export const startDownloadQueue = () => {
 
 /** Thunk that wraps the fetch and download operations */
 export function addToQueue(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     try {
       // Before anything, check the validity of the outputDirectory,
       // unless of course it is not set yet.
@@ -143,7 +144,7 @@ export function addToQueue(jobLabel) {
 
 async function fetchDownloadData(jobLabel, state) {
   const options = createRequestOptions(state);
-  const { projectUrl } = state.environment.project;
+  const { projectUrl } = config;
   const url = `${projectUrl}/downloads/${jobLabel}`;
   let response = await fetch(url, options);
   checkResponse(response);

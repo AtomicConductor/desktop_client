@@ -11,6 +11,7 @@ import {
 } from "../_helpers/fileSystem";
 
 import { TIMESPANS } from "../_helpers/constants";
+import { config } from '../_helpers/constants';
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -138,7 +139,7 @@ A thunk that wraps getRecentJobs().
 3. dispatch(receiveJobs(data)); - add data to store, kill the spinner etc.
 */
 export function fetchJobs(params) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     dispatch(requestJobs());
     const state = getState();
     try {
@@ -170,7 +171,7 @@ async function getRecentJobs(state) {
 
   const queryString = constructJobsQuery(state);
 
-  const { dashboardUrl } = state.environment.project;
+  const { dashboardUrl } = config;
 
   const url = `${dashboardUrl}/api/v1/jobs?${queryString}`;
 
@@ -182,7 +183,7 @@ async function getRecentJobs(state) {
 }
 
 export function fetchDownloadSummary(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     try {
       await dispatch(getDownloadFiles(jobLabel));
 
@@ -190,7 +191,7 @@ export function fetchDownloadSummary(jobLabel) {
       // actions before updating the component, meaning we don't
       // get to see anything until after updateExistingFilesInfo
       // completes.
-      setTimeout(function() {
+      setTimeout(function () {
         dispatch(updateExistingFilesInfo(jobLabel));
       }, 0);
     } catch (error) {
@@ -210,12 +211,12 @@ export function fetchDownloadSummary(jobLabel) {
 }
 
 export function getDownloadFiles(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const state = getState();
     dispatch(requestDownloadData(jobLabel));
 
     const options = createRequestOptions(state);
-    const { projectUrl } = state.environment.project;
+    const { projectUrl } = config;
     const url = `${projectUrl}/downloads/${jobLabel}`;
     let response = await fetch(url, options);
 
@@ -243,7 +244,7 @@ export function getDownloadFiles(jobLabel) {
 }
 
 export function updateExistingFilesInfo(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const state = getState();
     const job = state.entities.jobs[jobLabel];
 
@@ -265,7 +266,7 @@ export function updateExistingFilesInfo(jobLabel) {
 }
 
 export function viewOputputDirectoryInFinder(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const state = getState();
     const { outputDirectory } = state.entities.jobs[jobLabel];
     open(outputDirectory);

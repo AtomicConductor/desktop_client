@@ -6,6 +6,7 @@ import { createRequestOptions } from "../_helpers/network";
 
 import { setNotification } from "./notification";
 import { CREDENTIALS_FILENAME } from "../_helpers/constants";
+import { config } from '../_helpers/constants';
 
 export const requestProfile = createAction("profile/requestProfile");
 export const receiveCredentials = createAction("profile/receiveCredentials");
@@ -36,7 +37,7 @@ const validateParams = params => {
 };
 
 export function signIn(params) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     dispatch(requestProfile());
     try {
       console.log(JSON.stringify(params));
@@ -87,7 +88,7 @@ export function signIn(params) {
 }
 
 export function deleteSession() {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     try {
       dispatch(signOut());
 
@@ -122,7 +123,7 @@ async function authenticate(state, params) {
     method: "POST",
     body: JSON.stringify(params)
   };
-  let url = `${state.environment.project.apiServer}/api/auth`;
+  let url = `${config.apiServer}/api/auth`;
   let response = await fetch(url, options);
   checkResponse(response);
   return await response.json();
@@ -131,7 +132,7 @@ async function authenticate(state, params) {
 // copy creds from one of the accounts into the profile
 // Then use those creds to fetch the user
 export function chooseAccount(accountId) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const state = getState();
 
     try {
@@ -162,7 +163,7 @@ export function chooseAccount(accountId) {
 
 async function getChosenUser(state) {
   const options = createRequestOptions(state);
-  const apiServer = state.environment.project.apiServer;
+  const { apiServer } = config;
   let url = `${apiServer}/api/v1/profile`;
   let response = await fetch(url, options);
   checkResponse(response);

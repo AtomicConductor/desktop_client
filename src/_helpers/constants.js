@@ -4,9 +4,9 @@ export const statusLineHeight = 24;
 export const appBarHeight = 48;
 export const filterDrawerWidth = 210;
 
-export const googleProjects = [
+const googleProjects = {
+  production:
   {
-    name: "production",
     longName: "Atomic Light",
     projectUrl: "https://atomic-light-001.appspot.com",
     dashboardUrl: "https://dashboard.conductortech.com",
@@ -15,8 +15,8 @@ export const googleProjects = [
     googleClientId:
       "367447922845-sofnl08cemfm9rf27idhsuo7rsofqftu.apps.googleusercontent.com"
   },
+  development:
   {
-    name: "development",
     longName: "Eloquent vector",
     projectUrl: "https://eloquent-vector-104019.appspot.com",
     dashboardUrl: "https://dashboard.dev-conductortech.com",
@@ -25,9 +25,10 @@ export const googleProjects = [
     googleClientId:
       "239744134952-fiikjq85kj2t4eibgvvkocmbe07bopcv.apps.googleusercontent.com"
   }
-];
+};
 
-export const SETTINGS_FILENAME = "settings.json";
+export const config = googleProjects[process.env.NODE_ENV];
+
 export const CREDENTIALS_FILENAME = "credentials.json";
 
 export const TIMESPANS = {

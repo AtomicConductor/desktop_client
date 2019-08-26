@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./components/app/App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { readSettings } from "./_actions/environment";
 import { signInFromSaved } from "./_actions/profile";
 
 import {
@@ -16,7 +14,6 @@ import {
 
 // import { fetchProfile } from "./_actions/profile";
 
-store.dispatch(readSettings());
 store.dispatch(signInFromSaved());
 
 // store.dispatch(fetchProfile());

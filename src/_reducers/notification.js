@@ -6,7 +6,6 @@ import {
 } from "../_actions/notification";
 
 import { profileFailure } from "../_actions/profile";
-import { envFailure } from "../_actions/environment";
 
 const initialState = {
   snackbar: "",
@@ -32,13 +31,6 @@ const notification = createReducer(initialState, {
   },
 
   [profileFailure]: (state, action) => {
-    state.snackbar = action.payload;
-    state.detail = `Some more details ${action.payload}`;
-    state.show = !!action.payload ? "snackbar" : "none";
-    state.type = "error";
-  },
-
-  [envFailure]: (state, action) => {
     state.snackbar = action.payload;
     state.detail = `Some more details ${action.payload}`;
     state.show = !!action.payload ? "snackbar" : "none";

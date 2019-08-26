@@ -1,6 +1,6 @@
 import red from "@material-ui/core/colors/red";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { lightBlue, lightGreen, grey } from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
 
 export default createMuiTheme({
   palette: {

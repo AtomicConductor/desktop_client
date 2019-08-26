@@ -25,7 +25,6 @@ import PluginsContainer from "../plugins/PluginsContainer";
 import AccountContainer from "../account/AccountContainer";
 
 import CtDashboard from "../dashboard/CtDashboard";
-import Settings from "../settings/Settings";
 import StatusLine from "./StatusLine";
 
 import CtSnackbarContainer from "../notification/CtSnackbarContainer";
@@ -75,7 +74,6 @@ const Layout = () => {
             path="/plugins"
             render={props => <PluginsContainer {...props} />}
           />
-          <Route path="/settings" render={props => <Settings {...props} />} />
           <Route
             path="/account"
             render={props => <AccountContainer {...props} />}

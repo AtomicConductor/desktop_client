@@ -68,8 +68,8 @@ const SignIn = props => {
   const { onSignIn, googleClientId } = props;
   console.log("USING " + googleClientId);
   const [values, setValues] = React.useState({
-    email: "julian.mann@admios-sa.com",
-    password: "G9oZ#f92PBrc"
+    email: "",
+    password: ""
   });
 
   const handleGoogleSignIn = response => {
