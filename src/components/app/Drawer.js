@@ -12,13 +12,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import CloudDownload from "@material-ui/icons/CloudDownload";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-
 import PowerIcon from "@material-ui/icons/Power";
-
 import HelpIcon from "@material-ui/icons/Help";
-import SettingsIcon from "@material-ui/icons/Settings";
-
 import DrawerMenuItem from "./DrawerMenuItem";
 import DrawerAccountMenuItemContainer from "./DrawerAccountMenuItemContainer";
 
