@@ -2,7 +2,7 @@
   steps:
     - name: test
       service: conductor
-      command: echo "test placeholder"
+      command: yarn test
 
     - name: build
       service: conductor
@@ -11,8 +11,10 @@
     - name: deploy dev
       service: conductor
       command: echo "deploy dev placeholder"
+      exclude: ^(master)
 
     - name: deploy prod
       service: conductor
       command: echo "deploy prod placeholder"
+      tag: master
     

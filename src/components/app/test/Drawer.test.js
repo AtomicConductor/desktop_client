@@ -1,11 +1,11 @@
 import React from "react";
 
 import { shallow } from "enzyme";
-import CtDrawer from "../CtDrawer";
+import Drawer from "../Drawer";
 
 const setup = overrides => {
   const props = { profile: { user: {} }, ...overrides };
-  const wrapper = shallow(<CtDrawer {...props} />);
+  const wrapper = shallow(<Drawer {...props} />);
   return {
     props,
     wrapper

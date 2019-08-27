@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { CtDrawerMenuItem } from "../CtDrawerMenuItem";
+import { DrawerMenuItem } from "../DrawerMenuItem";
 
 const setup = overrides => {
   const props = {
@@ -11,7 +11,7 @@ const setup = overrides => {
     ...overrides
   };
 
-  const wrapper = shallow(<CtDrawerMenuItem {...props} />);
+  const wrapper = shallow(<DrawerMenuItem {...props} />);
   return {
     props,
     wrapper

@@ -1,4 +1,4 @@
-import { mapStateToProps } from "../CtDrawerContainer";
+import { mapStateToProps } from "../DrawerContainer";
 
 describe("mapStateToProps", () => {
   it("returns the profile object", () => {

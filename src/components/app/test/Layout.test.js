@@ -1,10 +1,10 @@
 import React from "react";
 import { shallow } from "enzyme";
-import CtLayout from "../CtLayout";
+import Layout from "../Layout";
 
 const setup = overrides => {
   const props = { ...overrides };
-  const wrapper = shallow(<CtLayout {...props} />);
+  const wrapper = shallow(<Layout {...props} />);
   return {
     props,
     wrapper

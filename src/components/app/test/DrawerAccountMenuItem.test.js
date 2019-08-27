@@ -1,15 +1,16 @@
 import React from "react";
 
 import { shallow } from "enzyme";
-import { CtDrawerAccountMenuItem } from "../CtDrawerAccountMenuItem";
+import { DrawerAccountMenuItem } from "../DrawerAccountMenuItem";
 
 const setup = overrides => {
   const props = {
     history: { location: { pathname: "/some/path" } },
-    currentUser: { email: null },
-    ...overrides
+    email: "",
+    loggedIn: false,
+    accountName: ""
   };
-  const wrapper = shallow(<CtDrawerAccountMenuItem {...props} />);
+  const wrapper = shallow(<DrawerAccountMenuItem {...props} />);
   return {
     props,
     wrapper

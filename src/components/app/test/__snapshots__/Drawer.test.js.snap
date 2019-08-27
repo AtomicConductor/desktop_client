@@ -3,7 +3,7 @@
 exports[`snapshots match snapshot when profile is invalid 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <CtDrawer
+  Symbol(enzyme.__unrendered__): <Drawer
     profile={
       Object {
         "user": Object {},
@@ -27,26 +27,17 @@ ShallowWrapper {
       "anchor": "left",
       "children": Array [
         <ForwardRef(WithStyles)
-          className="makeStyles-toolbar-5"
+          className="makeStyles-toolbar-3"
         >
           <ForwardRef(WithStyles)
-            className="makeStyles-logo-7"
+            className="makeStyles-logo-4"
           >
             CONDUCTOR
           </ForwardRef(WithStyles)>
         </ForwardRef(WithStyles)>,
         <ForwardRef(WithStyles) />,
         <ForwardRef(WithStyles)>
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            text_props={
-              Object {
-                "primary": "Dashboard",
-              }
-            }
-            url="/dashboard"
-          />
-          <withRouter(CtDrawerMenuItem)
+          <withRouter(DrawerMenuItem)
             icon={<UNDEFINED />}
             text_props={
               Object {
@@ -55,16 +46,7 @@ ShallowWrapper {
             }
             url="/downloader"
           />
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            text_props={
-              Object {
-                "primary": "Uploader",
-              }
-            }
-            url="/uploader"
-          />
-          <withRouter(CtDrawerMenuItem)
+          <withRouter(DrawerMenuItem)
             icon={<UNDEFINED />}
             text_props={
               Object {
@@ -72,16 +54,6 @@ ShallowWrapper {
               }
             }
             url="/plugins"
-          />
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            label="Settings"
-            text_props={
-              Object {
-                "primary": "Settings",
-              }
-            }
-            url="/settings"
           />
           <ForwardRef(WithStyles)
             dense={true}
@@ -95,13 +67,11 @@ ShallowWrapper {
           </ForwardRef(WithStyles)>
           <ForwardRef(WithStyles) />
         </ForwardRef(WithStyles)>,
-        <withRouter(CtDrawerAccountMenuItem)
-          currentUser={Object {}}
-        />,
+        <UNDEFINED />,
       ],
-      "className": "makeStyles-drawer-3",
+      "className": "makeStyles-drawer-1",
       "classes": Object {
-        "paper": "makeStyles-drawerPaper-4",
+        "paper": "makeStyles-drawerPaper-2",
       },
       "variant": "permanent",
     },
@@ -113,11 +83,11 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": <ForwardRef(WithStyles)
-            className="makeStyles-logo-7"
+            className="makeStyles-logo-4"
           >
             CONDUCTOR
           </ForwardRef(WithStyles)>,
-          "className": "makeStyles-toolbar-5",
+          "className": "makeStyles-toolbar-3",
         },
         "ref": null,
         "rendered": Object {
@@ -126,7 +96,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": "CONDUCTOR",
-            "className": "makeStyles-logo-7",
+            "className": "makeStyles-logo-4",
           },
           "ref": null,
           "rendered": "CONDUCTOR",
@@ -336,6 +306,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -635,6 +606,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -742,6 +714,7 @@ ShallowWrapper {
               "classes": [Function],
               "component": [Function],
               "light": [Function],
+              "role": [Function],
               "variant": [Function],
             },
             "render": [Function],
@@ -931,6 +904,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -1027,16 +1001,7 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": Array [
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Dashboard",
-                }
-              }
-              url="/dashboard"
-            />,
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -1045,16 +1010,7 @@ ShallowWrapper {
               }
               url="/downloader"
             />,
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Uploader",
-                }
-              }
-              url="/uploader"
-            />,
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -1062,16 +1018,6 @@ ShallowWrapper {
                 }
               }
               url="/plugins"
-            />,
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              label="Settings"
-              text_props={
-                Object {
-                  "primary": "Settings",
-                }
-              }
-              url="/settings"
             />,
             <ForwardRef(WithStyles)
               dense={true}
@@ -1096,21 +1042,6 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Dashboard",
-              },
-              "url": "/dashboard",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "text_props": Object {
                 "primary": "Downloader",
               },
               "url": "/downloader",
@@ -1126,40 +1057,9 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Uploader",
-              },
-              "url": "/uploader",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "text_props": Object {
                 "primary": "Plugins",
               },
               "url": "/plugins",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "label": "Settings",
-              "text_props": Object {
-                "primary": "Settings",
-              },
-              "url": "/settings",
             },
             "ref": null,
             "rendered": null,
@@ -1404,6 +1304,7 @@ ShallowWrapper {
                         },
                         "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                         "fontSize": 14,
+                        "fontWeightBold": 700,
                         "fontWeightLight": 300,
                         "fontWeightMedium": 500,
                         "fontWeightRegular": 400,
@@ -1705,6 +1606,7 @@ ShallowWrapper {
                         },
                         "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                         "fontSize": 14,
+                        "fontWeightBold": 700,
                         "fontWeightLight": 300,
                         "fontWeightMedium": 500,
                         "fontWeightRegular": 400,
@@ -2004,6 +1906,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -2111,6 +2014,7 @@ ShallowWrapper {
                   "classes": [Function],
                   "component": [Function],
                   "light": [Function],
+                  "role": [Function],
                   "variant": [Function],
                 },
                 "render": [Function],
@@ -2300,6 +2204,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -2591,6 +2496,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -2685,12 +2591,17 @@ ShallowWrapper {
         "instance": null,
         "key": undefined,
         "nodeType": "function",
-        "props": Object {
-          "currentUser": Object {},
-        },
+        "props": Object {},
         "ref": null,
         "rendered": null,
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "displayName": "Connect(withRouter(DrawerAccountMenuItem))",
+          "type": [Function],
+          Symbol(Symbol.hasInstance): [Function],
+        },
       },
     ],
     "type": Object {
@@ -2900,6 +2811,7 @@ ShallowWrapper {
             },
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": 14,
+            "fontWeightBold": 700,
             "fontWeightLight": 300,
             "fontWeightMedium": 500,
             "fontWeightRegular": 400,
@@ -3001,26 +2913,17 @@ ShallowWrapper {
         "anchor": "left",
         "children": Array [
           <ForwardRef(WithStyles)
-            className="makeStyles-toolbar-5"
+            className="makeStyles-toolbar-3"
           >
             <ForwardRef(WithStyles)
-              className="makeStyles-logo-7"
+              className="makeStyles-logo-4"
             >
               CONDUCTOR
             </ForwardRef(WithStyles)>
           </ForwardRef(WithStyles)>,
           <ForwardRef(WithStyles) />,
           <ForwardRef(WithStyles)>
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Dashboard",
-                }
-              }
-              url="/dashboard"
-            />
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -3029,16 +2932,7 @@ ShallowWrapper {
               }
               url="/downloader"
             />
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Uploader",
-                }
-              }
-              url="/uploader"
-            />
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -3046,16 +2940,6 @@ ShallowWrapper {
                 }
               }
               url="/plugins"
-            />
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              label="Settings"
-              text_props={
-                Object {
-                  "primary": "Settings",
-                }
-              }
-              url="/settings"
             />
             <ForwardRef(WithStyles)
               dense={true}
@@ -3069,13 +2953,11 @@ ShallowWrapper {
             </ForwardRef(WithStyles)>
             <ForwardRef(WithStyles) />
           </ForwardRef(WithStyles)>,
-          <withRouter(CtDrawerAccountMenuItem)
-            currentUser={Object {}}
-          />,
+          <UNDEFINED />,
         ],
-        "className": "makeStyles-drawer-3",
+        "className": "makeStyles-drawer-1",
         "classes": Object {
-          "paper": "makeStyles-drawerPaper-4",
+          "paper": "makeStyles-drawerPaper-2",
         },
         "variant": "permanent",
       },
@@ -3087,11 +2969,11 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": <ForwardRef(WithStyles)
-              className="makeStyles-logo-7"
+              className="makeStyles-logo-4"
             >
               CONDUCTOR
             </ForwardRef(WithStyles)>,
-            "className": "makeStyles-toolbar-5",
+            "className": "makeStyles-toolbar-3",
           },
           "ref": null,
           "rendered": Object {
@@ -3100,7 +2982,7 @@ ShallowWrapper {
             "nodeType": "function",
             "props": Object {
               "children": "CONDUCTOR",
-              "className": "makeStyles-logo-7",
+              "className": "makeStyles-logo-4",
             },
             "ref": null,
             "rendered": "CONDUCTOR",
@@ -3310,6 +3192,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -3609,6 +3492,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -3716,6 +3600,7 @@ ShallowWrapper {
                 "classes": [Function],
                 "component": [Function],
                 "light": [Function],
+                "role": [Function],
                 "variant": [Function],
               },
               "render": [Function],
@@ -3905,6 +3790,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -4001,16 +3887,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": Array [
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                text_props={
-                  Object {
-                    "primary": "Dashboard",
-                  }
-                }
-                url="/dashboard"
-              />,
-              <withRouter(CtDrawerMenuItem)
+              <withRouter(DrawerMenuItem)
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
@@ -4019,16 +3896,7 @@ ShallowWrapper {
                 }
                 url="/downloader"
               />,
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                text_props={
-                  Object {
-                    "primary": "Uploader",
-                  }
-                }
-                url="/uploader"
-              />,
-              <withRouter(CtDrawerMenuItem)
+              <withRouter(DrawerMenuItem)
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
@@ -4036,16 +3904,6 @@ ShallowWrapper {
                   }
                 }
                 url="/plugins"
-              />,
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                label="Settings"
-                text_props={
-                  Object {
-                    "primary": "Settings",
-                  }
-                }
-                url="/settings"
               />,
               <ForwardRef(WithStyles)
                 dense={true}
@@ -4070,21 +3928,6 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Dashboard",
-                },
-                "url": "/dashboard",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "text_props": Object {
                   "primary": "Downloader",
                 },
                 "url": "/downloader",
@@ -4100,40 +3943,9 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Uploader",
-                },
-                "url": "/uploader",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "text_props": Object {
                   "primary": "Plugins",
                 },
                 "url": "/plugins",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "label": "Settings",
-                "text_props": Object {
-                  "primary": "Settings",
-                },
-                "url": "/settings",
               },
               "ref": null,
               "rendered": null,
@@ -4378,6 +4190,7 @@ ShallowWrapper {
                           },
                           "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                           "fontSize": 14,
+                          "fontWeightBold": 700,
                           "fontWeightLight": 300,
                           "fontWeightMedium": 500,
                           "fontWeightRegular": 400,
@@ -4679,6 +4492,7 @@ ShallowWrapper {
                           },
                           "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                           "fontSize": 14,
+                          "fontWeightBold": 700,
                           "fontWeightLight": 300,
                           "fontWeightMedium": 500,
                           "fontWeightRegular": 400,
@@ -4978,6 +4792,7 @@ ShallowWrapper {
                       },
                       "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                       "fontSize": 14,
+                      "fontWeightBold": 700,
                       "fontWeightLight": 300,
                       "fontWeightMedium": 500,
                       "fontWeightRegular": 400,
@@ -5085,6 +4900,7 @@ ShallowWrapper {
                     "classes": [Function],
                     "component": [Function],
                     "light": [Function],
+                    "role": [Function],
                     "variant": [Function],
                   },
                   "render": [Function],
@@ -5274,6 +5090,7 @@ ShallowWrapper {
                       },
                       "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                       "fontSize": 14,
+                      "fontWeightBold": 700,
                       "fontWeightLight": 300,
                       "fontWeightMedium": 500,
                       "fontWeightRegular": 400,
@@ -5565,6 +5382,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -5659,12 +5477,17 @@ ShallowWrapper {
           "instance": null,
           "key": undefined,
           "nodeType": "function",
-          "props": Object {
-            "currentUser": Object {},
-          },
+          "props": Object {},
           "ref": null,
           "rendered": null,
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(withRouter(DrawerAccountMenuItem))",
+            "type": [Function],
+            Symbol(Symbol.hasInstance): [Function],
+          },
         },
       ],
       "type": Object {
@@ -5874,6 +5697,7 @@ ShallowWrapper {
               },
               "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
               "fontSize": 14,
+              "fontWeightBold": 700,
               "fontWeightLight": 300,
               "fontWeightMedium": 500,
               "fontWeightRegular": 400,
@@ -5999,7 +5823,7 @@ ShallowWrapper {
 exports[`snapshots match snapshot when profile is valid 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <CtDrawer
+  Symbol(enzyme.__unrendered__): <Drawer
     profile={
       Object {
         "user": Object {
@@ -6027,26 +5851,17 @@ ShallowWrapper {
       "anchor": "left",
       "children": Array [
         <ForwardRef(WithStyles)
-          className="makeStyles-toolbar-5"
+          className="makeStyles-toolbar-3"
         >
           <ForwardRef(WithStyles)
-            className="makeStyles-logo-7"
+            className="makeStyles-logo-4"
           >
             CONDUCTOR
           </ForwardRef(WithStyles)>
         </ForwardRef(WithStyles)>,
         <ForwardRef(WithStyles) />,
         <ForwardRef(WithStyles)>
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            text_props={
-              Object {
-                "primary": "Dashboard",
-              }
-            }
-            url="/dashboard"
-          />
-          <withRouter(CtDrawerMenuItem)
+          <withRouter(DrawerMenuItem)
             icon={<UNDEFINED />}
             text_props={
               Object {
@@ -6055,16 +5870,7 @@ ShallowWrapper {
             }
             url="/downloader"
           />
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            text_props={
-              Object {
-                "primary": "Uploader",
-              }
-            }
-            url="/uploader"
-          />
-          <withRouter(CtDrawerMenuItem)
+          <withRouter(DrawerMenuItem)
             icon={<UNDEFINED />}
             text_props={
               Object {
@@ -6072,16 +5878,6 @@ ShallowWrapper {
               }
             }
             url="/plugins"
-          />
-          <withRouter(CtDrawerMenuItem)
-            icon={<UNDEFINED />}
-            label="Settings"
-            text_props={
-              Object {
-                "primary": "Settings",
-              }
-            }
-            url="/settings"
           />
           <ForwardRef(WithStyles)
             dense={true}
@@ -6095,17 +5891,11 @@ ShallowWrapper {
           </ForwardRef(WithStyles)>
           <ForwardRef(WithStyles) />
         </ForwardRef(WithStyles)>,
-        <withRouter(CtDrawerAccountMenuItem)
-          currentUser={
-            Object {
-              "email": "foo@bar",
-            }
-          }
-        />,
+        <UNDEFINED />,
       ],
-      "className": "makeStyles-drawer-3",
+      "className": "makeStyles-drawer-1",
       "classes": Object {
-        "paper": "makeStyles-drawerPaper-4",
+        "paper": "makeStyles-drawerPaper-2",
       },
       "variant": "permanent",
     },
@@ -6117,11 +5907,11 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": <ForwardRef(WithStyles)
-            className="makeStyles-logo-7"
+            className="makeStyles-logo-4"
           >
             CONDUCTOR
           </ForwardRef(WithStyles)>,
-          "className": "makeStyles-toolbar-5",
+          "className": "makeStyles-toolbar-3",
         },
         "ref": null,
         "rendered": Object {
@@ -6130,7 +5920,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": "CONDUCTOR",
-            "className": "makeStyles-logo-7",
+            "className": "makeStyles-logo-4",
           },
           "ref": null,
           "rendered": "CONDUCTOR",
@@ -6340,6 +6130,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -6639,6 +6430,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -6746,6 +6538,7 @@ ShallowWrapper {
               "classes": [Function],
               "component": [Function],
               "light": [Function],
+              "role": [Function],
               "variant": [Function],
             },
             "render": [Function],
@@ -6935,6 +6728,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -7031,16 +6825,7 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "children": Array [
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Dashboard",
-                }
-              }
-              url="/dashboard"
-            />,
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -7049,16 +6834,7 @@ ShallowWrapper {
               }
               url="/downloader"
             />,
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Uploader",
-                }
-              }
-              url="/uploader"
-            />,
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -7066,16 +6842,6 @@ ShallowWrapper {
                 }
               }
               url="/plugins"
-            />,
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              label="Settings"
-              text_props={
-                Object {
-                  "primary": "Settings",
-                }
-              }
-              url="/settings"
             />,
             <ForwardRef(WithStyles)
               dense={true}
@@ -7100,21 +6866,6 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Dashboard",
-              },
-              "url": "/dashboard",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "text_props": Object {
                 "primary": "Downloader",
               },
               "url": "/downloader",
@@ -7130,40 +6881,9 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Uploader",
-              },
-              "url": "/uploader",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "text_props": Object {
                 "primary": "Plugins",
               },
               "url": "/plugins",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "icon": <UNDEFINED />,
-              "label": "Settings",
-              "text_props": Object {
-                "primary": "Settings",
-              },
-              "url": "/settings",
             },
             "ref": null,
             "rendered": null,
@@ -7408,6 +7128,7 @@ ShallowWrapper {
                         },
                         "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                         "fontSize": 14,
+                        "fontWeightBold": 700,
                         "fontWeightLight": 300,
                         "fontWeightMedium": 500,
                         "fontWeightRegular": 400,
@@ -7709,6 +7430,7 @@ ShallowWrapper {
                         },
                         "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                         "fontSize": 14,
+                        "fontWeightBold": 700,
                         "fontWeightLight": 300,
                         "fontWeightMedium": 500,
                         "fontWeightRegular": 400,
@@ -8008,6 +7730,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -8115,6 +7838,7 @@ ShallowWrapper {
                   "classes": [Function],
                   "component": [Function],
                   "light": [Function],
+                  "role": [Function],
                   "variant": [Function],
                 },
                 "render": [Function],
@@ -8304,6 +8028,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -8595,6 +8320,7 @@ ShallowWrapper {
                 },
                 "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                 "fontSize": 14,
+                "fontWeightBold": 700,
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
@@ -8689,14 +8415,17 @@ ShallowWrapper {
         "instance": null,
         "key": undefined,
         "nodeType": "function",
-        "props": Object {
-          "currentUser": Object {
-            "email": "foo@bar",
-          },
-        },
+        "props": Object {},
         "ref": null,
         "rendered": null,
-        "type": [Function],
+        "type": Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "displayName": "Connect(withRouter(DrawerAccountMenuItem))",
+          "type": [Function],
+          Symbol(Symbol.hasInstance): [Function],
+        },
       },
     ],
     "type": Object {
@@ -8906,6 +8635,7 @@ ShallowWrapper {
             },
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": 14,
+            "fontWeightBold": 700,
             "fontWeightLight": 300,
             "fontWeightMedium": 500,
             "fontWeightRegular": 400,
@@ -9007,26 +8737,17 @@ ShallowWrapper {
         "anchor": "left",
         "children": Array [
           <ForwardRef(WithStyles)
-            className="makeStyles-toolbar-5"
+            className="makeStyles-toolbar-3"
           >
             <ForwardRef(WithStyles)
-              className="makeStyles-logo-7"
+              className="makeStyles-logo-4"
             >
               CONDUCTOR
             </ForwardRef(WithStyles)>
           </ForwardRef(WithStyles)>,
           <ForwardRef(WithStyles) />,
           <ForwardRef(WithStyles)>
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Dashboard",
-                }
-              }
-              url="/dashboard"
-            />
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -9035,16 +8756,7 @@ ShallowWrapper {
               }
               url="/downloader"
             />
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              text_props={
-                Object {
-                  "primary": "Uploader",
-                }
-              }
-              url="/uploader"
-            />
-            <withRouter(CtDrawerMenuItem)
+            <withRouter(DrawerMenuItem)
               icon={<UNDEFINED />}
               text_props={
                 Object {
@@ -9052,16 +8764,6 @@ ShallowWrapper {
                 }
               }
               url="/plugins"
-            />
-            <withRouter(CtDrawerMenuItem)
-              icon={<UNDEFINED />}
-              label="Settings"
-              text_props={
-                Object {
-                  "primary": "Settings",
-                }
-              }
-              url="/settings"
             />
             <ForwardRef(WithStyles)
               dense={true}
@@ -9075,17 +8777,11 @@ ShallowWrapper {
             </ForwardRef(WithStyles)>
             <ForwardRef(WithStyles) />
           </ForwardRef(WithStyles)>,
-          <withRouter(CtDrawerAccountMenuItem)
-            currentUser={
-              Object {
-                "email": "foo@bar",
-              }
-            }
-          />,
+          <UNDEFINED />,
         ],
-        "className": "makeStyles-drawer-3",
+        "className": "makeStyles-drawer-1",
         "classes": Object {
-          "paper": "makeStyles-drawerPaper-4",
+          "paper": "makeStyles-drawerPaper-2",
         },
         "variant": "permanent",
       },
@@ -9097,11 +8793,11 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": <ForwardRef(WithStyles)
-              className="makeStyles-logo-7"
+              className="makeStyles-logo-4"
             >
               CONDUCTOR
             </ForwardRef(WithStyles)>,
-            "className": "makeStyles-toolbar-5",
+            "className": "makeStyles-toolbar-3",
           },
           "ref": null,
           "rendered": Object {
@@ -9110,7 +8806,7 @@ ShallowWrapper {
             "nodeType": "function",
             "props": Object {
               "children": "CONDUCTOR",
-              "className": "makeStyles-logo-7",
+              "className": "makeStyles-logo-4",
             },
             "ref": null,
             "rendered": "CONDUCTOR",
@@ -9320,6 +9016,7 @@ ShallowWrapper {
                     },
                     "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                     "fontSize": 14,
+                    "fontWeightBold": 700,
                     "fontWeightLight": 300,
                     "fontWeightMedium": 500,
                     "fontWeightRegular": 400,
@@ -9619,6 +9316,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -9726,6 +9424,7 @@ ShallowWrapper {
                 "classes": [Function],
                 "component": [Function],
                 "light": [Function],
+                "role": [Function],
                 "variant": [Function],
               },
               "render": [Function],
@@ -9915,6 +9614,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -10011,16 +9711,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "children": Array [
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                text_props={
-                  Object {
-                    "primary": "Dashboard",
-                  }
-                }
-                url="/dashboard"
-              />,
-              <withRouter(CtDrawerMenuItem)
+              <withRouter(DrawerMenuItem)
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
@@ -10029,16 +9720,7 @@ ShallowWrapper {
                 }
                 url="/downloader"
               />,
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                text_props={
-                  Object {
-                    "primary": "Uploader",
-                  }
-                }
-                url="/uploader"
-              />,
-              <withRouter(CtDrawerMenuItem)
+              <withRouter(DrawerMenuItem)
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
@@ -10046,16 +9728,6 @@ ShallowWrapper {
                   }
                 }
                 url="/plugins"
-              />,
-              <withRouter(CtDrawerMenuItem)
-                icon={<UNDEFINED />}
-                label="Settings"
-                text_props={
-                  Object {
-                    "primary": "Settings",
-                  }
-                }
-                url="/settings"
               />,
               <ForwardRef(WithStyles)
                 dense={true}
@@ -10080,21 +9752,6 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Dashboard",
-                },
-                "url": "/dashboard",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "text_props": Object {
                   "primary": "Downloader",
                 },
                 "url": "/downloader",
@@ -10110,40 +9767,9 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Uploader",
-                },
-                "url": "/uploader",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "text_props": Object {
                   "primary": "Plugins",
                 },
                 "url": "/plugins",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "icon": <UNDEFINED />,
-                "label": "Settings",
-                "text_props": Object {
-                  "primary": "Settings",
-                },
-                "url": "/settings",
               },
               "ref": null,
               "rendered": null,
@@ -10388,6 +10014,7 @@ ShallowWrapper {
                           },
                           "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                           "fontSize": 14,
+                          "fontWeightBold": 700,
                           "fontWeightLight": 300,
                           "fontWeightMedium": 500,
                           "fontWeightRegular": 400,
@@ -10689,6 +10316,7 @@ ShallowWrapper {
                           },
                           "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                           "fontSize": 14,
+                          "fontWeightBold": 700,
                           "fontWeightLight": 300,
                           "fontWeightMedium": 500,
                           "fontWeightRegular": 400,
@@ -10988,6 +10616,7 @@ ShallowWrapper {
                       },
                       "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                       "fontSize": 14,
+                      "fontWeightBold": 700,
                       "fontWeightLight": 300,
                       "fontWeightMedium": 500,
                       "fontWeightRegular": 400,
@@ -11095,6 +10724,7 @@ ShallowWrapper {
                     "classes": [Function],
                     "component": [Function],
                     "light": [Function],
+                    "role": [Function],
                     "variant": [Function],
                   },
                   "render": [Function],
@@ -11284,6 +10914,7 @@ ShallowWrapper {
                       },
                       "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                       "fontSize": 14,
+                      "fontWeightBold": 700,
                       "fontWeightLight": 300,
                       "fontWeightMedium": 500,
                       "fontWeightRegular": 400,
@@ -11575,6 +11206,7 @@ ShallowWrapper {
                   },
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": 14,
+                  "fontWeightBold": 700,
                   "fontWeightLight": 300,
                   "fontWeightMedium": 500,
                   "fontWeightRegular": 400,
@@ -11669,14 +11301,17 @@ ShallowWrapper {
           "instance": null,
           "key": undefined,
           "nodeType": "function",
-          "props": Object {
-            "currentUser": Object {
-              "email": "foo@bar",
-            },
-          },
+          "props": Object {},
           "ref": null,
           "rendered": null,
-          "type": [Function],
+          "type": Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(withRouter(DrawerAccountMenuItem))",
+            "type": [Function],
+            Symbol(Symbol.hasInstance): [Function],
+          },
         },
       ],
       "type": Object {
@@ -11886,6 +11521,7 @@ ShallowWrapper {
               },
               "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
               "fontSize": 14,
+              "fontWeightBold": 700,
               "fontWeightLight": 300,
               "fontWeightMedium": 500,
               "fontWeightRegular": 400,
