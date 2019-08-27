@@ -1,0 +1,18 @@
+- type: serial
+  steps:
+    - name: test
+      service: conductor
+      command: echo "test placeholder"
+
+    - name: build
+      service: conductor
+      command: yarn build
+
+    - name: deploy dev
+      service: conductor
+      command: echo "deploy dev placeholder"
+
+    - name: deploy prod
+      service: conductor
+      command: echo "deploy prod placeholder"
+    
