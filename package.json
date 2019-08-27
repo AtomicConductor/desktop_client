@@ -29,6 +29,7 @@
   },
   "scripts": {
     "start": "nw-react-scripts start",
+    "prebuild": "json -I -f package.json -e 'this[\"chromium-args\"]=\"\"'",
     "build": "nw-react-scripts build",
     "test": "nw-react-scripts test",
     "eject": "nw-react-scripts eject"
@@ -67,6 +68,7 @@
     "enzyme-adapter-react-16": "^1.14.0",
     "jest-environment-enzyme": "^7.0.2",
     "jest-enzyme": "^7.0.2",
+    "json": "^9.0.6",
     "prettier": "^1.17.1"
   }
 }
