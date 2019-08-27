@@ -47,14 +47,14 @@
     "//": "https://github.com/nwjs-community/nw-builder",
     "platforms": [
       "osx64",
-      "win32",
-      "win64"
+      "win",
+      "linux"
     ],
     "version": "latest",
     "flavor": "normal",
     "buildDir": "./build",
     "cacheDir": "./cache",
-    "macIcns": "./src/conductor.icns"
+    "macIcns": "./conductor.icns"
   },
   "window": {
     "width": 1280,

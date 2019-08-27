@@ -11,7 +11,7 @@ import {
 } from "../_helpers/fileSystem";
 
 import { TIMESPANS } from "../_helpers/constants";
-import { config } from '../_helpers/constants';
+import config from '../config';
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");

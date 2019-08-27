@@ -10,7 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import CloudUpload from "@material-ui/icons/CloudUpload";
 import CloudDownload from "@material-ui/icons/CloudDownload";
 import PowerIcon from "@material-ui/icons/Power";
 import HelpIcon from "@material-ui/icons/Help";
@@ -70,13 +69,7 @@ const Drawer = () => {
           }}
           icon={<CloudDownload />}
         />
-        <DrawerMenuItem
-          url="/uploader"
-          text_props={{
-            primary: "Uploader"
-          }}
-          icon={<CloudUpload />}
-        />
+
         <DrawerMenuItem
           url="/plugins"
           text_props={{

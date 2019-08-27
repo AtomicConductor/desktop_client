@@ -13,7 +13,7 @@ import {
 import { DownloaderHelper } from "node-downloader-helper";
 
 import { receiveDownloadSummary, updateExistingFilesInfo } from "./jobs";
-import { config } from '../_helpers/constants';
+import config from '../config';
 
 export const setFileExists = createAction("downloader/setFileExists");
 

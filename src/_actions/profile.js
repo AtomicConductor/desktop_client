@@ -6,7 +6,7 @@ import { createRequestOptions } from "../_helpers/network";
 
 import { setNotification } from "./notification";
 import { CREDENTIALS_FILENAME } from "../_helpers/constants";
-import { config } from '../_helpers/constants';
+import config from '../config';
 
 export const requestProfile = createAction("profile/requestProfile");
 export const receiveCredentials = createAction("profile/receiveCredentials");
