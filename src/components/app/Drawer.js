@@ -67,15 +67,9 @@ const Drawer = () => {
 
       <Divider />
       <List className={classes.list}>
+       
         <DrawerMenuItem
-          url="/dashboard"
-          text_props={{
-            primary: "Dashboard"
-          }}
-          icon={<DashboardIcon />}
-        />
-        <DrawerMenuItem
-          url="/downloader/jobs"
+          url="/downloader"
           text_props={{
             primary: "Downloader"
           }}
@@ -94,15 +88,6 @@ const Drawer = () => {
             primary: "Plugins"
           }}
           icon={<PowerIcon />}
-        />
-
-        <DrawerMenuItem
-          text_props={{
-            primary: "Settings"
-          }}
-          url="/settings"
-          label="Settings"
-          icon={<SettingsIcon />}
         />
 
         <ListItem dense>

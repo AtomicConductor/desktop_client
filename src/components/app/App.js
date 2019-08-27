@@ -1,20 +1,28 @@
 import React from "react";
 import "typeface-roboto";
+import DownloaderContainer from "../downloader/DownloaderContainer";
+import PluginsContainer from "../plugins/PluginsContainer";
+import AccountContainer from "../account/AccountContainer";
+import Layout from './Layout';
 
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Layout from "./Layout";
-import { ThemeProvider } from "@material-ui/styles";
-import theme from "../../theme";
-
-/*
-Provide the theme and create a layout.
-*/
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <Layout />
-  </ThemeProvider>
+  <Router>
+    <Layout>
+      <Switch>
+        <Route path="/downloader" component={DownloaderContainer} />
+        <Route path="/plugins" component={PluginsContainer} />
+        <Route path="/account" component={AccountContainer} />
+        <Redirect push to="/downloader" />
+      </Switch>
+    </Layout>
+  </Router>
 );
 
 export default App;
