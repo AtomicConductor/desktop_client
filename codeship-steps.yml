@@ -6,15 +6,15 @@
 
     - name: build
       service: conductor
-      command: yarn build
+      command: bash -c "yarn build && mv build /release"
 
     - name: deploy dev
       service: aws
-      command: sh -c "echo ${AWS_S3_BUCKET_NAME}"
+      command: sh -c "aws s3 cp /release/build/conductor s3://${AWS_S3_BUCKET_NAME}/dev/ --recursive"
       exclude: ^(master)
 
     - name: deploy prod
-      service: conductor
-      command: echo "deploy prod placeholder"
+      service: aws
+      command: sh -c "aws s3 cp /release/build/conductor s3://${AWS_S3_BUCKET_NAME}/prod/ --recursive"
       tag: master
     

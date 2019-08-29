@@ -1,7 +1,7 @@
 conductor:
   build: .
   volumes:
-    - ./build:/build
+    - ./.tmp/release:/release
 
 aws:
   encrypted_env_file: env.encrypted

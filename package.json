@@ -48,8 +48,8 @@
     "//": "https://github.com/nwjs-community/nw-builder",
     "platforms": [
       "osx64",
-      "win",
-      "linux"
+      "win64",
+      "linux64"
     ],
     "version": "latest",
     "flavor": "normal",
