@@ -1,2 +1,10 @@
 conductor:
   build: .
+  volumes:
+    - ./build:/build
+
+aws:
+  build:
+    dockerfile: awscli.dockerfile
+  volumes_from:
+    - conductor

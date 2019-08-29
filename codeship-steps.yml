@@ -9,8 +9,8 @@
       command: yarn build
 
     - name: deploy dev
-      service: conductor
-      command: echo "deploy dev placeholder"
+      service: aws
+      command: ls -la /build
       exclude: ^(master)
 
     - name: deploy prod
