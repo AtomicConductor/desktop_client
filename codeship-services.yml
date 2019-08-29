@@ -4,6 +4,7 @@ conductor:
     - ./build:/build
 
 aws:
+  encrypted_env_file: env.encrypted
   build:
     dockerfile: awscli.dockerfile
   volumes_from:

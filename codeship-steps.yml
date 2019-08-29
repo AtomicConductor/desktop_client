@@ -10,7 +10,7 @@
 
     - name: deploy dev
       service: aws
-      command: ls -la /build
+      command: sh -c "echo ${AWS_S3_BUCKET_NAME}"
       exclude: ^(master)
 
     - name: deploy prod
