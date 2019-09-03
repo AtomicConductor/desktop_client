@@ -10,12 +10,12 @@
 
     - name: compress artifacts dev
       service: aws
-      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor_${i%/}.zip $i; done"
+      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor-${i%/}-$(jq -r .version /release/build/package.json)-dev-$CI_BRANCH.zip $i; done"
       exclude: ^(master)
 
     - name: compress artifacts prod
       service: aws
-      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor_${i%/}_$(jq -r .version /release/build/package.json).zip $i; done"
+      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor-${i%/}-$(jq -r .version /release/build/package.json).zip $i; done"
       tag: master
 
     - name: deploy
