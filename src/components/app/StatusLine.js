@@ -1,11 +1,16 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-
+import {
+  Box,
+  Paper,
+  Typography
+} from "@material-ui/core";
 import "typeface-raleway";
-import { drawerWidth, statusLineHeight } from "../../_helpers/constants";
+import {
+  drawerWidth,
+  statusLineHeight,
+  appVersion
+} from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,14 +23,16 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     flexGrow: 1,
+    display: "flex",
     backgroundColor: theme.palette.grey["800"],
     borderColor: theme.palette.grey["700"],
     borderStyle: "solid",
     borderWidth: 1,
-    zIndex: 1301
+    zIndex: 1301,
+    justifyContent: "flex-end"
   },
   statusText: {
-    paddingLeft: theme.spacing(1),
+    padding: theme.spacing(0, 1),
     color: theme.palette.text.hint
   }
 }));
@@ -37,7 +44,7 @@ const StatusLine = props => {
     <Box className={classes.root}>
       <Paper className={classes.paper}>
         <Typography className={classes.statusText} variant="body2">
-          
+          Version: {appVersion}
         </Typography>
       </Paper>
     </Box>

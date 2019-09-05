@@ -15,3 +15,5 @@ export const TIMESPANS = {
   LASTYEAR: "Last Year",
   ALLTIME: "All Time"
 };
+
+export const appVersion = process.env.REACT_APP_VERSION;
