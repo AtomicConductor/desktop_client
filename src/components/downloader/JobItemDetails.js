@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
   rightColumn: {
     flexGrow: 1,
+    alignItems: "center",
     borderRight: `2px solid ${theme.palette.divider}`,
     borderLeft: `2px solid ${theme.palette.divider}`
   },
@@ -54,19 +55,24 @@ const JobItemDetails = props => {
     fetchFilesInfo,
     fileCount,
     existingFileCount,
+    percentageExist,
+    errorCount,
     jobLabel,
     loadingKey
   } = props;
 
-  /** Side effect to fetch files on first mount */
+  let errorMessage = null;
+  if (errorCount > 0) {
+    errorMessage = `${errorCount} failed download`;
+    if (errorCount > 1) {
+      errorMessage += "s";
+    }
+  }
+
+  /** Side effect to fetch files on first mount only*/
   useEffect(() => {
     fetchFilesInfo();
   }, []);
-
-  const progress =
-    existingFileCount === 0
-      ? 0
-      : parseInt((existingFileCount * 100) / fileCount, 10);
 
   if (loadingKey === LOADING_KEYS.DOWNLOAD_DETAILS) {
     return (
@@ -93,8 +99,13 @@ const JobItemDetails = props => {
         <ExistingFilesProgress
           color="secondary"
           variant="determinate"
-          value={progress}
+          value={percentageExist}
         />
+        {errorMessage && (
+          <Typography align="center" color="error">
+            {errorMessage}
+          </Typography>
+        )}
       </Box>
 
       <MoreMenuContainer jobLabel={jobLabel} />
@@ -108,6 +119,8 @@ JobItemDetails.propTypes = {
   fetchFilesInfo: PropTypes.func.isRequired,
   fileCount: PropTypes.number.isRequired,
   existingFileCount: PropTypes.number.isRequired,
+  percentageExist: PropTypes.number.isRequired,
+  errorCount: PropTypes.number.isRequired,
   jobLabel: PropTypes.string.isRequired,
   loadingKey: PropTypes.number.isRequired
 };

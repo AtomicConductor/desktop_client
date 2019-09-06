@@ -59,7 +59,7 @@ const JobItem = props => {
   const downloadable = Boolean(
     job.files &&
       Object.values(job.files).some(f => {
-        return f.exists !== true;
+        return f.exists !== 100;
       })
   );
 

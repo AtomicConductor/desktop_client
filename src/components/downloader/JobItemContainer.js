@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(addToQueue(jobLabel));
     },
     onPanelClick: panel => (event, newExpanded) => {
-      console.log("onPanelClick" + panel);
+      console.log("onPanelClick" + panel + "   " + newExpanded);
       dispatch(setExpanded(newExpanded ? panel : ""));
     }
   };

@@ -2,14 +2,16 @@ import { createReducer } from "redux-starter-kit";
 
 import {
   receiveJobs,
-  receiveDownloadSummary,
-  requestDownloadData,
   setOutputPathValue,
-  resetOutputPathValue,
-  receiveExistingFilesInfo
+  resetOutputPathValue
 } from "../../_actions/jobs";
 
-import { setFileExists } from "../../_actions/files";
+import {
+  receiveDownloadData,
+  receiveExistingFilesInfo,
+  setFileExists,
+  requestDownloadData
+} from "../../_actions/files";
 
 import os from "os";
 
@@ -67,8 +69,8 @@ const jobs = createReducer(initialState, {
     });
   },
 
-  [receiveDownloadSummary]: (state, action) => {
-    const { jobLabel, files } = action.payload;
+  [receiveDownloadData]: (state, action) => {
+    const { files, jobLabel } = action.payload;
 
     if (jobLabel in state) {
       Object.assign(state[jobLabel], {
@@ -92,11 +94,11 @@ const jobs = createReducer(initialState, {
      */
     if (jobLabel in state && "files" in state[jobLabel]) {
       Object.keys(state[jobLabel]["files"] || {}).forEach(relativePath => {
-        state[jobLabel]["files"][relativePath].exists = false;
+        state[jobLabel]["files"][relativePath].exists = 0;
       });
 
       existing.forEach(relativePath => {
-        state[jobLabel]["files"][relativePath].exists = true;
+        state[jobLabel]["files"][relativePath].exists = 100;
       });
 
       state[jobLabel]["loadingKey"] = LOADING_KEYS.NONE;
@@ -104,9 +106,9 @@ const jobs = createReducer(initialState, {
   },
 
   [setFileExists]: (state, action) => {
-    const { jobLabel, relativePath } = action.payload;
+    const { jobLabel, relativePath, percentage } = action.payload;
     if (jobLabel in state && relativePath in state[jobLabel]["files"]) {
-      state[jobLabel]["files"][relativePath]["exists"] = true;
+      state[jobLabel]["files"][relativePath]["exists"] = percentage;
     }
   },
 

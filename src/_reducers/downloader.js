@@ -2,7 +2,6 @@ import { createReducer } from "redux-starter-kit";
 
 import {
   toggleDrawer,
-  toggleUseDaemon,
   downloadProgress,
   addFileToQueue,
   setFilterValue,
@@ -15,7 +14,6 @@ import { TIMESPANS } from "../_helpers/constants";
 
 const initialState = {
   drawerOpen: true,
-  useDaemon: false,
   queue: [],
   downloadProgress: [],
   loadingJobs: false,
@@ -33,10 +31,6 @@ const downloader = createReducer(initialState, {
 
   [toggleDrawer]: state => {
     state.drawerOpen = !state.drawerOpen;
-  },
-
-  [toggleUseDaemon]: state => {
-    state.useDaemon = !state.useDaemon;
   },
 
   [requestJobs]: state => {

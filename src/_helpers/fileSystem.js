@@ -1,6 +1,5 @@
 import fs from "fs";
 import md5File from "md5-file";
-import path from "upath";
 
 export const exactFileExistsSync = (filePath, md5) => {
   try {
@@ -29,14 +28,6 @@ export const ensureDirectoryReady = directory => {
     }
   }
 };
-
-export const ensureDirectoryReadyFor = filePath => {
-  return ensureDirectoryReady(path.dirname(filePath));
-};
-
-// if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
-//   directory = filePath;
-// }
 
 export const directoryExistsSync = directory => {
   /** exists and is writable */

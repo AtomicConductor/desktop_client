@@ -64,8 +64,6 @@ const FilterDrawer = props => {
 
 FilterDrawer.propTypes = {
   drawerIsOpen: PropTypes.bool.isRequired,
-  useDaemon: PropTypes.bool.isRequired,
-  onToggleUseDaemon: PropTypes.func.isRequired,
   refreshJobList: PropTypes.func.isRequired
 };
 

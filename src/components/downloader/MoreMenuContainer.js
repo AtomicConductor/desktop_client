@@ -4,11 +4,13 @@ import MoreMenu from "./MoreMenu";
 import {
   // setOutputPathValue,
   resetOutputPathValue,
-  updateExistingFilesInfo,
-  fetchDownloadSummary,
   viewOputputDirectoryInFinder
 } from "../../_actions/jobs";
 
+import {
+  updateDownloadFiles,
+  updateExistingFilesInfo
+} from "../../_actions/files";
 const mapStateToProps = (state, ownProps) => {
   const { jobLabel } = ownProps;
   const { originalOutputDirectory, outputDirectory } = state.entities.jobs[
@@ -26,10 +28,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { jobLabel } = ownProps;
   return {
-    // setValue: value => {
-    //   dispatch(setOutputPathValue({ jobLabel, value }));
-    //   dispatch(updateExistingFilesInfo(jobLabel));
-    // },
     resetOutputDirectory: () => {
       dispatch(resetOutputPathValue({ jobLabel }));
       dispatch(updateExistingFilesInfo(jobLabel));
@@ -38,7 +36,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(updateExistingFilesInfo(jobLabel));
     },
     refreshAll: () => {
-      dispatch(fetchDownloadSummary(jobLabel));
+      dispatch(updateDownloadFiles(jobLabel));
     },
     viewInFinder: () => {
       dispatch(viewOputputDirectoryInFinder(jobLabel));

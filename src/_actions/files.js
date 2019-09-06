@@ -1,3 +1,9 @@
+/*
+
+
+
+*/
+
 import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
@@ -6,131 +12,187 @@ import fs from "fs";
 import { checkResponse } from "../_helpers/network";
 import {
   exactFileExistsSync,
-  ensureDirectoryReadyFor,
-  ensureDirectoryReady
+  ensureDirectoryReady,
+  directoryExistsSync
 } from "../_helpers/fileSystem";
 
 import { DownloaderHelper } from "node-downloader-helper";
 
-import { receiveDownloadSummary, updateExistingFilesInfo } from "./jobs";
-import config from '../config';
+import config from "../config";
+
+export const requestDownloadData = createAction(
+  "downloader/requestDownloadData"
+);
+export const receiveDownloadData = createAction(
+  "downloader/receiveDownloadData"
+);
+
+export const receiveExistingFilesInfo = createAction(
+  "downloader/receiveExistingFilesInfo"
+);
 
 export const setFileExists = createAction("downloader/setFileExists");
 
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
 
+/**
+ * Renames the file from the object-storage name to the intended name.
+ *
+ * The rename is synchronous because we don't want the object to leave
+ * the queue until renaming is complete, because it would break the logic
+ * of the canAndShouldDownload check. There would be a small moment where
+ * a file could leave the queue but not be renamed, thereby causing another
+ * download of the same file. Admittedly, unlikely to ever happen.
+ *
+ * @param {object} file
+ */
+const rename = file => {
+  const existingPath = path.join(
+    path.dirname(file.fullPath),
+    path.basename(file.url.split("?")[0])
+  );
+  fs.renameSync(existingPath, file.fullPath);
+};
+
+/**
+ * Determines if its possible for this file to be downloded.
+ * This function is given as a filter while adding files to the queue
+ * and is responsible for only adding files that shold be downloaded.
+ *
+ * If the file already exists, we don't want to add it. And if we can't
+ * prepare a directory, then we dont wat to add it either.
+ *
+ * @param {*} file The object representing a file that may be added to the queue.
+ * @param {*} callback A callback to run with an error message or the file.
+ * @returns The result of the callback.
+ */
 const canAndShouldDownload = (file, callback) => {
   if (exactFileExistsSync(file.fullPath, file.md5)) {
     return callback("file already exists");
   }
-  if (!ensureDirectoryReadyFor(file.fullPath)) {
+  if (!ensureDirectoryReady(path.dirname(file.fullPath))) {
     return callback("cant write to directory");
   }
   return callback(null, file);
 };
 
 /**
- * QUEUE OPTIONS
- * In the NW.js environment we must provide a setImmediate
- * function because otherwise it borks out because setImmediate
- * is not universally supported - i.e. not in this UI.
+ * Queue options object.
+ * https://www.npmjs.com/package/better-queue
  *
- * We also have to provide the store to be used - again only on NW.js.
+ * 1. In the NW.js environment we must provide a setImmediate()
+ * polyfill.
  *
- * We provide a merge function that returns nothing because
- * it is run when a duplicate task is in the queue. The intention
- * is that it returns a merged version of the 2 tasks when there's
- * a clash. Since we don't want to run anything at all in this case,
- * we return no task.
+ * 2. In the NW.js environment we also have to provide the in-memory store.
+ * In a future version we could use the redux store maybe.
  *
- * The merge function uses the "id" property  to identify
- * duplicate tasks, so we have to map the fullPath to id.
+ * 3. The merge function is designed for merging 2 tasks when one is already
+ * in the queue. We provide a merge function that returns nothing because
+ * if a task is already in the queue then we don't want to add it again.
+ *
+ * 4. The merge function uses the "id" property  to identify duplicate tasks,
+ * so we map the fullPath to the id.
+ *
+ * 5. The filter canAndShouldDownload avoids placing existing files on the queue.
+ *
+ * 6. maxRetries means a task does not leave the queue and produce an error
+ *    until it has failed (maxRetries+1) times.
  * */
-
-const downloaderOptions = { override: true };
-
 const queueOptions = {
-  concurrent: 8,
+  concurrent: 16,
   setImmediate: fn => {
     setTimeout(fn, 0);
   },
   id: "fullPath",
-  merge: function () { },
+  merge: function() {},
   filter: canAndShouldDownload,
-  store: new MemoryStore()
+  store: new MemoryStore(),
+  maxRetries: 3
 };
 
-const rename = file => {
-  const existingPath = path.join(
-    path.dirname(file.fullPath),
-    path.basename(file.url.split("?")[0])
-  );
-  console.log(existingPath + " --- " + file.fullPath);
-  fs.renameSync(existingPath, file.fullPath);
-};
+// Override is true because the name may be the same but the content changed.
+const downloaderOptions = { override: true };
 
-/** Make the Download queue in a thunk */
 let TheDownloadQueue = null;
 export const startDownloadQueue = () => {
   return (dispatch, getState) => {
-    TheDownloadQueue = new Queue(function (file, onDone) {
-      // console.log(file.url);
+    TheDownloadQueue = new Queue(function(file, onDone) {
       const directory = path.dirname(file.fullPath);
 
-      const dh = new DownloaderHelper(file.url, directory, downloaderOptions);
+      const file_url = file.url;
 
+      /*
+      uncomment next 2 lines to simulate failures caused by a bad URL
+      const rn = Math.random();
+      const file_url = rn > 0.3 ? "junk" : file.url;
+      */
+
+      const dh = new DownloaderHelper(file_url, directory, downloaderOptions);
+      /*
+      The downloader emits an "end" event when a file has been successfully
+      downloaded. We must also rename the file before letting the queue know the
+      task has finished. This is because, when adding files to the queue, a
+      check is made: exactFileExistsSync() to see if the file exists already or
+      is in the queue. It checks filename and md5. If the file hasn't been
+      renamed before it leaves the queue, then it can be in a state where the
+      queue thinks it doesn't exist and will redownload it.
+      */
       dh.on("end", () => {
         rename(file);
-        onDone();
+        onDone(null, file);
       });
 
-      // We dont need an onProgress handler at the moment
-      // because we don't record sub file progress
-      // Maybe in future we can add it
+      // Implement progress for individual files when we have some huge files to work with.
       // dh.on("progress", stats => {});
 
+      /*
+        We must propagate the error via the queue's onDone callback in order to
+        notify the queue, so that it can decide whether to retry the download,
+        or give up.
+      */
       dh.on("error", error => {
-        console.log(error);
-        onDone();
+        onDone(error, file);
       });
 
       dh.start();
     }, queueOptions);
-
-    console.log("Started download queue");
   };
 };
 
-/** Thunk that wraps the fetch and download operations */
+/*
+ * Thunk that adds all available file objects for a job to the download queue.
+ *
+ *
+ * @export
+ * @param {string} jobLabel Example 00452
+ * @returns function
+ */
 export function addToQueue(jobLabel) {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     try {
-      // Before anything, check the validity of the outputDirectory,
-      // unless of course it is not set yet.
-      const { outputDirectory } = getState().entities.jobs[jobLabel];
+      // OutputDirectory must exist or be created.
+      const job = getState().entities.jobs[jobLabel];
+      const { outputDirectory, files } = job;
       if (!ensureDirectoryReady(outputDirectory)) {
-        console.log("NOT ensureDirectoryReady");
-        throw new Error(
-          `Can't create or access directory:  ${outputDirectory}`
-        );
+        throw new Error(`Can't create or access directory: ${outputDirectory}`);
       }
-
-      const data = await fetchDownloadData(jobLabel, getState());
-
-      // add the summary data to the redux store
-      // and flag the entries for which files already exist
-      const summaryData = extractSummaryFileData(jobLabel, data);
-      dispatch(receiveDownloadSummary(summaryData));
-      dispatch(updateExistingFilesInfo(jobLabel));
-
-      data.forEach(file => {
-        TheDownloadQueue.push(file, () => {
-          dispatch(
-            setFileExists({ jobLabel, relativePath: file.relativePath })
-          );
+      Object.values(files)
+        .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1))
+        .forEach((file, i) => {
+          const { relativePath } = file;
+          TheDownloadQueue.push(file, (err, result) => {})
+            .on("finish", function(result) {
+              dispatch(
+                setFileExists({ jobLabel, relativePath, percentage: 100 })
+              );
+            })
+            .on("failed", function(err) {
+              dispatch(
+                setFileExists({ jobLabel, relativePath, percentage: -1 })
+              );
+            });
         });
-      });
     } catch (error) {
       dispatch(
         setNotification({
@@ -142,6 +204,53 @@ export function addToQueue(jobLabel) {
   };
 }
 
+/**
+ *
+ *
+ * @export
+ * @param {string} jobLabel The job whose data to work on.
+ * @returns Function that dispatches actions to start the fetch, fetch the data,
+ * and update the entities in the store.
+ */
+export function updateDownloadFiles(jobLabel) {
+  return async function(dispatch, getState) {
+    try {
+      dispatch(requestDownloadData(jobLabel));
+
+      const files = await fetchDownloadData(jobLabel, getState());
+
+      dispatch(receiveDownloadData({ files, jobLabel }));
+
+      // After receiving the list of available downloads, we want to update the
+      // information about which files already exist. We put this in a
+      // setTimeout because otherwise the UI is not updated before it happens.
+      setTimeout(function() {
+        dispatch(updateExistingFilesInfo(jobLabel));
+      }, 0);
+    } catch (error) {
+      dispatch(
+        setNotification({
+          type: "info",
+          snackbar: "Can't fetch download data for this job."
+        })
+      );
+      dispatch(
+        receiveDownloadData({
+          jobLabel
+        })
+      );
+    }
+  };
+}
+
+/**
+ *
+ *
+ * @param {string} jobLabel The job to get the list of files for.
+ * @param {redux} state
+ * @returns Object containing available files for download. The object keys are
+ * the files' relative paths.
+ */
 async function fetchDownloadData(jobLabel, state) {
   const options = createRequestOptions(state);
   const { projectUrl } = config;
@@ -151,85 +260,55 @@ async function fetchDownloadData(jobLabel, state) {
   const data = await response.json();
   const { outputDirectory } = state.entities.jobs[jobLabel];
 
-  // We use the full pathname for the ID, which is used by the
-  // queue  in order to ignore duplicates.
-  // Duplicates could happen if the user clicks the download
-  // button twice really fast
-
-  return data.downloads
-    .flatMap(task =>
-      task.files.map(file => ({
-        relativePath: file["relative_path"],
+  // Duplicates could happen if the user clicks the download button twice really
+  // fast, so we provide a pathname for the ID so thhey can be ignored. It must
+  // be the _full_ pathname, because files from other jobs could be in the queue
+  // at the same time and they could have the same relative path.
+  const downloads = data.downloads || [];
+  const files = {};
+  downloads.forEach(task => {
+    return task.files.forEach(file => {
+      const rp = file["relative_path"];
+      files[rp] = {
+        relativePath: rp,
         md5: file["md5"],
         url: file["url"],
         taskId: file["task_id"],
         fullPath: path.join(outputDirectory, file["relative_path"]),
         outputDirectory,
         jobLabel
-      }))
-    )
-    .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1));
+      };
+    });
+  });
+  return files;
 }
 
-const extractSummaryFileData = (jobLabel, data) => {
-  let outputDirectory = null;
-  let first = true;
-  const files = {};
+/**
+ *
+ *
+ * @export
+ * @param {string} jobLabel Job whose files will be checked for existence.
+ * @returns function that dispatches an action to update the store about which
+ * files exist on disk.
+ */
+export function updateExistingFilesInfo(jobLabel) {
+  return async function(dispatch, getState) {
+    const state = getState();
+    const job = state.entities.jobs[jobLabel];
 
-  data.forEach(file => {
-    if (first) {
-      outputDirectory = file["outputDirectory"];
-      first = false;
+    const existing = [];
+
+    const { outputDirectory, files } = job;
+
+    if (directoryExistsSync(outputDirectory) && files) {
+      Object.values(files).forEach(f => {
+        const fullPath = path.join(outputDirectory, f.relativePath);
+        const md5 = f.md5;
+        if (exactFileExistsSync(fullPath, md5)) {
+          existing.push(f.relativePath);
+        }
+      });
     }
-    const rp = file["relativePath"];
-
-    files[rp] = {
-      relativePath: rp,
-      md5: file["md5"]
-    };
-  });
-  return { files, jobLabel, outputDirectory };
-};
-
-// export const addFilesToQueue = jobLabel => {
-//   return (dispatch, getState) => {
-//     console.log("HERE addResourcesToQueue !!!! ");
-//     const downloadables = getState().entities.downloads;
-//     // add files by md5 or jobs by label.
-//     let keys = params;
-//     if (!Array.isArray(params)) {
-//       keys = [params];
-//     }
-//     // console.log(keys);
-//     keys.forEach(key => {
-//       if (key.match(/^\d{5}$/)) {
-//         // its a jobId
-//         // console.log(`its a jobId ${Object.entries(downloadables).length}`);
-
-//         // let arr = Object.entries(downloadables).filter(
-//         //   dl => dl[1]["job_id"] === key
-//         // );
-//         // console.log(arr);
-
-//         Object.entries(downloadables)
-//           .filter(dl => dl[1]["job_id"] === key)
-//           .map(dl => dl[1])
-//           .sort((a, b) => (a["task_id"] > b["task_id"] ? 1 : -1))
-//           .forEach(dl => {
-//             console.log(dl.url);
-//             // console.log(dl["task_id"]);
-//             TheDownloadQueue.push(dl, () => {
-//               console.log("DONE:" + dl.url);
-//             });
-//             // dispatch(addFileToQueue(dl));
-//           });
-//       } else {
-//         // its an md5
-//         TheDownloadQueue.push(downloadables[key], () => {
-//           console.log("DONE:" + downloadables[key].url);
-//         });
-//         // dispatch(addFileToQueue(downloadables[key]));
-//       }
-//     });
-//   };
-// };
+    dispatch(receiveExistingFilesInfo({ jobLabel, existing }));
+  };
+}
