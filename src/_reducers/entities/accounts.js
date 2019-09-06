@@ -8,10 +8,6 @@ const accounts = createReducer(initialState, {
   [receiveAccounts]: (state, action) => {
     const { accounts } = action.payload;
 
-    if (!accounts) {
-      throw Error("Can't sign in");
-    }
-
     accounts.forEach(account => {
       state[account.account] = account;
     });

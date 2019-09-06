@@ -1,16 +1,8 @@
 import { connect } from "react-redux";
 import SignIn from "./SignIn";
 import { signIn } from "../../_actions/profile";
-import config from '../../config';
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    error: state.profile.error,
-    googleClientId: config.googleClientId
-  };
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onSignIn: params => {
       dispatch(signIn(params));
@@ -19,7 +11,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const SignInContainer = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(SignIn);
 

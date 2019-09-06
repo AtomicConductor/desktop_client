@@ -16,31 +16,22 @@ export const receiveAccounts = createAction("profile/receiveAccounts");
 
 export const signOut = createAction("profile/signOut");
 
-const validateParams = params => {
-  if (params.error) {
-    console.log("ERROR:" + params.error);
-    throw Error(params.error);
+const validateParams = ({ email, password, id_token }) => {
+  if (email && password) {
+    return { email, password };
   }
 
-  if (params.email && params.password) {
-    console.log(params.email + " / " + params.password);
-    return params;
-  }
-
-  try {
-    const id_token = params.getAuthResponse(true).id_token;
-    console.log(id_token);
+  if (id_token) {
     return { id_token };
-  } catch {
-    throw Error("Can't log in with the given parameters");
   }
+
+  throw new Error("Can't log in with the given parameters");
 };
 
 export function signIn(params) {
   return async function (dispatch, getState) {
     dispatch(requestProfile());
     try {
-      console.log(JSON.stringify(params));
       const authParams = validateParams(params);
       const data = await authenticate(getState(), authParams);
 
@@ -126,7 +117,13 @@ async function authenticate(state, params) {
   let url = `${config.apiServer}/api/auth`;
   let response = await fetch(url, options);
   checkResponse(response);
-  return await response.json();
+  const { accounts } = await response.json();
+  
+  if (!accounts) {
+    throw Error("Can't sign in");
+  }
+
+  return { accounts };
 }
 
 // copy creds from one of the accounts into the profile
