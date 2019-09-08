@@ -1,7 +1,8 @@
 /*
-
-
-
+  The purpose of functions in this file, is to start a queue and add downloads to
+  it. It uses better-queue and node-downloader-helper respectively.
+  https://www.npmjs.com/package/better-queue
+  https://www.npmjs.com/package/node-downloader-helper
 */
 
 import { createAction } from "redux-starter-kit";
@@ -56,12 +57,12 @@ const rename = file => {
 };
 
 /**
- * Determines if its possible for this file to be downloded.
- * This function is given as a filter while adding files to the queue
- * and is responsible for only adding files that shold be downloaded.
+ * Determines if its possible for this file to be downloded. This function is
+ * given as a filter while adding files to the queue and is responsible for only
+ * adding files that shold be downloaded.
  *
- * If the file already exists, we don't want to add it. And if we can't
- * prepare a directory, then we dont wat to add it either.
+ * If the file already exists, we don't want to add it. And if we can't prepare
+ * a directory, then we dont wat to add it either.
  *
  * @param {*} file The object representing a file that may be added to the queue.
  * @param {*} callback A callback to run with an error message or the file.
@@ -81,18 +82,17 @@ const canAndShouldDownload = (file, callback) => {
  * Queue options object.
  * https://www.npmjs.com/package/better-queue
  *
- * 1. In the NW.js environment we must provide a setImmediate()
- * polyfill.
+ * 1. In the NW.js environment we must provide a setImmediate() polyfill.
  *
- * 2. In the NW.js environment we also have to provide the in-memory store.
- * In a future version we could use the redux store maybe.
+ * 2. In the NW.js environment we also have to provide the in-memory store for
+ *    the queue. In a future version we could use the redux store maybe.
  *
  * 3. The merge function is designed for merging 2 tasks when one is already
- * in the queue. We provide a merge function that returns nothing because
- * if a task is already in the queue then we don't want to add it again.
+ *    in the queue. We provide a merge function that returns nothing because
+ *    if a task is already in the queue then we don't want to add it again.
  *
  * 4. The merge function uses the "id" property  to identify duplicate tasks,
- * so we map the fullPath to the id.
+ *    so we map the fullPath to the id.
  *
  * 5. The filter canAndShouldDownload avoids placing existing files on the queue.
  *
@@ -120,15 +120,27 @@ export const startDownloadQueue = () => {
     TheDownloadQueue = new Queue(function(file, onDone) {
       const directory = path.dirname(file.fullPath);
 
-      const file_url = file.url;
+      const { jobLabel, relativePath, url } = file;
 
       /*
       uncomment next 2 lines to simulate failures caused by a bad URL
       const rn = Math.random();
-      const file_url = rn > 0.3 ? "junk" : file.url;
+      const url = rn > 0.3 ? "junk" : file.url;
       */
 
-      const dh = new DownloaderHelper(file_url, directory, downloaderOptions);
+      const dh = new DownloaderHelper(url, directory, downloaderOptions);
+
+      /*
+      Implement progress updates for individual files.
+      This is useful for large slow files. Progress stats are emitted once a
+      second, so files that take less than a second to download will never
+      trigger the event.
+      */
+      dh.on("progress", stats => {
+        const percentage = parseInt(stats.progress, 10);
+        dispatch(setFileExists({ jobLabel, relativePath, percentage }));
+      });
+
       /*
       The downloader emits an "end" event when a file has been successfully
       downloaded. We must also rename the file before letting the queue know the
@@ -143,16 +155,13 @@ export const startDownloadQueue = () => {
         onDone(null, file);
       });
 
-      // Implement progress for individual files when we have some huge files to work with.
-      // dh.on("progress", stats => {});
-
       /*
         We must propagate the error via the queue's onDone callback in order to
         notify the queue, so that it can decide whether to retry the download,
         or give up.
       */
       dh.on("error", error => {
-        onDone(error, file);
+        onDone(error);
       });
 
       dh.start();
@@ -171,12 +180,19 @@ export const startDownloadQueue = () => {
 export function addToQueue(jobLabel) {
   return async function(dispatch, getState) {
     try {
-      // OutputDirectory must exist or be created.
       const job = getState().entities.jobs[jobLabel];
+
+      // OutputDirectory must exist or be created.
       const { outputDirectory, files } = job;
       if (!ensureDirectoryReady(outputDirectory)) {
         throw new Error(`Can't create or access directory: ${outputDirectory}`);
       }
+
+      /*
+      TODO Here would be agood place to check disk space. Especially useful when
+      downloading directly to a thumb drive or something.
+      */
+
       Object.values(files)
         .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1))
         .forEach((file, i) => {
@@ -221,9 +237,12 @@ export function updateDownloadFiles(jobLabel) {
 
       dispatch(receiveDownloadData({ files, jobLabel }));
 
-      // After receiving the list of available downloads, we want to update the
-      // information about which files already exist. We put this in a
-      // setTimeout because otherwise the UI is not updated before it happens.
+      /*
+      After receiving the list of available downloads, we want to update the
+      information about which files already exist. We put this in a setTimeout
+      because otherwise the UI is not updated before it happens.
+      */
+
       setTimeout(function() {
         dispatch(updateExistingFilesInfo(jobLabel));
       }, 0);
@@ -260,10 +279,12 @@ async function fetchDownloadData(jobLabel, state) {
   const data = await response.json();
   const { outputDirectory } = state.entities.jobs[jobLabel];
 
-  // Duplicates could happen if the user clicks the download button twice really
-  // fast, so we provide a pathname for the ID so thhey can be ignored. It must
-  // be the _full_ pathname, because files from other jobs could be in the queue
-  // at the same time and they could have the same relative path.
+  /*
+  Duplicates could happen if the user clicks the download button twice really
+  fast, so we provide a pathname for the ID so they can be ignored. It must be
+  the _full_ pathname, because files from other jobs could be in the queue at
+  the same time and they could have the same relative path.
+  */
   const downloads = data.downloads || [];
   const files = {};
   downloads.forEach(task => {
