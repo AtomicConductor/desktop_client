@@ -8,17 +8,11 @@
       service: conductor
       command: bash -c "yarn build && mv build /release"
 
-    - name: compress artifacts dev
+    - name: compress artifacts
       service: aws
-      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor-${i%/}-$(jq -r .version /release/build/package.json)-dev-$CI_BRANCH.zip $i; done"
-      exclude: ^(master)
-
-    - name: compress artifacts prod
-      service: aws
-      command: sh -c "cd /release/build/conductor && for i in */; do zip -r conductor-${i%/}-$(jq -r .version /release/build/package.json).zip $i; done"
-      tag: master
+      command: "./compressArtifacts.sh" 
 
     - name: deploy
       service: aws
-      command: sh -c "aws s3 cp /release/build/conductor s3://${AWS_S3_BUCKET_NAME}/ --recursive --exclude '*' --include '*.zip'"
+      command: "./deployArtifacts.sh"
     
