@@ -69,7 +69,10 @@ const JobItemDetails = props => {
     }
   }
 
-  /** Side effect to fetch files on first mount only*/
+  /*
+  Side effect to fetch files on first mount only
+  
+  */
   useEffect(() => {
     fetchFilesInfo();
   }, []);

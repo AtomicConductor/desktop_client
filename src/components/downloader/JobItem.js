@@ -37,9 +37,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   meta: {
+    height: 24,
+    overflow: "hidden",
     width: "100%",
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     marginTop: theme.spacing(1)
   },
 
@@ -49,7 +52,8 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   },
   chip: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -89,6 +93,7 @@ const JobItem = props => {
             className={classes.label}
           >{`${jobLabel}`}</Typography>
         </Box>
+
         <Box className={classes.main}>
           <Typography className={classes.title}>{title}</Typography>
 
@@ -96,6 +101,7 @@ const JobItem = props => {
             <Typography className={classes.summaryDate}>
               {createdTime}
             </Typography>
+
             {projectLabel ? (
               <Chip
                 variant="outlined"

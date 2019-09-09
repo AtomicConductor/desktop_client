@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import JobItem from "./JobItem";
-import { addToQueue } from "../../_actions/files";
+import { addToQueue, updateExistingFilesInfo } from "../../_actions/files";
 import { LOADING_KEYS } from "../../_reducers/entities/jobs";
 import { setExpanded } from "../../_actions/downloader";
 
@@ -17,9 +17,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     addToQueue: () => {
       dispatch(addToQueue(jobLabel));
     },
-    onPanelClick: panel => (event, newExpanded) => {
-      console.log("onPanelClick" + panel + "   " + newExpanded);
-      dispatch(setExpanded(newExpanded ? panel : ""));
+    onPanelClick: jobLabel => (event, isExpanded) => {
+      dispatch(setExpanded(isExpanded ? jobLabel : ""));
+      dispatch(updateExistingFilesInfo());
     }
   };
 };

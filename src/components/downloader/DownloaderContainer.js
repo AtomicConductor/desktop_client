@@ -31,6 +31,7 @@ const matches = (text, job) => {
 
 const mapStateToProps = (state, ownProps) => {
   const loggedIn = Boolean(Object.entries(state.profile.user).length);
+
   const textFilter = state.downloader.jobQueryParams.textFilter
     .trim()
     .toLowerCase();

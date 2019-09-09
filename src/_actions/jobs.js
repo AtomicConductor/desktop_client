@@ -6,6 +6,7 @@ import moment from "moment";
 import { checkResponse } from "../_helpers/network";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
+import { deleteSession } from "./profile";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -15,6 +16,7 @@ export const resetOutputPathValue = createAction(
 );
 export const setJobQuery = createAction("downloader/setJobQuery");
 
+const FMT = "YYYY-MM-DD";
 /**
  * Generates string to filter by date in a query, for example "created_gt_2019-06-23"
  *
@@ -25,26 +27,26 @@ export const setJobQuery = createAction("downloader/setJobQuery");
 function spanToDateFilters(key, span) {
   switch (span) {
     case TIMESPANS.TODAY:
-      return [`${key}_gt_${moment.utc().format("YYYY-MM-DD")}`];
+      return [`${key}_gt_${moment.utc().format(FMT)}`];
     case TIMESPANS.THISWEEK:
       return [
         `${key}_gt_${moment
           .utc()
           .startOf("week")
-          .format("YYYY-MM-DD")}`
+          .format(FMT)}`
       ];
     case TIMESPANS.LASTWEEK:
       const lastweek = moment.utc().subtract(7, "days");
       return [
-        `${key}_gt_${lastweek.startOf("week").format("YYYY-MM-DD")}`,
-        `${key}_lt_${lastweek.endOf("week").format("YYYY-MM-DD")}`
+        `${key}_gt_${lastweek.startOf("week").format(FMT)}`,
+        `${key}_lt_${lastweek.endOf("week").format(FMT)}`
       ];
     case TIMESPANS.THISMONTH:
       return [
         `${key}_gt_${moment
           .utc()
           .startOf("month")
-          .format("YYYY-MM-DD")}`
+          .format(FMT)}`
       ];
     case TIMESPANS.LASTMONTH:
       const lastmonth = moment
@@ -52,15 +54,15 @@ function spanToDateFilters(key, span) {
         .startOf("month")
         .subtract(1, "days");
       return [
-        `${key}_gt_${lastmonth.startOf("month").format("YYYY-MM-DD")}`,
-        `${key}_lt_${lastmonth.endOf("month").format("YYYY-MM-DD")}`
+        `${key}_gt_${lastmonth.startOf("month").format(FMT)}`,
+        `${key}_lt_${lastmonth.endOf("month").format(FMT)}`
       ];
     case TIMESPANS.THISYEAR:
       return [
         `${key}_gt_${moment
           .utc()
           .startOf("year")
-          .format("YYYY-MM-DD")}`
+          .format(FMT)}`
       ];
     case TIMESPANS.LASTYEAR:
       const lastyear = moment
@@ -68,15 +70,15 @@ function spanToDateFilters(key, span) {
         .startOf("year")
         .subtract(1, "days");
       return [
-        `${key}_gt_${lastyear.startOf("year").format("YYYY-MM-DD")}`,
-        `${key}_lt_${lastyear.endOf("year").format("YYYY-MM-DD")}`
+        `${key}_gt_${lastyear.startOf("year").format(FMT)}`,
+        `${key}_lt_${lastyear.endOf("year").format(FMT)}`
       ];
     default:
       return [
         `${key}_gt_${moment
           .utc()
           .startOf("month")
-          .format("YYYY-MM-DD")}`
+          .format(FMT)}`
       ];
   }
 }
@@ -147,6 +149,11 @@ export function fetchJobs() {
       dispatch(receiveJobs(data));
     } catch (error) {
       dispatch(receiveJobs({}));
+
+      if (error.message === "Unauthorized") {
+        console.log("DELETING SESSION");
+        dispatch(deleteSession());
+      }
       dispatch(
         setNotification({
           type: "error",

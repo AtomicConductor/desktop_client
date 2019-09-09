@@ -10,7 +10,6 @@ const MoreMenu = props => {
   const {
     viewInFinder,
     refreshAll,
-    refreshExistingFiles,
     resetOutputDirectory,
     directoryResettable
   } = props;
@@ -28,11 +27,6 @@ const MoreMenu = props => {
   const handleResetOutputDirectory = () => {
     setAnchorEl(null);
     resetOutputDirectory();
-  };
-
-  const handleRefreshExistingFiles = () => {
-    setAnchorEl(null);
-    refreshExistingFiles();
   };
 
   const handleRefreshAll = () => {
@@ -63,9 +57,7 @@ const MoreMenu = props => {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleRefreshAll}>Refresh all</MenuItem>
-        <MenuItem onClick={handleRefreshExistingFiles}>
-          Refresh existing files
-        </MenuItem>
+
         <MenuItem
           disabled={!directoryResettable}
           onClick={handleResetOutputDirectory}
@@ -83,7 +75,6 @@ export default MoreMenu;
 MoreMenu.propTypes = {
   directoryResettable: PropTypes.bool.isRequired,
   resetOutputDirectory: PropTypes.func.isRequired,
-  refreshExistingFiles: PropTypes.func.isRequired,
   refreshAll: PropTypes.func.isRequired,
   viewInFinder: PropTypes.func.isRequired
 };

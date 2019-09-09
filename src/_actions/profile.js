@@ -6,7 +6,7 @@ import { createRequestOptions } from "../_helpers/network";
 
 import { setNotification } from "./notification";
 import { CREDENTIALS_FILENAME } from "../_helpers/constants";
-import config from '../config';
+import config from "../config";
 
 export const requestProfile = createAction("profile/requestProfile");
 export const receiveCredentials = createAction("profile/receiveCredentials");
@@ -29,7 +29,7 @@ const validateParams = ({ email, password, id_token }) => {
 };
 
 export function signIn(params) {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     dispatch(requestProfile());
     try {
       const authParams = validateParams(params);
@@ -79,7 +79,7 @@ export function signIn(params) {
 }
 
 export function deleteSession() {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     try {
       dispatch(signOut());
 
@@ -118,7 +118,7 @@ async function authenticate(state, params) {
   let response = await fetch(url, options);
   checkResponse(response);
   const { accounts } = await response.json();
-  
+
   if (!accounts) {
     throw Error("Can't sign in");
   }
@@ -129,7 +129,7 @@ async function authenticate(state, params) {
 // copy creds from one of the accounts into the profile
 // Then use those creds to fetch the user
 export function chooseAccount(accountId) {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     const state = getState();
 
     try {

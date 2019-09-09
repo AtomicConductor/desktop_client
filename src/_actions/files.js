@@ -9,6 +9,7 @@ import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
+
 import fs from "fs";
 import { checkResponse } from "../_helpers/network";
 import {
@@ -38,10 +39,10 @@ const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
 
 /**
- * Renames the file from the object-storage name to the intended name.
+ * Renames the file from the object-storage name to the original name.
  *
  * The rename is synchronous because we don't want the object to leave
- * the queue until renaming is complete, because it would break the logic
+ * the queue until renaming is complete. It would break the logic
  * of the canAndShouldDownload check. There would be a small moment where
  * a file could leave the queue but not be renamed, thereby causing another
  * download of the same file. Admittedly, unlikely to ever happen.
@@ -57,12 +58,12 @@ const rename = file => {
 };
 
 /**
- * Determines if its possible for this file to be downloded. This function is
- * given as a filter while adding files to the queue and is responsible for only
- * adding files that shold be downloaded.
+ * Determine if this file is to be downloded. This function is given as a filter
+ * while adding files to the queue and is responsible for only adding files that
+ * should be downloaded.
  *
  * If the file already exists, we don't want to add it. And if we can't prepare
- * a directory, then we dont wat to add it either.
+ * a directory, then we dont want to add it either.
  *
  * @param {*} file The object representing a file that may be added to the queue.
  * @param {*} callback A callback to run with an error message or the file.
@@ -115,6 +116,7 @@ const queueOptions = {
 const downloaderOptions = { override: true };
 
 let TheDownloadQueue = null;
+
 export const startDownloadQueue = () => {
   return (dispatch, getState) => {
     TheDownloadQueue = new Queue(function(file, onDone) {
@@ -184,6 +186,7 @@ export function addToQueue(jobLabel) {
 
       // OutputDirectory must exist or be created.
       const { outputDirectory, files } = job;
+      console.log(`ADDING FILES TO QUEUE FOR ${jobLabel} ${outputDirectory}`);
       if (!ensureDirectoryReady(outputDirectory)) {
         throw new Error(`Can't create or access directory: ${outputDirectory}`);
       }
@@ -194,10 +197,24 @@ export function addToQueue(jobLabel) {
       */
 
       Object.values(files)
+        .filter(f => !(f.exists && f.exists === 100))
         .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1))
         .forEach((file, i) => {
           const { relativePath } = file;
-          TheDownloadQueue.push(file, (err, result) => {})
+
+          /*
+          The object we add to the download queue needs to contain the fullPath
+          and the jobLabel so that it knows where to save and what object to
+          update in the redux store. We add them here, on the fly, in order to
+          keep the store DRY. i.e. The file entries shouldn't need to store
+          stuff that the job already stores.
+          */
+          const fileDownload = {
+            ...file,
+            jobLabel,
+            fullPath: path.join(outputDirectory, relativePath)
+          };
+          TheDownloadQueue.push(fileDownload, (err, result) => {})
             .on("finish", function(result) {
               dispatch(
                 setFileExists({ jobLabel, relativePath, percentage: 100 })
@@ -221,9 +238,22 @@ export function addToQueue(jobLabel) {
 }
 
 /**
+ * Fetches a list of available download files for a job, and then updates the
+ * list of files in the store.
  *
+ * Afterwards, we find out which of those entries represent files that already
+ * exist, and update their exist state. This happens in a setTimeout(0) because
+ * otherwise the UI is not updated beforehand, and then we don't see the
+ * progress bar update.
  *
- * @export
+ * Also important to note that updateExistingFiles() determines the expanded
+ * (visible) job by looking up the expandedJob entry in the store. This may not
+ * necessarily be the same job we just fetched download information for. This is
+ * a good thing, because if the user closed the panel while fetching, we don't
+ * need to update its UI yet anyway. Any newly expanded job will have it's files
+ * checked for existence instead.
+ *
+ * @export updateDownloadFiles
  * @param {string} jobLabel The job whose data to work on.
  * @returns Function that dispatches actions to start the fetch, fetch the data,
  * and update the entities in the store.
@@ -237,14 +267,8 @@ export function updateDownloadFiles(jobLabel) {
 
       dispatch(receiveDownloadData({ files, jobLabel }));
 
-      /*
-      After receiving the list of available downloads, we want to update the
-      information about which files already exist. We put this in a setTimeout
-      because otherwise the UI is not updated before it happens.
-      */
-
       setTimeout(function() {
-        dispatch(updateExistingFilesInfo(jobLabel));
+        dispatch(updateExistingFilesInfo());
       }, 0);
     } catch (error) {
       dispatch(
@@ -277,14 +301,7 @@ async function fetchDownloadData(jobLabel, state) {
   let response = await fetch(url, options);
   checkResponse(response);
   const data = await response.json();
-  const { outputDirectory } = state.entities.jobs[jobLabel];
 
-  /*
-  Duplicates could happen if the user clicks the download button twice really
-  fast, so we provide a pathname for the ID so they can be ignored. It must be
-  the _full_ pathname, because files from other jobs could be in the queue at
-  the same time and they could have the same relative path.
-  */
   const downloads = data.downloads || [];
   const files = {};
   downloads.forEach(task => {
@@ -294,10 +311,7 @@ async function fetchDownloadData(jobLabel, state) {
         relativePath: rp,
         md5: file["md5"],
         url: file["url"],
-        taskId: file["task_id"],
-        fullPath: path.join(outputDirectory, file["relative_path"]),
-        outputDirectory,
-        jobLabel
+        taskId: file["task_id"]
       };
     });
   });
@@ -305,16 +319,25 @@ async function fetchDownloadData(jobLabel, state) {
 }
 
 /**
+ * Update the store with info about which of the file entries actually exist on
+ * disk for the currently expanded job.
  *
+ * Before starting, we turn off the watcher. And after we have updated them, we
+ * restart the watcher. Not sure if this is bnecessary, but it seems to be
+ * cleaner.
  *
- * @export
- * @param {string} jobLabel Job whose files will be checked for existence.
+ * @export updateExistingFilesInfo
  * @returns function that dispatches an action to update the store about which
  * files exist on disk.
  */
-export function updateExistingFilesInfo(jobLabel) {
+export function updateExistingFilesInfo() {
   return async function(dispatch, getState) {
     const state = getState();
+
+    const jobLabel = state.downloader.expandedJob;
+    if (!(jobLabel in state.entities.jobs)) {
+      return;
+    }
     const job = state.entities.jobs[jobLabel];
 
     const existing = [];

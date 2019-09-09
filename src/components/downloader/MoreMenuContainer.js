@@ -32,9 +32,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(resetOutputPathValue({ jobLabel }));
       dispatch(updateExistingFilesInfo(jobLabel));
     },
-    refreshExistingFiles: () => {
-      dispatch(updateExistingFilesInfo(jobLabel));
-    },
     refreshAll: () => {
       dispatch(updateDownloadFiles(jobLabel));
     },
