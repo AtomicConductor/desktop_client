@@ -34,17 +34,8 @@ ShallowWrapper {
             path="/downloader"
           />
           <Route
-            component={
-              Object {
-                "$$typeof": Symbol(react.memo),
-                "WrappedComponent": [Function],
-                "compare": null,
-                "displayName": "Connect(Plugins)",
-                "type": [Function],
-                Symbol(Symbol.hasInstance): [Function],
-              }
-            }
-            path="/plugins"
+            component={[Function]}
+            path="/yaml"
           />
           <Route
             component={
@@ -87,17 +78,8 @@ ShallowWrapper {
             path="/downloader"
           />
           <Route
-            component={
-              Object {
-                "$$typeof": Symbol(react.memo),
-                "WrappedComponent": [Function],
-                "compare": null,
-                "displayName": "Connect(Plugins)",
-                "type": [Function],
-                Symbol(Symbol.hasInstance): [Function],
-              }
-            }
-            path="/plugins"
+            component={[Function]}
+            path="/yaml"
           />
           <Route
             component={
@@ -139,17 +121,8 @@ ShallowWrapper {
               path="/downloader"
             />,
             <Route
-              component={
-                Object {
-                  "$$typeof": Symbol(react.memo),
-                  "WrappedComponent": [Function],
-                  "compare": null,
-                  "displayName": "Connect(Plugins)",
-                  "type": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                }
-              }
-              path="/plugins"
+              component={[Function]}
+              path="/yaml"
             />,
             <Route
               component={
@@ -196,15 +169,8 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "component": Object {
-                "$$typeof": Symbol(react.memo),
-                "WrappedComponent": [Function],
-                "compare": null,
-                "displayName": "Connect(Plugins)",
-                "type": [Function],
-                Symbol(Symbol.hasInstance): [Function],
-              },
-              "path": "/plugins",
+              "component": [Function],
+              "path": "/yaml",
             },
             "ref": null,
             "rendered": null,
@@ -270,17 +236,8 @@ ShallowWrapper {
               path="/downloader"
             />
             <Route
-              component={
-                Object {
-                  "$$typeof": Symbol(react.memo),
-                  "WrappedComponent": [Function],
-                  "compare": null,
-                  "displayName": "Connect(Plugins)",
-                  "type": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                }
-              }
-              path="/plugins"
+              component={[Function]}
+              path="/yaml"
             />
             <Route
               component={
@@ -323,17 +280,8 @@ ShallowWrapper {
               path="/downloader"
             />
             <Route
-              component={
-                Object {
-                  "$$typeof": Symbol(react.memo),
-                  "WrappedComponent": [Function],
-                  "compare": null,
-                  "displayName": "Connect(Plugins)",
-                  "type": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                }
-              }
-              path="/plugins"
+              component={[Function]}
+              path="/yaml"
             />
             <Route
               component={
@@ -375,17 +323,8 @@ ShallowWrapper {
                 path="/downloader"
               />,
               <Route
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.memo),
-                    "WrappedComponent": [Function],
-                    "compare": null,
-                    "displayName": "Connect(Plugins)",
-                    "type": [Function],
-                    Symbol(Symbol.hasInstance): [Function],
-                  }
-                }
-                path="/plugins"
+                component={[Function]}
+                path="/yaml"
               />,
               <Route
                 component={
@@ -432,15 +371,8 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "component": Object {
-                  "$$typeof": Symbol(react.memo),
-                  "WrappedComponent": [Function],
-                  "compare": null,
-                  "displayName": "Connect(Plugins)",
-                  "type": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                },
-                "path": "/plugins",
+                "component": [Function],
+                "path": "/yaml",
               },
               "ref": null,
               "rendered": null,

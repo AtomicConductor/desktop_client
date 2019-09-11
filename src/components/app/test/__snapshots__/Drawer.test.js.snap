@@ -50,10 +50,10 @@ ShallowWrapper {
             icon={<UNDEFINED />}
             text_props={
               Object {
-                "primary": "Plugins",
+                "primary": "Custom Submission",
               }
             }
-            url="/plugins"
+            url="/yaml"
           />
           <ForwardRef(WithStyles)
             dense={true}
@@ -1014,10 +1014,10 @@ ShallowWrapper {
               icon={<UNDEFINED />}
               text_props={
                 Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 }
               }
-              url="/plugins"
+              url="/yaml"
             />,
             <ForwardRef(WithStyles)
               dense={true}
@@ -1057,9 +1057,9 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Plugins",
+                "primary": "Custom Submission",
               },
-              "url": "/plugins",
+              "url": "/yaml",
             },
             "ref": null,
             "rendered": null,
@@ -2936,10 +2936,10 @@ ShallowWrapper {
               icon={<UNDEFINED />}
               text_props={
                 Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 }
               }
-              url="/plugins"
+              url="/yaml"
             />
             <ForwardRef(WithStyles)
               dense={true}
@@ -3900,10 +3900,10 @@ ShallowWrapper {
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
-                    "primary": "Plugins",
+                    "primary": "Custom Submission",
                   }
                 }
-                url="/plugins"
+                url="/yaml"
               />,
               <ForwardRef(WithStyles)
                 dense={true}
@@ -3943,9 +3943,9 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 },
-                "url": "/plugins",
+                "url": "/yaml",
               },
               "ref": null,
               "rendered": null,
@@ -5874,10 +5874,10 @@ ShallowWrapper {
             icon={<UNDEFINED />}
             text_props={
               Object {
-                "primary": "Plugins",
+                "primary": "Custom Submission",
               }
             }
-            url="/plugins"
+            url="/yaml"
           />
           <ForwardRef(WithStyles)
             dense={true}
@@ -6838,10 +6838,10 @@ ShallowWrapper {
               icon={<UNDEFINED />}
               text_props={
                 Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 }
               }
-              url="/plugins"
+              url="/yaml"
             />,
             <ForwardRef(WithStyles)
               dense={true}
@@ -6881,9 +6881,9 @@ ShallowWrapper {
             "props": Object {
               "icon": <UNDEFINED />,
               "text_props": Object {
-                "primary": "Plugins",
+                "primary": "Custom Submission",
               },
-              "url": "/plugins",
+              "url": "/yaml",
             },
             "ref": null,
             "rendered": null,
@@ -8760,10 +8760,10 @@ ShallowWrapper {
               icon={<UNDEFINED />}
               text_props={
                 Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 }
               }
-              url="/plugins"
+              url="/yaml"
             />
             <ForwardRef(WithStyles)
               dense={true}
@@ -9724,10 +9724,10 @@ ShallowWrapper {
                 icon={<UNDEFINED />}
                 text_props={
                   Object {
-                    "primary": "Plugins",
+                    "primary": "Custom Submission",
                   }
                 }
-                url="/plugins"
+                url="/yaml"
               />,
               <ForwardRef(WithStyles)
                 dense={true}
@@ -9767,9 +9767,9 @@ ShallowWrapper {
               "props": Object {
                 "icon": <UNDEFINED />,
                 "text_props": Object {
-                  "primary": "Plugins",
+                  "primary": "Custom Submission",
                 },
-                "url": "/plugins",
+                "url": "/yaml",
               },
               "ref": null,
               "rendered": null,

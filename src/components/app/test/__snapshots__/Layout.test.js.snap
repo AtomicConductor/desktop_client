@@ -142,9 +142,9 @@ ShallowWrapper {
           },
           "secondary": Object {
             "contrastText": "#fff",
-            "dark": "#2888E0",
-            "light": "#64A9E9",
-            "main": "#3B8EDE",
+            "dark": "#3597f2",
+            "light": "#3597f2",
+            "main": "#3597f2",
           },
           "text": Object {
             "disabled": "rgba(255, 255, 255, 0.5)",
@@ -605,9 +605,9 @@ ShallowWrapper {
             },
             "secondary": Object {
               "contrastText": "#fff",
-              "dark": "#2888E0",
-              "light": "#64A9E9",
-              "main": "#3B8EDE",
+              "dark": "#3597f2",
+              "light": "#3597f2",
+              "main": "#3597f2",
             },
             "text": Object {
               "disabled": "rgba(255, 255, 255, 0.5)",
