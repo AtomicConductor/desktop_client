@@ -1,5 +1,5 @@
 {
-  "name": "conductor",
+  "name": "conductor_solo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -34,7 +34,7 @@
     "start": "nw-react-scripts start",
     "prebuild": "json -I -f package.json -e 'this[\"chromium-args\"]=\"\"'",
     "build": "nw-react-scripts build",
-    "postbuild": "mv build/conductor/osx64 build/conductor/macos64",
+    "postbuild": "mv build/conductor_solo/osx64 build/conductor_solo/macos64",
     "test": "nw-react-scripts test",
     "eject": "nw-react-scripts eject"
   },

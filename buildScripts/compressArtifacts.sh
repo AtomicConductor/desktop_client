@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /release/build/conductor
+cd /release/build/conductor_solo
 
 version="$(jq -r .version ../package.json)"
 
@@ -9,5 +9,5 @@ fi
 
 for artifact in */
 do 
-    zip -r conductor-desktop-app-$version-${releaseSuffix}${artifact%/}.zip $artifact
+    zip -r conductor-solo-$version-${releaseSuffix}${artifact%/}.zip $artifact
 done
