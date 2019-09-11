@@ -11,7 +11,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloudDownload from "@material-ui/icons/CloudDownload";
-import PowerIcon from "@material-ui/icons/Power";
+import NotesIcon from "@material-ui/icons/Notes";
 import HelpIcon from "@material-ui/icons/Help";
 import DrawerMenuItem from "./DrawerMenuItem";
 import DrawerAccountMenuItemContainer from "./DrawerAccountMenuItemContainer";
@@ -61,7 +61,6 @@ const Drawer = () => {
 
       <Divider />
       <List className={classes.list}>
-       
         <DrawerMenuItem
           url="/downloader"
           text_props={{
@@ -71,11 +70,11 @@ const Drawer = () => {
         />
 
         <DrawerMenuItem
-          url="/plugins"
+          url="/yaml"
           text_props={{
-            primary: "Plugins"
+            primary: "Custom Submission"
           }}
-          icon={<PowerIcon />}
+          icon={<NotesIcon />}
         />
 
         <ListItem dense>

@@ -6,16 +6,11 @@ export default createMuiTheme({
   palette: {
     type: "dark",
     primary: grey,
-
     secondary: {
-      light: "#64A9E9",
-      main: "#3B8EDE",
-      dark: "#2888E0",
-      contrastText: "#fff"
+      light: "#3597f2",
+      main: "#3597f2",
+      dark: "#3597f2"
     },
-    // To switch to nicer colors - uncomment the line below
-    // and remove the secondary block above
-    // secondary: lightGreen,
     error: red
   }
 });

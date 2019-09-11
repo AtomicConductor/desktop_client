@@ -1,9 +1,9 @@
 import React from "react";
 import "typeface-roboto";
 import DownloaderContainer from "../downloader/DownloaderContainer";
-import PluginsContainer from "../plugins/PluginsContainer";
+import Yaml from "../yaml/Yaml";
 import AccountContainer from "../account/AccountContainer";
-import Layout from './Layout';
+import Layout from "./Layout";
 
 import {
   BrowserRouter as Router,
@@ -17,7 +17,7 @@ const App = () => (
     <Layout>
       <Switch>
         <Route path="/downloader" component={DownloaderContainer} />
-        <Route path="/plugins" component={PluginsContainer} />
+        <Route path="/yaml" component={Yaml} />
         <Route path="/account" component={AccountContainer} />
         <Redirect push to="/downloader" />
       </Switch>
