@@ -15,7 +15,7 @@ import {
   Notes,
   Help
 } from "@material-ui/icons";
-import Account from "./Account";
+import Account from "../account/AccountContainer";
 
 import "typeface-raleway";
 import { drawerWidth } from "../../_helpers/constants";
@@ -46,7 +46,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Drawer = props => {
-  const { email, loggedIn, accountName } = props;
   const classes = useStyles();
 
   return (
@@ -60,7 +59,7 @@ const Drawer = props => {
     >
 
       <List className={classes.list}>
-        <Account email={email} accountName={accountName} loggedIn={loggedIn} />
+        <Account  />
 
         <Divider />
 

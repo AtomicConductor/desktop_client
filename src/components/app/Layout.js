@@ -6,7 +6,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "../../theme";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import Drawer from "./DrawerContainer";
+import Drawer from "./Drawer";
 import StatusLine from "./StatusLine";
 import CtSnackbarContainer from "../notification/CtSnackbarContainer";
 import { drawerWidth, statusLineHeight } from "../../_helpers/constants";
