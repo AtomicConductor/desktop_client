@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { LockOutlined } from "@material-ui/icons";
 
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
@@ -17,20 +17,17 @@ import { makeStyles } from "@material-ui/core/styles";
 import { avatarInitials } from "../../_helpers/presentation";
 
 const useStyles = makeStyles(theme => ({
-  in: {
+  avatar: {
     backgroundColor: theme.palette.secondary.dark,
     width: 30,
     height: 30
   },
-  out: { backgroundColor: theme.palette.primary.dark },
-  spacer: {
-    display: "flex",
-    flexGrow: "1",
-    flexDirection: "column"
-  },
   email: {
     marginLeft: "16px",
     color: theme.palette.text.secondary
+  },
+  list: {
+    paddingTop: 0
   }
 }));
 
@@ -46,8 +43,8 @@ const DrawerAccountMenuItem = props => {
   if (loggedIn) {
     return (
       <React.Fragment>
-        <div className={classes.spacer} />
-        <List>
+        
+        <List className={classes.list}>
           <Divider />
           <ListItem
             button
@@ -55,7 +52,7 @@ const DrawerAccountMenuItem = props => {
             onClick={onClick}
           >
             <ListItemAvatar>
-              <Avatar className={classes.in}>
+              <Avatar className={classes.avatar}>
                 <Typography variant="body2">{initials}</Typography>
               </Avatar>
             </ListItemAvatar>
@@ -76,8 +73,7 @@ const DrawerAccountMenuItem = props => {
 
   return (
     <React.Fragment>
-      <div className={classes.spacer} />
-      <List>
+      <List className={classes.list}>
         <Divider />
         <ListItem
           button
@@ -85,10 +81,10 @@ const DrawerAccountMenuItem = props => {
           onClick={onClick}
         >
           <ListItemIcon>
-            <AccountCircleIcon />
+            <LockOutlined />
           </ListItemIcon>
 
-          <ListItemText primary="Account" />
+          <ListItemText primary="Sign in" />
         </ListItem>
       </List>
     </React.Fragment>

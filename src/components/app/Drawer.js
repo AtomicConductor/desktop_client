@@ -27,19 +27,20 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth
   },
-  toolbar: {
-    height: 48
-  },
-
   logo: {
     fontFamily: "Raleway",
     fontSize: 24,
     textAlign: "center",
-    margin: "auto",
     fontWeight: 500,
-
-    verticalAlign: "middle",
-    m: 1
+    marginBottom: theme.spacing(1)
+  },
+  spacer: {
+    display: "flex",
+    flexGrow: "1",
+    flexDirection: "column"
+  },
+  list: {
+    paddingTop: 0
   }
 }));
 
@@ -55,12 +56,10 @@ const Drawer = () => {
       }}
       anchor="left"
     >
-      <ListItem className={classes.toolbar}>
-        <Typography className={classes.logo}>CONDUCTOR</Typography>
-      </ListItem>
 
-      <Divider />
       <List className={classes.list}>
+        <DrawerAccountMenuItemContainer />
+        <Divider />
         <DrawerMenuItem
           url="/downloader"
           text_props={{
@@ -77,7 +76,7 @@ const Drawer = () => {
           icon={<NotesIcon />}
         />
 
-        <ListItem dense>
+        <ListItem button>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>
@@ -86,8 +85,9 @@ const Drawer = () => {
 
         <Divider />
       </List>
+      <div className={classes.spacer} />
+      <Typography className={classes.logo}>CONDUCTOR</Typography>
 
-      <DrawerAccountMenuItemContainer />
     </MuiDrawer>
   );
 };

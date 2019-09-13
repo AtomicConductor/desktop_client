@@ -5,17 +5,17 @@ import {
   Typography,
   TextField,
   FormControl,
-  AppBar,
-  Toolbar,
   Card,
   Box,
   Divider,
-  Button
+  Button,
+  Link
 } from "@material-ui/core";
-import { drawerWidth } from "../../_helpers/constants";
 import GoogleButton from 'react-google-button';
 import googleSignIn from './googleSignIn';
+import config from '../../config';
 
+const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     width: "500px",
-    padding: "80px",
+    padding: theme.spacing(10),
     margin: "auto",
     marginTop: "100px"
   },
@@ -47,12 +47,11 @@ const useStyles = makeStyles(theme => ({
   divider: {
     width: 100
   },
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth
-  },
-  googleButton: {
+  centered: {
     alignSelf: "center"
+  },
+  onboarding: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -75,14 +74,6 @@ const SignIn = props => {
 
   return (
     <React.Fragment>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar variant="dense">
-          <Typography variant="h6" className={classes.title}>
-            Sign in
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
       <main className={classes.content}>
         <Card className={classes.card}>
           <FormControl className={classes.formControl}>
@@ -107,16 +98,22 @@ const SignIn = props => {
             />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <Box className={classes.buttonBox}>
-              <Button
-                onClick={handleSignIn}
-                variant="outlined"
-                color="secondary"
-                className={classes.signInButton}
-              >
-                Sign in
-              </Button>
-            </Box>
+            <Button
+              onClick={handleSignIn}
+              variant="outlined"
+              color="secondary"
+              className={classes.signInButton}
+            >
+              Sign in
+            </Button>
+            <Link
+              href="#"
+              variant="body2"
+              className={classes.onboarding}
+              onClick={() => nw.Shell.openExternal(`${onboarding}/forgot-password`)}
+            >
+              Forgot password?
+            </Link>
           </FormControl>
           <Box className={classes.dividerGroup}>
             <Divider variant="middle" className={classes.divider} />
@@ -125,10 +122,20 @@ const SignIn = props => {
           </Box>
           <FormControl className={classes.formControl}>
             <GoogleButton
-              className={classes.googleButton}
+              className={classes.centered}
               type="dark"
               onClick={() => googleSignIn(onSignIn)}
             />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <Link
+              className={classes.centered}
+              variant="body2"
+              href="#"
+              onClick={() => nw.Shell.openExternal(`${onboarding}/sign-up`)}
+            >
+              No Conductor account? Create a New Account
+            </Link>
           </FormControl>
         </Card>
       </main>
