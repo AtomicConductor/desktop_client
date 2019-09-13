@@ -4,8 +4,8 @@ import { shallow } from "enzyme";
 import Drawer from "../Drawer";
 
 const setup = overrides => {
-  const props = { profile: { user: {} }, ...overrides };
-  const wrapper = shallow(<Drawer {...props} />);
+  const props = { email: 'foo@bar', accountName: "my account", loggedIn: true };
+  const wrapper = shallow(<Drawer {...{...props, ...overrides}} />);
   return {
     props,
     wrapper
@@ -18,13 +18,13 @@ it("renders without crashing", () => {
 });
 
 describe("snapshots", () => {
-  it("match snapshot when profile is valid", () => {
-    const wrapper = setup({ profile: { user: { data: { email: "foo@bar" } } } })
+  it("match snapshot when user is not logged in", () => {
+    const wrapper = setup({ loggedIn: false })
       .wrapper;
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("match snapshot when profile is invalid", () => {
+  it("match snapshot when user is logged in", () => {
     const wrapper = setup().wrapper;
     expect(wrapper).toMatchSnapshot();
   });

@@ -1,10 +1,23 @@
 import { connect } from "react-redux";
 import Drawer from "./Drawer";
 
-const mapStateToProps = state => ({ profile: state.profile });
+const mapStateToProps = state => {
+  const { user } = state.profile;
+  const userData = user.data;
+  const email = (userData && userData.email) || "";
+  const accountName =
+    (userData && state.entities.accounts[userData.account].accountName) || "";
+  const loggedIn = !!(accountName && email);
 
-const DrawerContainer = connect(mapStateToProps)(Drawer);
+  return {
+    loggedIn,
+    email,
+    accountName
+  };
+};
 
 export { mapStateToProps };
 
-export default DrawerContainer;
+export default connect(mapStateToProps)(
+  Drawer
+);;

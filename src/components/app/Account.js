@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 
 import List from "@material-ui/core/List";
@@ -27,29 +27,25 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   },
   list: {
-    paddingTop: 0
+    paddingTop: 0,
+    paddingBottom: 0
   }
 }));
 
-const DrawerAccountMenuItem = props => {
+const Account = props => {
   const classes = useStyles();
-  const { history, email, loggedIn, accountName } = props;
+  const { email, loggedIn, accountName } = props;
   const initials = avatarInitials({ email });
-
-  const onClick = () => {
-    history.push("/account");
-  };
 
   if (loggedIn) {
     return (
       <React.Fragment>
-        
+
         <List className={classes.list}>
           <Divider />
           <ListItem
+            component={RouterLink} to="/account"
             button
-            selected={history.location.pathname === "/account"}
-            onClick={onClick}
           >
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
@@ -76,9 +72,8 @@ const DrawerAccountMenuItem = props => {
       <List className={classes.list}>
         <Divider />
         <ListItem
+          component={RouterLink} to="/account"
           button
-          selected={history.location.pathname === "/account"}
-          onClick={onClick}
         >
           <ListItemIcon>
             <LockOutlined />
@@ -91,12 +86,10 @@ const DrawerAccountMenuItem = props => {
   );
 };
 
-DrawerAccountMenuItem.propTypes = {
+Account.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   accountName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired
 };
 
-export { DrawerAccountMenuItem };
-
-export default withRouter(DrawerAccountMenuItem);
+export default Account;

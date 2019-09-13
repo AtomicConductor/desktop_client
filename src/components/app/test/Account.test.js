@@ -1,16 +1,15 @@
 import React from "react";
 
 import { shallow } from "enzyme";
-import { DrawerAccountMenuItem } from "../DrawerAccountMenuItem";
+import Account from "../Account";
 
 const setup = overrides => {
   const props = {
-    history: { location: { pathname: "/some/path" } },
     email: "",
     loggedIn: false,
     accountName: ""
   };
-  const wrapper = shallow(<DrawerAccountMenuItem {...props} />);
+  const wrapper = shallow(<Account {...{ ...props, ...overrides }} />);
   return {
     props,
     wrapper

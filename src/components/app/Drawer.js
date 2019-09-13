@@ -1,20 +1,21 @@
 import React from "react";
-
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
-import MuiDrawer from "@material-ui/core/Drawer";
-
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import CloudDownload from "@material-ui/icons/CloudDownload";
-import NotesIcon from "@material-ui/icons/Notes";
-import HelpIcon from "@material-ui/icons/Help";
-import DrawerMenuItem from "./DrawerMenuItem";
-import DrawerAccountMenuItemContainer from "./DrawerAccountMenuItemContainer";
+import {
+  List,
+  Divider,
+  Typography,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Drawer as MuiDrawer
+} from "@material-ui/core";
+import {
+  CloudDownload,
+  Notes,
+  Help
+} from "@material-ui/icons";
+import Account from "./Account";
 
 import "typeface-raleway";
 import { drawerWidth } from "../../_helpers/constants";
@@ -44,7 +45,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Drawer = () => {
+const Drawer = props => {
+  const { email, loggedIn, accountName } = props;
   const classes = useStyles();
 
   return (
@@ -58,27 +60,29 @@ const Drawer = () => {
     >
 
       <List className={classes.list}>
-        <DrawerAccountMenuItemContainer />
-        <Divider />
-        <DrawerMenuItem
-          url="/downloader"
-          text_props={{
-            primary: "Downloader"
-          }}
-          icon={<CloudDownload />}
-        />
+        <Account email={email} accountName={accountName} loggedIn={loggedIn} />
 
-        <DrawerMenuItem
-          url="/yaml"
-          text_props={{
-            primary: "Custom Submission"
-          }}
-          icon={<NotesIcon />}
-        />
+        <Divider />
+
+        <ListItem component={RouterLink} to="/downloader" button>
+          <ListItemIcon>
+            <CloudDownload />
+          </ListItemIcon>
+          <ListItemText primary="Downloader">
+          </ListItemText>
+        </ListItem>
+
+        <ListItem component={RouterLink} to="/yaml" button>
+          <ListItemIcon>
+            <Notes />
+          </ListItemIcon>
+          <ListItemText primary="Custom Submission">
+          </ListItemText>
+        </ListItem>
 
         <ListItem button>
           <ListItemIcon>
-            <HelpIcon />
+            <Help />
           </ListItemIcon>
           <ListItemText primary="Help" />
         </ListItem>
