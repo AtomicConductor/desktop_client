@@ -20,7 +20,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <CssBaseline />,
-        <UNDEFINED />,
+        <Drawer />,
         <ForwardRef(StyledComponent)
           className="makeStyles-box-1"
         />,
@@ -339,14 +339,7 @@ ShallowWrapper {
         "props": Object {},
         "ref": null,
         "rendered": null,
-        "type": Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(Drawer)",
-          "type": [Function],
-          Symbol(Symbol.hasInstance): [Function],
-        },
+        "type": [Function],
       },
       Object {
         "instance": null,
@@ -483,7 +476,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <CssBaseline />,
-          <UNDEFINED />,
+          <Drawer />,
           <ForwardRef(StyledComponent)
             className="makeStyles-box-1"
           />,
@@ -802,14 +795,7 @@ ShallowWrapper {
           "props": Object {},
           "ref": null,
           "rendered": null,
-          "type": Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(Drawer)",
-            "type": [Function],
-            Symbol(Symbol.hasInstance): [Function],
-          },
+          "type": [Function],
         },
         Object {
           "instance": null,

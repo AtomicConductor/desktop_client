@@ -37,22 +37,22 @@ ShallowWrapper {
             component={[Function]}
             path="/yaml"
           />
+          <Redirect
+            push={true}
+            to="/downloader"
+          />
           <Route
             component={
               Object {
                 "$$typeof": Symbol(react.memo),
                 "WrappedComponent": [Function],
                 "compare": null,
-                "displayName": "Connect(Account)",
+                "displayName": "Connect(SignIn)",
                 "type": [Function],
                 Symbol(Symbol.hasInstance): [Function],
               }
             }
-            path="/account"
-          />
-          <Redirect
-            push={true}
-            to="/downloader"
+            path="/sign-in"
           />
         </Switch>
       </Layout>,
@@ -81,22 +81,22 @@ ShallowWrapper {
             component={[Function]}
             path="/yaml"
           />
+          <Redirect
+            push={true}
+            to="/downloader"
+          />
           <Route
             component={
               Object {
                 "$$typeof": Symbol(react.memo),
                 "WrappedComponent": [Function],
                 "compare": null,
-                "displayName": "Connect(Account)",
+                "displayName": "Connect(SignIn)",
                 "type": [Function],
                 Symbol(Symbol.hasInstance): [Function],
               }
             }
-            path="/account"
-          />
-          <Redirect
-            push={true}
-            to="/downloader"
+            path="/sign-in"
           />
         </Switch>,
       },
@@ -124,22 +124,22 @@ ShallowWrapper {
               component={[Function]}
               path="/yaml"
             />,
+            <Redirect
+              push={true}
+              to="/downloader"
+            />,
             <Route
               component={
                 Object {
                   "$$typeof": Symbol(react.memo),
                   "WrappedComponent": [Function],
                   "compare": null,
-                  "displayName": "Connect(Account)",
+                  "displayName": "Connect(SignIn)",
                   "type": [Function],
                   Symbol(Symbol.hasInstance): [Function],
                 }
               }
-              path="/account"
-            />,
-            <Redirect
-              push={true}
-              to="/downloader"
+              path="/sign-in"
             />,
           ],
         },
@@ -179,17 +179,10 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
-              "component": Object {
-                "$$typeof": Symbol(react.memo),
-                "WrappedComponent": [Function],
-                "compare": null,
-                "displayName": "Connect(Account)",
-                "type": [Function],
-                Symbol(Symbol.hasInstance): [Function],
-              },
-              "path": "/account",
+              "push": true,
+              "to": "/downloader",
             },
             "ref": null,
             "rendered": null,
@@ -198,10 +191,17 @@ ShallowWrapper {
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "function",
+            "nodeType": "class",
             "props": Object {
-              "push": true,
-              "to": "/downloader",
+              "component": Object {
+                "$$typeof": Symbol(react.memo),
+                "WrappedComponent": [Function],
+                "compare": null,
+                "displayName": "Connect(SignIn)",
+                "type": [Function],
+                Symbol(Symbol.hasInstance): [Function],
+              },
+              "path": "/sign-in",
             },
             "ref": null,
             "rendered": null,
@@ -239,22 +239,22 @@ ShallowWrapper {
               component={[Function]}
               path="/yaml"
             />
+            <Redirect
+              push={true}
+              to="/downloader"
+            />
             <Route
               component={
                 Object {
                   "$$typeof": Symbol(react.memo),
                   "WrappedComponent": [Function],
                   "compare": null,
-                  "displayName": "Connect(Account)",
+                  "displayName": "Connect(SignIn)",
                   "type": [Function],
                   Symbol(Symbol.hasInstance): [Function],
                 }
               }
-              path="/account"
-            />
-            <Redirect
-              push={true}
-              to="/downloader"
+              path="/sign-in"
             />
           </Switch>
         </Layout>,
@@ -283,22 +283,22 @@ ShallowWrapper {
               component={[Function]}
               path="/yaml"
             />
+            <Redirect
+              push={true}
+              to="/downloader"
+            />
             <Route
               component={
                 Object {
                   "$$typeof": Symbol(react.memo),
                   "WrappedComponent": [Function],
                   "compare": null,
-                  "displayName": "Connect(Account)",
+                  "displayName": "Connect(SignIn)",
                   "type": [Function],
                   Symbol(Symbol.hasInstance): [Function],
                 }
               }
-              path="/account"
-            />
-            <Redirect
-              push={true}
-              to="/downloader"
+              path="/sign-in"
             />
           </Switch>,
         },
@@ -326,22 +326,22 @@ ShallowWrapper {
                 component={[Function]}
                 path="/yaml"
               />,
+              <Redirect
+                push={true}
+                to="/downloader"
+              />,
               <Route
                 component={
                   Object {
                     "$$typeof": Symbol(react.memo),
                     "WrappedComponent": [Function],
                     "compare": null,
-                    "displayName": "Connect(Account)",
+                    "displayName": "Connect(SignIn)",
                     "type": [Function],
                     Symbol(Symbol.hasInstance): [Function],
                   }
                 }
-                path="/account"
-              />,
-              <Redirect
-                push={true}
-                to="/downloader"
+                path="/sign-in"
               />,
             ],
           },
@@ -381,17 +381,10 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
-                "component": Object {
-                  "$$typeof": Symbol(react.memo),
-                  "WrappedComponent": [Function],
-                  "compare": null,
-                  "displayName": "Connect(Account)",
-                  "type": [Function],
-                  Symbol(Symbol.hasInstance): [Function],
-                },
-                "path": "/account",
+                "push": true,
+                "to": "/downloader",
               },
               "ref": null,
               "rendered": null,
@@ -400,10 +393,17 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "function",
+              "nodeType": "class",
               "props": Object {
-                "push": true,
-                "to": "/downloader",
+                "component": Object {
+                  "$$typeof": Symbol(react.memo),
+                  "WrappedComponent": [Function],
+                  "compare": null,
+                  "displayName": "Connect(SignIn)",
+                  "type": [Function],
+                  Symbol(Symbol.hasInstance): [Function],
+                },
+                "path": "/sign-in",
               },
               "ref": null,
               "rendered": null,
