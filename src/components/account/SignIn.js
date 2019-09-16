@@ -9,11 +9,14 @@ import {
   Box,
   Divider,
   Button,
-  Link
+  Link,
+  AppBar,
+  Toolbar
 } from "@material-ui/core";
 import GoogleButton from 'react-google-button';
 import googleSignIn from './googleSignIn';
 import config from '../../config';
+import {drawerWidth} from '../../_helpers/constants';
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
@@ -52,7 +55,11 @@ const useStyles = makeStyles(theme => ({
   },
   onboarding: {
     marginTop: theme.spacing(2)
-  }
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth
+  },
 }));
 
 const SignIn = props => {
@@ -74,6 +81,14 @@ const SignIn = props => {
 
   return (
     <React.Fragment>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar variant="dense">
+          <Typography variant="h6" className={classes.title}>
+            Sign in
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
       <main className={classes.content}>
         <Card className={classes.card}>
           <FormControl className={classes.formControl}>

@@ -2,17 +2,18 @@ import { connect } from "react-redux";
 import Account from "./Account";
 import { chooseAccount, deleteSession } from "../../_actions/profile";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   const { profile, entities } = state;
-  const accounts = Object.values(entities.accounts).map(account => ({
-    label: account.accountName,
-    value: account.account
-  }));
   const loggedIn = Boolean(Object.entries(profile.user).length);
-  return { profile, accounts, loggedIn };
+  const accountName = loggedIn && state.entities.accounts[profile.user.data.account].accountName;
+  const accounts = Object
+    .values(entities.accounts)
+    .filter(({ accountName: name }) => name !== accountName)
+    .map(({ account: accountId, accountName }) => ({ accountId, accountName }));
+  return { profile, accounts, loggedIn, accountName };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = dispatch => {
   return {
     setAccount: accountId => {
       dispatch(chooseAccount(accountId));
