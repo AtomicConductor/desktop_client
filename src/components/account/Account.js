@@ -28,7 +28,8 @@ const useStyles = makeStyles(theme => ({
     height: 30
   },
   email: {
-    color: theme.palette.secondary.dark
+    marginLeft: "16px",
+    color: theme.palette.text.secondary
   },
   list: {
     paddingTop: 0,
@@ -100,6 +101,13 @@ const Account = props => {
             <ListItemText>Sign Out</ListItemText>
           </MenuItem>
         </Menu>
+        <Typography
+          display="block"
+          variant="caption"
+          className={classes.email}
+        >
+          {email}
+        </Typography>
       </List>
     );
   }

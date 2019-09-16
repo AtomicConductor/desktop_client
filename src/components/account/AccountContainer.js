@@ -4,11 +4,12 @@ import { chooseAccount, deleteSession } from "../../_actions/profile";
 
 const mapStateToProps = state => {
   const { profile, entities } = state;
-  const accounts = Object
-    .values(entities.accounts)
-    .map(({ account: accountId, accountName }) => ({accountId, accountName}));
   const loggedIn = Boolean(Object.entries(profile.user).length);
   const accountName = loggedIn && state.entities.accounts[profile.user.data.account].accountName;
+  const accounts = Object
+    .values(entities.accounts)
+    .filter(({ accountName: name }) => name !== accountName)
+    .map(({ account: accountId, accountName }) => ({ accountId, accountName }));
   return { profile, accounts, loggedIn, accountName };
 };
 
