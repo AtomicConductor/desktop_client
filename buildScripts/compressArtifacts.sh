@@ -9,5 +9,5 @@ fi
 
 for artifact in */
 do 
-    zip -r conductor-solo-$version-${releaseSuffix}${artifact%/}.zip $artifact
+    (cd $artifact && zip -ry ../conductor-solo-$version-${releaseSuffix}${artifact%/}.zip .)
 done

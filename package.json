@@ -34,7 +34,7 @@
     "start": "nw-react-scripts start",
     "prebuild": "json -I -f package.json -e 'this[\"chromium-args\"]=\"\"'",
     "build": "nw-react-scripts build",
-    "postbuild": "mv build/conductor_solo/osx64 build/conductor_solo/macos64",
+    "postbuild": "./buildScripts/postBuild.sh",
     "test": "nw-react-scripts test",
     "eject": "nw-react-scripts eject"
   },
