@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles, fade } from "@material-ui/core/styles";

@@ -37,6 +37,7 @@ const jobs = createReducer(initialState, {
   [receiveJobs]: (state, action) => {
     const data = action.payload.data;
     const newJobs = Array.isArray(data) ? data : data ? [data] : [];
+    // eslint-disable-next-line no-unused-vars
     for (const k in state) {
       if (state.hasOwnProperty(k)) {
         delete state[k];

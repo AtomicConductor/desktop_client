@@ -14,6 +14,7 @@ const accounts = createReducer(initialState, {
   },
 
   [signOut]: (state, action) => {
+    // eslint-disable-next-line no-unused-vars
     for (const k in state) {
       if (state.hasOwnProperty(k)) {
         delete state[k];

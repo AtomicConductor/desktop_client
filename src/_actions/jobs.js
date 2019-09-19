@@ -1,7 +1,6 @@
 import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
-import open from "open";
 import moment from "moment";
 import { checkResponse } from "../_helpers/network";
 import { TIMESPANS } from "../_helpers/constants";
@@ -184,19 +183,4 @@ async function getRecentJobs(state) {
 
   const data = await response.json();
   return data;
-}
-
-/**
- * Opens the outputDoirectory using the OS, for exqample the finder on Mac.
- *
- * @export
- * @param {string} jobLabel
- * @returns
- */
-export function viewOputputDirectoryInFinder(jobLabel) {
-  return async function(dispatch, getState) {
-    const state = getState();
-    const { outputDirectory } = state.entities.jobs[jobLabel];
-    open(outputDirectory);
-  };
 }

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 

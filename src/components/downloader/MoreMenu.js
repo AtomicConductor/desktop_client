@@ -8,10 +8,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 const MoreMenu = props => {
   const {
-    viewInFinder,
     refreshAll,
     resetOutputDirectory,
-    directoryResettable
+    directoryResettable,
+    outputDirectory
   } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,8 +35,8 @@ const MoreMenu = props => {
   };
 
   const handleViewInFinder = () => {
+    nw.Shell.showItemInFolder(outputDirectory);
     setAnchorEl(null);
-    viewInFinder();
   };
 
   return (

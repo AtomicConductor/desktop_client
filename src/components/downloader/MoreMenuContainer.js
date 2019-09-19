@@ -2,9 +2,7 @@ import { connect } from "react-redux";
 import MoreMenu from "./MoreMenu";
 
 import {
-  // setOutputPathValue,
-  resetOutputPathValue,
-  viewOputputDirectoryInFinder
+  resetOutputPathValue
 } from "../../_actions/jobs";
 
 import {
@@ -20,8 +18,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     directoryResettable: Boolean(
       outputDirectory && outputDirectory !== originalOutputDirectory
-    )
-    // value: outputDirectory || ""
+    ),
+    outputDirectory
   };
 };
 
@@ -34,9 +32,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     refreshAll: () => {
       dispatch(updateDownloadFiles(jobLabel));
-    },
-    viewInFinder: () => {
-      dispatch(viewOputputDirectoryInFinder(jobLabel));
     }
   };
 };

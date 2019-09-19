@@ -13,8 +13,6 @@
     "md5-file": "^4.0.0",
     "moment": "^2.24.0",
     "node-downloader-helper": "^1.0.10",
-    "nw-react-scripts": "2.0.0",
-    "open": "^6.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-google-button": "^0.5.3",
@@ -66,13 +64,14 @@
     "height": 720,
     "resizable": true
   },
-  "chromium-args": "--disable-web-security --enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.6_0'",
+  "chromium-args": "",
   "devDependencies": {
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "jest-environment-enzyme": "^7.0.2",
-    "jest-enzyme": "^7.0.2",
+    "jest-enzyme": "^7.1.1",
     "json": "^9.0.6",
+    "nw-react-scripts": "^2.1.1",
     "prettier": "^1.17.1"
   }
 }
