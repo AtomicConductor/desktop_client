@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { avatarInitials } from "../../_helpers/presentation";
+import LinesEllipsis from "react-lines-ellipsis";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -72,7 +73,11 @@ const Account = props => {
             </Avatar>
           </ListItemAvatar>
 
-          <ListItemText primary={accountName} />
+          <LinesEllipsis
+            component={ListItemText}
+            text={accountName}
+            basedOn="letters" />
+
           <ListItemIcon style={{ minWidth: 0 }}>
             <ExpandMore color="secondary" />
           </ListItemIcon>
@@ -101,13 +106,15 @@ const Account = props => {
             <ListItemText>Sign Out</ListItemText>
           </MenuItem>
         </Menu>
-        <Typography
+
+        <LinesEllipsis
+          component={Typography}
           display="block"
           variant="caption"
           className={classes.email}
-        >
-          {email}
-        </Typography>
+          text={email}
+          basedOn="letters" />
+
       </List>
     );
   }
