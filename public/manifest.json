@@ -1,6 +1,6 @@
 {
-  "short_name": "Conductor",
-  "name": "ConductorClient",
+  "short_name": "Conductor Desktop",
+  "name": "Conductor Desktop",
   "nodejs": true,
   "icons": [
     {
