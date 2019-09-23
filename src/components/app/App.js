@@ -1,7 +1,6 @@
 import React from "react";
 import "typeface-roboto";
 import DownloaderContainer from "../downloader/DownloaderContainer";
-import Yaml from "../yaml/Yaml";
 import SignInContainer from "../account/SignInContainer";
 import Layout from "./Layout";
 
@@ -17,9 +16,8 @@ const App = () => (
     <Layout>
       <Switch>
         <Route path="/downloader" component={DownloaderContainer} />
-        <Route path="/yaml" component={Yaml} />
-        <Redirect push to="/downloader" />
         <Route path="/sign-in" component={SignInContainer} />
+        <Redirect push to="/downloader" />
       </Switch>
     </Layout>
   </Router>

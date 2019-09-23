@@ -1,20 +1,10 @@
 import React from "react";
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import {
   List,
-  Divider,
   Typography,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Drawer as MuiDrawer
 } from "@material-ui/core";
-import {
-  CloudDownload,
-  Notes,
-  Help
-} from "@material-ui/icons";
 import Account from "../account/AccountContainer";
 
 import "typeface-raleway";
@@ -60,33 +50,6 @@ const Drawer = props => {
 
       <List className={classes.list}>
         <Account  />
-
-        <Divider />
-
-        <ListItem component={RouterLink} to="/downloader" button>
-          <ListItemIcon>
-            <CloudDownload />
-          </ListItemIcon>
-          <ListItemText primary="Downloader">
-          </ListItemText>
-        </ListItem>
-
-        <ListItem component={RouterLink} to="/yaml" button>
-          <ListItemIcon>
-            <Notes />
-          </ListItemIcon>
-          <ListItemText primary="Custom Submission">
-          </ListItemText>
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <Help />
-          </ListItemIcon>
-          <ListItemText primary="Help" />
-        </ListItem>
-
-        <Divider />
       </List>
       <div className={classes.spacer} />
       <Typography className={classes.logo}>CONDUCTOR</Typography>
