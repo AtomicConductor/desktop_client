@@ -24,6 +24,22 @@
 
 
     <title>Conductor Desktop</title>
+
+    <script>
+      if (process.platform === 'darwin') {
+        const menu = new nw.Menu({ type: 'menubar' });
+        menu.createMacBuiltin(nw.App.manifest.name, {
+          hideEdit: true,
+          hideWindow: true
+        });
+
+        // remove 'About' menu item
+        menu.items[0].submenu.removeAt(0);
+        
+        nw.Window.get().menu = menu;
+      }
+    </script>Ï
+      
   </head>
   <body>
     <noscript>
@@ -41,5 +57,6 @@
 
     <!-- <p>'Right click' to show context menu.</p> -->
  
+    
   </body>
 </html>

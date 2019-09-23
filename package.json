@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "nw-react-scripts start",
-    "prebuild": "json -I -f package.json -e 'this[\"chromium-args\"]=\"\"'",
+    "prebuild": "./buildScripts/preBuild.sh",
     "build": "nw-react-scripts build",
     "postbuild": "./buildScripts/postBuild.sh",
     "test": "nw-react-scripts test",
