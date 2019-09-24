@@ -23,7 +23,7 @@
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> -->
 
 
-    <title>Conductor Desktop</title>
+    <title>Conductor</title>
 
     <script>
       if (process.platform === 'darwin') {
@@ -35,6 +35,11 @@
 
         // remove 'About' menu item
         menu.items[0].submenu.removeAt(0);
+        // remove 'Seperator'
+        menu.items[0].submenu.removeAt(0);
+
+        menu.items[0].submenu.items[0].label = 'Hide Conductor';
+        menu.items[0].submenu.items[4].label = 'Quit Conductor';
         
         nw.Window.get().menu = menu;
       }
