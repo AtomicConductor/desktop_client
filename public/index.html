@@ -29,7 +29,6 @@
       if (process.platform === 'darwin') {
         const menu = new nw.Menu({ type: 'menubar' });
         menu.createMacBuiltin(nw.App.manifest.name, {
-          hideEdit: true,
           hideWindow: true
         });
 
