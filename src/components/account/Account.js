@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0
   },
   accountListItem: {
-    paddingRight: theme.spacing(.5)
+    paddingRight: theme.spacing(.5),
+    paddingBottom: 0
   },
   expand: {
     color: theme.palette.secondary.dark
