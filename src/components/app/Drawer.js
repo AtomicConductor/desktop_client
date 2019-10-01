@@ -1,14 +1,24 @@
 import React from "react";
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import {
   List,
   Typography,
+  ListItemText,
+  ListItem,
+  ListItemIcon,
   Drawer as MuiDrawer
 } from "@material-ui/core";
+
+import { 
+  CloudDownloadRounded,
+  HomeRounded
+} from "@material-ui/icons"
+
 import Account from "../account/AccountContainer";
 
 import "typeface-raleway";
-import { drawerWidth } from "../../_helpers/constants";
+import { drawerWidth, paths } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -37,7 +47,9 @@ const useStyles = makeStyles(theme => ({
 
 const Drawer = props => {
   const classes = useStyles();
-
+  const { home, downloader } = paths;
+  const { location: { pathname } } = props;
+  
   return (
     <MuiDrawer
       className={classes.drawer}
@@ -49,7 +61,22 @@ const Drawer = props => {
     >
 
       <List className={classes.list}>
-        <Account  />
+        <Account />
+
+        <ListItem component={RouterLink} to={home} button selected={pathname === home}>
+          <ListItemIcon>
+            <HomeRounded />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+
+        <ListItem component={RouterLink} to={downloader} button selected={pathname === downloader}>
+          <ListItemIcon>
+            <CloudDownloadRounded />
+          </ListItemIcon>
+          <ListItemText primary="Downloader" />
+        </ListItem>
+
       </List>
       <div className={classes.spacer} />
       <Typography className={classes.logo}>CONDUCTOR</Typography>
@@ -58,4 +85,4 @@ const Drawer = props => {
   );
 };
 
-export default Drawer;
+export default withRouter(Drawer);

@@ -1,8 +1,8 @@
 import React from "react";
 import {
   AccountCircle,
-  ExitToApp,
-  ExpandMore
+  ExitToAppRounded,
+  ExpandMoreRounded
 } from "@material-ui/icons";
 import {
   List,
@@ -80,7 +80,7 @@ const Account = props => {
           basedOn="letters" />
 
         <IconButton onClick={e => setAnchorEl(e.target)}>
-          <ExpandMore color="secondary" />
+          <ExpandMoreRounded color="secondary" />
         </IconButton>
       </ListItem>
       <Menu
@@ -103,7 +103,7 @@ const Account = props => {
         <Divider />
         <MenuItem onClick={() => handleSignOut()}>
           <ListItemIcon>
-            <ExitToApp />
+            <ExitToAppRounded />
           </ListItemIcon>
           <ListItemText>Sign Out</ListItemText>
         </MenuItem>
@@ -117,6 +117,7 @@ const Account = props => {
         text={email}
         basedOn="letters" />
 
+      <Divider />
     </List>
   );
 

@@ -10,13 +10,13 @@ import {
   Divider,
   Button,
   Link,
-  AppBar,
-  Toolbar
+  Avatar
 } from "@material-ui/core";
 import GoogleButton from 'react-google-button';
 import googleSignIn from './googleSignIn';
 import config from '../../config';
-import {drawerWidth} from '../../_helpers/constants';
+import { drawerWidth } from '../../_helpers/constants';
+import { LockRounded } from "@material-ui/icons";
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
@@ -27,9 +27,10 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     width: "500px",
-    padding: theme.spacing(10),
+    padding: theme.spacing(6, 10, 10, 10),
     margin: "auto",
-    marginTop: "100px"
+    marginTop: "30px",
+    textAlign: "center"
   },
   formControl: {
     margin: theme.spacing(1),
@@ -54,12 +55,20 @@ const useStyles = makeStyles(theme => ({
     alignSelf: "center"
   },
   onboarding: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    textAlign: "left"
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth
   },
+  avatar: {
+    margin: "auto",
+    color: theme.palette.common.white
+  },
+  signInText: {
+    paddingBottom: theme.spacing(4)
+  }
 }));
 
 const SignIn = props => {
@@ -81,16 +90,14 @@ const SignIn = props => {
 
   return (
     <React.Fragment>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar variant="dense">
-          <Typography variant="h6" className={classes.title}>
-            Sign in
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
       <main className={classes.content}>
         <Card className={classes.card}>
+          <Avatar className={classes.avatar}>
+            <LockRounded />
+          </Avatar>
+          <Typography component="h1" variant="h5" className={classes.signInText}>
+            Sign in
+          </Typography>
           <FormControl className={classes.formControl}>
             <TextField
               fullWidth

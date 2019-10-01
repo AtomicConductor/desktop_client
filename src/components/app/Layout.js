@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
   box: {
     display: "flex",
     flex: "1 0 auto",
-    // border: "1px solid #0f0",
     marginLeft: drawerWidth,
     position: "absolute",
     height: `calc(100% - ${statusLineHeight}px)`,
