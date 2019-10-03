@@ -19,6 +19,7 @@ import {
 } from '@material-ui/icons';
 
 import Feedback from './Feedback';
+import config from '../../../config';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -53,6 +54,8 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const [feedbackFormOpen, setFeedbackFormOpen] = useState(false);
+  const browse = url => () => nw.Shell.openExternal(url);
+  const { documentationUrl, supportUrl} = config;
 
   return (
     <Box className={classes.container}>
@@ -79,7 +82,10 @@ export default () => {
       <Grid className={classes.ctaItemsGrid} container spacing={8}>
         <Grid item sm={12} lg={6}>
           <Card className={classes.card}>
-            <CardActionArea className={classes.ctaActionArea}>
+            <CardActionArea
+              className={classes.ctaActionArea}
+              onClick={browse(documentationUrl)}
+            >
               <CardHeader
                 className={classes.header}
                 title="Documentation"
@@ -101,7 +107,10 @@ export default () => {
 
         <Grid item sm={12} lg={6}>
           <Card className={classes.card}>
-            <CardActionArea className={classes.ctaActionArea}>
+            <CardActionArea
+              className={classes.ctaActionArea}
+              onClick={browse(supportUrl)}
+            >
               <CardHeader
                 className={classes.header}
                 title="Support"
