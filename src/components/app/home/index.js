@@ -1,53 +1,28 @@
-import React, { useState } from 'react';
-import {
-  Typography,
-  Box,
-  Link,
-  Grid,
-  Card,
-  CardContent,
-  CardActionArea,
-  CardHeader,
-  Avatar
-} from '@material-ui/core';
+import React, { useState } from "react";
+
+import { Typography, Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   LibraryBooksRounded,
   ContactSupportRounded,
-  FeedbackRounded,
-  CallToActionRounded
-} from '@material-ui/icons';
+  FeedbackRounded
+} from "@material-ui/icons";
+import config from "../../../config";
 
-import Feedback from './Feedback';
-import config from '../../../config';
+import Feedback from "./Feedback";
+import IndexCard from "./IndexCard";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(4, 10),
+    margin: theme.spacing(8, 12),
     flexGrow: 1
   },
-  card: {
-    boxShadow: theme.shadows[6],
+  headerText: {
+    fontWeight: "bold",
+    marginBottom: theme.spacing(4)
   },
-  cardHeader: {
-    color: theme.palette.secondary.main
-  },
-  ctaItemsGrid: {
-    margin: 'auto',
-    maxWidth: '800px'
-  },
-  avatar: {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.common.white
-  },
-  header: {
-    textTransform: "uppercase",
-    color: theme.palette.secondary.main
-  },
-  ctaActionArea: {
-    height: '190px',
-    flexDirection: 'column',
-    alignItems: 'baseline'
+  subheader: {
+    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -55,125 +30,68 @@ export default () => {
   const classes = useStyles();
   const [feedbackFormOpen, setFeedbackFormOpen] = useState(false);
   const browse = url => () => nw.Shell.openExternal(url);
-  const { documentationUrl, supportUrl} = config;
+  const { documentationUrl, supportUrl, dashboardUrl } = config;
 
   return (
     <Box className={classes.container}>
-      <Typography variant="h3">
-        Lorem ipsum
+      <Typography variant="h4" className={classes.headerText}>
+        Get Started!
       </Typography>
-      <br />
-      <Typography variant="body1">
-        Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+      <Typography
+        variant="h6"
+        className={classes.subheader}
+        color="textSecondary"
+      >
+        Conductor tools are installed and you are ready to go. Use the links
+        below to get specific info for your platform or to contact us for help.
       </Typography>
-      <br />
-      <Typography variant="body2">
-        Have additional questions? Check out the
-        <Link>
-          {' knowledgebase '}
-        </Link>
-        {' or submit a ticket to '}
-        <Link>
-          support
-        </Link>
-      </Typography>
-      <br />
 
-      <Grid className={classes.ctaItemsGrid} container spacing={8}>
-        <Grid item sm={12} lg={6}>
-          <Card className={classes.card}>
-            <CardActionArea
-              className={classes.ctaActionArea}
-              onClick={browse(documentationUrl)}
-            >
-              <CardHeader
-                className={classes.header}
-                title="Documentation"
-                titleTypographyProps={{ variant: 'h6' }}
-                avatar={
-                  <Avatar className={classes.avatar}>
-                    <LibraryBooksRounded className={classes.avatar} />
-                  </Avatar>
-                }
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+      <Grid container spacing={8}>
+        <IndexCard
+          onClick={browse(documentationUrl)}
+          title="Documentation"
+          body={
+            <React.Fragment>
+              Learn how to submit your renders from within <strong>Maya</strong>
+              , <strong>Nuke</strong> and <strong>Clarisse</strong>, or get help
+              crafting your submissions through simple Python APIs.
+            </React.Fragment>
+          }
+          icon={<LibraryBooksRounded className={classes.avatar} />}
+        />
 
-        <Grid item sm={12} lg={6}>
-          <Card className={classes.card}>
-            <CardActionArea
-              className={classes.ctaActionArea}
-              onClick={browse(supportUrl)}
-            >
-              <CardHeader
-                className={classes.header}
-                title="Support"
-                titleTypographyProps={{ variant: 'h6' }}
-                avatar={
-                  <Avatar className={classes.avatar}>
-                    <ContactSupportRounded className={classes.avatar} />
-                  </Avatar>
-                }
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+        <IndexCard
+          onClick={browse(supportUrl)}
+          title="Support center"
+          body="Have questions about the service or need some guidance? Submit
+          a support ticket and you'll get a response from one of our
+          developers within the hour."
+          icon={<ContactSupportRounded className={classes.avatar} />}
+        />
 
-        <Grid item sm={12} lg={6}>
-          <Card className={classes.card}>
-            <CardActionArea className={classes.ctaActionArea}>
-              <CardHeader
-                className={classes.header}
-                title="Lorem Ipsum"
-                titleTypographyProps={{ variant: 'h6' }}
-                avatar={
-                  <Avatar className={classes.avatar}>
-                    <CallToActionRounded className={classes.avatar} />
-                  </Avatar>
-                }
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+        <IndexCard
+          onClick={browse(dashboardUrl)}
+          title="Web Dashboard"
+          body="Head over to our web application at conductortech.com to check
+          the status of your running jobs and more."
+          icon={<ContactSupportRounded className={classes.avatar} />}
+        />
 
-        <Grid item sm={12} lg={6}>
-          <Card className={classes.card}>
-            <CardActionArea className={classes.ctaActionArea} onClick={() => setFeedbackFormOpen(true)}>
-              <CardHeader
-                className={classes.header}
-                title="Feedback"
-                titleTypographyProps={{ variant: 'h6' }}
-                avatar={
-                  <Avatar className={classes.avatar}>
-                    <FeedbackRounded className={classes.avatar} />
-                  </Avatar>
-                }
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Dolor sit amet, consectetur adipis
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Feedback feebackFormOpen={feedbackFormOpen} onCloseFeedbackForm={() => setFeedbackFormOpen(false)} />
+        <IndexCard
+          onClick={() => {
+            setFeedbackFormOpen(true);
+          }}
+          title="Beta Feedback"
+          body="Thanks for trying out the Conductor desktop agent. If you find an
+          issue or have a suggestion, please click here to let us know."
+          icon={<FeedbackRounded className={classes.avatar} />}
+        />
+
+        <Feedback
+          feebackFormOpen={feedbackFormOpen}
+          onCloseFeedbackForm={() => setFeedbackFormOpen(false)}
+        />
       </Grid>
     </Box>
   );
