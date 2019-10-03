@@ -7,7 +7,8 @@ export default {
     apiServer: "https://api.conductortech.com",
     onboarding: "https://id.conductortech.com",
     googleClientId: "367447922845-sofnl08cemfm9rf27idhsuo7rsofqftu.apps.googleusercontent.com",
-    googleClientSecret: "0jRwPcGHFBRJ2-gFQj4_9Sd0"
+    googleClientSecret: "0jRwPcGHFBRJ2-gFQj4_9Sd0",
+    feedbackHookUrl: "https://hooks.zapier.com/hooks/catch/5792407/o2s3554/" 
   },
   development:
   {
@@ -17,10 +18,12 @@ export default {
     apiServer: "https://api.dev-conductortech.com",
     onboarding: "https://id.dev-conductortech.com",
     googleClientId: "239744134952-fiikjq85kj2t4eibgvvkocmbe07bopcv.apps.googleusercontent.com",
-    googleClientSecret: "z4koSWnIYvSmTKICwGlBB2dT"
+    googleClientSecret: "z4koSWnIYvSmTKICwGlBB2dT",
+    feedbackHookUrl: "https://hooks.zapier.com/hooks/catch/5792407/o2s3554/" 
   },
   test: {
     googleClientId: "",
-    googleClientSecret: ""
+    googleClientSecret: "",
+    feedbackHookUrl: "https://hooks.zapier.com/" 
   }
 }[process.env.NODE_ENV];

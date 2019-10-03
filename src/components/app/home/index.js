@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles();
-  const [feedbackFormOpen, setFeedbackFormOpen] = useState();
+  const [feedbackFormOpen, setFeedbackFormOpen] = useState(false);
 
   return (
     <Box className={classes.container}>
@@ -164,7 +164,7 @@ export default () => {
             </CardActionArea>
           </Card>
         </Grid>
-        <Feedback feebackFormOpen={feedbackFormOpen} oncCloseFeedbackForm={() => setFeedbackFormOpen(false)} />
+        <Feedback feebackFormOpen={feedbackFormOpen} onCloseFeedbackForm={() => setFeedbackFormOpen(false)} />
       </Grid>
     </Box>
   );

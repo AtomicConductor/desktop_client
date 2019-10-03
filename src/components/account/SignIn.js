@@ -103,14 +103,14 @@ const SignIn = props => {
               fullWidth
               id="email-input"
               label="Email"
-              variant="filled"
+              variant="outlined"
               value={values.email}
               onChange={handleChange("email")}
             />
           </FormControl>
           <FormControl className={classes.formControl}>
             <TextField
-              variant="filled"
+              variant="outlined"
               fullWidth
               id="password-input"
               label="Password"
