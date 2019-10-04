@@ -7,6 +7,7 @@ import { createRequestOptions } from "../_helpers/network";
 import { setNotification } from "./notification";
 import { CREDENTIALS_FILENAME } from "../_helpers/constants";
 import config from "../config";
+import * as Sentry from '@sentry/browser';
 
 export const requestProfile = createAction("profile/requestProfile");
 export const receiveCredentials = createAction("profile/receiveCredentials");
@@ -68,6 +69,8 @@ export function signIn(params) {
 
       await dispatch(chooseAccount(accountId));
     } catch (error) {
+      Sentry.captureException(error);
+
       dispatch(
         setNotification({
           type: "error",
@@ -98,6 +101,8 @@ export function deleteSession() {
         JSON.stringify(result)
       );
     } catch (error) {
+      Sentry.captureException(error);
+
       dispatch(
         setNotification({
           type: "error",
@@ -147,6 +152,8 @@ export function chooseAccount(accountId) {
       /** Write to disk so we may auto sign in next time*/
       dispatch(writeAccounts());
     } catch (error) {
+      Sentry.captureException(error);
+
       dispatch(receiveUser({}));
       dispatch(
         setNotification({
@@ -178,6 +185,8 @@ export function writeAccounts() {
       };
       fs.writeFileSync(filePath, JSON.stringify(data, null, "\t"));
     } catch (error) {
+      Sentry.captureException(error);
+
       dispatch(
         setNotification({
           type: "error",
@@ -190,13 +199,10 @@ export function writeAccounts() {
 
 export function signInFromSaved() {
   return async (dispatch, getState) => {
-    // const state = getState();
     try {
       const filePath = path.join(nw.App.dataPath, CREDENTIALS_FILENAME);
       const creds = fs.readFileSync(filePath, { encoding: "utf8" });
       const { lastAccount, accounts } = JSON.parse(creds);
-
-      // console.log(lastAccount, accounts);
 
       if (!accounts.length) {
         throw Error("No accounts in credentials file");
@@ -206,12 +212,6 @@ export function signInFromSaved() {
       dispatch(chooseAccount(lastAccount));
     } catch (error) {
       console.log("Couldn't sign in from saved credentials.");
-      // dispatch(
-      //   setNotification({
-      //     type: "info",
-      //     snackbar: "Couldn't sign in from saved credentials."
-      //   })
-      // );
     }
   };
 }

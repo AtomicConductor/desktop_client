@@ -4,19 +4,13 @@ import App from "./components/app/App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
+import * as Sentry from '@sentry/browser';
+import config from './config';
 
-import { signInFromSaved } from "./_actions/profile";
-
-import {
-  startDownloadQueue
-  // startDownloadQueueTest
-} from "./_actions/files";
-
-// import { fetchProfile } from "./_actions/profile";
-
-store.dispatch(signInFromSaved());
-
-// store.dispatch(fetchProfile());
+Sentry.init({
+  dsn: config.sentryDns,
+  environment: process.env.NODE_ENV
+});
 
 ReactDOM.render(
   <Provider store={store}>
@@ -24,8 +18,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
-store.dispatch(startDownloadQueue());
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
