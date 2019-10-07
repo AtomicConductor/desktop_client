@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import PluginItemContainer from "./PluginItemContainer";
-import AppBarContainer from "./AppBarContainer";
+import AppBar from "./AppBar";
 import Box from "@material-ui/core/Box";
 import { appBarHeight } from "../../_helpers/constants";
 
@@ -26,7 +26,7 @@ const Plugins = props => {
 
   return (
     <React.Fragment>
-      <AppBarContainer />
+      <AppBar />
       <Box spacing={1} className={classes.container}>
         {plugins.map((plugin, i) => (
           <PluginItemContainer key={i} plugin={plugin} />

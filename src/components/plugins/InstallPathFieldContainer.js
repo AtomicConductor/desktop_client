@@ -22,9 +22,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  // console.log(ownProps);
-  // const { pluginName } = ownProps;
-  // console.log(pluginName);
   return {
     setValue: (pluginName, value) => {
       console.log(pluginName + "  " + value);
@@ -32,7 +29,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     resetValue: pluginName => {
       dispatch(resetInstallPathValue({ pluginName }));
-      // dispatch(updateExistingFilesInfo(pluginName));
     }
   };
 };

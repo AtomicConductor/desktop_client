@@ -11,13 +11,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//   return {};
-// };
-
 const PluginsContainer = connect(
   mapStateToProps
-  // mapDispatchToProps
 )(Plugins);
 
 export default PluginsContainer;

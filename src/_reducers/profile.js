@@ -54,5 +54,3 @@ const profile = createReducer(initialState, {
 });
 
 export default profile;
-
-///////////////////
