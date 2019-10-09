@@ -7,7 +7,7 @@ import {
   ContactSupportRounded,
   FeedbackRounded
 } from "@material-ui/icons";
-import config from "../../../config";
+import config from "../../config";
 
 import Feedback from "./Feedback";
 import IndexCard from "./IndexCard";

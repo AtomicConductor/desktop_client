@@ -1,7 +1,7 @@
 import React from "react";
 
 import { shallow } from "enzyme";
-import IndexCard from "../home/IndexCard";
+import IndexCard from "../IndexCard";
 
 const setup = overrides => {
   const props = {

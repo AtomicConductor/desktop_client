@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import "typeface-roboto";
 import DownloaderContainer from "../downloader/DownloaderContainer";
 import SignInContainer from "../account/SignInContainer";
-import Home from './home';
+import Home from '../home';
 import Layout from "./Layout";
 import { paths } from '../../_helpers/constants';
 import {

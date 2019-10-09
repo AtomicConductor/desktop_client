@@ -75,6 +75,5 @@ export default MoreMenu;
 MoreMenu.propTypes = {
   directoryResettable: PropTypes.bool.isRequired,
   resetOutputDirectory: PropTypes.func.isRequired,
-  refreshAll: PropTypes.func.isRequired,
-  viewInFinder: PropTypes.func.isRequired
+  refreshAll: PropTypes.func.isRequired
 };

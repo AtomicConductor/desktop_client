@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from 'react-redux';
-import submitFeedback from '../../../_actions/feedback';
+import submitFeedback from '../../_actions/feedback';
 
 const useStyles = makeStyles(theme => ({
   formTitle: {
