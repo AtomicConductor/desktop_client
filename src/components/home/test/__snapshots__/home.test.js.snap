@@ -51,7 +51,7 @@ exports[`snapshots match snapshot when status is success 1`] = `
     />
     <IndexCard
       body="Head over to our web application at conductortech.com to check the status of your running jobs and more."
-      icon={<Memo(ContactSupportRoundedIcon) />}
+      icon={<Memo(WebRoundedIcon) />}
       onClick={[Function]}
       title="Web Dashboard"
     />

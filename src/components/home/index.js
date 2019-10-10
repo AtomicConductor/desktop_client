@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   LibraryBooksRounded,
   ContactSupportRounded,
-  FeedbackRounded
+  FeedbackRounded,
+  WebRounded
 } from "@material-ui/icons";
 import config from "../../config";
 
@@ -75,7 +76,7 @@ export default () => {
           title="Web Dashboard"
           body="Head over to our web application at conductortech.com to check
           the status of your running jobs and more."
-          icon={<ContactSupportRounded className={classes.avatar} />}
+          icon={<WebRounded className={classes.avatar} />}
         />
 
         <IndexCard
