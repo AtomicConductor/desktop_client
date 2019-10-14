@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -23,10 +23,14 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   const { onCloseFeedbackForm, feebackFormOpen } = props;
-  const email = useSelector(state => emailSelector(state));
+  const email = useSelector(state => emailSelector(state)) || undefined;
   const [feedback, setFeedback] = useState({ email });
   const dispatch = useDispatch();
   const submitForm = useCallback(() => dispatch(submitFeedback(feedback)), [dispatch, feedback]);
+
+  useEffect(() => {
+    setFeedback({ email });
+  }, [email]);
 
   const handleFormClose = () => {
     setFeedback({});

@@ -2,6 +2,8 @@ import { setNotification } from './notification';
 import * as axios from 'axios';
 import { platform, release } from 'os';
 import config from '../config';
+import FeedbackError from '../errors/feedbackError';
+import { currentAccountSelector, signedInSelector } from '../selectors/account';
 
 export default (
   feedback,
@@ -10,9 +12,12 @@ export default (
 ) => async (dispatch, getState) => {
 
   try {
+    const state = getState();
+    const accountId = signedInSelector(state) ? currentAccountSelector(state).id : null;
+
     const payload = {
       ...feedback,
-      accountId: getState().profile.credentials.account,
+      accountId,
       os: {
         platform: os.platform(),
         release: os.release()
@@ -27,9 +32,6 @@ export default (
       snackbar: 'Thank you for your feedback!'
     }));
   } catch (e) {
-    dispatch(setNotification({
-      type: 'error',
-      snackbar: 'Cannot submit feedback'
-    }));
+    throw new FeedbackError(e);
   }
 }
