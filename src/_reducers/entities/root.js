@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 import jobs from "./jobs";
-import accounts from "./accounts";
 
-const entities = combineReducers({ jobs, accounts });
+const entities = combineReducers({ jobs });
 
 export default entities;

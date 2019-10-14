@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import AppBarContainer from "./AppBarContainer";
-import SignInContainer from "../account/SignInContainer";
+import SignIn from "../account/SignIn";
 import { makeStyles } from "@material-ui/core/styles";
 import JobItemContainer from "./JobItemContainer";
 import Box from "@material-ui/core/Box";
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 const Downloader = props => {
   const { jobs, loading, fetchJobs, loggedIn } = props;
   if (!loggedIn) {
-    return <SignInContainer />;
+    return <SignIn />;
   }
   const classes = useStyles();
 

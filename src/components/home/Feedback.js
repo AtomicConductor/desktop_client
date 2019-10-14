@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import submitFeedback from '../../_actions/feedback';
+import { emailSelector } from '../../selectors/account';
 
 const useStyles = makeStyles(theme => ({
   formTitle: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   const { onCloseFeedbackForm, feebackFormOpen } = props;
-  const email = useSelector(state => state.profile.credentials.email);
+  const email = useSelector(state => emailSelector(state));
   const [feedback, setFeedback] = useState({ email });
   const dispatch = useDispatch();
   const submitForm = useCallback(() => dispatch(submitFeedback(feedback)), [dispatch, feedback]);

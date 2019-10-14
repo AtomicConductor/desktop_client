@@ -5,8 +5,6 @@ import {
   setNotification
 } from "../_actions/notification";
 
-import { profileFailure } from "../_actions/profile";
-
 const initialState = {
   snackbar: "",
   detail: "",
@@ -28,13 +26,6 @@ const notification = createReducer(initialState, {
     state.detail = action.payload.detail || "";
     state.show = !!action.payload ? "snackbar" : "none";
     state.type = action.payload.type;
-  },
-
-  [profileFailure]: (state, action) => {
-    state.snackbar = action.payload;
-    state.detail = `Some more details ${action.payload}`;
-    state.show = !!action.payload ? "snackbar" : "none";
-    state.type = "error";
   }
 });
 

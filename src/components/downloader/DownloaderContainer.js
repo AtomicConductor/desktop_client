@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import Downloader from "./Downloader";
 import { fetchJobs } from "../../_actions/jobs";
 import moment from "moment";
+import { signedInSelector } from '../../selectors/account';
 
 const matches = (text, job) => {
   if (job.jobLabel.toLowerCase().includes(text)) {
@@ -30,7 +31,7 @@ const matches = (text, job) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const loggedIn = Boolean(Object.entries(state.profile.user).length);
+  const loggedIn = signedInSelector(state);
 
   const textFilter = state.downloader.jobQueryParams.textFilter
     .trim()

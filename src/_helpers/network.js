@@ -31,16 +31,15 @@ const checkResponse = response => {
   }
 };
 
-const createRequestOptions = state => {
+const createRequestOptions = token => {
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json"
   };
-  try {
-    headers["Authorization"] = `Bearer ${
-      state.profile.credentials.access_token
-    }`;
-  } catch (error) {}
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   return { headers };
 };

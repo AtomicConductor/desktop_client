@@ -15,7 +15,7 @@ import {
   HomeRounded
 } from "@material-ui/icons"
 
-import Account from "../account/AccountContainer";
+import Account from "../account/Account";
 
 import "typeface-raleway";
 import { drawerWidth, paths } from "../../_helpers/constants";

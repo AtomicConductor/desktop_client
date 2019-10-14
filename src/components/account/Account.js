@@ -18,8 +18,10 @@ import {
   IconButton
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { avatarInitials } from "../../_helpers/presentation";
 import LinesEllipsis from "react-lines-ellipsis";
+import { useSelector, useDispatch } from 'react-redux';
+import { accountsSelector } from '../../selectors/account';
+import { signOut, switchAccount } from '../../_actions/user';
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -44,39 +46,36 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Account = props => {
+const Account = () => {
   const classes = useStyles();
-  const { loggedIn, signOut, setAccount } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { isSignedIn, selectedAccount, otherAccounts } = useSelector(state => accountsSelector(state));
+  const dispatch = useDispatch();
 
-  if (!loggedIn) return null;
-
-  const { profile: { user: { data: { email } } }, accountName, accounts } = props;
-  const initials = avatarInitials({ email });
+  if (!isSignedIn) return null;
 
   const handleSwitchAccount = accountId => {
     setAnchorEl(null);
-    setAccount(accountId);
+    dispatch(switchAccount(accountId));
   };
 
   const handleSignOut = () => {
-    signOut();
     setAnchorEl(null);
+    dispatch(signOut());
   }
 
   return (
-
     <List className={classes.list}>
       <ListItem className={classes.accountListItem}>
         <ListItemAvatar >
           <Avatar className={classes.avatar} >
-            <Typography variant="body2">{initials}</Typography>
+            <Typography variant="body2">{selectedAccount.avatar}</Typography>
           </Avatar>
         </ListItemAvatar>
 
         <LinesEllipsis
           component={ListItemText}
-          text={accountName}
+          text={selectedAccount.name}
           basedOn="letters" />
 
         <IconButton onClick={e => setAnchorEl(e.target)}>
@@ -90,7 +89,7 @@ const Account = props => {
         onClose={() => setAnchorEl(null)}
         variant="selectedMenu"
       >
-        {accounts.map(({ accountId: id, accountName: name }) => (
+        {otherAccounts.map(({ id, name }) => (
           <MenuItem
             key={id}
             onClick={() => handleSwitchAccount(id)}>
@@ -114,7 +113,7 @@ const Account = props => {
         display="block"
         variant="caption"
         className={classes.email}
-        text={email}
+        text={selectedAccount.email}
         basedOn="letters" />
 
       <Divider />

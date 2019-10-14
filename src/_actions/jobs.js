@@ -5,7 +5,7 @@ import moment from "moment";
 import { checkResponse } from "../_helpers/network";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
-import { deleteSession } from "./profile";
+import { currentAccountSelector, tokenSelector } from '../selectors/account';
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -90,7 +90,7 @@ function spanToDateFilters(key, span) {
  */
 function constructJobsQuery(state) {
   const filter = [];
-  const accountId = state.profile.user.data.account;
+  const {id: accountId} = currentAccountSelector(state);
   filter.push(`account_id_eq_${accountId}`);
 
   const spanFilters = spanToDateFilters(
@@ -136,23 +136,15 @@ function constructJobsQuery(state) {
  * @returns
  */
 export function fetchJobs() {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     dispatch(requestJobs());
     const state = getState();
     try {
-      if (!state.profile.user.data) {
-        throw Error("Not logged in");
-      }
-
       const data = await getRecentJobs(state);
       dispatch(receiveJobs(data));
     } catch (error) {
       dispatch(receiveJobs({}));
 
-      if (error.message === "Unauthorized") {
-        console.log("DELETING SESSION");
-        dispatch(deleteSession());
-      }
       dispatch(
         setNotification({
           type: "error",
@@ -170,7 +162,7 @@ export function fetchJobs() {
  * @returns Array of jobs.
  */
 async function getRecentJobs(state) {
-  const options = createRequestOptions(state);
+  const options = createRequestOptions(tokenSelector(state));
 
   const queryString = constructJobsQuery(state);
 

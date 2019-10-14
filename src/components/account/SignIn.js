@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -10,13 +9,16 @@ import {
   Divider,
   Button,
   Link,
-  Avatar
+  Avatar,
+  CircularProgress
 } from "@material-ui/core";
 import GoogleButton from 'react-google-button';
 import googleSignIn from './googleSignIn';
 import config from '../../config';
 import { drawerWidth } from '../../_helpers/constants';
 import { LockRounded } from "@material-ui/icons";
+import { signIn } from '../../_actions/user';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
@@ -68,32 +70,40 @@ const useStyles = makeStyles(theme => ({
   },
   signInText: {
     paddingBottom: theme.spacing(4)
+  },
+  progress: {
+    backgroundColor: theme.palette.background.paper
   }
 }));
 
 const SignIn = props => {
   const classes = useStyles();
-  const { onSignIn } = props;
 
   const [values, setValues] = useState({
     email: "",
     password: ""
   });
 
+  const dispatch = useDispatch();
   const handleSignIn = () => {
-    onSignIn(values);
+    dispatch(signIn(values));
   };
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
 
+  const isLoading = useSelector(state => state.user.loading);
+  
   return (
     <React.Fragment>
       <main className={classes.content}>
         <Card className={classes.card}>
           <Avatar className={classes.avatar}>
-            <LockRounded />
+            {isLoading
+              ? <CircularProgress className={classes.progress} color="secondary" />
+              : <LockRounded />
+            }
           </Avatar>
           <Typography component="h1" variant="h5" className={classes.signInText}>
             Sign in
@@ -146,7 +156,7 @@ const SignIn = props => {
             <GoogleButton
               className={classes.centered}
               type="dark"
-              onClick={() => googleSignIn(onSignIn)}
+              onClick={() => googleSignIn(creds => dispatch(signIn(creds)))}
             />
           </FormControl>
           <FormControl className={classes.formControl}>
@@ -163,10 +173,6 @@ const SignIn = props => {
       </main>
     </React.Fragment>
   );
-};
-
-SignIn.propTypes = {
-  onSignIn: PropTypes.func.isRequired
 };
 
 export default SignIn;

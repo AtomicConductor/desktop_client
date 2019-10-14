@@ -22,6 +22,8 @@ import { DownloaderHelper } from "node-downloader-helper";
 
 import config from "../config";
 
+import { tokenSelector } from '../selectors/account';
+
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
 );
@@ -106,7 +108,7 @@ const queueOptions = {
     setTimeout(fn, 0);
   },
   id: "fullPath",
-  merge: function() {},
+  merge: function () { },
   filter: canAndShouldDownload,
   store: new MemoryStore(),
   maxRetries: 3
@@ -119,7 +121,7 @@ let TheDownloadQueue = null;
 
 export const startDownloadQueue = () => {
   return (dispatch, getState) => {
-    TheDownloadQueue = new Queue(function(file, onDone) {
+    TheDownloadQueue = new Queue(function (file, onDone) {
       const directory = path.dirname(file.fullPath);
 
       const { jobLabel, relativePath, url } = file;
@@ -180,7 +182,7 @@ export const startDownloadQueue = () => {
  * @returns function
  */
 export function addToQueue(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     try {
       const job = getState().entities.jobs[jobLabel];
 
@@ -214,13 +216,13 @@ export function addToQueue(jobLabel) {
             jobLabel,
             fullPath: path.join(outputDirectory, relativePath)
           };
-          TheDownloadQueue.push(fileDownload, (err, result) => {})
-            .on("finish", function(result) {
+          TheDownloadQueue.push(fileDownload, (err, result) => { })
+            .on("finish", function (result) {
               dispatch(
                 setFileExists({ jobLabel, relativePath, percentage: 100 })
               );
             })
-            .on("failed", function(err) {
+            .on("failed", function (err) {
               dispatch(
                 setFileExists({ jobLabel, relativePath, percentage: -1 })
               );
@@ -259,7 +261,7 @@ export function addToQueue(jobLabel) {
  * and update the entities in the store.
  */
 export function updateDownloadFiles(jobLabel) {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     try {
       dispatch(requestDownloadData(jobLabel));
 
@@ -267,7 +269,7 @@ export function updateDownloadFiles(jobLabel) {
 
       dispatch(receiveDownloadData({ files, jobLabel }));
 
-      setTimeout(function() {
+      setTimeout(function () {
         dispatch(updateExistingFilesInfo());
       }, 0);
     } catch (error) {
@@ -295,7 +297,7 @@ export function updateDownloadFiles(jobLabel) {
  * the files' relative paths.
  */
 async function fetchDownloadData(jobLabel, state) {
-  const options = createRequestOptions(state);
+  const options = createRequestOptions(tokenSelector(state));
   const { projectUrl } = config;
   const url = `${projectUrl}/downloads/${jobLabel}`;
   let response = await fetch(url, options);
@@ -331,7 +333,7 @@ async function fetchDownloadData(jobLabel, state) {
  * files exist on disk.
  */
 export function updateExistingFilesInfo() {
-  return async function(dispatch, getState) {
+  return async function (dispatch, getState) {
     const state = getState();
 
     const jobLabel = state.downloader.expandedJob;

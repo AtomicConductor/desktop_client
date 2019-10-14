@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import "typeface-roboto";
 import DownloaderContainer from "../downloader/DownloaderContainer";
-import SignInContainer from "../account/SignInContainer";
 import Home from '../home';
 import Layout from "./Layout";
 import { paths } from '../../_helpers/constants';
@@ -13,10 +12,10 @@ import {
   Redirect
 } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { signInFromSaved } from '../../_actions/profile';
+import { signInFromSaved } from '../../_actions/user';
 import {startDownloadQueue } from '../../_actions/files';
 
-const { home, downloader, signIn } = paths;
+const { home, downloader } = paths;
 
 const App = () => {
 
@@ -33,7 +32,6 @@ const App = () => {
         <Switch>
           <Route path={home} component={Home} />
           <Route path={downloader} component={DownloaderContainer} />
-          <Route path={signIn} component={SignInContainer} />
           <Redirect push to={home} />
         </Switch>
       </Layout>
