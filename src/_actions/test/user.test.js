@@ -3,29 +3,34 @@ import config from '../../config';
 import nock from 'nock';
 
 describe('user', () => {
-  let dispatch, storage;
+  let dispatch, appStorage;
 
   beforeEach(() => {
     dispatch = jest.fn();
-    storage = {
+    appStorage = {
+      readCredentials: jest.fn(),
+      saveCredentials: jest.fn()
+    };
+    
+    global.localStorage.__proto__ = {
       getItem: jest.fn(),
       setItem: jest.fn()
     };
   });
 
   describe('signInfromSaved', () => {
-    it('signs user in when credentials are in local storage', () => {
-      storage.getItem.mockReturnValueOnce('{}');
+    it('signs user in when credentials are in local storage', async () => {
+      appStorage.readCredentials.mockResolvedValueOnce({});
 
-      signInFromSaved(storage)(dispatch);
+      await signInFromSaved(appStorage)(dispatch);
 
       expect(dispatch).toHaveBeenCalled();
     });
 
-    it('does not sign in user when local storage is empty', () => {
-      storage.getItem.mockReturnValueOnce(null);
+    it('does not sign in user when local storage is empty', async () => {
+      appStorage.readCredentials.mockResolvedValueOnce(undefined);
 
-      signInFromSaved(storage)(dispatch);
+      await signInFromSaved(appStorage)(dispatch);
 
       expect(dispatch).not.toHaveBeenCalled();
     });
@@ -60,26 +65,26 @@ describe('user', () => {
         .query({ hapikey: config.hubSpot.apiKey })
         .reply(204);
 
-      await signIn(credentials, storage)(dispatch, getState);
+      await signIn(credentials, appStorage)(dispatch, getState);
+
+      const mappedAccounts = [{
+        id: 1234567890,
+        name: 'my account',
+        token: 'token',
+        email: 'joe@email.com',
+        selected: true,
+        avatar: 'J'
+      }];
 
       expect(dispatch).toHaveBeenCalledWith({
         type: 'user/signInRequest',
         payload: undefined
       });
-
-      expect(storage.setItem).toHaveBeenCalledWith('credentials', JSON.stringify(credentials));
-      expect(storage.setItem).toHaveBeenCalledWith('isBetaUser', true);
-
+      expect(appStorage.saveCredentials).toHaveBeenCalledWith({ accounts: mappedAccounts });
+      expect(localStorage.setItem).toHaveBeenCalledWith('isBetaUser', true);
       expect(dispatch.mock.calls[1][0]).toEqual({
         type: 'user/signInSuccess',
-        payload: [{
-          id: 1234567890,
-          name: 'my account',
-          token: 'token',
-          email: 'joe@email.com',
-          selected: true,
-          avatar: 'J'
-        }]
+        payload: mappedAccounts
       });
     });
 
@@ -103,12 +108,12 @@ describe('user', () => {
             }
           ]
         });
-      
-      storage.getItem.mockReturnValueOnce(true);
 
-      await signIn(credentials, storage)(dispatch, getState);
+      localStorage.getItem.mockReturnValueOnce(true);
 
-      expect(storage.setItem).not.toHaveBeenCalledWith('isBetaUser', true);
+      await signIn(credentials, appStorage)(dispatch, getState);
+
+      expect(localStorage.setItem).not.toHaveBeenCalledWith('isBetaUser', true);
     });
 
     it('throws when there are no active accounts', async () => {
@@ -118,14 +123,14 @@ describe('user', () => {
           accounts: false
         });
 
-      await expect(signIn({}, storage)(dispatch)).rejects.toThrow("Can't sign in");
+      await expect(signIn({}, appStorage)(dispatch)).rejects.toThrow("Can't sign in");
 
       expect(dispatch.mock.calls[1][0]).toEqual({
         type: 'user/signInError',
         payload: undefined
       });
 
-      expect(storage.setItem).not.toHaveBeenCalled();
+      expect(localStorage.setItem).not.toHaveBeenCalled();
     });
   });
 });

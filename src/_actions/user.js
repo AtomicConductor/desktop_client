@@ -5,14 +5,13 @@ import SignInError from "../errors/signInError";
 import { avatarInitials } from '../_helpers/presentation';
 import { emailSelector } from '../selectors/account';
 import * as Sentry from '@sentry/browser';
+import AppStorage from "../_helpers/storage";
 
 const signInSuccess = createAction('user/signInSuccess');
 const signInError = createAction('user/signInError');
 const signInRequest = createAction('user/signInRequest');
 const signOut = createAction('user/signOut');
 const switchAccount = createAction('user/switchAccount');
-
-const credentialsStorageKey = 'credentials';
 
 const mapAccounts = accounts =>
   accounts
@@ -26,7 +25,7 @@ const mapAccounts = accounts =>
       avatar: avatarInitials(_)
     }));
 
-const signIn = (credentials, storage = localStorage) => async (dispatch, getState) => {
+const signIn = (credentials, storage = new AppStorage()) => async (dispatch, getState) => {
   try {
     dispatch(signInRequest());
 
@@ -35,27 +34,26 @@ const signIn = (credentials, storage = localStorage) => async (dispatch, getStat
 
     if (!accounts) throw new Error('No active accounts');
 
-    storage.setItem(credentialsStorageKey, JSON.stringify(credentials));
-
-    dispatch(signInSuccess(mapAccounts(accounts)));
+    const mappedAccounts = mapAccounts(accounts);
+    await storage.saveCredentials({accounts: mappedAccounts});
+    dispatch(signInSuccess(mappedAccounts));
 
     // remove after beta phase
-    await flagBetaUser(storage, emailSelector(getState()));
+    await flagBetaUser(emailSelector(getState()));
   } catch (e) {
     dispatch(signInError());
     throw new SignInError(e);
   }
 };
 
-const signInFromSaved = (storage = localStorage) => async dispatch => {
-  const credentials = JSON.parse(storage.getItem(credentialsStorageKey));
-
+const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
+  const credentials = await storage.readCredentials();
   if (credentials) {
-    dispatch(signIn(credentials));
+    dispatch(signInSuccess(credentials.accounts));
   }
 }
 
-const flagBetaUser = async (storage, email) => {
+const flagBetaUser = async (email, storage = localStorage) => {
   const betaUserFlagKey = 'isBetaUser';
   if (storage.getItem(betaUserFlagKey)) return;
 

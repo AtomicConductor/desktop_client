@@ -32,6 +32,8 @@ const desktopClientErrorHandler = e => (dispatch, getState) => {
       type: "error",
       snackbar: message
     }));
+  } else {
+    console.log(e);
   }
 };
 
