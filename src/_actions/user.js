@@ -3,9 +3,10 @@ import config from '../config';
 import * as axios from 'axios';
 import SignInError from "../errors/signInError";
 import { avatarInitials } from '../_helpers/presentation';
-import { emailSelector } from '../selectors/account';
+import { emailSelector, accountsSelector } from '../selectors/account';
 import * as Sentry from '@sentry/browser';
 import AppStorage from "../_helpers/storage";
+import { fetchJobs } from '../_actions/jobs';
 
 const signInSuccess = createAction('user/signInSuccess');
 const signInError = createAction('user/signInError');
@@ -35,7 +36,7 @@ const signIn = (credentials, storage = new AppStorage()) => async (dispatch, get
     if (!accounts) throw new Error('No active accounts');
 
     const mappedAccounts = mapAccounts(accounts);
-    await storage.saveCredentials({accounts: mappedAccounts});
+    await storage.saveCredentials({ accounts: mappedAccounts });
     dispatch(signInSuccess(mappedAccounts));
 
     // remove after beta phase
@@ -52,6 +53,13 @@ const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
     dispatch(signInSuccess(credentials.accounts));
   }
 }
+
+const selectAccount = (id, storage = new AppStorage()) => async (dispatch, getState) => {
+  dispatch(switchAccount(id));
+  dispatch(fetchJobs());
+  const { selectedAccount, otherAccounts } = accountsSelector(getState());
+  await storage.saveCredentials({ accounts: [selectedAccount, ...otherAccounts] });
+};
 
 const flagBetaUser = async (email, storage = localStorage) => {
   const betaUserFlagKey = 'isBetaUser';
@@ -86,6 +94,7 @@ export {
   signInSuccess,
   signInError,
   signInRequest,
+  selectAccount,
   switchAccount,
-  signInFromSaved
+  signInFromSaved,
 }

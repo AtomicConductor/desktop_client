@@ -21,7 +21,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import LinesEllipsis from "react-lines-ellipsis";
 import { useSelector, useDispatch } from 'react-redux';
 import { accountsSelector } from '../../selectors/account';
-import { signOut, switchAccount } from '../../_actions/user';
+import { signOut, selectAccount } from '../../_actions/user';
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -56,7 +56,7 @@ const Account = () => {
 
   const handleSwitchAccount = accountId => {
     setAnchorEl(null);
-    dispatch(switchAccount(accountId));
+    dispatch(selectAccount(accountId));
   };
 
   const handleSignOut = () => {

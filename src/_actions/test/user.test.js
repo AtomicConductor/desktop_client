@@ -1,9 +1,9 @@
-import { signInFromSaved, signIn } from '../user';
+import { signInFromSaved, signIn, selectAccount } from '../user';
 import config from '../../config';
 import nock from 'nock';
 
 describe('user', () => {
-  let dispatch, appStorage;
+  let dispatch, appStorage, getState;
 
   beforeEach(() => {
     dispatch = jest.fn();
@@ -11,11 +11,16 @@ describe('user', () => {
       readCredentials: jest.fn(),
       saveCredentials: jest.fn()
     };
-    
+
     global.localStorage.__proto__ = {
       getItem: jest.fn(),
       setItem: jest.fn()
     };
+
+    getState = jest.fn().mockReturnValue({
+      user:
+        { accounts: [{ selected: true, email: 'joe@email.com' }] }
+    });
   });
 
   describe('signInfromSaved', () => {
@@ -39,10 +44,6 @@ describe('user', () => {
   describe('signIn', () => {
     it('stores credentials in local storage when sign in succeeds', async () => {
       const credentials = { email: 'joe@email.com', password: 'secret' };
-      const getState = jest.fn().mockReturnValueOnce({
-        user:
-          { accounts: [{ selected: true, email: 'joe@email.com' }] }
-      });
 
       nock(config.apiServer)
         .post('/api/auth', credentials)
@@ -90,10 +91,6 @@ describe('user', () => {
 
     it('does not set beta user flag if already exists ', async () => {
       const credentials = { email: 'joe@email.com', password: 'secret' };
-      const getState = jest.fn().mockReturnValueOnce({
-        user:
-          { accounts: [{ selected: true, email: 'joe@email.com' }] }
-      });
 
       nock(config.apiServer)
         .post('/api/auth', credentials)
@@ -131,6 +128,23 @@ describe('user', () => {
       });
 
       expect(localStorage.setItem).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('selectAccount', () => {
+    it('refereshes job list and updates credentials', async () => {
+      await selectAccount(1234567890, appStorage)(dispatch, getState);
+
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "user/switchAccount",
+        payload: 1234567890
+      });
+
+      expect(dispatch).toHaveBeenCalledWith(expect.any(Function));
+
+      expect(appStorage.saveCredentials).toHaveBeenCalledWith({
+        accounts: [{ selected: true, email: 'joe@email.com' }]
+      });
     });
   });
 });
