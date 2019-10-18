@@ -39,7 +39,7 @@
     "eject": "nw-react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "nw-react-app"
+    "extends": ["nw-react-app", "plugin:prettier/recommended"]
   },
   "browserslist": [
     ">0.2%",
@@ -71,6 +71,8 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.2",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "jest-environment-enzyme": "^7.0.2",
     "jest-enzyme": "^7.1.1",
     "json": "^9.0.6",
