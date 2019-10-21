@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { Link as RouterLink, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   List,
@@ -10,10 +10,11 @@ import {
   Drawer as MuiDrawer
 } from "@material-ui/core";
 
-import { 
+import {
   CloudDownloadRounded,
-  HomeRounded
-} from "@material-ui/icons"
+  HomeRounded,
+  SettingsInputComponent
+} from "@material-ui/icons";
 
 import Account from "../account/Account";
 
@@ -47,9 +48,11 @@ const useStyles = makeStyles(theme => ({
 
 const Drawer = props => {
   const classes = useStyles();
-  const { home, downloader } = paths;
-  const { location: { pathname } } = props;
-  
+  const { home, downloader, submitter } = paths;
+  const {
+    location: { pathname }
+  } = props;
+
   return (
     <MuiDrawer
       className={classes.drawer}
@@ -59,28 +62,47 @@ const Drawer = props => {
       }}
       anchor="left"
     >
-
       <List className={classes.list}>
         <Account />
 
-        <ListItem component={RouterLink} to={home} button selected={pathname === home}>
+        <ListItem
+          component={RouterLink}
+          to={home}
+          button
+          selected={pathname === home}
+        >
           <ListItemIcon>
             <HomeRounded />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
 
-        <ListItem component={RouterLink} to={downloader} button selected={pathname === downloader}>
+        <ListItem
+          component={RouterLink}
+          to={downloader}
+          button
+          selected={pathname === downloader}
+        >
           <ListItemIcon>
             <CloudDownloadRounded />
           </ListItemIcon>
           <ListItemText primary="Downloader" />
         </ListItem>
 
+        <ListItem
+          component={RouterLink}
+          to={submitter}
+          button
+          selected={pathname === submitter}
+        >
+          <ListItemIcon>
+            <SettingsInputComponent />
+          </ListItemIcon>
+          <ListItemText primary="Custom Submitter" />
+        </ListItem>
       </List>
       <div className={classes.spacer} />
       <Typography className={classes.logo}>CONDUCTOR</Typography>
-
     </MuiDrawer>
   );
 };

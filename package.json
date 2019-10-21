@@ -14,6 +14,7 @@
     "md5-file": "^4.0.0",
     "moment": "^2.24.0",
     "node-downloader-helper": "^1.0.10",
+    "python-shell": "^1.0.8",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-google-button": "^0.5.3",
@@ -21,12 +22,14 @@
     "react-logger": "^1.1.0",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
+    "react-selectable-fast": "^3.0.0",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-starter-kit": "^0.7.0",
     "redux-thunk-error-handler": "^1.1.3",
     "reselect": "^4.0.0",
     "server-terminate": "^1.5.0",
+    "squirrelly": "^7.7.0",
     "typeface-raleway": "^0.0.54",
     "typeface-roboto": "^0.0.54"
   },
@@ -39,7 +42,10 @@
     "eject": "nw-react-scripts eject"
   },
   "eslintConfig": {
-    "extends": ["nw-react-app", "plugin:prettier/recommended"]
+    "extends": [
+      "nw-react-app",
+      "plugin:prettier/recommended"
+    ]
   },
   "browserslist": [
     ">0.2%",

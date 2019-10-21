@@ -2,7 +2,8 @@ import { combineReducers } from "redux";
 import downloader from "./downloader";
 import notification from "./notification";
 import plugins from "./plugins";
-import user from './user';
+import user from "./user";
+import submitter from "./submitter";
 
 import entities from "./entities/root";
 
@@ -11,6 +12,7 @@ const conductorReducer = combineReducers({
   notification,
   plugins,
   entities,
-  user
+  user,
+  submitter
 });
 export default conductorReducer;

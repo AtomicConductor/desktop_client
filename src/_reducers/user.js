@@ -5,19 +5,23 @@ import {
   signInSuccess,
   signOut,
   switchAccount
-} from '../_actions/user';
+} from "../_actions/user";
+
+import { projectsError, instanceTypesError } from "../_actions/submitter";
 
 const initialState = {
   accounts: [],
   loading: false
 };
 
+const unauthorized = statusCode => statusCode === 401;
+
 export default createReducer(initialState, {
   [signInRequest]: state => {
-    state.loading = true
+    state.loading = true;
   },
   [signInError]: state => {
-    state.loading = false
+    state.loading = false;
   },
   [signInSuccess]: (state, action) => {
     state.loading = false;
@@ -25,6 +29,16 @@ export default createReducer(initialState, {
   },
   [signOut]: () => initialState,
   [switchAccount]: (state, action) => {
-    state.accounts.forEach(_ => _.selected = _.id === action.payload);
+    state.accounts.forEach(_ => (_.selected = _.id === action.payload));
+  },
+  [projectsError]: (state, action) => {
+    if (unauthorized(action.payload)) {
+      return initialState;
+    }
+  },
+  [instanceTypesError]: (state, action) => {
+    if (unauthorized(action.payload)) {
+      return initialState;
+    }
   }
 });

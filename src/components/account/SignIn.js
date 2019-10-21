@@ -12,13 +12,13 @@ import {
   Avatar,
   CircularProgress
 } from "@material-ui/core";
-import GoogleButton from 'react-google-button';
-import googleSignIn from './googleSignIn';
-import config from '../../config';
-import { drawerWidth } from '../../_helpers/constants';
+import GoogleButton from "react-google-button";
+import googleSignIn from "./googleSignIn";
+import config from "../../config";
+import { drawerWidth } from "../../_helpers/constants";
 import { LockRounded } from "@material-ui/icons";
-import { signIn } from '../../_actions/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { signIn } from "../../_actions/user";
+import { useDispatch, useSelector } from "react-redux";
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
@@ -94,18 +94,26 @@ const SignIn = props => {
   };
 
   const isLoading = useSelector(state => state.user.loading);
-  
+
   return (
     <React.Fragment>
       <main className={classes.content}>
         <Card className={classes.card}>
           <Avatar className={classes.avatar}>
-            {isLoading
-              ? <CircularProgress className={classes.progress} color="secondary" />
-              : <LockRounded />
-            }
+            {isLoading ? (
+              <CircularProgress
+                className={classes.progress}
+                color="secondary"
+              />
+            ) : (
+              <LockRounded />
+            )}
           </Avatar>
-          <Typography component="h1" variant="h5" className={classes.signInText}>
+          <Typography
+            component="h1"
+            variant="h5"
+            className={classes.signInText}
+          >
             Sign in
           </Typography>
           <FormControl className={classes.formControl}>
@@ -142,7 +150,9 @@ const SignIn = props => {
               href="#"
               variant="body2"
               className={classes.onboarding}
-              onClick={() => nw.Shell.openExternal(`${onboarding}/forgot-password`)}
+              onClick={() =>
+                nw.Shell.openExternal(`${onboarding}/forgot-password`)
+              }
             >
               Forgot password?
             </Link>
