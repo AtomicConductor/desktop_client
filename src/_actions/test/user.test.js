@@ -1,8 +1,8 @@
-import { signInFromSaved, signIn, selectAccount } from '../user';
-import config from '../../config';
-import nock from 'nock';
+import { signInFromSaved, signIn, selectAccount } from "../user";
+import config from "../../config";
+import nock from "nock";
 
-describe('user', () => {
+describe("user", () => {
   let dispatch, appStorage, getState;
 
   beforeEach(() => {
@@ -18,13 +18,12 @@ describe('user', () => {
     };
 
     getState = jest.fn().mockReturnValue({
-      user:
-        { accounts: [{ selected: true, email: 'joe@email.com' }] }
+      user: { accounts: [{ selected: true, email: "joe@email.com" }] }
     });
   });
 
-  describe('signInfromSaved', () => {
-    it('signs user in when credentials are in local storage', async () => {
+  describe("signInfromSaved", () => {
+    it("signs user in when credentials are in local storage", async () => {
       appStorage.readCredentials.mockResolvedValueOnce({});
 
       await signInFromSaved(appStorage)(dispatch);
@@ -32,7 +31,7 @@ describe('user', () => {
       expect(dispatch).toHaveBeenCalled();
     });
 
-    it('does not sign in user when local storage is empty', async () => {
+    it("does not sign in user when local storage is empty", async () => {
       appStorage.readCredentials.mockResolvedValueOnce(undefined);
 
       await signInFromSaved(appStorage)(dispatch);
@@ -41,26 +40,26 @@ describe('user', () => {
     });
   });
 
-  describe('signIn', () => {
-    it('stores credentials in local storage when sign in succeeds', async () => {
-      const credentials = { email: 'joe@email.com', password: 'secret' };
+  describe("signIn", () => {
+    it("stores credentials in local storage when sign in succeeds", async () => {
+      const credentials = { email: "joe@email.com", password: "secret" };
 
       nock(config.apiServer)
-        .post('/api/auth', credentials)
+        .post("/api/auth", credentials)
         .reply(200, {
           accounts: [
             {
               account: 1234567890,
-              accountName: 'my account',
-              token: 'token',
-              email: 'joe@email.com',
+              accountName: "my account",
+              token: "token",
+              email: "joe@email.com",
               role: 1
             }
           ]
         });
 
       nock(config.hubSpot.contactApiUrl)
-        .post('/email/joe@email.com/profile', {
+        .post("/email/joe@email.com/profile", {
           properties: [{ property: "beta_user", value: true }]
         })
         .query({ hapikey: config.hubSpot.apiKey })
@@ -68,39 +67,43 @@ describe('user', () => {
 
       await signIn(credentials, appStorage)(dispatch, getState);
 
-      const mappedAccounts = [{
-        id: 1234567890,
-        name: 'my account',
-        token: 'token',
-        email: 'joe@email.com',
-        selected: true,
-        avatar: 'J'
-      }];
+      const mappedAccounts = [
+        {
+          id: 1234567890,
+          name: "my account",
+          token: "token",
+          email: "joe@email.com",
+          selected: true,
+          avatar: "J"
+        }
+      ];
 
       expect(dispatch).toHaveBeenCalledWith({
-        type: 'user/signInRequest',
+        type: "user/signInRequest",
         payload: undefined
       });
-      expect(appStorage.saveCredentials).toHaveBeenCalledWith({ accounts: mappedAccounts });
-      expect(localStorage.setItem).toHaveBeenCalledWith('isBetaUser', true);
+      expect(appStorage.saveCredentials).toHaveBeenCalledWith({
+        accounts: mappedAccounts
+      });
+      expect(localStorage.setItem).toHaveBeenCalledWith("isBetaUser", true);
       expect(dispatch.mock.calls[1][0]).toEqual({
-        type: 'user/signInSuccess',
+        type: "user/signInSuccess",
         payload: mappedAccounts
       });
     });
 
-    it('does not set beta user flag if already exists ', async () => {
-      const credentials = { email: 'joe@email.com', password: 'secret' };
+    it("does not set beta user flag if already exists ", async () => {
+      const credentials = { email: "joe@email.com", password: "secret" };
 
       nock(config.apiServer)
-        .post('/api/auth', credentials)
+        .post("/api/auth", credentials)
         .reply(200, {
           accounts: [
             {
               account: 1234567890,
-              accountName: 'my account',
-              token: 'token',
-              email: 'joe@email.com',
+              accountName: "my account",
+              token: "token",
+              email: "joe@email.com",
               role: 1
             }
           ]
@@ -110,20 +113,22 @@ describe('user', () => {
 
       await signIn(credentials, appStorage)(dispatch, getState);
 
-      expect(localStorage.setItem).not.toHaveBeenCalledWith('isBetaUser', true);
+      expect(localStorage.setItem).not.toHaveBeenCalledWith("isBetaUser", true);
     });
 
-    it('throws when there are no active accounts', async () => {
+    it("throws when there are no active accounts", async () => {
       nock(config.apiServer)
-        .post('/api/auth', {})
+        .post("/api/auth", {})
         .reply(200, {
           accounts: false
         });
 
-      await expect(signIn({}, appStorage)(dispatch)).rejects.toThrow("Can't sign in");
+      await expect(signIn({}, appStorage)(dispatch)).rejects.toThrow(
+        "Can't sign in"
+      );
 
       expect(dispatch.mock.calls[1][0]).toEqual({
-        type: 'user/signInError',
+        type: "user/signInError",
         payload: undefined
       });
 
@@ -131,8 +136,8 @@ describe('user', () => {
     });
   });
 
-  describe('selectAccount', () => {
-    it('refereshes job list and updates credentials', async () => {
+  describe("selectAccount", () => {
+    it("refereshes job list and updates credentials", async () => {
       await selectAccount(1234567890, appStorage)(dispatch, getState);
 
       expect(dispatch).toHaveBeenCalledWith({
@@ -143,7 +148,7 @@ describe('user', () => {
       expect(dispatch).toHaveBeenCalledWith(expect.any(Function));
 
       expect(appStorage.saveCredentials).toHaveBeenCalledWith({
-        accounts: [{ selected: true, email: 'joe@email.com' }]
+        accounts: [{ selected: true, email: "joe@email.com" }]
       });
     });
   });

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -8,11 +8,11 @@ import {
   DialogActions,
   Button,
   Link
-} from '@material-ui/core';
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch, useSelector } from 'react-redux';
-import submitFeedback from '../../_actions/feedback';
-import { emailSelector } from '../../selectors/account';
+import { useDispatch, useSelector } from "react-redux";
+import submitFeedback from "../../_actions/feedback";
+import { emailSelector } from "../../selectors/account";
 
 const useStyles = makeStyles(theme => ({
   formTitle: {
@@ -26,7 +26,10 @@ export default props => {
   const email = useSelector(state => emailSelector(state)) || undefined;
   const [feedback, setFeedback] = useState({ email });
   const dispatch = useDispatch();
-  const submitForm = useCallback(() => dispatch(submitFeedback(feedback)), [dispatch, feedback]);
+  const submitForm = useCallback(() => dispatch(submitFeedback(feedback)), [
+    dispatch,
+    feedback
+  ]);
 
   useEffect(() => {
     setFeedback({ email });
@@ -46,15 +49,18 @@ export default props => {
     e.preventDefault();
     submitForm();
     handleFormClose();
-  }
+  };
 
   return (
     <Dialog open={feebackFormOpen} onClose={onCloseFeedbackForm}>
-      <DialogTitle id="form-dialog-title" className={classes.formTitle}>Send us a message</DialogTitle>
+      <DialogTitle id="form-dialog-title" className={classes.formTitle}>
+        Send us a message
+      </DialogTitle>
       <form autoComplete="off" onSubmit={handleFormSubmit}>
         <DialogContent>
           <DialogContentText>
-            Use the form below or email us at <Link>{' support@conductortech.com '}</Link>
+            Use the form below or email us at{" "}
+            <Link>{" support@conductortech.com "}</Link>
           </DialogContentText>
           <TextField
             margin="normal"
@@ -104,5 +110,5 @@ export default props => {
         </DialogActions>
       </form>
     </Dialog>
-  )
+  );
 };

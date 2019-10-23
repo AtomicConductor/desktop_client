@@ -19,9 +19,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import LinesEllipsis from "react-lines-ellipsis";
-import { useSelector, useDispatch } from 'react-redux';
-import { accountsSelector } from '../../selectors/account';
-import { signOut, selectAccount } from '../../_actions/user';
+import { useSelector, useDispatch } from "react-redux";
+import { accountsSelector } from "../../selectors/account";
+import { signOut, selectAccount } from "../../_actions/user";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0
   },
   accountListItem: {
-    paddingRight: theme.spacing(.5),
+    paddingRight: theme.spacing(0.5),
     paddingBottom: 0
   },
   expand: {
@@ -49,7 +49,9 @@ const useStyles = makeStyles(theme => ({
 const Account = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { isSignedIn, selectedAccount, otherAccounts } = useSelector(state => accountsSelector(state));
+  const { isSignedIn, selectedAccount, otherAccounts } = useSelector(state =>
+    accountsSelector(state)
+  );
   const dispatch = useDispatch();
 
   if (!isSignedIn) return null;
@@ -62,13 +64,13 @@ const Account = () => {
   const handleSignOut = () => {
     setAnchorEl(null);
     dispatch(signOut());
-  }
+  };
 
   return (
     <List className={classes.list}>
       <ListItem className={classes.accountListItem}>
-        <ListItemAvatar >
-          <Avatar className={classes.avatar} >
+        <ListItemAvatar>
+          <Avatar className={classes.avatar}>
             <Typography variant="body2">{selectedAccount.avatar}</Typography>
           </Avatar>
         </ListItemAvatar>
@@ -76,7 +78,8 @@ const Account = () => {
         <LinesEllipsis
           component={ListItemText}
           text={selectedAccount.name}
-          basedOn="letters" />
+          basedOn="letters"
+        />
 
         <IconButton onClick={e => setAnchorEl(e.target)}>
           <ExpandMoreRounded color="secondary" />
@@ -90,9 +93,7 @@ const Account = () => {
         variant="selectedMenu"
       >
         {otherAccounts.map(({ id, name }) => (
-          <MenuItem
-            key={id}
-            onClick={() => handleSwitchAccount(id)}>
+          <MenuItem key={id} onClick={() => handleSwitchAccount(id)}>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
@@ -114,12 +115,12 @@ const Account = () => {
         variant="caption"
         className={classes.email}
         text={selectedAccount.email}
-        basedOn="letters" />
+        basedOn="letters"
+      />
 
       <Divider />
     </List>
   );
-
 };
 
 export default Account;

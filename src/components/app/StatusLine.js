@@ -1,10 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Box,
-  Paper,
-  Typography
-} from "@material-ui/core";
+import { Box, Paper, Typography } from "@material-ui/core";
 import "typeface-raleway";
 import {
   drawerWidth,

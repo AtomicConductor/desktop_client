@@ -22,16 +22,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Layout = (props) => {
-
+const Layout = props => {
   const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Drawer />
-      <Box className={classes.box}>
-        {props.children}
-      </Box>
+      <Box className={classes.box}>{props.children}</Box>
       <CtSnackbarContainer />
       <StatusLine />
     </ThemeProvider>

@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
 const EnvironmentControls = props => {
   const classes = useStyles();
 
-  return <Box className={classes.container} >EnvironmentControls</Box>;
+  return <Box className={classes.container}>EnvironmentControls</Box>;
 };
 
 export default EnvironmentControls;

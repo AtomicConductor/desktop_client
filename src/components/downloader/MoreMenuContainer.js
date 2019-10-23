@@ -1,9 +1,7 @@
 import { connect } from "react-redux";
 import MoreMenu from "./MoreMenu";
 
-import {
-  resetOutputPathValue
-} from "../../_actions/jobs";
+import { resetOutputPathValue } from "../../_actions/jobs";
 
 import {
   updateDownloadFiles,

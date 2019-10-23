@@ -1,11 +1,11 @@
 import { configureStore, getDefaultMiddleware } from "redux-starter-kit";
 import ctReducer from "./_reducers/root";
 import DesktopClientError from "./errors/desktopClientError";
-import { setNotification } from './_actions/notification';
-import createThunkErrorHandlerMiddleware from 'redux-thunk-error-handler';
-import * as Sentry from '@sentry/browser';
-import config from './config';
-import { currentAccountSelector, signedInSelector } from './selectors/account';
+import { setNotification } from "./_actions/notification";
+import createThunkErrorHandlerMiddleware from "redux-thunk-error-handler";
+import * as Sentry from "@sentry/browser";
+import config from "./config";
+import { currentAccountSelector, signedInSelector } from "./selectors/account";
 
 Sentry.init({
   dsn: config.sentryDns,
@@ -13,7 +13,7 @@ Sentry.init({
 });
 
 const desktopClientErrorHandler = e => (dispatch, getState) => {
-  if ((e instanceof DesktopClientError)) {
+  if (e instanceof DesktopClientError) {
     const { inner, message } = e;
     const state = getState();
 
@@ -24,14 +24,16 @@ const desktopClientErrorHandler = e => (dispatch, getState) => {
       Sentry.captureException(inner);
     });
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       console.log(inner);
     }
 
-    dispatch(setNotification({
-      type: "error",
-      snackbar: message
-    }));
+    dispatch(
+      setNotification({
+        type: "error",
+        snackbar: message
+      })
+    );
   } else {
     console.log(e);
   }

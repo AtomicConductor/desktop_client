@@ -1,17 +1,21 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const signedIn = state => state.user.accounts.length !== 0;
 const otherAccounts = state => state.user.accounts.filter(_ => !_.selected);
 const currentAccount = state => state.user.accounts.find(_ => _.selected);
 
-const signedInSelector = createSelector(signedIn, _ => _);
+const signedInSelector = createSelector(
+  signedIn,
+  _ => _
+);
 
 const emailSelector = createSelector(
   signedIn,
   currentAccount,
   (signedIn, selectedAccount) => {
     return signedIn ? selectedAccount.email : null;
-  });
+  }
+);
 
 const accountsSelector = createSelector(
   signedIn,
@@ -22,7 +26,7 @@ const accountsSelector = createSelector(
       isSignedIn,
       selectedAccount,
       otherAccounts
-    }
+    };
   }
 );
 
@@ -42,4 +46,4 @@ export {
   accountsSelector,
   currentAccountSelector,
   tokenSelector
-}
+};

@@ -188,4 +188,3 @@ PluginItem.propTypes = {
 };
 
 export default PluginItem;
-

@@ -5,7 +5,7 @@ import moment from "moment";
 import { checkResponse } from "../_helpers/network";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
-import { currentAccountSelector, tokenSelector } from '../selectors/account';
+import { currentAccountSelector, tokenSelector } from "../selectors/account";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -90,7 +90,7 @@ function spanToDateFilters(key, span) {
  */
 function constructJobsQuery(state) {
   const filter = [];
-  const {id: accountId} = currentAccountSelector(state);
+  const { id: accountId } = currentAccountSelector(state);
   filter.push(`account_id_eq_${accountId}`);
 
   const spanFilters = spanToDateFilters(
@@ -136,7 +136,7 @@ function constructJobsQuery(state) {
  * @returns
  */
 export function fetchJobs() {
-  return async function (dispatch, getState) {
+  return async function(dispatch, getState) {
     dispatch(requestJobs());
     const state = getState();
     try {

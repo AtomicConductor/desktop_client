@@ -11,8 +11,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PluginsContainer = connect(
-  mapStateToProps
-)(Plugins);
+const PluginsContainer = connect(mapStateToProps)(Plugins);
 
 export default PluginsContainer;

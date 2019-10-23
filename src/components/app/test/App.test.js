@@ -2,18 +2,19 @@ import React from "react";
 
 import { shallow } from "enzyme";
 import App from "../App";
-import { Provider } from 'react-redux';
-import mockReduxStore from 'redux-mock-store';
+import { Provider } from "react-redux";
+import mockReduxStore from "redux-mock-store";
 
-describe('<App />', () => {
+describe("<App />", () => {
   let app;
   beforeEach(() => {
     const store = mockReduxStore()({});
-    app =
+    app = (
       <Provider store={store}>
         <App />
-      </Provider>;
-  })
+      </Provider>
+    );
+  });
   it("renders without crashing", () => {
     shallow(app);
   });
