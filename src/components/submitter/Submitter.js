@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -23,7 +23,12 @@ import AppBar from "./AppBar";
 import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
 
-import { testPythonShell } from "../../_actions/submitter";
+import {
+  testPythonShell,
+  fetchProjects,
+  fetchInstanceTypes
+} from "../../_actions/submitter";
+import { signedInSelector } from "../../selectors/account";
 
 function TabContainer(props) {
   return (
@@ -77,9 +82,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Submitter = props => {
-  const { fetchResources, loggedIn } = props;
-
-  if (!loggedIn) {
+  const signedIn = useSelector(state => signedInSelector(state));
+  if (!signedIn) {
     return <SignIn />;
   }
 
@@ -90,7 +94,8 @@ const Submitter = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchResources();
+    dispatch(fetchProjects());
+    dispatch(fetchInstanceTypes());
   }, []);
 
   function handleChange(event, newTabIndex) {
@@ -155,11 +160,6 @@ const Submitter = props => {
       </Box>
     </React.Fragment>
   );
-};
-
-Submitter.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
-  fetchResources: PropTypes.func.isRequired
 };
 
 export default Submitter;

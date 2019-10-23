@@ -93,39 +93,50 @@ const resolveTasks = (
   });
 };
 
-const resolveScoutFrames = (scoutFrameSpec, useScoutFrames) =>
-  useScoutFrames ? _resolveFrames(scoutFrameSpec).join(", ") : "";
+const resolvePackages = softwarePackages => [
+  ...new Set(softwarePackages.filter(_ => _.package).map(_ => _.package.id))
+];
 
-const resolveSubmission = (submitter, instanceType) => {
-  const {
-    taskTemplate,
-    frameSpec,
-    chunkSize,
-    useTiles,
-    useScoutFrames,
-    scoutFrameSpec,
-    jobTitle,
-    preemptible,
-    projectIndex,
-    projects
-  } = submitter;
+const resolveEnvironment = (softwarePackages, existingEnvironment = {}) =>
+  softwarePackages
+    .filter(_ => _.package)
+    .reduce((env, { package: { environment } }) => {
+      return environment.reduce((acc, { merge_policy, name, value }) => {
+        if (merge_policy === "exclusive") env[name] = value;
+        if (merge_policy === "append") {
+          env[name] = env[name] ? `${env[name]}:${value}` : value;
+        }
+        return acc;
+      }, env);
+    }, existingEnvironment);
 
-  const tileSpec = useTiles ? submitter.tileSpec : "1";
-
-  const scout_frames = resolveScoutFrames(scoutFrameSpec, useScoutFrames);
-
+const resolveSubmission = ({
+  taskTemplate,
+  frameSpec,
+  chunkSize,
+  useTiles,
+  instanceTypes,
+  instanceTypeIndex,
+  jobTitle,
+  preemptible,
+  projectIndex,
+  projects,
+  tileSpec,
+  softwarePackages
+}) => {
   const tasks_data = resolveTasks(
     taskTemplate,
     frameSpec,
     chunkSize,
-    tileSpec,
+    useTiles ? tileSpec : "1",
     useTiles
   );
 
-  const upload_paths = Object.keys(submitter.assets);
-  const instance_type = instanceType.name;
+  const instance_type = instanceTypes[instanceTypeIndex].name;
   const project = projects[projectIndex];
   const job_title = jobTitle;
+  const software_package_ids = resolvePackages(softwarePackages);
+  const environment = resolveEnvironment(softwarePackages);
 
   return {
     tasks_data,
@@ -133,9 +144,9 @@ const resolveSubmission = (submitter, instanceType) => {
     job_title,
     preemptible,
     project,
-    scout_frames,
-    upload_paths
+    software_package_ids,
+    environment
   };
 };
 
-export { resolveTasks, resolveSubmission };
+export { resolveTasks, resolveSubmission, resolvePackages, resolveEnvironment };

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import "typeface-roboto";
 import DownloaderContainer from "../downloader/DownloaderContainer";
-import SubmitterContainer from "../submitter/SubmitterContainer";
+import Submitter from "../submitter/Submitter";
 import Home from "../home";
 import Layout from "./Layout";
 import { paths } from "../../_helpers/constants";
@@ -15,6 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 import { signInFromSaved } from "../../_actions/user";
 import { startDownloadQueue } from "../../_actions/files";
+import { fetchSoftwarePackages } from "../../_actions/submitter";
 
 const { home, downloader, submitter } = paths;
 
@@ -24,6 +25,7 @@ const App = () => {
   useEffect(() => {
     dispatch(signInFromSaved());
     dispatch(startDownloadQueue());
+    dispatch(fetchSoftwarePackages());
   }, []);
 
   return (
@@ -32,7 +34,7 @@ const App = () => {
         <Switch>
           <Route path={home} component={Home} />
           <Route path={downloader} component={DownloaderContainer} />
-          <Route path={submitter} component={SubmitterContainer} />
+          <Route path={submitter} component={Submitter} />
           <Redirect push to={home} />
         </Switch>
       </Layout>

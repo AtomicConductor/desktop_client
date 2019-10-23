@@ -99,7 +99,6 @@ const General = props => {
 
   return (
     <Box className={classes.container}>
-      {/* TITLE */}
       <InputRow single>
         <InputLabel label="Job title" firstLabel />
         <Paper className={clsx(classes.paper, classes.dominantPaper)}>
@@ -122,11 +121,8 @@ const General = props => {
             onChange={e => dispatch(setProjectIndex(e.target.value))}
             value={projectIndex}
             input={<InputBase className={classes.input} />}
-            MenuProps={{
-              style: { zIndex: "1400" }
-            }}
           >
-            {projects.map((_, index) => (
+            {[projects].map((_, index) => (
               <MenuItem key={index} value={index}>
                 {_}
               </MenuItem>
@@ -199,9 +195,6 @@ const General = props => {
             onChange={e => dispatch(setInstanceTypeIndex(e.target.value))}
             value={instanceTypeIndex}
             input={<InputBase className={classes.input} />}
-            MenuProps={{
-              style: { zIndex: "1400" }
-            }}
           >
             {instanceTypes.map((_, index) => (
               <MenuItem key={index} value={index}>

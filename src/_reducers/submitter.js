@@ -16,7 +16,9 @@ import {
   projectsSuccess,
   addAssets,
   removeAssets,
-  updateAssetSelection
+  updateAssetSelection,
+  instanceTypesSuccess,
+  updateSelectedSoftware
 } from "../_actions/submitter";
 
 const initialState = {
@@ -34,7 +36,7 @@ const initialState = {
   scoutFrameSpec: "1",
   useTiles: false,
   useScoutFrames: false,
-  softwarePackageIds: ["32ae46dcb2d20a9c2b33f2b817c0461e"],
+  softwarePackages: [{}],
   taskTemplate:
     '/tmp/conductor/ct_cnode "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list <chunk_start> <chunk_start> <chunk_end>',
   uploadPaths: [],
@@ -55,41 +57,41 @@ const initialState = {
 
 export default createReducer(initialState, {
   [setJobTitle]: (state, action) => {
-    state["jobTitle"] = action.payload;
+    state.jobTitle = action.payload;
   },
   [setFrameSpec]: (state, action) => {
-    state["frameSpec"] = action.payload;
+    state.frameSpec = action.payload;
   },
   [setChunkSize]: (state, action) => {
-    state["chunkSize"] = action.payload;
+    state.chunkSize = action.payload;
   },
   [setTileSpec]: (state, action) => {
-    state["tileSpec"] = action.payload;
+    state.tileSpec = action.payload;
   },
   [setScoutFrameSpec]: (state, action) => {
-    state["scoutFrameSpec"] = action.payload;
+    state.scoutFrameSpec = action.payload;
   },
   [setUseTiles]: (state, action) => {
-    state["useTiles"] = action.payload;
+    state.useTiles = action.payload;
   },
   [setUseScoutFrames]: (state, action) => {
-    state["useScoutFrames"] = action.payload;
+    state.useScoutFrames = action.payload;
   },
   [setPreemptible]: (state, action) => {
-    state["preemptible"] = action.payload;
+    state.preemptible = action.payload;
   },
   [setRetries]: (state, action) => {
-    state["retries"] = action.payload;
+    state.retries = action.payload;
   },
   [setInstanceTypeIndex]: (state, action) => {
-    state["instanceTypeIndex"] = action.payload;
+    state.instanceTypeIndex = action.payload;
   },
   [setProjectIndex]: (state, action) => {
-    state["projectIndex"] = action.payload;
+    state.projectIndex = action.payload;
   },
 
   [setTaskTemplate]: (state, action) => {
-    state["taskTemplate"] = action.payload;
+    state.taskTemplate = action.payload;
   },
   [projectsSuccess]: (state, action) => {
     state.projects = action.payload;
@@ -110,5 +112,23 @@ export default createReducer(initialState, {
   },
   [updateAssetSelection]: (state, action) => {
     state.selectedAssets = action.payload;
+  },
+  [instanceTypesSuccess]: (state, action) => {
+    state.instanceTypes = action.payload;
+  },
+  [updateSelectedSoftware]: (state, { payload }) => {
+    const { index, softwareKey, package: pkg } = payload;
+    const removeSoftware = softwareKey === undefined && pkg === undefined;
+    const newEntry = index === undefined;
+
+    if (newEntry) {
+      state.softwarePackages.push({});
+    } else {
+      if (removeSoftware) {
+        state.softwarePackages.splice(index, 1);
+      } else {
+        state.softwarePackages[index] = { softwareKey, package: pkg };
+      }
+    }
   }
 });

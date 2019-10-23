@@ -1,4 +1,8 @@
-import { resolveTasks } from "../submitter";
+import {
+  resolveTasks,
+  resolvePackages,
+  resolveEnvironment
+} from "../submitter";
 
 describe("submitter helpers", () => {
   describe("resolveTasks", () => {
@@ -168,6 +172,112 @@ describe("submitter helpers", () => {
         { command: "command -s 5 -e 7", frames: "5-7x2" },
         { command: "command -s 9 -e 9", frames: "9" }
       ]);
+    });
+  });
+
+  describe("resolvePackages", () => {
+    it("extracts unique packade IDs", () => {
+      const softwarePackages = [
+        {
+          softwareKey: "maya",
+          package: { id: "1" }
+        },
+        {
+          softwareKey: "maya",
+          package: { id: "1" }
+        },
+        {
+          softwareKey: "cara-vr",
+          package: { id: "3" }
+        },
+        {
+          softwareKey: "miarmy",
+          package: null
+        },
+        {}
+      ];
+
+      expect(resolvePackages(softwarePackages)).toEqual(["1", "3"]);
+    });
+  });
+
+  describe("resolve environment", () => {
+    it("exclusively adds package environment variable", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "exclusive",
+                name: "maya_var",
+                value: "maya_value"
+              }
+            ]
+          }
+        },
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "exclusive",
+                name: "miarmy_var",
+                value: "miarmy_value"
+              }
+            ]
+          }
+        }
+      ];
+
+      expect(resolveEnvironment(softwarePackages)).toEqual({
+        maya_var: "maya_value",
+        miarmy_var: "miarmy_value"
+      });
+    });
+
+    it("appends package environment variables", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "append",
+                name: "maya_var",
+                value: "maya_value"
+              },
+              {
+                merge_policy: "append",
+                name: "maya_var_2",
+                value: "maya_value_2"
+              }
+            ]
+          }
+        }
+      ];
+
+      expect(
+        resolveEnvironment(softwarePackages, { maya_var: "existing_value" })
+      ).toEqual({
+        maya_var: "existing_value:maya_value",
+        maya_var_2: "maya_value_2"
+      });
+    });
+
+    it("ignores invalid merge policies", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "invalid policy",
+                name: "maya_var",
+                value: "maya_value"
+              }
+            ]
+          }
+        }
+      ];
+
+      expect(resolveEnvironment(softwarePackages, {})).toEqual({});
     });
   });
 });

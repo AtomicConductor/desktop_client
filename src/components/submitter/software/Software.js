@@ -1,16 +1,20 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import InputBase from "@material-ui/core/InputBase";
-
-import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Select from "@material-ui/core/Select";
-
-import InputRow from "../InputRow";
-import InputLabel from "../InputLabel";
-
 import clsx from "clsx";
+import {
+  IconButton,
+  Grid,
+  Typography,
+  Select,
+  Box,
+  Paper,
+  MenuItem,
+  InputBase
+} from "@material-ui/core";
+import { LibraryAddRounded, DeleteOutlineRounded } from "@material-ui/icons";
+import { updateSelectedSoftware } from "../../../_actions/submitter";
+
 const useStyles = makeStyles(theme => ({
   container: {
     margin: "20px 192px 20px 96px",
@@ -29,69 +33,117 @@ const useStyles = makeStyles(theme => ({
   },
   dominantPaper: {
     flexBasis: "100%"
+  },
+  fabIcon: {
+    margin: theme.spacing(1)
   }
 }));
 
-const Software = props => {
+const Software = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const softwarePackages = useSelector(
+    state => state.entities.softwarePackages
+  );
+
+  const packages = useSelector(state => state.submitter.softwarePackages);
 
   return (
     <Box className={classes.container}>
-      <InputRow single>
-        <InputLabel label="Software" firstLabel />
-        <Paper className={clsx(classes.paper, classes.dominantPaper)}>
-          <Select value={10} input={<InputBase className={classes.input} />}>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Autodesk Maya</MenuItem>
-            <MenuItem value={20}>Clarisse</MenuItem>
-            <MenuItem value={30}>Nuke</MenuItem>
-          </Select>
-        </Paper>
-
-        <InputLabel label="Version" />
-        <Paper className={clsx(classes.paper)}>
-          <Select value={10} input={<InputBase className={classes.input} />}>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>2018 SP3</MenuItem>
-            <MenuItem value={10}>2018 SP4</MenuItem>
-            <MenuItem value={10}>2018 SP5</MenuItem>
-            <MenuItem value={10}>2018.5 SP0 </MenuItem>
-            <MenuItem value={10}>2019 SP0</MenuItem>
-          </Select>
-        </Paper>
-      </InputRow>
-
-      <InputRow single>
-        <InputLabel label="" firstLabel />
-        <Paper className={clsx(classes.paper, classes.dominantPaper)}>
-          <Select value={20} input={<InputBase className={classes.input} />}>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Vray</MenuItem>
-            <MenuItem value={20}>Arnold</MenuItem>
-            <MenuItem value={30}>Mental Ray</MenuItem>
-          </Select>
-        </Paper>
-
-        <InputLabel label="Version" />
-        <Paper className={clsx(classes.paper)}>
-          <Select value={10} input={<InputBase className={classes.input} />}>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>3.2.1.1</MenuItem>
-            <MenuItem value={20}>3.2.1.2</MenuItem>
-            <MenuItem value={30}>3.2.2.1</MenuItem>
-            <MenuItem value={40}>3.3.0</MenuItem>
-            <MenuItem value={50}>3.3.2.1</MenuItem>
-          </Select>
-        </Paper>
-      </InputRow>
+      {packages.map(({ softwareKey, package: pkg }, softwareIndex) => (
+        <Grid
+          container
+          justify="flex-start"
+          alignItems="center"
+          key={softwareIndex}
+          spacing={1}
+        >
+          <Grid item xs={1}>
+            <Typography color="primary">Software:</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Paper className={clsx(classes.paper, classes.dominantPaper)}>
+              <Select
+                value={softwareKey}
+                input={<InputBase className={classes.input} />}
+                onChange={e => {
+                  dispatch(
+                    updateSelectedSoftware({
+                      index: softwareIndex,
+                      softwareKey: e.target.value,
+                      package: undefined
+                    })
+                  );
+                }}
+              >
+                <MenuItem value={null}>
+                  <em>None</em>
+                </MenuItem>
+                {Object.keys(softwarePackages).map((software, index) => (
+                  <MenuItem key={index} value={software}>
+                    {software}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Paper>
+          </Grid>
+          <Grid item xs={1}>
+            <Typography color="primary">Version:</Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Paper className={clsx(classes.paper)}>
+              <Select
+                value={pkg}
+                input={<InputBase className={classes.input} />}
+                onChange={e => {
+                  dispatch(
+                    updateSelectedSoftware({
+                      index: softwareIndex,
+                      softwareKey,
+                      package: e.target.value
+                    })
+                  );
+                }}
+              >
+                <MenuItem value={null}>
+                  <em>None</em>
+                </MenuItem>
+                {softwarePackages[softwareKey] &&
+                  softwarePackages[softwareKey].packages.map((pkg, index) => (
+                    <MenuItem key={index} value={pkg}>
+                      {pkg.version}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </Paper>
+          </Grid>
+          <Grid item xs={1}>
+            <IconButton
+              onClick={() => {
+                dispatch(
+                  updateSelectedSoftware({
+                    index: softwareIndex,
+                    softwareKey: undefined,
+                    package: undefined
+                  })
+                );
+              }}
+            >
+              <DeleteOutlineRounded />
+            </IconButton>
+          </Grid>
+        </Grid>
+      ))}
+      <Grid container spacing={1}>
+        <IconButton
+          onClick={() => {
+            dispatch(updateSelectedSoftware({}));
+          }}
+        >
+          <LibraryAddRounded className={classes.fabIcon} />
+        </IconButton>
+      </Grid>
     </Box>
   );
 };
