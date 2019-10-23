@@ -114,7 +114,7 @@ const Uploads = () => {
           <Typography variant="h6">No assets selected for upload.</Typography>
         </Box>
       ) : (
-        <Box className={classes.scrollBox}>
+        <Box className={classes.scrollBox} id="scroll-box">
           <SelectableGroup
             ref={selectableGroupRef}
             className="main"

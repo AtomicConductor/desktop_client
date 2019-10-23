@@ -140,7 +140,7 @@ const Submitter = props => {
             />
           </Tabs>
         </Card>
-        <Box className={classes.content} id="scroll-box">
+        <Box className={classes.content}>
           {tabIndex === 0 && <General />}
           {tabIndex === 1 && <Uploads />}
           {tabIndex === 2 && <Environment />}
