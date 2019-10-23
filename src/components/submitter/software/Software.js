@@ -72,12 +72,12 @@ const Software = () => {
                     updateSelectedSoftware({
                       index: softwareIndex,
                       softwareKey: e.target.value,
-                      package: undefined
+                      package: {}
                     })
                   );
                 }}
               >
-                <MenuItem value={null}>
+                <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {Object.keys(softwarePackages).map((software, index) => (
@@ -106,7 +106,7 @@ const Software = () => {
                   );
                 }}
               >
-                <MenuItem value={null}>
+                <MenuItem value={{}}>
                   <em>None</em>
                 </MenuItem>
                 {softwarePackages[softwareKey] &&
@@ -124,8 +124,8 @@ const Software = () => {
                 dispatch(
                   updateSelectedSoftware({
                     index: softwareIndex,
-                    softwareKey: undefined,
-                    package: undefined
+                    softwareKey: "",
+                    package: ""
                   })
                 );
               }}

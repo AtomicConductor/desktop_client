@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
@@ -82,21 +80,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Submitter = props => {
-  const signedIn = useSelector(state => signedInSelector(state));
-  if (!signedIn) {
-    return <SignIn />;
-  }
-
   const classes = useStyles();
-
   const [tabIndex, setTabIndex] = React.useState(0);
-
+  const signedIn = useSelector(state => signedInSelector(state));
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!signedIn) return;
     dispatch(fetchProjects());
     dispatch(fetchInstanceTypes());
-  }, []);
+  }, [signedIn, dispatch]);
+
+  if (!signedIn) {
+    return <SignIn />;
+  }
 
   function handleChange(event, newTabIndex) {
     setTabIndex(newTabIndex);

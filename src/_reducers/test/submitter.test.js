@@ -10,7 +10,9 @@ describe("submitter reducer", () => {
 
       const state = reducer(initialState, updateSelectedSoftware({}));
 
-      expect(state).toEqual({ softwarePackages: [{}, {}] });
+      expect(state).toEqual({
+        softwarePackages: [{}, { softwareKey: "", package: {} }]
+      });
     });
 
     it("updates an existing entry", () => {
@@ -45,8 +47,8 @@ describe("submitter reducer", () => {
         initialState,
         updateSelectedSoftware({
           index: 1,
-          softwareKey: undefined,
-          package: undefined
+          softwareKey: "",
+          package: ""
         })
       );
 

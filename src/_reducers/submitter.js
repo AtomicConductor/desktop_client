@@ -36,7 +36,7 @@ const initialState = {
   scoutFrameSpec: "1",
   useTiles: false,
   useScoutFrames: false,
-  softwarePackages: [{}],
+  softwarePackages: [{ softwareKey: "", package: {} }],
   taskTemplate:
     '/tmp/conductor/ct_cnode "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list <chunk_start> <chunk_start> <chunk_end>',
   uploadPaths: [],
@@ -118,11 +118,11 @@ export default createReducer(initialState, {
   },
   [updateSelectedSoftware]: (state, { payload }) => {
     const { index, softwareKey, package: pkg } = payload;
-    const removeSoftware = softwareKey === undefined && pkg === undefined;
+    const removeSoftware = softwareKey === "" && pkg === "";
     const newEntry = index === undefined;
 
     if (newEntry) {
-      state.softwarePackages.push({});
+      state.softwarePackages.push({ softwareKey: "", package: {} });
     } else {
       if (removeSoftware) {
         state.softwarePackages.splice(index, 1);
