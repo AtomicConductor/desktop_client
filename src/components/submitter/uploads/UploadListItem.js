@@ -9,7 +9,7 @@ import { createSelectable } from "react-selectable-fast";
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    padding: theme.spacing(0, 2)
+    padding: theme.spacing(0.5, 2)
   },
   odd: {
     backgroundColor: fade(theme.palette.primary[800], 0.8)
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 const UploadListItem = props => {
   const classes = useStyles();
 
-  const { odd, selectableRef, isSelected, isSelecting, filename, size } = props;
+  const { odd, selectableRef, isSelected, isSelecting, path, size } = props;
 
   const hilight = isSelected || isSelecting;
   const hilightClassname = clsx({ [classes.sel]: hilight });
@@ -41,13 +41,13 @@ const UploadListItem = props => {
     >
       <div className={classes.left}>
         <Typography className={hilightClassname} component="p">
-          {filename}
+          {path}
         </Typography>
       </div>
 
       <div className={classes.right}>
         <Typography className={hilightClassname} component="p" align="center">
-          {`${size}Mb`}
+          {`${parseInt(size / 1024)}Mb`}
         </Typography>
       </div>
     </Paper>

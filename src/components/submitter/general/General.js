@@ -17,7 +17,7 @@ import {
 
 import InputRow from "../InputRow";
 import InputLabel from "../InputLabel";
-import { instanceTypeDescriptions } from "../../../selectors/submitter";
+import { instanceTypeDescriptionSelector } from "../../../selectors/submitter";
 import {
   setJobTitle,
   setFrameSpec,
@@ -95,7 +95,7 @@ const General = props => {
     projectIndex
   } = useSelector(state => state.submitter);
 
-  const instanceTypes = useSelector(instanceTypeDescriptions);
+  const instanceTypes = useSelector(instanceTypeDescriptionSelector);
 
   return (
     <Box className={classes.container}>

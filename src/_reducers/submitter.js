@@ -14,7 +14,9 @@ import {
   setInstanceTypeIndex,
   setProjectIndex,
   projectsSuccess,
-  instanceTypesSuccess
+  addAssets,
+  removeAssets,
+  updateAssetSelection
 } from "../_actions/submitter";
 
 const initialState = {
@@ -35,20 +37,8 @@ const initialState = {
   softwarePackageIds: ["32ae46dcb2d20a9c2b33f2b817c0461e"],
   taskTemplate:
     '/tmp/conductor/ct_cnode "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list <chunk_start> <chunk_start> <chunk_end>',
-  uploadPaths: [
-    "/Users/julian/projects/fish/clarisse/Maps/alcazar.jpg",
-    "/Users/julian/projects/fish/clarisse/Maps/diamonddogs.tif",
-    "/Users/julian/projects/fish/clarisse/Maps/thewall.jpg",
-    "/Users/julian/projects/fish/clarisse/refs_test/arch_model.project",
-    "/Users/julian/projects/fish/clarisse/refs_test/arch_shading.project",
-    "/Users/julian/projects/fish/clarisse/refs_test/layout.project",
-    "/Users/julian/projects/fish/clarisse/refs_test/lighting.project",
-    "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project",
-    "/Users/julian/projects/fish/clarisse/refs_test/walls_shading.project",
-    "/tmp/conductor/clarisse.cfg",
-    "/tmp/conductor/ct_cnode",
-    "/tmp/conductor/ct_prep.py"
-  ],
+  uploadPaths: [],
+  assets: {},
   environment: {
     CONDUCTOR_PATHHELPER: 0,
     ILISE_SERVER: "conductor_ilise:40500",
@@ -60,8 +50,7 @@ const initialState = {
   loading: false,
   framesInfo: "",
   projects: [],
-  projectIndex: 0,
-  instanceTypes: []
+  projectIndex: 0
 };
 
 export default createReducer(initialState, {
@@ -105,7 +94,21 @@ export default createReducer(initialState, {
   [projectsSuccess]: (state, action) => {
     state.projects = action.payload;
   },
-  [instanceTypesSuccess]: (state, action) => {
-    state.instanceTypes = action.payload;
+  [addAssets]: (state, action) => {
+    state.assets = {
+      ...state.assets,
+      ...action.payload
+    };
+  },
+  [removeAssets]: (state, action) => {
+    action.payload.forEach(_ => {
+      if (state.assets.hasOwnProperty(_)) {
+        delete state.assets[_];
+      }
+    });
+    state.selectedAssets = [];
+  },
+  [updateAssetSelection]: (state, action) => {
+    state.selectedAssets = action.payload;
   }
 });

@@ -98,7 +98,7 @@ const Drawer = props => {
           <ListItemIcon>
             <SettingsInputComponent />
           </ListItemIcon>
-          <ListItemText primary="Custom Submitter" />
+          <ListItemText primary="Submission toolkit" />
         </ListItem>
       </List>
       <div className={classes.spacer} />

@@ -93,20 +93,27 @@ const resolveTasks = (
   });
 };
 
-const resolveSubmission = submitter => {
+const resolveScoutFrames = (scoutFrameSpec, useScoutFrames) =>
+  useScoutFrames ? _resolveFrames(scoutFrameSpec).join(", ") : "";
+
+const resolveSubmission = (submitter, instanceType) => {
   const {
     taskTemplate,
     frameSpec,
     chunkSize,
     useTiles,
-    instanceTypes,
-    instanceTypeIndex,
+    useScoutFrames,
+    scoutFrameSpec,
     jobTitle,
     preemptible,
     projectIndex,
     projects
   } = submitter;
-  let tileSpec = useTiles ? submitter.tileSpec : "1";
+
+  const tileSpec = useTiles ? submitter.tileSpec : "1";
+
+  const scout_frames = resolveScoutFrames(scoutFrameSpec, useScoutFrames);
+
   const tasks_data = resolveTasks(
     taskTemplate,
     frameSpec,
@@ -115,11 +122,20 @@ const resolveSubmission = submitter => {
     useTiles
   );
 
-  const instance_type = instanceTypes[instanceTypeIndex].name;
+  const upload_paths = Object.keys(submitter.assets);
+  const instance_type = instanceType.name;
   const project = projects[projectIndex];
   const job_title = jobTitle;
 
-  return { tasks_data, instance_type, job_title, preemptible, project };
+  return {
+    tasks_data,
+    instance_type,
+    job_title,
+    preemptible,
+    project,
+    scout_frames,
+    upload_paths
+  };
 };
 
 export { resolveTasks, resolveSubmission };

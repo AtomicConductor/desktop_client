@@ -13,9 +13,6 @@ import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 
-import UploadsControls from "./uploads/UploadsControls";
-import EnvironmentControls from "./EnvironmentControls";
-
 import Environment from "./Environment";
 import Uploads from "./uploads/Uploads";
 import General from "./general/General";
@@ -76,11 +73,6 @@ const useStyles = makeStyles(theme => ({
   tab: {
     paddingTop: 0,
     paddingBottom: theme.spacing(0.5)
-  },
-  secondaryControl: {
-    flexShrink: 0,
-    display: "flex",
-    alignItems: "center"
   }
 }));
 
@@ -100,18 +92,6 @@ const Submitter = props => {
   useEffect(() => {
     fetchResources();
   }, []);
-
-  const renderSecondaryControl = () => {
-    switch (tabIndex) {
-      case 1:
-        return <UploadsControls />;
-      case 2:
-        return <EnvironmentControls />;
-
-      default:
-        return null;
-    }
-  };
 
   function handleChange(event, newTabIndex) {
     setTabIndex(newTabIndex);
@@ -141,7 +121,7 @@ const Submitter = props => {
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
             <Tab
-              label="Extra uploads"
+              label="Files"
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
             <Tab
@@ -157,10 +137,6 @@ const Submitter = props => {
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
           </Tabs>
-
-          <Box className={classes.secondaryControl}>
-            {renderSecondaryControl()}
-          </Box>
         </Card>
         <Box className={classes.content} id="scroll-box">
           {tabIndex === 0 && <General />}

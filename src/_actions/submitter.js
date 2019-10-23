@@ -22,6 +22,12 @@ const projectsSuccess = createAction("submitter/projectsSuccess");
 const projectsError = createAction("submitter/projectsError");
 const instanceTypesSuccess = createAction("submitter/instanceTypesSuccess");
 const instanceTypesError = createAction("submitter/instanceTypesError");
+
+const addAssets = createAction("submitter/addAssets");
+const removeAssets = createAction("submitter/removeAssets");
+
+const updateAssetSelection = createAction("submitter/updateAssetSelection");
+
 const submission = require("../components/submitter/preview/tmp.json");
 
 /**
@@ -50,12 +56,10 @@ const testPythonShell = () => {
 const fetchProjects = () => async (dispatch, getState) => {
   try {
     const options = createRequestOptions(tokenSelector(getState()));
-
     const response = await axios.get(
       `${config.apiServer}/api/v1/projects`,
       options
     );
-
     const projects = response.data.data
       .filter(_ => _.status === "active")
       .sort((a, b) => a.name < b.name)
@@ -77,9 +81,7 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
       `${config.dashboardUrl}/api/v1/instance-types`,
       options
     );
-    const instanceTypes = response.data.data
-      .sort((a, b) => (a.cores < b.cores ? -1 : 1))
-      .map(_ => ({ description: _.description, name: _.name }));
+    const instanceTypes = response.data.data;
     if (!instanceTypes) throw new Error("Failed to fetch any instance types");
     dispatch(instanceTypesSuccess(instanceTypes));
   } catch (e) {
@@ -107,5 +109,8 @@ export {
   projectsSuccess,
   instanceTypesSuccess,
   projectsError,
-  instanceTypesError
+  instanceTypesError,
+  addAssets,
+  removeAssets,
+  updateAssetSelection
 };

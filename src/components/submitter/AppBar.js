@@ -28,7 +28,7 @@ const AppBar = props => {
     <MuiAppBar position="fixed" className={classes.appBar}>
       <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
-          Custom submitter
+          Submission toolkit
         </Typography>
       </Toolbar>
     </MuiAppBar>

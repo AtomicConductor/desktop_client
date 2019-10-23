@@ -4,6 +4,8 @@ import Box from "@material-ui/core/Box";
 import { useSelector } from "react-redux";
 import { resolveSubmission } from "../../../_helpers/submitter";
 
+import { selectedInstanceType } from "../../../selectors/submitter";
+
 const useStyles = makeStyles(theme => ({
   container: {
     margin: "20px 192px 20px 96px",
@@ -13,7 +15,11 @@ const useStyles = makeStyles(theme => ({
 
 const Preview = () => {
   const classes = useStyles();
-  const submission = resolveSubmission(useSelector(_ => _.submitter));
+  const submission = resolveSubmission(
+    useSelector(_ => _.submitter),
+    useSelector(selectedInstanceType)
+  );
+
   return (
     <Box className={classes.container}>
       <pre>{JSON.stringify(submission, null, " ")}</pre>
