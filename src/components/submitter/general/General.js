@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+
+import FolderIcon from "@material-ui/icons/Folder";
+
 import { BookmarkBorder, Bookmarks } from "@material-ui/icons";
 
 import {
@@ -30,7 +33,8 @@ import {
   setPreemptible,
   setRetries,
   setInstanceTypeIndex,
-  setProjectIndex
+  setProjectIndex,
+  setOutputPath
 } from "../../../_actions/submitter";
 
 import clsx from "clsx";
@@ -75,7 +79,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const General = props => {
+const General = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -92,10 +96,17 @@ const General = props => {
     retries,
     projects,
     instanceTypeIndex,
-    projectIndex
+    projectIndex,
+    outputPath
   } = useSelector(state => state.submitter);
 
   const instanceTypes = useSelector(instanceTypeDescriptionSelector);
+
+  const handleSelectOutputDirectory = e => {
+    if (e.target.files && e.target.files[0]) {
+      dispatch(setOutputPath(e.target.files[0].path));
+    }
+  };
 
   return (
     <Box className={classes.container}>
@@ -218,7 +229,35 @@ const General = props => {
           />
         </Paper>
       </InputRow>
-
+      <InputRow single>
+        <InputLabel label="Output folder" firstLabel />
+        <Paper className={clsx(classes.paper, classes.dominantPaper)}>
+          <InputBase
+            onChange={e => dispatch(setOutputPath(e.target.value))}
+            value={outputPath}
+            className={classes.input}
+          />
+          <label htmlFor="output-path-file">
+            <input
+              hidden
+              className={classes.input}
+              id="output-path-file"
+              type="file"
+              nwdirectory="true"
+              nwdirectorydesc="Choose output folder"
+              onChange={handleSelectOutputDirectory}
+            />
+            <IconButton
+              color="primary"
+              className={classes.iconButton}
+              component="span"
+              size="small"
+            >
+              <FolderIcon />
+            </IconButton>
+          </label>
+        </Paper>
+      </InputRow>
       <InputRow>
         <InputLabel label="Task template" firstLabel />
         <Box className={classes.taskTemplateContainer}>

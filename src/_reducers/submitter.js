@@ -13,6 +13,7 @@ import {
   setRetries,
   setInstanceTypeIndex,
   setProjectIndex,
+  setOutputPath,
   projectsSuccess,
   addAssets,
   removeAssets,
@@ -88,6 +89,9 @@ export default createReducer(initialState, {
   },
   [setProjectIndex]: (state, action) => {
     state.projectIndex = action.payload;
+  },
+  [setOutputPath]: (state, action) => {
+    state.outputPath = action.payload;
   },
 
   [setTaskTemplate]: (state, action) => {

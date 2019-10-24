@@ -93,13 +93,15 @@ const resolveTasks = (
   });
 };
 
+const _validPackage = _ => _.package && Object.keys(_.package).length;
+
 const resolvePackages = softwarePackages => [
-  ...new Set(softwarePackages.filter(_ => _.package).map(_ => _.package.id))
+  ...new Set(softwarePackages.filter(_validPackage).map(_ => _.package.id))
 ];
 
 const resolveEnvironment = (softwarePackages, existingEnvironment = {}) =>
   softwarePackages
-    .filter(_ => _.package)
+    .filter(_validPackage)
     .reduce((env, { package: { environment } }) => {
       return environment.reduce((acc, { merge_policy, name, value }) => {
         if (merge_policy === "exclusive") env[name] = value;
@@ -118,6 +120,7 @@ const resolveSubmission = ({
   instanceTypes,
   instanceTypeIndex,
   jobTitle,
+  outputPath,
   preemptible,
   projectIndex,
   projects,
@@ -135,10 +138,12 @@ const resolveSubmission = ({
   const instance_type = instanceTypes[instanceTypeIndex].name;
   const project = projects[projectIndex];
   const job_title = jobTitle;
+  const output_path = outputPath;
   const software_package_ids = resolvePackages(softwarePackages);
   const environment = resolveEnvironment(softwarePackages);
 
   return {
+    output_path,
     tasks_data,
     instance_type,
     job_title,

@@ -194,10 +194,22 @@ describe("submitter helpers", () => {
           softwareKey: "miarmy",
           package: null
         },
+        { softwareKey: "", package: {} },
         {}
       ];
 
       expect(resolvePackages(softwarePackages)).toEqual(["1", "3"]);
+    });
+
+    it("gives empty array if package has no id", () => {
+      const softwarePackages = [
+        {
+          softwareKey: "",
+          package: {}
+        }
+      ];
+
+      expect(resolvePackages(softwarePackages)).toEqual([]);
     });
   });
 
@@ -276,7 +288,15 @@ describe("submitter helpers", () => {
           }
         }
       ];
+      expect(resolveEnvironment(softwarePackages, {})).toEqual({});
+    });
 
+    it("handles resolving empty environment", () => {
+      const softwarePackages = [
+        {
+          package: {}
+        }
+      ];
       expect(resolveEnvironment(softwarePackages, {})).toEqual({});
     });
   });

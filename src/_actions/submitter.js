@@ -18,6 +18,8 @@ const setPreemptible = createAction("submitter/setPreemptible");
 const setRetries = createAction("submitter/setRetries");
 const setInstanceTypeIndex = createAction("submitter/setInstanceTypeIndex");
 const setProjectIndex = createAction("submitter/setProjectIndex");
+const setOutputPath = createAction("submitter/setOutputPath");
+
 const projectsSuccess = createAction("submitter/projectsSuccess");
 const projectsError = createAction("submitter/projectsError");
 const instanceTypesSuccess = createAction("submitter/instanceTypesSuccess");
@@ -183,6 +185,7 @@ export {
   setRetries,
   setInstanceTypeIndex,
   setProjectIndex,
+  setOutputPath,
   projectsSuccess,
   instanceTypesSuccess,
   projectsError,
