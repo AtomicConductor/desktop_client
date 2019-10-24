@@ -22,11 +22,15 @@ describe("storage", () => {
 
     await storage.saveCredentials({ accounts: [] });
 
-    expect(fs.writeFile).toHaveBeenCalledWith("data/path/credentials.json", "{\"accounts\":[]}", expect.anything());
+    expect(fs.writeFile).toHaveBeenCalledWith(
+      "data/path/credentials.json",
+      '{"accounts":[]}',
+      expect.anything()
+    );
   });
 
   it("reads credentials", async () => {
-    const savedCredentials = "{ \"accounts\": [] }";
+    const savedCredentials = '{ "accounts": [] }';
     fs.exists.mockImplementation((path, cb) => cb(null, true));
     fs.readFile.mockImplementation((path, cb) => cb(null, savedCredentials));
 
@@ -35,8 +39,8 @@ describe("storage", () => {
     expect(credentials).toEqual({ accounts: [] });
   });
 
-  it('merges credentials if file already has data', async () => {
-    const savedCredentials = "{ \"accounts\": [] }";
+  it("merges credentials if file already has data", async () => {
+    const savedCredentials = '{ "accounts": [] }';
     fs.exists.mockImplementation((path, cb) => cb(null, true));
     fs.readFile.mockImplementation((path, cb) => cb(null, savedCredentials));
 
@@ -44,7 +48,7 @@ describe("storage", () => {
 
     expect(fs.writeFile).toHaveBeenCalledWith(
       expect.anything(),
-      "{\"accounts\":[],\"additionalData\":\"test\"}",
+      '{"accounts":[],"additionalData":"test"}',
       expect.anything()
     );
   });
