@@ -23,11 +23,7 @@ const InstallPathField = props => {
   const classes = useStyles();
 
   const { pluginName, value, setValue } = props;
-
-  const handleSelectDirectory = event => {
-    console.log("HANDLESELECTDIRECTORY");
     if (event.target.files && event.target.files[0]) {
-      console.log(event.target.files[0].path);
       setValue(pluginName, event.target.files[0].path);
     }
   };

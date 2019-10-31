@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import FolderIcon from "@material-ui/icons/Folder";
+import Typography from "@material-ui/core/Typography";
 
 import { BookmarkBorder, Bookmarks } from "@material-ui/icons";
 
@@ -20,7 +21,10 @@ import {
 
 import InputRow from "../InputRow";
 import InputLabel from "../InputLabel";
-import { instanceTypeDescriptionSelector } from "../../../selectors/submitter";
+import {
+  instanceTypesSelector,
+  projectsSelector
+} from "../../../selectors/submitter";
 import {
   setJobTitle,
   setFrameSpec,
@@ -32,8 +36,8 @@ import {
   setTaskTemplate,
   setPreemptible,
   setRetries,
-  setInstanceTypeIndex,
-  setProjectIndex,
+  setInstanceType,
+  setProject,
   setOutputPath
 } from "../../../_actions/submitter";
 
@@ -46,6 +50,9 @@ const useStyles = makeStyles(theme => ({
   input: {
     marginLeft: 8,
     flex: 1
+  },
+  filename: {
+    paddingTop: theme.spacing(1)
   },
   iconButton: {
     padding: 0,
@@ -94,13 +101,16 @@ const General = () => {
     taskTemplate,
     preemptible,
     retries,
-    projects,
-    instanceTypeIndex,
-    projectIndex,
+    instanceType,
+    project,
     outputPath
-  } = useSelector(state => state.submitter);
+  } = useSelector(state => state.submitter.submission);
 
-  const instanceTypes = useSelector(instanceTypeDescriptionSelector);
+  const instanceTypes = useSelector(instanceTypesSelector);
+
+  const projects = useSelector(projectsSelector);
+
+  const filename = useSelector(state => state.submitter.filename);
 
   const handleSelectOutputDirectory = e => {
     if (e.target.files && e.target.files[0]) {
@@ -110,6 +120,18 @@ const General = () => {
 
   return (
     <Box className={classes.container}>
+      <InputRow single>
+        <InputLabel label="" firstLabel />
+
+        <Typography
+          variant="body2"
+          color="primary"
+          className={classes.filename}
+        >
+          {filename || "This submission has not been saved"}
+        </Typography>
+      </InputRow>
+
       <InputRow single>
         <InputLabel label="Job title" firstLabel />
         <Paper className={clsx(classes.paper, classes.dominantPaper)}>
@@ -129,12 +151,12 @@ const General = () => {
         <InputLabel label="Project" firstLabel />
         <Paper className={clsx(classes.paper, classes.dominantPaper)}>
           <Select
-            onChange={e => dispatch(setProjectIndex(e.target.value))}
-            value={projectIndex}
+            onChange={e => dispatch(setProject(e.target.value))}
+            value={project}
             input={<InputBase className={classes.input} />}
           >
-            {[projects].map((_, index) => (
-              <MenuItem key={index} value={index}>
+            {projects.map((_, index) => (
+              <MenuItem key={index} value={_}>
                 {_}
               </MenuItem>
             ))}
@@ -157,6 +179,7 @@ const General = () => {
         <Paper className={clsx(classes.paper, classes.dominantPaper)}>
           <InputBase
             className={clsx(classes.input)}
+            type="number"
             value={chunkSize}
             onChange={e => dispatch(setChunkSize(e.target.value))}
           />
@@ -203,13 +226,13 @@ const General = () => {
         <InputLabel label="Instance type" firstLabel />
         <Paper className={clsx(classes.paper, classes.dominantPaper)}>
           <Select
-            onChange={e => dispatch(setInstanceTypeIndex(e.target.value))}
-            value={instanceTypeIndex}
+            onChange={e => dispatch(setInstanceType(e.target.value))}
+            value={instanceType}
             input={<InputBase className={classes.input} />}
           >
             {instanceTypes.map((_, index) => (
-              <MenuItem key={index} value={index}>
-                {_}
+              <MenuItem key={index} value={_}>
+                {_.description}
               </MenuItem>
             ))}
           </Select>
@@ -223,6 +246,7 @@ const General = () => {
         <Paper className={clsx(classes.paper)}>
           <InputBase
             className={clsx(classes.input)}
+            type="number"
             disabled={!preemptible}
             value={retries}
             onChange={e => dispatch(setRetries(e.target.value))}

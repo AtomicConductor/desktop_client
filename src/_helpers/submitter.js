@@ -57,7 +57,6 @@ const _resolveFrames = frameSpec => {
 
 const _resolveChunks = (frameSpec, chunkSize = 1) => {
   const frames = _resolveFrames(frameSpec);
-
   return Array(Math.ceil(frames.length / chunkSize))
     .fill()
     .map((_, index) => index * chunkSize)
@@ -80,6 +79,7 @@ const resolveTasks = (
 ) => {
   Sqrl.defaultTags(["<", ">"]);
   const tiles = _resolveTiles(frameSpec, chunkSize, tileSpec);
+
   return tiles.map(tile => {
     const context = {
       tile: tile.tile,
@@ -99,7 +99,7 @@ const resolvePackages = softwarePackages => [
   ...new Set(softwarePackages.filter(_validPackage).map(_ => _.package.id))
 ];
 
-const resolveEnvironment = (softwarePackages, existingEnvironment = {}) =>
+const _resolveSoftwareEnvironment = softwarePackages =>
   softwarePackages
     .filter(_validPackage)
     .reduce((env, { package: { environment } }) => {
@@ -110,48 +110,104 @@ const resolveEnvironment = (softwarePackages, existingEnvironment = {}) =>
         }
         return acc;
       }, env);
-    }, existingEnvironment);
+    }, {});
+
+const _resolveEnvironmentOverrides = overrides =>
+  overrides
+    .filter(_ => !(_.key.trim() === "" && _.value.trim() === ""))
+    .reduce((obj, _) => ({ ...obj, [_.key]: _.value }), {});
+
+const resolveEnvironment = (softwarePackages, environmentOverrides = []) => {
+  const combinedEnv = {
+    ..._resolveSoftwareEnvironment(softwarePackages, {}),
+    ..._resolveEnvironmentOverrides(environmentOverrides)
+  };
+  return Object.keys(combinedEnv)
+    .filter(key => combinedEnv[key].trim() !== "")
+    .reduce((obj, key) => {
+      obj[key] = combinedEnv[key];
+      return obj;
+    }, {});
+};
+
+const resolveAssets = assets => Object.keys(assets).sort();
+
+const resolveRetryPolicy = (preemptible, retries) =>
+  preemptible ? { preempted: { max_retries: parseInt(retries) } } : null;
+
+const resolveScoutFrames = (scoutFrameSpec, useScoutFrames) =>
+  useScoutFrames ? _resolveFrames(scoutFrameSpec).join(",") : "";
 
 const resolveSubmission = ({
   taskTemplate,
   frameSpec,
   chunkSize,
   useTiles,
-  instanceTypes,
-  instanceTypeIndex,
   jobTitle,
   outputPath,
   preemptible,
-  projectIndex,
-  projects,
+  retries,
+  project,
+  instanceType,
   tileSpec,
-  softwarePackages
+  scoutFrameSpec,
+  useScoutFrames,
+  softwarePackages,
+  environmentOverrides,
+  assets
 }) => {
   const tasks_data = resolveTasks(
     taskTemplate,
     frameSpec,
     chunkSize,
-    useTiles ? tileSpec : "1",
-    useTiles
+    useTiles ? tileSpec : "1"
   );
 
-  const instance_type = instanceTypes[instanceTypeIndex].name;
-  const project = projects[projectIndex];
+  const autoretry_policy = resolveRetryPolicy(preemptible, retries);
+
+  const upload_paths = resolveAssets(assets);
+  const instance_type = instanceType.name;
   const job_title = jobTitle;
   const output_path = outputPath;
   const software_package_ids = resolvePackages(softwarePackages);
-  const environment = resolveEnvironment(softwarePackages);
+
+  const environment = resolveEnvironment(
+    softwarePackages,
+    environmentOverrides
+  );
+
+  const upload_only = false;
+  const force = false;
+  const local_upload = true;
+  const priority = 5;
+
+  const scout_frames = resolveScoutFrames(scoutFrameSpec, useScoutFrames);
 
   return {
+    upload_only,
+    force,
+    local_upload,
+    priority,
+    scout_frames,
+    autoretry_policy,
     output_path,
-    tasks_data,
     instance_type,
     job_title,
     preemptible,
     project,
     software_package_ids,
-    environment
+    environment,
+    upload_paths,
+    tasks_data
   };
 };
 
-export { resolveTasks, resolveSubmission, resolvePackages, resolveEnvironment };
+export {
+  resolveTasks,
+  resolveSubmission,
+  resolvePackages,
+  resolveEnvironment,
+  resolveAssets,
+  resolveScoutFrames,
+  resolveRetryPolicy
+};

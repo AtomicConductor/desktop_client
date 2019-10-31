@@ -1,28 +1,20 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-
 import { makeStyles } from "@material-ui/core/styles";
-
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
-
-import Environment from "./Environment";
+import { Tabs, Tab, Typography, Card, Button, Box } from "@material-ui/core";
+import Advanced from "./advanced/Advanced";
 import Uploads from "./uploads/Uploads";
 import General from "./general/General";
 import Software from "./software/Software";
-import Preview from "./preview/Preview";
 
+import Preview from "./preview/Preview";
 import AppBar from "./AppBar";
 import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
 
 import {
-  testPythonShell,
+  submit,
   fetchProjects,
   fetchInstanceTypes
 } from "../../_actions/submitter";
@@ -100,8 +92,7 @@ const Submitter = props => {
   }
 
   function handleSubmit(event) {
-    dispatch(testPythonShell());
-    console.log("testPythonShell");
+    dispatch(submit());
   }
 
   return (
@@ -127,11 +118,11 @@ const Submitter = props => {
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
             <Tab
-              label="Environment"
+              label="Software"
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
             <Tab
-              label="Software"
+              label="Advanced"
               classes={{ wrapper: classes.tab, root: classes.tab }}
             />
             <Tab
@@ -143,13 +134,11 @@ const Submitter = props => {
         <Box className={classes.content}>
           {tabIndex === 0 && <General />}
           {tabIndex === 1 && <Uploads />}
-          {tabIndex === 2 && <Environment />}
-          {tabIndex === 3 && <Software />}
+          {tabIndex === 2 && <Software />}
+          {tabIndex === 3 && <Advanced />}
           {tabIndex === 4 && <Preview />}
         </Box>
         <Card className={classes.actionsCard}>
-          <Button color="primary">Save</Button>
-          <Button color="primary">Load</Button>
           <Button color="secondary" onClick={handleSubmit}>
             Submit
           </Button>

@@ -2,7 +2,10 @@ import { createSelector } from "reselect";
 
 const instanceTypesMap = state => state.entities.instanceTypes;
 
-const instanceTypeIndex = state => state.submitter.instanceTypeIndex;
+const projectsSelector = state =>
+  state.entities.projects
+    .concat()
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
 const instanceTypesSelector = createSelector(
   instanceTypesMap,
@@ -12,23 +15,7 @@ const instanceTypesSelector = createSelector(
       .sort((a, b) => (a.cores < b.cores ? -1 : 1))
 );
 
-const instanceTypeDescriptionSelector = createSelector(
-  instanceTypesSelector,
-  instanceTypesSelector => instanceTypesSelector.map(_ => _.description)
-);
-
-const instanceTypeNamesSelector = createSelector(
-  instanceTypesSelector,
-  instanceTypesSelector => instanceTypesSelector.map(_ => _.name)
-);
-
-const selectedInstanceType = createSelector(
-  [instanceTypeIndex, instanceTypesSelector],
-  (instanceTypeIndex, instanceTypesSelector) =>
-    instanceTypesSelector[instanceTypeIndex]
-);
-
-const assetsMap = state => state.submitter.assets;
+const assetsMap = state => state.submitter.submission.assets;
 
 const assetsSelector = createSelector(
   assetsMap,
@@ -40,9 +27,4 @@ const assetsSelector = createSelector(
     }))
 );
 
-export {
-  instanceTypeDescriptionSelector,
-  instanceTypeNamesSelector,
-  selectedInstanceType,
-  assetsSelector
-};
+export { instanceTypesSelector, assetsSelector, projectsSelector };

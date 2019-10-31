@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => {
   const plugins = Object.values(state.plugins.items).sort((a, b) =>
-    a["order"] < b["order"] ? -1 : 1
+    a.order < b.order ? -1 : 1
   );
 
   return {

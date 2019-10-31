@@ -96,7 +96,6 @@ const flagBetaUser = async (email, storage = localStorage) => {
     storage.setItem(betaUserFlagKey, true);
   } catch (e) {
     // No need no propagate exception to the user
-    console.log(e);
     Sentry.withScope(scope => {
       scope.setExtras({ source: "hubspot - flag beta user", email });
       Sentry.captureException(e);

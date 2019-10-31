@@ -80,32 +80,30 @@ const initialState = {
 const plugins = createReducer(initialState, {
   [setInstallPathValue]: (state, action) => {
     const { pluginName, value } = action.payload;
-    console.log(pluginName + "  " + value);
-    if (pluginName in state["items"]) {
-      state["items"][pluginName]["installDirectory"] = value;
+    if (pluginName in state.items) {
+      state.items[pluginName].installDirectory = value;
     }
   },
 
   [resetInstallPathValue]: (state, action) => {
     const { pluginName } = action.payload;
-    if (pluginName in state["items"]) {
-      state["items"][pluginName]["installDirectory"] =
-        state["items"][pluginName]["defaultInstallDirectory"];
+    if (pluginName in state.items) {
+      state.items[pluginName].installDirectory =
+        state.items[pluginName].defaultInstallDirectory;
     }
   },
 
   [installPlugin]: (state, action) => {
     const pluginName = action.payload;
-    console.log(pluginName);
-    if (pluginName in state["items"]) {
-      state["items"][pluginName]["installed"] = true;
+    if (pluginName in state.items) {
+      state.items[pluginName].installed = true;
     }
   },
 
   [uninstallPlugin]: (state, action) => {
     const pluginName = action.payload;
-    if (pluginName in state["items"]) {
-      state["items"][pluginName]["installed"] = false;
+    if (pluginName in state.items) {
+      state.items[pluginName].installed = false;
     }
   }
 });

@@ -65,10 +65,11 @@ const Uploads = () => {
   const handleAddFiles = filelist => {
     dispatch(
       addAssets(
-        [...filelist].reduce((arr, _) => {
-          arr[_.path] = { size: _.size, type: _.type };
-          return arr;
-        }, {})
+        // filelist is not an array, hence the [...]
+        [...filelist].reduce(
+          (obj, _) => ({ ...obj, [_.path]: { size: _.size, type: _.type } }),
+          {}
+        )
       )
     );
     if (selectableGroupRef.current) {
@@ -78,8 +79,6 @@ const Uploads = () => {
 
   const handleRemoveFiles = () => {
     if (selectableGroupRef.current) {
-      console.log("TO REMOVE");
-      console.log(selectableGroupRef.current.selectedItems);
       dispatch(
         removeAssets(
           [...selectableGroupRef.current.selectedItems].map(_ => _.props.path)

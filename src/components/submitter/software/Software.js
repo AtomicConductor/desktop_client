@@ -47,7 +47,9 @@ const Software = () => {
     state => state.entities.softwarePackages
   );
 
-  const packages = useSelector(state => state.submitter.softwarePackages);
+  const packages = useSelector(
+    state => state.submitter.submission.softwarePackages
+  );
 
   return (
     <Box className={classes.container}>

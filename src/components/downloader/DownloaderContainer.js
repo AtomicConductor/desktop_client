@@ -45,9 +45,7 @@ const mapStateToProps = (state, ownProps) => {
   } else {
     jobs = Object.values(state.entities.jobs || {});
   }
-  jobs = jobs.sort((a, b) =>
-    moment(b["created"]) < moment(a["created"]) ? -1 : 1
-  );
+  jobs = jobs.sort((a, b) => (moment(b.created) < moment(a.created) ? -1 : 1));
 
   return {
     loggedIn,

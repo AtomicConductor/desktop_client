@@ -5,19 +5,23 @@ describe("submitter reducer", () => {
   describe("software packages", () => {
     it("adds a new entry", () => {
       const initialState = {
-        softwarePackages: [{}]
+        submission: {
+          softwarePackages: [{}]
+        }
       };
 
       const state = reducer(initialState, updateSelectedSoftware({}));
 
       expect(state).toEqual({
-        softwarePackages: [{}, { softwareKey: "", package: {} }]
+        submission: {
+          softwarePackages: [{}, { softwareKey: "", package: {} }]
+        }
       });
     });
 
     it("updates an existing entry", () => {
       const initialState = {
-        softwarePackages: [{}, {}, {}]
+        submission: { softwarePackages: [{}, {}, {}] }
       };
 
       const state = reducer(
@@ -30,17 +34,21 @@ describe("submitter reducer", () => {
       );
 
       expect(state).toEqual({
-        softwarePackages: [
-          {},
-          {},
-          { softwareKey: "maya", package: "1234567890" }
-        ]
+        submission: {
+          softwarePackages: [
+            {},
+            {},
+            { softwareKey: "maya", package: "1234567890" }
+          ]
+        }
       });
     });
 
     it("removes an existing entry", () => {
       const initialState = {
-        softwarePackages: [{}, { softwareKey: "key", package: "id" }]
+        submission: {
+          softwarePackages: [{}, { softwareKey: "key", package: "id" }]
+        }
       };
 
       const state = reducer(
@@ -52,7 +60,7 @@ describe("submitter reducer", () => {
         })
       );
 
-      expect(state).toEqual({ softwarePackages: [{}] });
+      expect(state).toEqual({ submission: { softwarePackages: [{}] } });
     });
   });
 });

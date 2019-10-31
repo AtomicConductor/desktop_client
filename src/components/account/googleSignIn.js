@@ -22,13 +22,10 @@ export default async signInHandler => {
     scope: "profile email"
   });
 
-  console.log(authorizeUrl);
-
   nw.Window.open(authorizeUrl, { width: 450, height: 620 }, authWindow => {
     let server;
 
     authWindow.on("close", function() {
-      console.log("closing window and destroying server");
       if (server.terminate) server.terminate();
       this.close(true);
     });
@@ -47,7 +44,6 @@ export default async signInHandler => {
 
           signInHandler({ id_token });
         } catch (e) {
-          console.log(e);
         } finally {
           server.terminate();
         }

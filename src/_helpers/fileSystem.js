@@ -5,11 +5,9 @@ export const exactFileExistsSync = (filePath, md5) => {
   try {
     fs.statSync(filePath).isFile();
   } catch (err) {
-    // console.log(filePath + " is not a file");
     return false;
   }
   const calcMd5 = Buffer.from(md5File.sync(filePath), "hex").toString("base64");
-  // console.log(calcMd5 + " === " + md5);
   return calcMd5 === md5;
 };
 

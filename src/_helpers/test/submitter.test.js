@@ -1,7 +1,10 @@
 import {
   resolveTasks,
   resolvePackages,
-  resolveEnvironment
+  resolveEnvironment,
+  resolveAssets,
+  resolveScoutFrames,
+  resolveRetryPolicy
 } from "../submitter";
 
 describe("submitter helpers", () => {
@@ -84,6 +87,23 @@ describe("submitter helpers", () => {
       expect(result[2]).toEqual({
         command: "command -s 5 -e 6",
         frames: "5-6"
+      });
+    });
+
+    it("creates many chunks", () => {
+      const result = resolveTasks(
+        "command -s <chunk_start> -e <chunk_end>",
+        "1-6",
+        1
+      );
+      expect(result).toHaveLength(6);
+      expect(result[0]).toEqual({
+        command: "command -s 1 -e 1",
+        frames: "1"
+      });
+      expect(result[2]).toEqual({
+        command: "command -s 3 -e 3",
+        frames: "3"
       });
     });
 
@@ -201,7 +221,7 @@ describe("submitter helpers", () => {
       expect(resolvePackages(softwarePackages)).toEqual(["1", "3"]);
     });
 
-    it("gives empty array if package has no id", () => {
+    it("returns empty array if package has no id", () => {
       const softwarePackages = [
         {
           softwareKey: "",
@@ -246,34 +266,6 @@ describe("submitter helpers", () => {
       });
     });
 
-    it("appends package environment variables", () => {
-      const softwarePackages = [
-        {
-          package: {
-            environment: [
-              {
-                merge_policy: "append",
-                name: "maya_var",
-                value: "maya_value"
-              },
-              {
-                merge_policy: "append",
-                name: "maya_var_2",
-                value: "maya_value_2"
-              }
-            ]
-          }
-        }
-      ];
-
-      expect(
-        resolveEnvironment(softwarePackages, { maya_var: "existing_value" })
-      ).toEqual({
-        maya_var: "existing_value:maya_value",
-        maya_var_2: "maya_value_2"
-      });
-    });
-
     it("ignores invalid merge policies", () => {
       const softwarePackages = [
         {
@@ -288,7 +280,7 @@ describe("submitter helpers", () => {
           }
         }
       ];
-      expect(resolveEnvironment(softwarePackages, {})).toEqual({});
+      expect(resolveEnvironment(softwarePackages)).toEqual({});
     });
 
     it("handles resolving empty environment", () => {
@@ -297,7 +289,125 @@ describe("submitter helpers", () => {
           package: {}
         }
       ];
-      expect(resolveEnvironment(softwarePackages, {})).toEqual({});
+      expect(resolveEnvironment(softwarePackages)).toEqual({});
+    });
+
+    it("appends overrides", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "append",
+                name: "maya_var",
+                value: "maya_value"
+              }
+            ]
+          }
+        }
+      ];
+      const overrides = [{ key: "foo", value: "bar" }];
+
+      expect(resolveEnvironment(softwarePackages, overrides)).toEqual({
+        maya_var: "maya_value",
+        foo: "bar"
+      });
+    });
+
+    it("appends overrides except empty entries", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "append",
+                name: "maya_var",
+                value: "maya_value"
+              }
+            ]
+          }
+        }
+      ];
+      const overrides = [
+        { key: "foo", value: "bar" },
+        { key: " ", value: " " }
+      ];
+
+      expect(resolveEnvironment(softwarePackages, overrides)).toEqual({
+        maya_var: "maya_value",
+        foo: "bar"
+      });
+    });
+
+    it("appends removes variables when the overridden value is blank", () => {
+      const softwarePackages = [
+        {
+          package: {
+            environment: [
+              {
+                merge_policy: "append",
+                name: "maya_var",
+                value: "maya_value"
+              },
+              {
+                merge_policy: "append",
+                name: "maya_var2",
+                value: "maya_value2"
+              }
+            ]
+          }
+        }
+      ];
+      const overrides = [
+        { key: "foo", value: "bar" },
+        { key: "maya_var2", value: " " }
+      ];
+
+      expect(resolveEnvironment(softwarePackages, overrides)).toEqual({
+        maya_var: "maya_value",
+        foo: "bar"
+      });
+    });
+  });
+
+  describe("resolve assets", () => {
+    it("makes a sorted list from keys", () => {
+      const assets = {
+        pathA: { size: "foo", type: "bar" },
+        pathD: { size: "foo", type: "bar" },
+        pathC: { size: "foo", type: "bar" },
+        pathB: { size: "foo", type: "bar" }
+      };
+      expect(resolveAssets(assets)).toEqual([
+        "pathA",
+        "pathB",
+        "pathC",
+        "pathD"
+      ]);
+    });
+  });
+
+  describe("resolve scout frames", () => {
+    it("returns empty string when useScoutFrames is off", () => {
+      expect(resolveScoutFrames("1-10x3", false)).toBe("");
+    });
+
+    it("returns comma separated string of ints", () => {
+      expect(resolveScoutFrames("1-10x3", true)).toBe("1,4,7,10");
+    });
+  });
+
+  describe("resolve autoretry", () => {
+    it("returns an object when preemptible is on", () => {
+      expect(resolveRetryPolicy(true, 3)).toEqual({
+        preempted: {
+          max_retries: 3
+        }
+      });
+    });
+
+    it("returns null when preemptible is off", () => {
+      expect(resolveRetryPolicy(false, 3)).toBeNull();
     });
   });
 });

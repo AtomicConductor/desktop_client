@@ -9,36 +9,29 @@ export default class AppStorage {
     this.fileProvider = fileProvider;
   }
 
-  async save(file, data) {
-    await promisify(this.fileProvider.writeFile)(
-      join(this.dataPath, file),
-      JSON.stringify(data)
-    );
+  async save(path, data) {
+    await promisify(this.fileProvider.writeFile)(path, JSON.stringify(data));
   }
 
-  async load(file) {
-    const data = await promisify(this.fileProvider.readFile)(
-      join(this.dataPath, file)
-    );
+  async load(path) {
+    const data = await promisify(this.fileProvider.readFile)(path);
     return JSON.parse(data.toString());
   }
 
   async saveCredentials(data) {
     const credentials = await this.readCredentials();
     const mergedCredentials = { ...credentials, ...data };
-
-    await this.save(credentialsFileName, mergedCredentials);
+    const path = join(this.dataPath, credentialsFileName);
+    await this.save(path, mergedCredentials);
   }
 
   async readCredentials() {
+    const path = join(this.dataPath, credentialsFileName);
+
     const { exists } = this.fileProvider;
-    const credentialsFileExists = await promisify(exists)(
-      join(this.dataPath, credentialsFileName)
-    );
-    if (!credentialsFileExists) {
+    if (!(await promisify(exists)(path))) {
       return undefined;
     }
-
-    return await this.load(credentialsFileName);
+    return await this.load(path);
   }
 }

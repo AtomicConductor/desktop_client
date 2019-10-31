@@ -16,17 +16,12 @@ const MESSAGE_MAP = {
 const checkResponse = response => {
   if (!response.ok) {
     if (response.statusText) {
-      console.log(`response.statusText ${response.statusText}`);
       throw new Error(response.statusText);
     }
 
     if (response.status in MESSAGE_MAP) {
-      console.log(
-        `MESSAGE_MAP[response.status] ${MESSAGE_MAP[response.status]}`
-      );
       throw new Error(MESSAGE_MAP[response.status]);
     }
-    console.log("Unknown error");
     throw new Error("Unknown error");
   }
 };
@@ -38,7 +33,7 @@ const createRequestOptions = token => {
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers.Authorization = `Bearer ${token}`;
   }
 
   return { headers };

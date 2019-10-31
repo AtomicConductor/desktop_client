@@ -22,7 +22,6 @@ const DateRangeMenu = props => {
 
   const handle = span => () => {
     setAnchorEl(null);
-    console.log(`SPAN: ${span}`);
     fetchJobsInSpan(span);
   };
 

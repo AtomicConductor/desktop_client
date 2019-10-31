@@ -188,19 +188,18 @@ export function addToQueue(jobLabel) {
 
       // OutputDirectory must exist or be created.
       const { outputDirectory, files } = job;
-      console.log(`ADDING FILES TO QUEUE FOR ${jobLabel} ${outputDirectory}`);
       if (!ensureDirectoryReady(outputDirectory)) {
         throw new Error(`Can't create or access directory: ${outputDirectory}`);
       }
 
       /*
-      TODO Here would be agood place to check disk space. Especially useful when
+      TODO Here would be a good place to check disk space. Especially useful when
       downloading directly to a thumb drive or something.
       */
 
       Object.values(files)
         .filter(f => !(f.exists && f.exists === 100))
-        .sort((a, b) => (a["taskId"] > b["taskId"] ? 1 : -1))
+        .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
         .forEach((file, i) => {
           const { relativePath } = file;
 
@@ -308,12 +307,12 @@ async function fetchDownloadData(jobLabel, state) {
   const files = {};
   downloads.forEach(task => {
     return task.files.forEach(file => {
-      const rp = file["relative_path"];
+      const rp = file.relative_path;
       files[rp] = {
         relativePath: rp,
-        md5: file["md5"],
-        url: file["url"],
-        taskId: file["task_id"]
+        md5: file.md5,
+        url: file.url,
+        taskId: file.task_id
       };
     });
   });

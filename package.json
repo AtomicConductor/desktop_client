@@ -23,6 +23,7 @@
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
     "react-selectable-fast": "^3.0.0",
+    "react-syntax-highlighter": "^11.0.2",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-starter-kit": "^0.7.0",

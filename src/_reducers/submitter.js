@@ -11,128 +11,183 @@ import {
   setTaskTemplate,
   setPreemptible,
   setRetries,
-  setInstanceTypeIndex,
-  setProjectIndex,
-  setOutputPath,
+  setInstanceType,
+  setProject,
   projectsSuccess,
+  setOutputPath,
   addAssets,
   removeAssets,
-  updateAssetSelection,
-  instanceTypesSuccess,
-  updateSelectedSoftware
+  updateSelectedSoftware,
+  saveSubmissionSuccess,
+  loadSubmissionSuccess,
+  applyResetSubmission,
+  conformInstanceType,
+  setEnvEntry,
+  setPythonLocation
 } from "../_actions/submitter";
 
 const initialState = {
-  retries: 3,
-  preemptible: true,
-  chunkSize: 2,
-  force: false,
-  instanceTypeIndex: 0,
-  jobTitle: "Desktop client test",
-  localUpload: true,
-  uploadOnly: false,
-  notify: null,
-  frameSpec: "1-10x2",
-  tileSpec: "1-9",
-  scoutFrameSpec: "1",
-  useTiles: false,
-  useScoutFrames: false,
-  softwarePackages: [{ softwareKey: "", package: {} }],
-  taskTemplate:
-    '/tmp/conductor/ct_cnode "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list <chunk_start> <chunk_start> <chunk_end>',
-  uploadPaths: [],
-  assets: {},
-  environment: {
-    CONDUCTOR_PATHHELPER: 0,
-    ILISE_SERVER: "conductor_ilise:40500",
-    LD_LIBRARY_PATH: "/usr/lib/python2.7/config-x86_64-linux-gnu",
-    PATH: "/opt/isotropix/clarisse/4/clarisse4.0.sp2/clarisse",
-    PYTHONHOME: "/opt/silhouettefx/silhouette/7/silhouette-7.5.2"
-  },
-  outputPath: "/Users/julian/projects/fish/clarisse/refs_test/renders",
+  filename: "",
   loading: false,
-  framesInfo: "",
-  projects: [],
-  projectIndex: 0
+  pythonLocation: "/Users/julian/.virtualenvs/ccc/bin/python",
+  submission: {
+    retries: 3,
+    preemptible: true,
+    chunkSize: 1,
+    force: false,
+    instanceType: { name: "-not-set-", description: "Not set" },
+    jobTitle: "Desktop client test",
+    localUpload: true,
+    uploadOnly: false,
+    notify: null,
+    frameSpec: "1-10",
+    tileSpec: "1-9",
+    scoutFrameSpec: "1",
+    useTiles: false,
+    useScoutFrames: false,
+    softwarePackages: [{ softwareKey: "", package: {} }],
+    taskTemplate: "cmd <chunk_start> <chunk_end>",
+    uploadPaths: [],
+    assets: {},
+    environmentOverrides: [{ key: "", value: "" }],
+    environment: {},
+    project: "",
+    outputPath: "/tmp/renders"
+  }
 };
 
 export default createReducer(initialState, {
-  [setJobTitle]: (state, action) => {
-    state.jobTitle = action.payload;
+  [setJobTitle]: (state, { payload }) => {
+    state.submission.jobTitle = payload;
   },
-  [setFrameSpec]: (state, action) => {
-    state.frameSpec = action.payload;
+  [setFrameSpec]: (state, { payload }) => {
+    state.submission.frameSpec = payload;
   },
-  [setChunkSize]: (state, action) => {
-    state.chunkSize = action.payload;
+  [setChunkSize]: (state, { payload }) => {
+    state.submission.chunkSize = Math.max(Math.trunc(payload), 1);
   },
-  [setTileSpec]: (state, action) => {
-    state.tileSpec = action.payload;
+  [setTileSpec]: (state, { payload }) => {
+    state.submission.tileSpec = payload;
   },
-  [setScoutFrameSpec]: (state, action) => {
-    state.scoutFrameSpec = action.payload;
+  [setScoutFrameSpec]: (state, { payload }) => {
+    state.submission.scoutFrameSpec = payload;
   },
-  [setUseTiles]: (state, action) => {
-    state.useTiles = action.payload;
+  [setUseTiles]: (state, { payload }) => {
+    state.submission.useTiles = payload;
   },
-  [setUseScoutFrames]: (state, action) => {
-    state.useScoutFrames = action.payload;
+  [setUseScoutFrames]: (state, { payload }) => {
+    state.submission.useScoutFrames = payload;
   },
-  [setPreemptible]: (state, action) => {
-    state.preemptible = action.payload;
+  [setPreemptible]: (state, { payload }) => {
+    state.submission.preemptible = payload;
   },
-  [setRetries]: (state, action) => {
-    state.retries = action.payload;
+  [setRetries]: (state, { payload }) => {
+    state.submission.retries = Math.max(Math.trunc(payload), 0);
   },
-  [setInstanceTypeIndex]: (state, action) => {
-    state.instanceTypeIndex = action.payload;
+  [setInstanceType]: (state, { payload }) => {
+    state.submission.instanceType = payload;
   },
-  [setProjectIndex]: (state, action) => {
-    state.projectIndex = action.payload;
+  [setProject]: (state, { payload }) => {
+    state.submission.project = payload;
   },
-  [setOutputPath]: (state, action) => {
-    state.outputPath = action.payload;
+  [setOutputPath]: (state, { payload }) => {
+    state.submission.outputPath = payload;
   },
 
-  [setTaskTemplate]: (state, action) => {
-    state.taskTemplate = action.payload;
+  [setTaskTemplate]: (state, { payload }) => {
+    state.submission.taskTemplate = payload;
   },
-  [projectsSuccess]: (state, action) => {
-    state.projects = action.payload;
+
+  [conformInstanceType]: (state, { payload }) => {
+    if (payload.length) {
+      const index = Math.max(
+        0,
+        payload.findIndex(_ => _.name === state.submission.instanceType.name)
+      );
+
+      state.submission.instanceType = payload[index];
+    }
   },
-  [addAssets]: (state, action) => {
-    state.assets = {
-      ...state.assets,
-      ...action.payload
+  [projectsSuccess]: (state, { payload }) => {
+    /**
+     * If there is a project already set which is in the list of projects, just leave it.
+     * Otherwise, tryto set the default project. In the last resort, set to the first project in the list
+     *
+     */
+    if (payload.length) {
+      if (!payload.some(_ => state.submission.project === _)) {
+        if (!payload.some(_ => "default" === _)) {
+          state.submission.project = "default";
+        } else {
+          state.submission.project = payload.sort((a, b) =>
+            a.toLowerCase().localeCompare(b.toLowerCase())
+          )[0];
+        }
+      }
+    }
+  },
+  [addAssets]: (state, { payload }) => {
+    state.submission.assets = {
+      ...state.submission.assets,
+      ...payload
     };
   },
-  [removeAssets]: (state, action) => {
-    action.payload.forEach(_ => {
-      if (state.assets.hasOwnProperty(_)) {
-        delete state.assets[_];
+  [removeAssets]: (state, { payload }) => {
+    payload.forEach(_ => {
+      if (state.submission.assets.hasOwnProperty(_)) {
+        delete state.submission.assets[_];
       }
     });
-    state.selectedAssets = [];
   },
-  [updateAssetSelection]: (state, action) => {
-    state.selectedAssets = action.payload;
-  },
-  [instanceTypesSuccess]: (state, action) => {
-    state.instanceTypes = action.payload;
-  },
+
   [updateSelectedSoftware]: (state, { payload }) => {
     const { index, softwareKey, package: pkg } = payload;
     const removeSoftware = softwareKey === "" && pkg === "";
     const newEntry = index === undefined;
 
     if (newEntry) {
-      state.softwarePackages.push({ softwareKey: "", package: {} });
+      state.submission.softwarePackages.push({ softwareKey: "", package: {} });
     } else {
       if (removeSoftware) {
-        state.softwarePackages.splice(index, 1);
+        state.submission.softwarePackages.splice(index, 1);
       } else {
-        state.softwarePackages[index] = { softwareKey, package: pkg };
+        state.submission.softwarePackages[index] = {
+          softwareKey,
+          package: pkg
+        };
       }
     }
+  },
+  [saveSubmissionSuccess]: (state, { payload }) => {
+    state.filename = payload;
+  },
+  [loadSubmissionSuccess]: (state, { payload }) => {
+    state.submission = payload.submission;
+    state.filename = payload.path;
+  },
+  [applyResetSubmission]: (state, { payload }) => {
+    state.submission = initialState.submission;
+    state.filename = "";
+  },
+  [setEnvEntry]: (state, { payload }) => {
+    const { key, value, index } = payload;
+    const { environmentOverrides } = state.submission;
+
+    if (index < environmentOverrides.length) {
+      if (key !== null) {
+        environmentOverrides[index].key = key;
+      }
+      if (value !== null) {
+        environmentOverrides[index].value = value;
+      }
+    }
+    state.submission.environmentOverrides = environmentOverrides.filter(
+      _ => !(_.key.trim() === "" && _.value.trim() === "")
+    );
+    state.submission.environmentOverrides.push({ key: "", value: "" });
+  },
+
+  [setPythonLocation]: (state, { payload }) => {
+    state.pythonLocation = payload;
   }
 });

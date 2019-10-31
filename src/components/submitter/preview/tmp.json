@@ -1,55 +1,59 @@
-{
-    "autoretry_policy": {
-       "preempted": {
-          "max_retries": 3
-       }
-    },
-    "chunk_size": 1,
-    "enforced_md5s": {},
-    "environment": {
-       "CONDUCTOR_PATHHELPER": 0,
-       "ILISE_SERVER": "conductor_ilise:40500",
-       "LD_LIBRARY_PATH": "/usr/lib/python2.7/config-x86_64-linux-gnu",
-       "PATH": "/opt/isotropix/clarisse/4/clarisse4.0.sp2/clarisse",
-       "PYTHONHOME": "/opt/silhouettefx/silhouette/7/silhouette-7.5.2"
-    },
-    "force": false,
-    "instance_type": "n1-highmem-8",
-    "job_title": "DL test 2 frames",
-    "local_upload": true,
-    "max_instances": 0,
-    "notify": null,
-    "output_path": "/Users/julian/projects/fish/clarisse/refs_test/renders",
-    "preemptible": true,
-    "priority": 5,
-    "project": "fishAttack",
-    "scout_frames": "",
-    "software_package_ids": [
-       "32ae46dcb2d20a9c2b33f2b817c0461e"
-    ],
-    "tasks_data": [
-       {
-          "command": "/tmp/conductor/ct_cnode \"/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project\" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list 101 101 -tile_rendering 1 1",
-          "frames": "101"
-       },
-       {
-          "command": "/tmp/conductor/ct_cnode \"/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project\" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list 102 102 -tile_rendering 1 1",
-          "frames": "102"
-       }
-    ],
-    "upload_only": false,
-    "upload_paths": [
-       "/Users/julian/projects/fish/clarisse/Maps/alcazar.jpg",
-       "/Users/julian/projects/fish/clarisse/Maps/diamonddogs.tif",
-       "/Users/julian/projects/fish/clarisse/Maps/thewall.jpg",
-       "/Users/julian/projects/fish/clarisse/refs_test/arch_model.project",
-       "/Users/julian/projects/fish/clarisse/refs_test/arch_shading.project",
-       "/Users/julian/projects/fish/clarisse/refs_test/layout.project",
-       "/Users/julian/projects/fish/clarisse/refs_test/lighting.project",
-       "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project",
-       "/Users/julian/projects/fish/clarisse/refs_test/walls_shading.project",
-       "/tmp/conductor/clarisse.cfg",
-       "/tmp/conductor/ct_cnode",
-       "/tmp/conductor/ct_prep.py"
-    ]
- }
+
+
+   {
+      "autoretry_policy": {
+         "preempted": {
+            "max_retries": 3
+         }
+      }, 
+      "chunk_size": 1, 
+      "enforced_md5s": {}, 
+      "environment": {
+         "CONDUCTOR_PATHHELPER": 0, 
+         "ILISE_SERVER": "conductor_ilise:40500", 
+         "LD_LIBRARY_PATH": "/usr/lib/python2.7/config-x86_64-linux-gnu", 
+         "PATH": "/opt/isotropix/clarisse/4/clarisse4.0.sp2/clarisse", 
+         "PYTHONHOME": "/opt/silhouettefx/silhouette/7/silhouette-7.5.2"
+      }, 
+      "force": false, 
+      "instance_type": "n1-standard-2", 
+      "job_title": "DL test 2 frames", 
+      "local_upload": true, 
+      "max_instances": 0, 
+      "notify": null, 
+      "output_path": "/Users/julian/projects/fish/clarisse/refs_test/renders", 
+      "preemptible": true, 
+      "priority": 5, 
+      "project": "fishAttack", 
+      "scout_frames": "", 
+      "software_package_ids": [
+         "32ae46dcb2d20a9c2b33f2b817c0461e"
+      ], 
+      "tasks_data": [
+         {
+            "command": "/Users/Shared/tmp/conductor/ct_cnode \"/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project\" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list 101 101 -tile_rendering 1 1", 
+            "frames": "101"
+         }, 
+         {
+            "command": "/Users/Shared/tmp/conductor/ct_cnode \"/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project\" -image project://scene/image1.background project://scene/image1.foreground -image_frames_list 102 102 -tile_rendering 1 1", 
+            "frames": "102"
+         }
+      ], 
+      "upload_only": false, 
+      "upload_paths": [
+         "/Users/Shared/tmp/conductor/clarisse.cfg", 
+         "/Users/Shared/tmp/conductor/ct_cnode", 
+         "/Users/Shared/tmp/conductor/ct_prep.py", 
+         "/Users/julian/projects/fish/clarisse/Maps/alcazar.jpg", 
+         "/Users/julian/projects/fish/clarisse/Maps/diamonddogs.tif", 
+         "/Users/julian/projects/fish/clarisse/Maps/thewall.jpg", 
+         "/Users/julian/projects/fish/clarisse/refs_test/arch_model.project", 
+         "/Users/julian/projects/fish/clarisse/refs_test/arch_shading.project", 
+         "/Users/julian/projects/fish/clarisse/refs_test/layout.project", 
+         "/Users/julian/projects/fish/clarisse/refs_test/lighting.project", 
+         "/Users/julian/projects/fish/clarisse/refs_test/shot_mac_ct.project", 
+         "/Users/julian/projects/fish/clarisse/refs_test/walls_shading.project"
+      ]
+   }
+
+ 

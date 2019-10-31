@@ -48,14 +48,13 @@ const downloader = createReducer(initialState, {
   },
 
   [downloadProgress]: (state, action) => {
-    console.log(action.payload);
     state.downloadProgress.push(action.payload);
   },
   [setJobQuery]: (state, action) => {
-    state["jobQueryParams"] = { ...state["jobQueryParams"], ...action.payload };
+    state.jobQueryParams = { ...state.jobQueryParams, ...action.payload };
   },
   [setFilterValue]: (state, action) => {
-    state["jobQueryParams"] = { ...state["jobQueryParams"], ...action.payload };
+    state.jobQueryParams = { ...state.jobQueryParams, ...action.payload };
   }
 });
 

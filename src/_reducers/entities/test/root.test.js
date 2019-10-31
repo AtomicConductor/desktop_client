@@ -12,7 +12,8 @@ describe("entities reducer", () => {
       instanceTypes: {},
       softwarePackages: {
         software: { packages: [] }
-      }
+      },
+      projects: []
     });
   });
 });

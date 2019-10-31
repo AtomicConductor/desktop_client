@@ -94,42 +94,41 @@ const jobs = createReducer(initialState, {
      * Therefore, set all files to not existing first
      */
     if (jobLabel in state && "files" in state[jobLabel]) {
-      Object.keys(state[jobLabel]["files"] || {}).forEach(relativePath => {
-        state[jobLabel]["files"][relativePath].exists = 0;
+      Object.keys(state[jobLabel].files || {}).forEach(relativePath => {
+        state[jobLabel].files[relativePath].exists = 0;
       });
 
       existing.forEach(relativePath => {
-        state[jobLabel]["files"][relativePath].exists = 100;
+        state[jobLabel].files[relativePath].exists = 100;
       });
 
-      state[jobLabel]["loadingKey"] = LOADING_KEYS.NONE;
+      state[jobLabel].loadingKey = LOADING_KEYS.NONE;
     }
   },
 
   [setFileExists]: (state, action) => {
     const { jobLabel, relativePath, percentage } = action.payload;
-    if (jobLabel in state && relativePath in state[jobLabel]["files"]) {
-      state[jobLabel]["files"][relativePath]["exists"] = percentage;
+    if (jobLabel in state && relativePath in state[jobLabel].files) {
+      state[jobLabel].files[relativePath].exists = percentage;
     }
   },
 
   [requestDownloadData]: (state, action) => {
     const jobLabel = action.payload;
-    state[jobLabel]["loadingKey"] = LOADING_KEYS.DOWNLOAD_DETAILS;
+    state[jobLabel].loadingKey = LOADING_KEYS.DOWNLOAD_DETAILS;
   },
 
   [setOutputPathValue]: (state, action) => {
     const { jobLabel, value } = action.payload;
     if (jobLabel in state) {
-      state[jobLabel]["outputDirectory"] = value;
+      state[jobLabel].outputDirectory = value;
     }
   },
 
   [resetOutputPathValue]: (state, action) => {
     const { jobLabel } = action.payload;
     if (jobLabel in state) {
-      state[jobLabel]["outputDirectory"] =
-        state[jobLabel]["originalOutputDirectory"];
+      state[jobLabel].outputDirectory = state[jobLabel].originalOutputDirectory;
     }
   }
 });

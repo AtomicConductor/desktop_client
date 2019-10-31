@@ -3,26 +3,36 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { useSelector } from "react-redux";
 import { resolveSubmission } from "../../../_helpers/submitter";
-
-import { selectedInstanceType } from "../../../selectors/submitter";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { tomorrowNightEighties } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: "20px 192px 20px 96px",
-    minWidth: 700
+    minWidth: 700,
+    height: "100%"
   }
 }));
 
 const Preview = () => {
   const classes = useStyles();
   const submission = resolveSubmission(
-    useSelector(_ => _.submitter),
-    useSelector(selectedInstanceType)
+    useSelector(_ => _.submitter.submission)
   );
 
   return (
     <Box className={classes.container}>
-      <pre>{JSON.stringify(submission, null, " ")}</pre>
+      <SyntaxHighlighter
+        language="json"
+        style={tomorrowNightEighties}
+        customStyle={{
+          fontSize: "14px",
+          padding: "20px",
+          margin: 0,
+          height: "100%"
+        }}
+      >
+        {JSON.stringify(submission, null, " ")}
+      </SyntaxHighlighter>
     </Box>
   );
 };

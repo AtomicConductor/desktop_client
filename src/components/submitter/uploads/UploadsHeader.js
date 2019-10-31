@@ -14,13 +14,6 @@ const useStyles = makeStyles(theme => ({
   container: {
     height: 28
   },
-  browseButtonGroup: {},
-  select: {
-    border: "1px solid green"
-  },
-  deselect: {
-    border: "1px solid red"
-  },
   header: {
     display: "flex",
     justifyContent: "flex-end",
