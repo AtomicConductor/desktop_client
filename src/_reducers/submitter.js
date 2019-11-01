@@ -21,7 +21,6 @@ import {
   saveSubmissionSuccess,
   loadSubmissionSuccess,
   applyResetSubmission,
-  conformInstanceType,
   setEnvEntry,
   setPythonLocation
 } from "../_actions/submitter";
@@ -35,7 +34,7 @@ const initialState = {
     preemptible: true,
     chunkSize: 1,
     force: false,
-    instanceType: { name: "-not-set-", description: "Not set" },
+    instanceType: { name: "", description: "" },
     jobTitle: "Desktop client test",
     localUpload: true,
     uploadOnly: false,
@@ -97,17 +96,6 @@ export default createReducer(initialState, {
   [setTaskTemplate]: (state, { payload }) => {
     state.submission.taskTemplate = payload;
   },
-
-  [conformInstanceType]: (state, { payload }) => {
-    if (payload.length) {
-      const index = Math.max(
-        0,
-        payload.findIndex(_ => _.name === state.submission.instanceType.name)
-      );
-
-      state.submission.instanceType = payload[index];
-    }
-  },
   [projectsSuccess]: (state, { payload }) => {
     /**
      * If there is a project already set which is in the list of projects, just leave it.
@@ -165,10 +153,11 @@ export default createReducer(initialState, {
     state.submission = payload.submission;
     state.filename = payload.path;
   },
-  [applyResetSubmission]: (state, { payload }) => {
-    state.submission = initialState.submission;
+  [applyResetSubmission]: state => {
     state.filename = "";
+    state.submission = initialState.submission;
   },
+
   [setEnvEntry]: (state, { payload }) => {
     const { key, value, index } = payload;
     const { environmentOverrides } = state.submission;

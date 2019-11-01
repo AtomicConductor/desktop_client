@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 
-const instanceTypesMap = state => state.entities.instanceTypes;
+const instanceTypesMapSelector = state => state.entities.instanceTypes;
 
 const projectsSelector = state =>
   state.entities.projects
@@ -8,7 +8,7 @@ const projectsSelector = state =>
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
 const instanceTypesSelector = createSelector(
-  instanceTypesMap,
+  instanceTypesMapSelector,
   instanceTypesMap =>
     Object.keys(instanceTypesMap)
       .map(_ => instanceTypesMap[_])
@@ -27,4 +27,9 @@ const assetsSelector = createSelector(
     }))
 );
 
-export { instanceTypesSelector, assetsSelector, projectsSelector };
+export {
+  instanceTypesSelector,
+  instanceTypesMapSelector,
+  assetsSelector,
+  projectsSelector
+};

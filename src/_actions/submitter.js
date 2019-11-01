@@ -11,7 +11,7 @@ import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
 import path from "upath";
 
-import { instanceTypesSelector } from "../selectors/submitter";
+import { instanceTypesMapSelector } from "../selectors/submitter";
 
 const setJobTitle = createAction("submitter/setJobTitle");
 const setFrameSpec = createAction("submitter/setFrameSpec");
@@ -31,7 +31,6 @@ const projectsSuccess = createAction("submitter/projectsSuccess");
 const projectsError = createAction("submitter/projectsError");
 const instanceTypesSuccess = createAction("submitter/instanceTypesSuccess");
 const instanceTypesError = createAction("submitter/instanceTypesError");
-const conformInstanceType = createAction("submitter/conformInstanceType");
 
 const addAssets = createAction("submitter/addAssets");
 const removeAssets = createAction("submitter/removeAssets");
@@ -40,7 +39,6 @@ const saveSubmissionSuccess = createAction("submitter/saveSubmissionSuccess");
 const loadSubmissionSuccess = createAction("submitter/loadSubmissionSuccess");
 const applyResetSubmission = createAction("submitter/applyResetSubmission");
 
-// const submission = require("../components/submitter/preview/tmp.json");
 const softwarePackagesSuccess = createAction(
   "submitter/softwarePackagesSuccess"
 );
@@ -109,7 +107,6 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
 
     if (!instanceTypes) throw new Error("Failed to fetch any instance types");
     dispatch(instanceTypesSuccess(instanceTypes));
-    dispatch(conformInstanceType(instanceTypesSelector(getState())));
   } catch (e) {
     dispatch(instanceTypesError(e.response.status));
     throw new SubmitterError(e);
@@ -209,9 +206,9 @@ const loadSubmission = path => async (dispatch, getState) => {
     const storage = new AppStorage();
     const submission = await storage.load(path);
 
-    // TODO: Validate
     dispatch(loadSubmissionSuccess({ path, submission }));
-    dispatch(conformInstanceType(instanceTypesSelector(getState())));
+    dispatch(syncStateWithLoadedSubmission(submission));
+
     dispatch(
       setNotification({
         snackbar: `Successfully opened ${path}`,
@@ -226,10 +223,30 @@ const loadSubmission = path => async (dispatch, getState) => {
 const resetSubmission = () => (dispatch, getState) => {
   try {
     dispatch(applyResetSubmission());
-    dispatch(conformInstanceType(instanceTypesSelector(getState())));
   } catch (e) {
     throw new SubmitterError(e);
   }
+};
+
+const syncStateWithLoadedSubmission = submission => async (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  dispatch(
+    setInstanceType(
+      instanceTypesMapSelector(state)[submission.instanceType.name]
+    )
+  );
+
+  const { softwarePackages } = state.entities;
+  submission.softwarePackages.forEach(
+    ({ softwareKey, package: { id } }, index) => {
+      if (!softwarePackages[softwareKey]) return;
+      const pkg = softwarePackages[softwareKey].packages.find(_ => _.id === id);
+      dispatch(updateSelectedSoftware({ index, softwareKey, package: pkg }));
+    }
+  );
 };
 
 export {
@@ -252,7 +269,6 @@ export {
   instanceTypesSuccess,
   projectsError,
   instanceTypesError,
-  conformInstanceType,
   addAssets,
   removeAssets,
   fetchSoftwarePackages,
