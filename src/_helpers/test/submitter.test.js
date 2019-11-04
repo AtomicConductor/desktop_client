@@ -126,6 +126,34 @@ describe("submitter helpers", () => {
       ]);
     });
 
+    it("creates chunks with step and knows what the step is", () => {
+      const result = resolveTasks(
+        "command -s <chunk_start> -e <chunk_end> -b <chunk_step>",
+        "1-6x2",
+        2
+      );
+      expect(result).toHaveLength(2);
+      expect(result).toEqual([
+        {
+          command: "command -s 1 -e 3 -b 2",
+          frames: "1-3x2"
+        },
+        {
+          command: "command -s 5 -e 5 -b 1",
+          frames: "5"
+        }
+      ]);
+    });
+
+    it("creates  UNDEFINED step when chunk is not a progression", () => {
+      const result = resolveTasks(
+        "command -s <chunk_start> -e <chunk_end> -b <chunk_step>",
+        "1,2,4",
+        3
+      );
+      expect(result[0].command).toMatch(new RegExp("-b UNDEFINED"));
+    });
+
     it("creates one chunk if chunkSize larger than frames", () => {
       const result = resolveTasks(
         "command -s <chunk_start> -e <chunk_end>",
@@ -164,7 +192,7 @@ describe("submitter helpers", () => {
       expect(result[3].command).toBe("command -s 1 -e 1 -t 4");
     });
 
-    it("makes many tiles of many chunks", () => {
+    it("makes many tiles of many single chunks", () => {
       const result = resolveTasks(
         "command -s <chunk_start> -e <chunk_end> -t <tile>",
         "1-2",

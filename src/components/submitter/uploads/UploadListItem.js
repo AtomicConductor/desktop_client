@@ -47,7 +47,7 @@ const UploadListItem = props => {
 
       <div className={classes.right}>
         <Typography className={hilightClassname} component="p" align="center">
-          {`${parseInt(size / 1024)}Mb`}
+          {`${parseInt(size / 1024)} Kb`}
         </Typography>
       </div>
     </Paper>
