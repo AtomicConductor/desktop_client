@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-
+import { isDeepStrictEqual } from "util";
 import {
   setJobTitle,
   setFrameSpec,
@@ -129,22 +129,27 @@ export default createReducer(initialState, {
   },
 
   [updateSelectedSoftware]: (state, { payload }) => {
+    const {
+      submission: { softwarePackages }
+    } = state;
     const { index, softwareKey, package: pkg } = payload;
     const removeSoftware = softwareKey === "" && pkg === "";
-    const newEntry = index === undefined;
+    const emptyEntry = { softwareKey: "", package: {} };
+    const nonEmptyEntryPredicate = _ => !isDeepStrictEqual(_, emptyEntry);
 
-    if (newEntry) {
-      state.submission.softwarePackages.push({ softwareKey: "", package: {} });
+    if (removeSoftware) {
+      softwarePackages.splice(index, 1);
     } else {
-      if (removeSoftware) {
-        state.submission.softwarePackages.splice(index, 1);
-      } else {
-        state.submission.softwarePackages[index] = {
-          softwareKey,
-          package: pkg
-        };
-      }
+      softwarePackages[index] = {
+        softwareKey,
+        package: pkg
+      };
     }
+
+    state.submission.softwarePackages = [
+      ...softwarePackages.filter(nonEmptyEntryPredicate),
+      emptyEntry
+    ];
   },
   [saveSubmissionSuccess]: (state, { payload }) => {
     state.filename = payload;
@@ -161,19 +166,21 @@ export default createReducer(initialState, {
   [setEnvEntry]: (state, { payload }) => {
     const { key, value, index } = payload;
     const { environmentOverrides } = state.submission;
+    const emptyEntry = { key: "", value: "" };
+    const nonEmptyEntryPredicate = _ =>
+      _.key.trim() !== "" || _.value.trim() !== "";
 
-    if (index < environmentOverrides.length) {
-      if (key !== null) {
-        environmentOverrides[index].key = key;
-      }
-      if (value !== null) {
-        environmentOverrides[index].value = value;
-      }
+    if (key !== null) {
+      environmentOverrides[index].key = key;
     }
-    state.submission.environmentOverrides = environmentOverrides.filter(
-      _ => !(_.key.trim() === "" && _.value.trim() === "")
-    );
-    state.submission.environmentOverrides.push({ key: "", value: "" });
+    if (value !== null) {
+      environmentOverrides[index].value = value;
+    }
+
+    state.submission.environmentOverrides = [
+      ...environmentOverrides.filter(nonEmptyEntryPredicate),
+      emptyEntry
+    ];
   },
 
   [setPythonLocation]: (state, { payload }) => {

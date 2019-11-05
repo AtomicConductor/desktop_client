@@ -3,31 +3,15 @@ import { updateSelectedSoftware } from "../../_actions/submitter";
 
 describe("submitter reducer", () => {
   describe("software packages", () => {
-    it("adds a new entry", () => {
-      const initialState = {
-        submission: {
-          softwarePackages: [{}]
-        }
-      };
-
-      const state = reducer(initialState, updateSelectedSoftware({}));
-
-      expect(state).toEqual({
-        submission: {
-          softwarePackages: [{}, { softwareKey: "", package: {} }]
-        }
-      });
-    });
-
     it("updates an existing entry", () => {
       const initialState = {
-        submission: { softwarePackages: [{}, {}, {}] }
+        submission: { softwarePackages: [{ softwareKey: "", package: {} }] }
       };
 
       const state = reducer(
         initialState,
         updateSelectedSoftware({
-          index: 2,
+          index: 0,
           softwareKey: "maya",
           package: "1234567890"
         })
@@ -36,9 +20,8 @@ describe("submitter reducer", () => {
       expect(state).toEqual({
         submission: {
           softwarePackages: [
-            {},
-            {},
-            { softwareKey: "maya", package: "1234567890" }
+            { softwareKey: "maya", package: "1234567890" },
+            { softwareKey: "", package: {} }
           ]
         }
       });
@@ -47,20 +30,29 @@ describe("submitter reducer", () => {
     it("removes an existing entry", () => {
       const initialState = {
         submission: {
-          softwarePackages: [{}, { softwareKey: "key", package: "id" }]
+          softwarePackages: [
+            { softwareKey: "key1", package: "id1" },
+            { softwareKey: "key2", package: "id2" }
+          ]
         }
       };
 
-      const state = reducer(
-        initialState,
-        updateSelectedSoftware({
-          index: 1,
-          softwareKey: "",
-          package: ""
-        })
-      );
+      const removeItem = (state, index) =>
+        reducer(
+          state,
+          updateSelectedSoftware({
+            index,
+            softwareKey: "",
+            package: ""
+          })
+        );
 
-      expect(state).toEqual({ submission: { softwarePackages: [{}] } });
+      let state = removeItem(initialState, 0);
+      state = removeItem(state, 0);
+
+      expect(state).toEqual({
+        submission: { softwarePackages: [{ softwareKey: "", package: {} }] }
+      });
     });
   });
 });

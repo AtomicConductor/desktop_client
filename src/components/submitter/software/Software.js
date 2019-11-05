@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
+import { isDeepStrictEqual } from "util";
 import {
   IconButton,
   Grid,
@@ -12,7 +13,7 @@ import {
   MenuItem,
   InputBase
 } from "@material-ui/core";
-import { LibraryAddRounded, DeleteOutlineRounded } from "@material-ui/icons";
+import { DeleteOutlineRounded } from "@material-ui/icons";
 import { updateSelectedSoftware } from "../../../_actions/submitter";
 
 const useStyles = makeStyles(theme => ({
@@ -122,6 +123,7 @@ const Software = () => {
           </Grid>
           <Grid item xs={1}>
             <IconButton
+              disabled={softwareKey === "" && isDeepStrictEqual(pkg, {})}
               onClick={() => {
                 dispatch(
                   updateSelectedSoftware({
@@ -137,15 +139,6 @@ const Software = () => {
           </Grid>
         </Grid>
       ))}
-      <Grid container spacing={1}>
-        <IconButton
-          onClick={() => {
-            dispatch(updateSelectedSoftware({}));
-          }}
-        >
-          <LibraryAddRounded className={classes.fabIcon} />
-        </IconButton>
-      </Grid>
     </Box>
   );
 };

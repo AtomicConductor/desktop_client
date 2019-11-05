@@ -100,7 +100,6 @@ const Advanced = () => {
         <Paper className={clsx(classes.paper, classes.value)}>
           <InputBase
             disabled={true}
-            // onChange={e => dispatch(setPythonLocation(e.target.value))}
             value={pythonLocation}
             className={classes.input}
           />
