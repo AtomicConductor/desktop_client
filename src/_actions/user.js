@@ -1,6 +1,6 @@
 import { createAction } from "redux-starter-kit";
 import config from "../config";
-import * as axios from "axios";
+import axios from "../_helpers/axios";
 import SignInError from "../errors/signInError";
 import { avatarInitials } from "../_helpers/presentation";
 import { emailSelector, accountsSelector } from "../selectors/account";

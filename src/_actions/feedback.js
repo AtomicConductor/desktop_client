@@ -1,5 +1,5 @@
 import { setNotification } from "./notification";
-import * as axios from "axios";
+import axios from "../_helpers/axios";
 import { platform, release } from "os";
 import config from "../config";
 import FeedbackError from "../errors/feedbackError";

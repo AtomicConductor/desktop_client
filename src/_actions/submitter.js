@@ -1,6 +1,6 @@
 import { PythonShell } from "python-shell";
 import { createAction } from "redux-starter-kit";
-import * as axios from "axios";
+import axios from "../_helpers/axios";
 import config from "../config";
 import SubmitterError from "../errors/submitterError";
 import { tokenSelector } from "../selectors/account";
@@ -28,9 +28,7 @@ const setProject = createAction("submitter/setProject");
 const setOutputPath = createAction("submitter/setOutputPath");
 
 const projectsSuccess = createAction("submitter/projectsSuccess");
-const projectsError = createAction("submitter/projectsError");
 const instanceTypesSuccess = createAction("submitter/instanceTypesSuccess");
-const instanceTypesError = createAction("submitter/instanceTypesError");
 
 const addAssets = createAction("submitter/addAssets");
 const removeAssets = createAction("submitter/removeAssets");
@@ -91,7 +89,6 @@ const fetchProjects = () => async (dispatch, getState) => {
 
     dispatch(projectsSuccess(projects));
   } catch (e) {
-    dispatch(projectsError(e.response.status));
     throw new SubmitterError(e);
   }
 };
@@ -108,7 +105,6 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
     if (!instanceTypes) throw new Error("Failed to fetch any instance types");
     dispatch(instanceTypesSuccess(instanceTypes));
   } catch (e) {
-    dispatch(instanceTypesError(e.response.status));
     throw new SubmitterError(e);
   }
 };
@@ -267,8 +263,6 @@ export {
   setOutputPath,
   projectsSuccess,
   instanceTypesSuccess,
-  projectsError,
-  instanceTypesError,
   addAssets,
   removeAssets,
   fetchSoftwarePackages,

@@ -11,7 +11,6 @@ import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
 
 import fs from "fs";
-import { checkResponse } from "../_helpers/network";
 import {
   exactFileExistsSync,
   ensureDirectoryReady,
@@ -23,6 +22,8 @@ import { DownloaderHelper } from "node-downloader-helper";
 import config from "../config";
 
 import { tokenSelector } from "../selectors/account";
+import axios from "../_helpers/axios";
+import DownloaderError from "../errors/downloaderError";
 
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
@@ -228,12 +229,7 @@ export function addToQueue(jobLabel) {
             });
         });
     } catch (error) {
-      dispatch(
-        setNotification({
-          type: "error",
-          snackbar: error.message
-        })
-      );
+      throw new DownloaderError(error);
     }
   };
 }
@@ -299,10 +295,8 @@ async function fetchDownloadData(jobLabel, state) {
   const options = createRequestOptions(tokenSelector(state));
   const { projectUrl } = config;
   const url = `${projectUrl}/downloads/${jobLabel}`;
-  let response = await fetch(url, options);
-  checkResponse(response);
-  const data = await response.json();
-
+  let response = await axios.get(url, options);
+  const { data } = response;
   const downloads = data.downloads || [];
   const files = {};
   downloads.forEach(task => {

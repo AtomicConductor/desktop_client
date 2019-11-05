@@ -2,10 +2,11 @@ import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import moment from "moment";
-import { checkResponse } from "../_helpers/network";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
 import { currentAccountSelector, tokenSelector } from "../selectors/account";
+import axios from "../_helpers/axios";
+import JobsError from "../errors/jobError";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -170,9 +171,11 @@ async function getRecentJobs(state) {
 
   const url = `${dashboardUrl}/api/v1/jobs?${queryString}`;
 
-  const response = await fetch(url, options);
-  checkResponse(response);
-
-  const data = await response.json();
-  return data;
+  try {
+    const response = await axios.get(url, options);
+    const { data } = response;
+    return data;
+  } catch (e) {
+    throw new JobsError(e);
+  }
 }
