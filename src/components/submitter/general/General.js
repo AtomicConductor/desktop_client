@@ -1,14 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
-
 import FolderIcon from "@material-ui/icons/Folder";
 import Typography from "@material-ui/core/Typography";
-
-import { BookmarkBorder, Bookmarks } from "@material-ui/icons";
-
 import {
   Select,
   Box,
@@ -21,6 +16,7 @@ import {
 
 import InputRow from "../InputRow";
 import InputLabel from "../InputLabel";
+import TaskTemplate from "./TaskTemplate";
 import {
   instanceTypesSelector,
   projectsSelector
@@ -33,7 +29,6 @@ import {
   setScoutFrameSpec,
   setUseTiles,
   setUseScoutFrames,
-  setTaskTemplate,
   setPreemptible,
   setRetries,
   setInstanceType,
@@ -98,7 +93,6 @@ const General = () => {
     scoutFrameSpec,
     useTiles,
     useScoutFrames,
-    taskTemplate,
     preemptible,
     retries,
     instanceType,
@@ -284,28 +278,7 @@ const General = () => {
       </InputRow>
       <InputRow>
         <InputLabel label="Task template" firstLabel />
-        <Box className={classes.taskTemplateContainer}>
-          <Paper className={clsx(classes.dominantPaper)}>
-            <Box className={clsx(classes.taskToolbar)}>
-              <IconButton color="primary" className={classes.iconButton}>
-                <BookmarkBorder />
-              </IconButton>
-              <IconButton color="primary" className={classes.iconButton}>
-                <Bookmarks />
-              </IconButton>
-            </Box>
-            <Box className={clsx(classes.taskMain)}>
-              <InputBase
-                value={taskTemplate}
-                onChange={e => dispatch(setTaskTemplate(e.target.value))}
-                multiline
-                rows={6}
-                className={classes.taskTemplateInput}
-                placeholder="kick -nstdin -i /path/to/myfile.<chunk_start>.ass -dw -dp -v 5"
-              />
-            </Box>
-          </Paper>
-        </Box>
+        <TaskTemplate />
       </InputRow>
     </Box>
   );

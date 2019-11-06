@@ -45,7 +45,7 @@ const initialState = {
     useTiles: false,
     useScoutFrames: false,
     softwarePackages: [{ softwareKey: "", package: {} }],
-    taskTemplate: "cmd <chunk_start> <chunk_end>",
+    taskTemplate: "",
     uploadPaths: [],
     assets: {},
     environmentOverrides: [{ key: "", value: "" }],

@@ -24,3 +24,10 @@ export const paths = {
   signIn: "/sign-in",
   submitter: "/submitter"
 };
+
+export const taskTemplateTokens = [
+  "chunk_start",
+  "chunk_end",
+  "chunk_step",
+  "chunk_spec"
+];
