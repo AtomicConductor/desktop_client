@@ -5,12 +5,11 @@ import config from "../config";
 import SubmitterError from "../errors/submitterError";
 import { tokenSelector } from "../selectors/account";
 import { createRequestOptions } from "../_helpers/network";
-import { resolveSubmission } from "../_helpers/submitter";
+import { submissionSelector } from "../selectors/submitter";
 
 import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
 import path from "upath";
-
 import { instanceTypesMapSelector } from "../selectors/submitter";
 
 const setJobTitle = createAction("submitter/setJobTitle");
@@ -47,9 +46,10 @@ const setPythonLocation = createAction("submitter/setPythonLocation");
 
 const submit = () => async (dispatch, getState) => {
   try {
-    const { pythonLocation, submission } = getState().submitter;
+    const state = getState();
+    const { pythonLocation } = state.submitter;
 
-    const submissionArgs = JSON.stringify(resolveSubmission(submission));
+    const submissionArgs = JSON.stringify(submissionSelector(state));
 
     const scriptPath =
       process.env.NODE_ENV === "development"
