@@ -1,12 +1,22 @@
-import { fetchSoftwarePackages, insertTaskTemplateToken } from "../submitter";
+import {
+  fetchSoftwarePackages,
+  insertTaskTemplateToken,
+  loadPythonLocation
+} from "../submitter";
 import nock from "nock";
 import config from "../../config";
+import { settings } from "../../_helpers/constants";
 
 describe("submitter", () => {
   let dispatch;
   beforeEach(() => {
     dispatch = jest.fn();
   });
+
+  global.localStorage.__proto__ = {
+    getItem: jest.fn(),
+    setItem: jest.fn()
+  };
 
   describe("fetchSoftwarePackages", () => {
     it("retrieves software packages", async () => {
@@ -120,6 +130,37 @@ describe("submitter", () => {
       expect(dispatch).toHaveBeenCalledWith({
         type: "submitter/setTaskTemplate",
         payload: "cmd <chunk_start> param "
+      });
+    });
+  });
+
+  describe("loadPythonLocation", () => {
+    it("resolves and saves python path if not already present in localstorage", async () => {
+      const pythonPathResolver = jest
+        .fn()
+        .mockReturnValueOnce("/saved/path/python");
+
+      await loadPythonLocation(pythonPathResolver)(_ => _(dispatch));
+
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        settings.pythonLocation,
+        "/saved/path/python"
+      );
+
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/setPythonLocation",
+        payload: "/saved/path/python"
+      });
+    });
+
+    it("loads python path from locastorage if already present", async () => {
+      localStorage.getItem.mockReturnValueOnce("saved/path");
+
+      await loadPythonLocation(null)(dispatch);
+
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/setPythonLocation",
+        payload: "saved/path"
       });
     });
   });

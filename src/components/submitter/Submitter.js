@@ -16,7 +16,8 @@ import { appBarHeight } from "../../_helpers/constants";
 import {
   submit,
   fetchProjects,
-  fetchInstanceTypes
+  fetchInstanceTypes,
+  loadPythonLocation
 } from "../../_actions/submitter";
 import { signedInSelector } from "../../selectors/account";
 
@@ -81,6 +82,7 @@ const Submitter = props => {
     if (!signedIn) return;
     dispatch(fetchProjects());
     dispatch(fetchInstanceTypes());
+    dispatch(loadPythonLocation());
   }, [signedIn, dispatch]);
 
   if (!signedIn) {

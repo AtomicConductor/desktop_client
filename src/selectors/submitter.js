@@ -24,11 +24,10 @@ const retries = state => state.submitter.submission.retries;
 const uploadOnly = state => state.submitter.submission.uploadOnly;
 const force = state => state.submitter.submission.force;
 const localUpload = state => state.submitter.submission.localUpload;
+const pythonLocation = state => state.submitter.pythonLocation;
 
 const environmentOverrides = state =>
-  state.submitter.submission.environmentOverrides.filter(
-    _ => !(_.key.trim() === "" && _.value.trim() === "")
-  );
+  state.submitter.submission.environmentOverrides;
 
 const tileSpec = state =>
   state.submitter.submission.useTiles
@@ -268,7 +267,9 @@ const softwareEnvironmentSelector = createSelector(
 const environmentOverridesSelector = createSelector(
   environmentOverrides,
   environmentOverrides =>
-    environmentOverrides.reduce((acc, _) => ({ ...acc, [_.key]: _.value }), {})
+    environmentOverrides
+      .filter(_ => !(_.key.trim() === "" && _.value.trim() === ""))
+      .reduce((acc, _) => ({ ...acc, [_.key]: _.value }), {})
 );
 
 const environmentSelector = createSelector(
@@ -359,5 +360,7 @@ export {
   projectSelector,
   outputPathSelector,
   submissionValidSelector,
-  submissionSelector
+  submissionSelector,
+  environmentOverrides,
+  pythonLocation
 };

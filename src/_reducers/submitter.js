@@ -28,7 +28,7 @@ import {
 const initialState = {
   filename: "",
   loading: false,
-  pythonLocation: "/Users/julian/.virtualenvs/ccc/bin/python",
+  pythonLocation: "",
   submission: {
     retries: 3,
     preemptible: true,

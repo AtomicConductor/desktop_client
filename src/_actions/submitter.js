@@ -5,12 +5,14 @@ import config from "../config";
 import SubmitterError from "../errors/submitterError";
 import { tokenSelector } from "../selectors/account";
 import { createRequestOptions } from "../_helpers/network";
-import { submissionSelector } from "../selectors/submitter";
+import { submissionSelector, pythonLocation } from "../selectors/submitter";
 
 import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
 import path from "upath";
 import { instanceTypesMapSelector } from "../selectors/submitter";
+import { resolvePythonLocation } from "../_helpers/python";
+import { settings } from "../_helpers/constants";
 
 const setJobTitle = createAction("submitter/setJobTitle");
 const setFrameSpec = createAction("submitter/setFrameSpec");
@@ -47,8 +49,7 @@ const setPythonLocation = createAction("submitter/setPythonLocation");
 const submit = () => async (dispatch, getState) => {
   try {
     const state = getState();
-    const { pythonLocation } = state.submitter;
-
+    const pythonPath = pythonLocation(state);
     const submissionArgs = JSON.stringify(submissionSelector(state));
 
     const scriptPath =
@@ -59,7 +60,7 @@ const submit = () => async (dispatch, getState) => {
     const options = {
       mode: "text",
       pythonOptions: ["-u"],
-      pythonPath: pythonLocation,
+      pythonPath,
       scriptPath,
       args: [submissionArgs]
     };
@@ -256,6 +257,23 @@ const insertTaskTemplateToken = payload => async (dispatch, getState) => {
   dispatch(setTaskTemplate(updatedTemplate));
 };
 
+const savePythonLocation = path => async dispatch => {
+  localStorage.setItem(settings.pythonLocation, path);
+  dispatch(setPythonLocation(path));
+};
+
+const loadPythonLocation = (
+  pythonPathResolver = resolvePythonLocation
+) => async dispatch => {
+  let path = localStorage.getItem(settings.pythonLocation);
+  if (!path) {
+    path = await pythonPathResolver();
+    dispatch(savePythonLocation(path));
+  } else {
+    dispatch(setPythonLocation(path));
+  }
+};
+
 export {
   fetchProjects,
   fetchInstanceTypes,
@@ -287,6 +305,8 @@ export {
   applyResetSubmission,
   setEnvEntry,
   setPythonLocation,
+  savePythonLocation,
+  loadPythonLocation,
   submit,
   insertTaskTemplateToken
 };

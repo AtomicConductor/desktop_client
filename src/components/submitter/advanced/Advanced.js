@@ -10,11 +10,12 @@ import {
   Divider,
   Typography
 } from "@material-ui/core";
-import { DeleteOutlineRounded } from "@material-ui/icons";
-
-import { setEnvEntry, setPythonLocation } from "../../../_actions/submitter";
-
-import FolderIcon from "@material-ui/icons/Folder";
+import { DeleteOutlineRounded, FolderRounded } from "@material-ui/icons";
+import { setEnvEntry, savePythonLocation } from "../../../_actions/submitter";
+import {
+  environmentOverrides,
+  pythonLocation
+} from "../../../selectors/submitter";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -65,17 +66,8 @@ const Advanced = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const environmentOverrides = useSelector(
-    state => state.submitter.submission.environmentOverrides
-  );
-
-  const pythonLocation = useSelector(state => state.submitter.pythonLocation);
-
-  const handleSelectPythonLocation = e => {
-    if (e.target.files && e.target.files[0]) {
-      dispatch(setPythonLocation(e.target.files[0].path));
-    }
-  };
+  const overrides = useSelector(environmentOverrides);
+  const pythonPath = useSelector(pythonLocation);
 
   return (
     <Box className={classes.container}>
@@ -100,7 +92,7 @@ const Advanced = () => {
         <Paper className={clsx(classes.paper, classes.value)}>
           <InputBase
             disabled={true}
-            value={pythonLocation}
+            value={pythonPath}
             className={classes.input}
           />
         </Paper>
@@ -110,9 +102,14 @@ const Advanced = () => {
             className={classes.input}
             id="python-path-file"
             type="file"
-            nwdirectory="true"
             nwdirectorydesc="Choose python path"
-            onChange={handleSelectPythonLocation}
+            onChange={e => {
+              const { files } = e.target;
+              const file = files[0];
+              if (files) {
+                dispatch(savePythonLocation(file.path));
+              }
+            }}
           />
 
           <IconButton
@@ -121,7 +118,7 @@ const Advanced = () => {
             component="span"
             size="small"
           >
-            <FolderIcon />
+            <FolderRounded />
           </IconButton>
         </label>
       </Box>
@@ -134,7 +131,7 @@ const Advanced = () => {
         Remote environment overrides
       </Typography>
 
-      {environmentOverrides.map((entry, i) => (
+      {overrides.map((entry, i) => (
         <Box
           className={classes.row}
           justify="flex-start"

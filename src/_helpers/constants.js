@@ -31,3 +31,7 @@ export const taskTemplateTokens = [
   "chunk_step",
   "chunk_spec"
 ];
+
+export const settings = {
+  pythonLocation: "settings.pythonLocation"
+};
