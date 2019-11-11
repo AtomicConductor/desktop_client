@@ -4,6 +4,7 @@ export const appBarHeight = 48;
 export const filterDrawerWidth = 210;
 
 export const credentialsFileName = "credentials.json";
+export const presetsFileName = "presets.json";
 
 export const TIMESPANS = {
   TODAY: "Today",

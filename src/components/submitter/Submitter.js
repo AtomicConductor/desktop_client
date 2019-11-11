@@ -19,6 +19,8 @@ import {
   fetchInstanceTypes,
   loadPythonLocation
 } from "../../_actions/submitter";
+
+import { loadPresets } from "../../_actions/entities";
 import { signedInSelector } from "../../selectors/account";
 
 function TabContainer(props) {
@@ -83,6 +85,7 @@ const Submitter = props => {
     dispatch(fetchProjects());
     dispatch(fetchInstanceTypes());
     dispatch(loadPythonLocation());
+    dispatch(loadPresets());
   }, [signedIn, dispatch]);
 
   if (!signedIn) {

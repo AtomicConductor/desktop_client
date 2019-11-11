@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   BookmarkBorderRounded,
   BookmarksRounded,
-  CodeRounded
+  CodeRounded,
+  BookmarkRounded
 } from "@material-ui/icons";
 
 import {
@@ -14,7 +15,8 @@ import {
   IconButton,
   InputBase,
   Menu,
-  MenuItem
+  MenuItem,
+  ListItemText
 } from "@material-ui/core";
 
 import {
@@ -23,6 +25,15 @@ import {
 } from "../../../_actions/submitter";
 import clsx from "clsx";
 import { taskTemplateTokens } from "../../../_helpers/constants";
+import {
+  presetsSelector,
+  selectedPresetSelector
+} from "../../../selectors/entities";
+import {
+  savePreset,
+  selectPreset,
+  deletePreset
+} from "../../../_actions/entities";
 
 const useStyles = makeStyles(theme => ({
   dominantPaper: {
@@ -49,11 +60,16 @@ const useStyles = makeStyles(theme => ({
 
 export default props => {
   const [tokensListAnchor, setTokensListAnchor] = React.useState(null);
+  const [taskTempaltesListAnchor, setTaskTempaltesListAnchor] = React.useState(
+    null
+  );
   const taskTemplateInputRef = useRef(null);
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const { taskTemplate } = useSelector(state => state.submitter.submission);
+  const taskTemplates = useSelector(presetsSelector);
+  const selectedPreset = useSelector(selectedPresetSelector);
 
   return (
     <Box className={classes.taskTemplateContainer}>
@@ -66,11 +82,36 @@ export default props => {
             <CodeRounded />
           </IconButton>
           <div>
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={e => setTaskTempaltesListAnchor(e.currentTarget)}
+            >
+              <BookmarksRounded />
+            </IconButton>
+            <IconButton
+              disabled={!selectedPreset || selectedPreset.readonly}
+              color="primary"
+              onClick={e => {
+                dispatch(setTaskTemplate(""));
+                dispatch(deletePreset());
+              }}
+            >
               <BookmarkBorderRounded />
             </IconButton>
-            <IconButton color="primary">
-              <BookmarksRounded />
+            <IconButton
+              color="primary"
+              onClick={e => {
+                const name = prompt("Enter a name for you custom command:");
+                if (!name) return;
+                dispatch(
+                  savePreset({
+                    name,
+                    command: taskTemplate
+                  })
+                );
+              }}
+            >
+              <BookmarkRounded />
             </IconButton>
           </div>
         </Box>
@@ -121,6 +162,28 @@ export default props => {
             {token}
           </MenuItem>
         ))}
+      </Menu>
+      <Menu
+        anchorEl={taskTempaltesListAnchor}
+        keepMounted
+        open={Boolean(taskTempaltesListAnchor)}
+        onClick={e => setTaskTempaltesListAnchor(null)}
+      >
+        {Object.keys(taskTemplates).map((key, index) => {
+          const { command } = taskTemplates[key];
+          return (
+            <MenuItem
+              key={index}
+              onClick={e => {
+                setTaskTempaltesListAnchor(null);
+                dispatch(selectPreset(key));
+                dispatch(setTaskTemplate(command));
+              }}
+            >
+              <ListItemText>{key}</ListItemText>
+            </MenuItem>
+          );
+        })}
       </Menu>
     </Box>
   );

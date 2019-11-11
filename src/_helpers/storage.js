@@ -1,4 +1,4 @@
-import { credentialsFileName } from "../_helpers/constants";
+import { credentialsFileName, presetsFileName } from "../_helpers/constants";
 import * as fs from "fs";
 import { promisify } from "util";
 import { join } from "path";
@@ -18,20 +18,44 @@ export default class AppStorage {
     return JSON.parse(data.toString());
   }
 
-  async saveCredentials(data) {
-    const credentials = await this.readCredentials();
-    const mergedCredentials = { ...credentials, ...data };
-    const path = join(this.dataPath, credentialsFileName);
-    await this.save(path, mergedCredentials);
+  async saveData(data, filename) {
+    const path = join(this.dataPath, filename);
+    await this.save(path, data);
   }
 
-  async readCredentials() {
-    const path = join(this.dataPath, credentialsFileName);
+  async loadData(filename) {
+    const path = join(this.dataPath, filename);
 
     const { exists } = this.fileProvider;
     if (!(await promisify(exists)(path))) {
       return undefined;
     }
     return await this.load(path);
+  }
+
+  async saveCredentials(data) {
+    const credentials = await this.readCredentials();
+    const mergedCredentials = { ...credentials, ...data };
+    await this.saveData(mergedCredentials, credentialsFileName);
+  }
+
+  async readCredentials() {
+    return await this.loadData(credentialsFileName);
+  }
+
+  async savePresets(data) {
+    const templates = await this.loadPresets();
+    const mergedTemplates = { ...templates, ...data };
+    await this.saveData(mergedTemplates, presetsFileName);
+  }
+
+  async loadPresets() {
+    return await this.loadData(presetsFileName);
+  }
+
+  async deletePreset(key) {
+    const templates = await this.loadPresets();
+    delete templates[key];
+    await this.saveData(templates, presetsFileName);
   }
 }

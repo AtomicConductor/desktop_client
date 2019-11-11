@@ -3,10 +3,13 @@
 import { createSelector } from "reselect";
 import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
-
 import path from "upath";
+import {
+  instanceTypesSelector,
+  instanceTypesMapSelector,
+  projectsSelector
+} from "./entities";
 
-const instanceTypesMapSelector = state => state.entities.instanceTypes;
 const assetsMap = state => state.submitter.submission.assets;
 const taskTemplate = state => state.submitter.submission.taskTemplate;
 const chunkSize = state => state.submitter.submission.chunkSize;
@@ -42,20 +45,7 @@ const scoutFrameSpec = state =>
     ? state.submitter.submission.scoutFrameSpec
     : "";
 
-const projectsSelector = state =>
-  state.entities.projects
-    .concat()
-    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-
 const _packageIsValid = _ => _.package && Object.keys(_.package).length;
-
-const instanceTypesSelector = createSelector(
-  instanceTypesMapSelector,
-  instanceTypesMap =>
-    Object.keys(instanceTypesMap)
-      .map(_ => instanceTypesMap[_])
-      .sort((a, b) => (a.cores < b.cores ? -1 : 1))
-);
 
 const assetsSelector = createSelector(
   assetsMap,

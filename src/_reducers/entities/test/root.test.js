@@ -13,7 +13,11 @@ describe("entities reducer", () => {
       softwarePackages: {
         software: { packages: [] }
       },
-      projects: []
+      projects: [],
+      presets: {
+        "preset 1": { command: "this is a preset command 1", readonly: true },
+        "preset 2": { command: "this is a preset command 2", readonly: true }
+      }
     });
   });
 });
