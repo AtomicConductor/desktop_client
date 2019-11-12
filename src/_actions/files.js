@@ -24,7 +24,7 @@ import config from "../config";
 import { tokenSelector } from "../selectors/account";
 import axios from "../_helpers/axios";
 import DownloaderError from "../errors/downloaderError";
-
+import { pushEvent } from "../_actions/log";
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
 );
@@ -171,6 +171,7 @@ export const startDownloadQueue = () => {
 
       dh.start();
     }, queueOptions);
+    dispatch(pushEvent("Download queue initialized", "info"));
   };
 };
 
@@ -271,7 +272,7 @@ export function updateDownloadFiles(jobLabel) {
       dispatch(
         setNotification({
           type: "info",
-          snackbar: "Can't fetch download data for this job."
+          message: "Can't fetch download data for this job."
         })
       );
       dispatch(

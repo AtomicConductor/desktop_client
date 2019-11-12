@@ -40,7 +40,8 @@ const useStyles = makeStyles(theme => ({
     flexBasis: "100%"
   },
   taskToolbar: {
-    padding: "2px 8px",
+    height: theme.spacing(4),
+    padding: "0px 8px",
     borderBottom: `1px solid ${theme.palette.divider}`,
     display: "flex",
     justifyContent: "space-between"
@@ -55,6 +56,17 @@ const useStyles = makeStyles(theme => ({
     padding: "2px 4px",
     flexGrow: 1,
     fontFamily: "Courier New"
+  },
+  icon: {
+    margin: 0,
+    padding: 0,
+    paddingLeft: theme.spacing(2),
+    borderRadius: 0,
+    flexShrink: 0
+  },
+  spacer: {
+    display: "flex",
+    flexGrow: "1"
   }
 }));
 
@@ -76,44 +88,47 @@ export default props => {
       <Paper className={clsx(classes.dominantPaper)}>
         <Box className={clsx(classes.taskToolbar)}>
           <IconButton
+            className={classes.icon}
             color="primary"
             onClick={e => setTokensListAnchor(e.currentTarget)}
           >
-            <CodeRounded />
+            <CodeRounded fontSize="small" />
           </IconButton>
-          <div>
-            <IconButton
-              color="primary"
-              onClick={e => setTaskTempaltesListAnchor(e.currentTarget)}
-            >
-              <BookmarksRounded />
-            </IconButton>
-            <IconButton
-              disabled={!selectedPreset || selectedPreset.readonly}
-              color="primary"
-              onClick={e => {
-                dispatch(setTaskTemplate(""));
-                dispatch(deletePreset());
-              }}
-            >
-              <BookmarkBorderRounded />
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={e => {
-                const name = prompt("Enter a name for you custom command:");
-                if (!name) return;
-                dispatch(
-                  savePreset({
-                    name,
-                    command: taskTemplate
-                  })
-                );
-              }}
-            >
-              <BookmarkRounded />
-            </IconButton>
-          </div>
+          <div className={classes.spacer} />
+          <IconButton
+            className={classes.icon}
+            color="primary"
+            onClick={e => setTaskTempaltesListAnchor(e.currentTarget)}
+          >
+            <BookmarksRounded fontSize="small" />
+          </IconButton>
+          <IconButton
+            className={classes.icon}
+            disabled={!selectedPreset || selectedPreset.readonly}
+            color="primary"
+            onClick={e => {
+              dispatch(setTaskTemplate(""));
+              dispatch(deletePreset());
+            }}
+          >
+            <BookmarkBorderRounded fontSize="small" />
+          </IconButton>
+          <IconButton
+            className={classes.icon}
+            color="primary"
+            onClick={e => {
+              const name = prompt("Enter a name for you custom command:");
+              if (!name) return;
+              dispatch(
+                savePreset({
+                  name,
+                  command: taskTemplate
+                })
+              );
+            }}
+          >
+            <BookmarkRounded fontSize="small" />
+          </IconButton>
         </Box>
         <Box className={clsx(classes.taskMain)}>
           <InputBase

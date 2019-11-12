@@ -30,7 +30,7 @@ describe("desktopClientErrorHandler", () => {
       type: "notification/setNotification",
       payload: {
         type: "error",
-        snackbar: "Your session has expired, please sign-in again."
+        message: "Your session has expired, please sign-in again."
       }
     });
   });
@@ -43,7 +43,7 @@ describe("desktopClientErrorHandler", () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: "notification/setNotification",
       payload: {
-        snackbar: "Can't perform action",
+        message: "Can't perform action",
         type: "error"
       }
     });

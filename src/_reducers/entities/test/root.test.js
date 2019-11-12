@@ -14,10 +14,12 @@ describe("entities reducer", () => {
         software: { packages: [] }
       },
       projects: [],
-      presets: {
-        "preset 1": { command: "this is a preset command 1", readonly: true },
-        "preset 2": { command: "this is a preset command 2", readonly: true }
-      }
+      presets: expect.objectContaining({
+        "simple modo": expect.objectContaining({
+          command: expect.stringMatching(/modo_render/i),
+          readonly: true
+        })
+      })
     });
   });
 });

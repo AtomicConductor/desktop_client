@@ -16,6 +16,8 @@ import {
   SettingsInputComponent
 } from "@material-ui/icons";
 
+import { appVersion } from "../../_helpers/constants";
+
 import Account from "../account/Account";
 
 import "typeface-raleway";
@@ -31,10 +33,10 @@ const useStyles = makeStyles(theme => ({
   },
   logo: {
     fontFamily: "Raleway",
+
     fontSize: 24,
     textAlign: "center",
-    fontWeight: 500,
-    marginBottom: theme.spacing(1)
+    fontWeight: 700
   },
   spacer: {
     display: "flex",
@@ -43,6 +45,11 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     paddingTop: 0
+  },
+  versionText: {
+    textAlign: "center",
+    padding: theme.spacing(0, 1),
+    color: theme.palette.text.hint
   }
 }));
 
@@ -103,6 +110,9 @@ const Drawer = props => {
       </List>
       <div className={classes.spacer} />
       <Typography className={classes.logo}>CONDUCTOR</Typography>
+      <Typography className={classes.versionText} variant="body2">
+        Version: {appVersion}
+      </Typography>
     </MuiDrawer>
   );
 };

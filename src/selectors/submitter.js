@@ -4,6 +4,7 @@ import { createSelector } from "reselect";
 import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
 import path from "upath";
+
 import {
   instanceTypesSelector,
   instanceTypesMapSelector,
@@ -309,17 +310,17 @@ const submissionSelector = createSelector(
   ) => {
     return {
       jobTitle: jobTitleSelector,
+      project: projectSelector,
       instance_type: instanceTypeNameSelector,
-      tasks_data: taskDataSelector,
-      upload_paths: assetFilenamesSelector,
-      environment: environmentSelector,
-      scout_frames: scoutFramesSelector,
-      autoretry_policy: retryPolicySelector,
       upload_only: uploadOnly,
       force,
       local_upload: localUpload,
-      project: projectSelector,
-      output_path: outputPathSelector
+      autoretry_policy: retryPolicySelector,
+      output_path: outputPathSelector,
+      environment: environmentSelector,
+      upload_paths: assetFilenamesSelector,
+      scout_frames: scoutFramesSelector,
+      tasks_data: taskDataSelector
     };
   }
 );

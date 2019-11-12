@@ -19,7 +19,8 @@ export default {
     hubSpot: {
       apiKey: "6ddb097e-9f16-4b9c-8b52-d6e7e3655721",
       contactApiUrl: "https://api.hubapi.com/contacts/v1/contact"
-    }
+    },
+    public: ["."]
   },
   development: {
     ...commonConfig,
@@ -34,7 +35,8 @@ export default {
     hubSpot: {
       apiKey: "ed177850-e3d7-4c82-83da-d12471afa02b",
       contactApiUrl: "https://api.hubapi.com/contacts/v1/contact"
-    }
+    },
+    public: ["..", "public"]
   },
   test: {
     googleClientId: "",
@@ -45,6 +47,7 @@ export default {
     hubSpot: {
       apiKey: "hapikey",
       contactApiUrl: "https://hubspot"
-    }
+    },
+    public: ["test"]
   }
 }[process.env.NODE_ENV];

@@ -23,7 +23,7 @@ const savePreset = (
   dispatch(
     setNotification({
       type: "success",
-      snackbar: `${name} preset successfully saved.`
+      message: `${name} preset successfully saved.`
     })
   );
 };
@@ -38,7 +38,7 @@ const deletePreset = (storage = new AppStorage()) => async (
   dispatch(
     setNotification({
       type: "success",
-      snackbar: `${key} preset successfully deleted.`
+      message: `${key} preset successfully deleted.`
     })
   );
 };

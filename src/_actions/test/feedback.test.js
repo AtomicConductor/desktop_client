@@ -73,7 +73,7 @@ describe("feedback", () => {
       expect(dispatch).toHaveBeenCalledWith({
         payload: {
           type: "success",
-          snackbar: "Thank you for your feedback!"
+          message: "Thank you for your feedback!"
         },
         type: "notification/setNotification"
       });

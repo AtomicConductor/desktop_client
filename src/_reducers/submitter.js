@@ -22,13 +22,16 @@ import {
   loadSubmissionSuccess,
   applyResetSubmission,
   setEnvEntry,
-  setPythonLocation
+  setPythonLocation,
+  submissionRequested,
+  submissionFinished
 } from "../_actions/submitter";
 
 const initialState = {
   filename: "",
   loading: false,
   pythonLocation: "",
+  submitting: false,
   submission: {
     retries: 3,
     preemptible: true,
@@ -185,5 +188,12 @@ export default createReducer(initialState, {
 
   [setPythonLocation]: (state, { payload }) => {
     state.pythonLocation = payload;
+  },
+  [submissionRequested]: (state, action) => {
+    state.submitting = true;
+  },
+
+  [submissionFinished]: (state, action) => {
+    state.submitting = false;
   }
 });

@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Drawer from "./Drawer";
 import StatusLine from "./StatusLine";
-import CtSnackbarContainer from "../notification/CtSnackbarContainer";
+import Snackbar from "../notification/Snackbar";
 import { drawerWidth, statusLineHeight } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +29,7 @@ const Layout = props => {
       <CssBaseline />
       <Drawer />
       <Box className={classes.box}>{props.children}</Box>
-      <CtSnackbarContainer />
+      <Snackbar />
       <StatusLine />
     </ThemeProvider>
   );

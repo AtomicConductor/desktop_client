@@ -10,7 +10,6 @@ import {
   projectSelector,
   jobTitleSelector,
   outputPathSelector,
-  submissionSelector,
   submissionValidSelector
 } from "../submitter";
 

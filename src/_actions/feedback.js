@@ -31,7 +31,7 @@ export default (
     dispatch(
       setNotification({
         type: "success",
-        snackbar: "Thank you for your feedback!"
+        message: "Thank you for your feedback!"
       })
     );
   } catch (e) {

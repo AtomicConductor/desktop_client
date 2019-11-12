@@ -1,20 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
+import MUISnackbar from "@material-ui/core/Snackbar";
+import MUISnackbarContent from "@material-ui/core/SnackbarContent";
 
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import green from "@material-ui/core/colors/green";
 import amber from "@material-ui/core/colors/amber";
+import red from "@material-ui/core/colors/red";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
 import WarningIcon from "@material-ui/icons/Warning";
+
+import { snackbarSelector } from "../../selectors/snackbar";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { clearNotification } from "../../_actions/notification";
 
 const useStyles = makeStyles(theme => ({
   close: {
@@ -22,16 +28,16 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   success: {
-    backgroundColor: green[600]
+    backgroundColor: green[800]
   },
   error: {
-    backgroundColor: theme.palette.error.dark
+    backgroundColor: red[900]
   },
   info: {
     backgroundColor: theme.palette.primary.dark
   },
   warning: {
-    backgroundColor: amber[700]
+    backgroundColor: amber[900]
   },
 
   iconVariant: {
@@ -46,8 +52,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CtSnackbar = props => {
+const Snackbar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const { message, show, type, url, buttonLabel } = useSelector(
+    snackbarSelector
+  );
 
   const variantIcon = {
     success: CheckCircleIcon,
@@ -56,31 +67,29 @@ const CtSnackbar = props => {
     info: InfoIcon
   };
 
-  const { dismiss, showDetail, content, open, hasDetails, type } = props;
-
   function handleClose(event, reason) {
     if (reason === "clickaway") {
       return;
     }
-    dismiss();
+    dispatch(clearNotification());
   }
 
-  function handleShowDetails(event) {
-    showDetail();
+  function handleButtonClick(event) {
+    nw.Shell.openExternal(url);
   }
 
   const Icon = variantIcon[type];
 
   const actions = [];
-  if (hasDetails) {
+  if (url !== "") {
     actions.push(
       <Button
         key="details"
-        color="secondary"
+        color="inherit"
         size="small"
-        onClick={handleShowDetails}
+        onClick={handleButtonClick}
       >
-        DETAILS
+        {buttonLabel}
       </Button>
     );
   }
@@ -97,38 +106,29 @@ const CtSnackbar = props => {
   );
 
   return (
-    <Snackbar
+    <MUISnackbar
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "right"
       }}
-      open={open}
+      open={show}
       autoHideDuration={6000}
       onClose={handleClose}
-      message={<span id="message-id">{content}</span>}
+      message={<span id="message-id">{message}</span>}
     >
-      <SnackbarContent
+      <MUISnackbarContent
         className={classes[type]}
         aria-describedby="client-snackbar"
         message={
           <span id="client-snackbar" className={classes.message}>
             <Icon className={classes.iconVariant} />
-            {content}
+            {message}
           </span>
         }
         action={actions}
       />
-    </Snackbar>
+    </MUISnackbar>
   );
 };
 
-CtSnackbar.propTypes = {
-  content: PropTypes.string.isRequired,
-  open: PropTypes.bool.isRequired,
-  type: PropTypes.string.isRequired,
-  hasDetails: PropTypes.bool.isRequired,
-  dismiss: PropTypes.func.isRequired,
-  showDetail: PropTypes.func.isRequired
-};
-
-export default CtSnackbar;
+export default Snackbar;

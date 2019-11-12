@@ -12,6 +12,7 @@ import Preview from "./preview/Preview";
 import AppBar from "./AppBar";
 import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   submit,
@@ -71,6 +72,11 @@ const useStyles = makeStyles(theme => ({
   tab: {
     paddingTop: 0,
     paddingBottom: theme.spacing(0.5)
+  },
+  progressBox: {
+    display: "flex",
+    alignItems: "center",
+    marginRight: theme.spacing(3)
   }
 }));
 
@@ -78,6 +84,7 @@ const Submitter = props => {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = React.useState(0);
   const signedIn = useSelector(state => signedInSelector(state));
+  const submitting = useSelector(state => state.submitter.submitting);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -100,6 +107,8 @@ const Submitter = props => {
     dispatch(submit());
   }
 
+  const labels = ["General", "Files", "Software", "Advanced", "Preview"];
+
   return (
     <React.Fragment>
       <AppBar />
@@ -114,39 +123,33 @@ const Submitter = props => {
             }}
             color="inherit"
           >
-            <Tab
-              label="General"
-              classes={{ wrapper: classes.tab, root: classes.tab }}
-            />
-            <Tab
-              label="Files"
-              classes={{ wrapper: classes.tab, root: classes.tab }}
-            />
-            <Tab
-              label="Software"
-              classes={{ wrapper: classes.tab, root: classes.tab }}
-            />
-            <Tab
-              label="Advanced"
-              classes={{ wrapper: classes.tab, root: classes.tab }}
-            />
-            <Tab
-              label="Preview"
-              classes={{ wrapper: classes.tab, root: classes.tab }}
-            />
+            {labels.map((_, i) => (
+              <Tab
+                key={i}
+                label={_}
+                classes={{ wrapper: classes.tab, root: classes.tab }}
+              />
+            ))}
           </Tabs>
         </Card>
         <Box className={classes.content}>
-          {tabIndex === 0 && <General />}
-          {tabIndex === 1 && <Uploads />}
-          {tabIndex === 2 && <Software />}
-          {tabIndex === 3 && <Advanced />}
-          {tabIndex === 4 && <Preview />}
+          {
+            [<General />, <Uploads />, <Software />, <Advanced />, <Preview />][
+              tabIndex
+            ]
+          }
         </Box>
+
         <Card className={classes.actionsCard}>
-          <Button color="secondary" onClick={handleSubmit}>
-            Submit
-          </Button>
+          {submitting ? (
+            <Box className={classes.progressBox}>
+              <CircularProgress size={30} color="secondary" />
+            </Box>
+          ) : (
+            <Button color="secondary" onClick={handleSubmit}>
+              Submit
+            </Button>
+          )}
         </Card>
       </Box>
     </React.Fragment>

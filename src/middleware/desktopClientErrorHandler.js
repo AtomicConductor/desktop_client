@@ -19,7 +19,7 @@ export default sentry => e => (dispatch, getState) => {
     dispatch(
       setNotification({
         type: "error",
-        snackbar: inner.message
+        message: inner.message
       })
     );
 
@@ -42,7 +42,7 @@ export default sentry => e => (dispatch, getState) => {
   dispatch(
     setNotification({
       type: "error",
-      snackbar: message
+      message: message
     })
   );
 };

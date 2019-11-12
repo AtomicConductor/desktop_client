@@ -23,7 +23,8 @@ export const paths = {
   home: "/home",
   downloader: "/downloader",
   signIn: "/sign-in",
-  submitter: "/submitter"
+  submitter: "/submitter",
+  log: "/log"
 };
 
 export const taskTemplateTokens = [

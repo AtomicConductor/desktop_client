@@ -8,6 +8,8 @@ import * as Sentry from "@sentry/browser";
 import AppStorage from "../_helpers/storage";
 import { fetchJobs } from "../_actions/jobs";
 
+import { pushEvent } from "../_actions/log";
+
 const signInSuccess = createAction("user/signInSuccess");
 const signInError = createAction("user/signInError");
 const signInRequest = createAction("user/signInRequest");
@@ -46,6 +48,7 @@ const signIn = (credentials, storage = new AppStorage()) => async (
     const mappedAccounts = mapAccounts(accounts);
     await storage.saveCredentials({ accounts: mappedAccounts });
     dispatch(signInSuccess(mappedAccounts));
+    dispatch(pushEvent("Successfully signed in", "info"));
 
     // remove after beta phase
     await flagBetaUser(emailSelector(getState()));
@@ -59,6 +62,9 @@ const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
   const credentials = await storage.readCredentials();
   if (credentials) {
     dispatch(signInSuccess(credentials.accounts));
+    dispatch(
+      pushEvent("Successfully signed in from saved credentials", "info")
+    );
   }
 };
 

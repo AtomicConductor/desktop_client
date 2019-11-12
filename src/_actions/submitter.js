@@ -1,17 +1,24 @@
-import { PythonShell } from "python-shell";
 import { createAction } from "redux-starter-kit";
 import axios from "../_helpers/axios";
 import config from "../config";
 import SubmitterError from "../errors/submitterError";
+import DesktopClientError from "../errors/desktopClientError";
+import FileIOError from "../errors/fileIOError";
+
 import { tokenSelector } from "../selectors/account";
+import { pushEvent } from "../_actions/log";
 import { createRequestOptions } from "../_helpers/network";
-import { submissionSelector, pythonLocation } from "../selectors/submitter";
+import {
+  submissionSelector,
+  submissionValidSelector,
+  pythonLocation,
+  jobTitleSelector
+} from "../selectors/submitter";
 
 import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
-import path from "upath";
-import { instanceTypesMapSelector } from "../selectors/submitter";
-import { resolvePythonLocation } from "../_helpers/python";
+import { instanceTypesMapSelector } from "../selectors/entities";
+import { resolvePythonLocation, runPythonShell } from "../_helpers/python";
 import { settings } from "../_helpers/constants";
 
 const setJobTitle = createAction("submitter/setJobTitle");
@@ -46,68 +53,96 @@ const updateSelectedSoftware = createAction("submitter/updateSelectedSoftware");
 const setEnvEntry = createAction("submitter/setEnvEntry");
 const setPythonLocation = createAction("submitter/setPythonLocation");
 
+const submissionRequested = createAction("submitter/submissionRequested");
+const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
+const submissionFinished = createAction("submitter/submissionFinished");
+
 const submit = () => async (dispatch, getState) => {
-  try {
-    const state = getState();
-    const pythonPath = pythonLocation(state);
-    const submissionArgs = JSON.stringify(submissionSelector(state));
-
-    const scriptPath =
-      process.env.NODE_ENV === "development"
-        ? path.join(path.dirname(process.cwd()), "public", "python")
-        : path.join(process.cwd(), "python");
-
-    const options = {
-      mode: "text",
-      pythonOptions: ["-u"],
-      pythonPath,
-      scriptPath,
-      args: [submissionArgs]
-    };
-
-    PythonShell.run("submit.py", options, function(err, results) {
-      if (err) {
-        throw err;
-      }
-    });
-  } catch (e) {
-    throw new SubmitterError(e);
+  if (!submissionValidSelector(getState())) {
+    throw new DesktopClientError(
+      "Invalid submission. Please check the preview tab for errors."
+    );
   }
+
+  const pythonPath = pythonLocation(getState());
+  const args = [JSON.stringify(submissionSelector(getState()))];
+
+  const pyshell = await runPythonShell("submit.py", { pythonPath, args });
+  dispatch(submissionRequested());
+
+  pyshell.on("message", function(message) {
+    if (message.match(/response_code/)) {
+      const response = JSON.parse(message);
+      const title = jobTitleSelector(getState());
+      if (response.response_code === 201) {
+        dispatch(
+          setNotification({
+            message: `Successfully submitted ${title}`,
+            type: "success",
+            url: `${config.dashboardUrl}${response.uri.replace(
+              "/jobs",
+              "/job"
+            )}`,
+            buttonLabel: "view"
+          })
+        );
+        dispatch(pushEvent(message, "info"));
+      } else {
+        dispatch(
+          setNotification({
+            message: `Submission failed with response code ${
+              response.response_code
+            }`,
+            type: "error"
+          })
+        );
+        dispatch(pushEvent(message, "error"));
+      }
+    } else {
+      dispatch(pushEvent(message, "info"));
+    }
+  });
+
+  pyshell.on("stderr", function(message) {
+    dispatch(pushEvent(message, "error"));
+  });
+
+  pyshell.end(function(error, code, signal) {
+    dispatch(submissionFinished());
+    if (error) {
+      dispatch(setNotification({ message: error.message, type: "error" }));
+      return;
+    }
+  });
 };
 
 const fetchProjects = () => async (dispatch, getState) => {
-  try {
-    const options = createRequestOptions(tokenSelector(getState()));
-    const response = await axios.get(
-      `${config.apiServer}/api/v1/projects`,
-      options
-    );
-    const projects = response.data.data
-      .filter(_ => _.status === "active")
-      .map(_ => _.name);
+  const options = createRequestOptions(tokenSelector(getState()));
+  const response = await axios.get(
+    `${config.apiServer}/api/v1/projects`,
+    options
+  );
+  const projects = response.data.data
+    .filter(_ => _.status === "active")
+    .map(_ => _.name);
 
-    if (!projects) throw new Error("Failed to fetch any active projects");
+  if (!projects)
+    throw new DesktopClientError("Failed to fetch any active projects");
 
-    dispatch(projectsSuccess(projects));
-  } catch (e) {
-    throw new SubmitterError(e);
-  }
+  dispatch(projectsSuccess(projects));
 };
 
 const fetchInstanceTypes = () => async (dispatch, getState) => {
-  try {
-    const options = createRequestOptions(tokenSelector(getState()));
-    const response = await axios.get(
-      `${config.dashboardUrl}/api/v1/instance-types`,
-      options
-    );
-    const instanceTypes = response.data.data;
+  const options = createRequestOptions(tokenSelector(getState()));
+  const response = await axios.get(
+    `${config.dashboardUrl}/api/v1/instance-types`,
+    options
+  );
+  const instanceTypes = response.data.data;
 
-    if (!instanceTypes) throw new Error("Failed to fetch any instance types");
-    dispatch(instanceTypesSuccess(instanceTypes));
-  } catch (e) {
-    throw new SubmitterError(e);
-  }
+  if (!instanceTypes)
+    throw new DesktopClientError("Failed to fetch any instance types");
+  dispatch(instanceTypesSuccess(instanceTypes));
 };
 
 const mapPackages = software => {
@@ -189,12 +224,12 @@ const saveSubmission = path => async (dispatch, getState) => {
     dispatch(saveSubmissionSuccess(path));
     dispatch(
       setNotification({
-        snackbar: `Successfully saved ${path}`,
+        message: `Successfully saved ${path}`,
         type: "success"
       })
     );
   } catch (e) {
-    throw new SubmitterError(e);
+    throw new FileIOError(e);
   }
 };
 
@@ -208,12 +243,12 @@ const loadSubmission = path => async (dispatch, getState) => {
 
     dispatch(
       setNotification({
-        snackbar: `Successfully opened ${path}`,
+        message: `Successfully opened ${path}`,
         type: "success"
       })
     );
   } catch (e) {
-    throw new SubmitterError(e);
+    throw new FileIOError(e);
   }
 };
 
@@ -308,5 +343,8 @@ export {
   savePythonLocation,
   loadPythonLocation,
   submit,
-  insertTaskTemplateToken
+  insertTaskTemplateToken,
+  submissionRequested,
+  submissionFinished,
+  setSubmissionResponse
 };

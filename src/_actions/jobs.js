@@ -149,7 +149,7 @@ export function fetchJobs() {
       dispatch(
         setNotification({
           type: "error",
-          snackbar: error.message
+          message: error.message
         })
       );
     }
