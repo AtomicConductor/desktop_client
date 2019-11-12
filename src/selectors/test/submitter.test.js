@@ -384,12 +384,6 @@ describe("submission selectors", () => {
     });
 
     it("returns empty array if package has no id", () => {
-      const softwarePackages = [
-        {
-          softwareKey: "",
-          package: {}
-        }
-      ];
       const result = softwarePackageIdsSelector(
         ss({
           softwarePackages: [

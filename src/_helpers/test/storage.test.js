@@ -52,4 +52,18 @@ describe("storage", () => {
       expect.anything()
     );
   });
+
+  it("deletes a preset", async () => {
+    const savedPresets = '{ "foo": {}, "bar": {} }';
+    fs.exists.mockImplementation((path, cb) => cb(null, true));
+    fs.readFile.mockImplementation((path, cb) => cb(null, savedPresets));
+
+    await storage.deletePreset("foo");
+
+    expect(fs.writeFile).toHaveBeenCalledWith(
+      expect.anything(),
+      '{"bar":{}}',
+      expect.anything()
+    );
+  });
 });

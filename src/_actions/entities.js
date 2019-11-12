@@ -6,7 +6,7 @@ import { setNotification } from "../_actions/notification";
 const loadPresetsSuccess = createAction("entities/loadPresetsSuccess");
 const selectPreset = createAction("entities/selectPreset");
 
-const loadPresets = (storage = new AppStorage()) => async dispatch => {
+const loadPresets = storage => async dispatch => {
   const templates = await storage.loadPresets();
   dispatch(loadPresetsSuccess(templates));
 };
@@ -18,7 +18,7 @@ const savePreset = (
   await storage.savePresets({
     [name]: { command, readonly: false }
   });
-  await dispatch(loadPresets());
+  await dispatch(loadPresets(storage));
   dispatch(selectPreset(name));
   dispatch(
     setNotification({
@@ -34,7 +34,7 @@ const deletePreset = (storage = new AppStorage()) => async (
 ) => {
   const { key } = selectedPresetSelector(getState());
   await storage.deletePreset(key);
-  dispatch(loadPresets());
+  dispatch(loadPresets(storage));
   dispatch(
     setNotification({
       type: "success",
