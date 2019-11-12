@@ -1,9 +1,7 @@
 import { createAction } from "redux-starter-kit";
 import axios from "../_helpers/axios";
 import config from "../config";
-import SubmitterError from "../errors/submitterError";
 import DesktopClientError from "../errors/desktopClientError";
-import FileIOError from "../errors/fileIOError";
 
 import { tokenSelector } from "../selectors/account";
 import { pushEvent } from "../_actions/log";
@@ -111,7 +109,6 @@ const submit = () => async (dispatch, getState) => {
     dispatch(submissionFinished());
     if (error) {
       dispatch(setNotification({ message: error.message, type: "error" }));
-      return;
     }
   });
 };
@@ -142,6 +139,7 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
 
   if (!instanceTypes)
     throw new DesktopClientError("Failed to fetch any instance types");
+
   dispatch(instanceTypesSuccess(instanceTypes));
 };
 
@@ -201,63 +199,41 @@ const mapPackages = software => {
 };
 
 const fetchSoftwarePackages = () => async dispatch => {
-  try {
-    const response = await axios.get(
-      `${config.dashboardUrl}/api/v1/ee/packages`
-    );
+  const response = await axios.get(`${config.dashboardUrl}/api/v1/ee/packages`);
 
-    const {
-      data: { data }
-    } = response;
+  const {
+    data: { data }
+  } = response;
 
-    const packages = mapPackages(data);
-    dispatch(softwarePackagesSuccess(packages));
-  } catch (e) {
-    throw new SubmitterError(e);
-  }
+  const packages = mapPackages(data);
+  dispatch(softwarePackagesSuccess(packages));
 };
 
 const saveSubmission = path => async (dispatch, getState) => {
-  try {
-    const storage = new AppStorage();
-    await storage.save(path, getState().submitter.submission);
-    dispatch(saveSubmissionSuccess(path));
-    dispatch(
-      setNotification({
-        message: `Successfully saved ${path}`,
-        type: "success"
-      })
-    );
-  } catch (e) {
-    throw new FileIOError(e);
-  }
+  const storage = new AppStorage();
+  await storage.save(path, getState().submitter.submission);
+  dispatch(saveSubmissionSuccess(path));
+  dispatch(
+    setNotification({
+      message: `Successfully saved ${path}`,
+      type: "success"
+    })
+  );
 };
 
 const loadSubmission = path => async (dispatch, getState) => {
-  try {
-    const storage = new AppStorage();
-    const submission = await storage.load(path);
+  const storage = new AppStorage();
+  const submission = await storage.load(path);
 
-    dispatch(loadSubmissionSuccess({ path, submission }));
-    dispatch(syncStateWithLoadedSubmission(submission));
+  dispatch(loadSubmissionSuccess({ path, submission }));
+  dispatch(syncStateWithLoadedSubmission(submission));
 
-    dispatch(
-      setNotification({
-        message: `Successfully opened ${path}`,
-        type: "success"
-      })
-    );
-  } catch (e) {
-    throw new FileIOError(e);
-  }
-};
-
-const resetSubmission = () => (dispatch, getState) => {
-  try {
-    dispatch(applyResetSubmission());
-  } catch (e) {
-    throw new SubmitterError(e);
-  }
+  dispatch(
+    setNotification({
+      message: `Successfully opened ${path}`,
+      type: "success"
+    })
+  );
 };
 
 const syncStateWithLoadedSubmission = submission => async (
@@ -336,7 +312,6 @@ export {
   saveSubmissionSuccess,
   loadSubmission,
   loadSubmissionSuccess,
-  resetSubmission,
   applyResetSubmission,
   setEnvEntry,
   setPythonLocation,

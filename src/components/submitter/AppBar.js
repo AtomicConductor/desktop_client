@@ -18,7 +18,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import {
   saveSubmission,
   loadSubmission,
-  resetSubmission
+  applyResetSubmission
 } from "../../_actions/submitter";
 
 const useStyles = makeStyles(theme => ({
@@ -74,7 +74,7 @@ const AppBar = props => {
   };
 
   const handleReset = e => {
-    dispatch(resetSubmission());
+    dispatch(applyResetSubmission());
     setAnchorEl(null);
   };
 

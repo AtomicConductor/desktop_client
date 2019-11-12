@@ -24,11 +24,22 @@ describe("user", () => {
 
   describe("signInfromSaved", () => {
     it("signs user in when credentials are in local storage", async () => {
-      appStorage.readCredentials.mockResolvedValueOnce({});
+      appStorage.readCredentials.mockResolvedValueOnce({ accounts: [] });
 
       await signInFromSaved(appStorage)(dispatch);
 
-      expect(dispatch).toHaveBeenCalled();
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        payload: [],
+        type: "user/signInSuccess"
+      });
+
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: "log/pushEvent",
+        payload: expect.objectContaining({
+          text: "Loaded saved credentials",
+          level: "info"
+        })
+      });
     });
 
     it("does not sign in user when local storage is empty", async () => {

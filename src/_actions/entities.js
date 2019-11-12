@@ -6,7 +6,7 @@ import { setNotification } from "../_actions/notification";
 const loadPresetsSuccess = createAction("entities/loadPresetsSuccess");
 const selectPreset = createAction("entities/selectPreset");
 
-const loadPresets = storage => async dispatch => {
+const loadPresets = (storage = new AppStorage()) => async dispatch => {
   const templates = await storage.loadPresets();
   dispatch(loadPresetsSuccess(templates));
 };

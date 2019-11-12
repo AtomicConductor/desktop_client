@@ -1,12 +1,10 @@
 import { createAction } from "redux-starter-kit";
-import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import moment from "moment";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
 import { currentAccountSelector, tokenSelector } from "../selectors/account";
 import axios from "../_helpers/axios";
-import JobsError from "../errors/jobError";
 
 export const requestJobs = createAction("downloader/requestJobs");
 export const receiveJobs = createAction("downloader/receiveJobs");
@@ -127,55 +125,18 @@ function constructJobsQuery(state) {
   return "";
 }
 
-/**
- * Thunk to fetch some jobs while a loading indicator is displayed.
- * requestJobs() is dispatched first, to start a spinner.
- * Then we try to get the recent jobs based on the state.
- * Finally dispatch receiveJobs() to update the store and hide the spinner.
- *
- * @export
- * @returns
- */
-export function fetchJobs() {
+export const fetchJobs = () => {
   return async function(dispatch, getState) {
     dispatch(requestJobs());
     const state = getState();
-    try {
-      const data = await getRecentJobs(state);
-      dispatch(receiveJobs(data));
-    } catch (error) {
-      dispatch(receiveJobs({}));
+    const options = createRequestOptions(tokenSelector(state));
+    const queryString = constructJobsQuery(state);
+    const { dashboardUrl } = config;
 
-      dispatch(
-        setNotification({
-          type: "error",
-          message: error.message
-        })
-      );
-    }
-  };
-}
-
-/**
- * Fetches some jobs.
- *
- * @param {redux} state
- * @returns Array of jobs.
- */
-async function getRecentJobs(state) {
-  const options = createRequestOptions(tokenSelector(state));
-
-  const queryString = constructJobsQuery(state);
-
-  const { dashboardUrl } = config;
-
-  const url = `${dashboardUrl}/api/v1/jobs?${queryString}`;
-
-  try {
+    const url = `${dashboardUrl}/api/v1/jobs?${queryString}`;
     const response = await axios.get(url, options);
     const { data } = response;
-    return data;
-  } catch (e) {
-    throw new JobsError(e);
-  }
-}
+
+    dispatch(receiveJobs(data));
+  };
+};

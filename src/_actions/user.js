@@ -1,7 +1,6 @@
 import { createAction } from "redux-starter-kit";
 import config from "../config";
 import axios from "../_helpers/axios";
-import SignInError from "../errors/signInError";
 import { avatarInitials } from "../_helpers/presentation";
 import { emailSelector, accountsSelector } from "../selectors/account";
 import * as Sentry from "@sentry/browser";
@@ -9,6 +8,7 @@ import AppStorage from "../_helpers/storage";
 import { fetchJobs } from "../_actions/jobs";
 
 import { pushEvent } from "../_actions/log";
+import DesktopClientError from "../errors/desktopClientError";
 
 const signInSuccess = createAction("user/signInSuccess");
 const signInError = createAction("user/signInError");
@@ -54,7 +54,7 @@ const signIn = (credentials, storage = new AppStorage()) => async (
     await flagBetaUser(emailSelector(getState()));
   } catch (e) {
     dispatch(signInError());
-    throw new SignInError(e);
+    throw new DesktopClientError("Can't sign in", e);
   }
 };
 
@@ -62,9 +62,7 @@ const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
   const credentials = await storage.readCredentials();
   if (credentials) {
     dispatch(signInSuccess(credentials.accounts));
-    dispatch(
-      pushEvent("Successfully signed in from saved credentials", "info")
-    );
+    dispatch(pushEvent("Loaded saved credentials", "info"));
   }
 };
 

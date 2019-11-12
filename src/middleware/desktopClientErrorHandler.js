@@ -7,6 +7,8 @@ import { signOut } from "../_actions/user";
 
 const shouldCallSentry = () => process.env.NODE_ENV === "production";
 const shouldLogToConsole = () => process.env.NODE_ENV === "development";
+const getUnauthorizedError = error =>
+  [error, error.inner].find(_ => _ instanceof UnauthorizedError);
 
 export default sentry => e => (dispatch, getState) => {
   const state = getState();
@@ -14,12 +16,13 @@ export default sentry => e => (dispatch, getState) => {
     e instanceof DesktopClientError ? e : new UnhandledApplicationError(e);
   const { inner, message } = error;
 
-  if (inner instanceof UnauthorizedError) {
+  const possibleUnauthorizedError = getUnauthorizedError(error);
+  if (possibleUnauthorizedError) {
     dispatch(signOut());
     dispatch(
       setNotification({
         type: "error",
-        message: inner.message
+        message: possibleUnauthorizedError.message
       })
     );
 
@@ -31,18 +34,18 @@ export default sentry => e => (dispatch, getState) => {
       if (signedInSelector(state)) {
         scope.setUser(currentAccountSelector(state));
       }
-      sentry.captureException(inner);
+      sentry.captureException(inner || error);
     });
   }
 
   if (shouldLogToConsole()) {
-    console.log(inner);
+    console.log(inner || error);
   }
 
   dispatch(
     setNotification({
       type: "error",
-      message: message
+      message
     })
   );
 };

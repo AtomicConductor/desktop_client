@@ -78,11 +78,5 @@ describe("feedback", () => {
         type: "notification/setNotification"
       });
     });
-
-    it("dispatches failure notification when feedback submission fails", async () => {
-      await expect(feedback(input, os, nw)(dispatch, getState)).rejects.toThrow(
-        "Can't submit feedback"
-      );
-    });
   });
 });

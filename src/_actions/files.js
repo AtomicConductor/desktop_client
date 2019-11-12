@@ -23,7 +23,6 @@ import config from "../config";
 
 import { tokenSelector } from "../selectors/account";
 import axios from "../_helpers/axios";
-import DownloaderError from "../errors/downloaderError";
 import { pushEvent } from "../_actions/log";
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
@@ -185,53 +184,47 @@ export const startDownloadQueue = () => {
  */
 export function addToQueue(jobLabel) {
   return async function(dispatch, getState) {
-    try {
-      const job = getState().entities.jobs[jobLabel];
+    const job = getState().entities.jobs[jobLabel];
 
-      // OutputDirectory must exist or be created.
-      const { outputDirectory, files } = job;
-      if (!ensureDirectoryReady(outputDirectory)) {
-        throw new Error(`Can't create or access directory: ${outputDirectory}`);
-      }
+    // OutputDirectory must exist or be created.
+    const { outputDirectory, files } = job;
+    if (!ensureDirectoryReady(outputDirectory)) {
+      throw new Error(`Can't create or access directory: ${outputDirectory}`);
+    }
 
-      /*
+    /*
       TODO Here would be a good place to check disk space. Especially useful when
       downloading directly to a thumb drive or something.
       */
 
-      Object.values(files)
-        .filter(f => !(f.exists && f.exists === 100))
-        .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
-        .forEach((file, i) => {
-          const { relativePath } = file;
+    Object.values(files)
+      .filter(f => !(f.exists && f.exists === 100))
+      .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
+      .forEach((file, i) => {
+        const { relativePath } = file;
 
-          /*
+        /*
           The object we add to the download queue needs to contain the fullPath
           and the jobLabel so that it knows where to save and what object to
           update in the redux store. We add them here, on the fly, in order to
           keep the store DRY. i.e. The file entries shouldn't need to store
           stuff that the job already stores.
           */
-          const fileDownload = {
-            ...file,
-            jobLabel,
-            fullPath: path.join(outputDirectory, relativePath)
-          };
-          TheDownloadQueue.push(fileDownload, (err, result) => {})
-            .on("finish", function(result) {
-              dispatch(
-                setFileExists({ jobLabel, relativePath, percentage: 100 })
-              );
-            })
-            .on("failed", function(err) {
-              dispatch(
-                setFileExists({ jobLabel, relativePath, percentage: -1 })
-              );
-            });
-        });
-    } catch (error) {
-      throw new DownloaderError(error);
-    }
+        const fileDownload = {
+          ...file,
+          jobLabel,
+          fullPath: path.join(outputDirectory, relativePath)
+        };
+        TheDownloadQueue.push(fileDownload, (err, result) => {})
+          .on("finish", function(result) {
+            dispatch(
+              setFileExists({ jobLabel, relativePath, percentage: 100 })
+            );
+          })
+          .on("failed", function(err) {
+            dispatch(setFileExists({ jobLabel, relativePath, percentage: -1 }));
+          });
+      });
   };
 }
 

@@ -7,7 +7,8 @@ import desktopClientErrorHandler from "./middleware/desktopClientErrorHandler";
 
 Sentry.init({
   dsn: config.sentryDns,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
+  defaultIntegrations: false
 });
 
 const store = configureStore({

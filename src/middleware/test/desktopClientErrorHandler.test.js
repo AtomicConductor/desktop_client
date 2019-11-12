@@ -13,25 +13,35 @@ describe("desktopClientErrorHandler", () => {
     };
   });
 
-  it("signs user out when token has expired", () => {
-    const wrappedError = new DesktopClientError(
-      "action error",
-      new UnauthorizedError()
-    );
+  describe("Token has expired", () => {
+    const executeTest = wrappedError => {
+      errorHandler(sentry)(wrappedError)(dispatch, getState);
 
-    errorHandler(sentry)(wrappedError)(dispatch, getState);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: "user/signOut",
+        payload: undefined
+      });
 
-    expect(dispatch).toHaveBeenNthCalledWith(1, {
-      type: "user/signOut",
-      payload: undefined
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: "notification/setNotification",
+        payload: {
+          type: "error",
+          message: "Your session has expired, please sign-in again."
+        }
+      });
+    };
+
+    it("signs user out when inner exception is UnauthorizedError", () => {
+      const wrappedError = new DesktopClientError(
+        "action error",
+        new UnauthorizedError()
+      );
+
+      executeTest(wrappedError);
     });
 
-    expect(dispatch).toHaveBeenNthCalledWith(2, {
-      type: "notification/setNotification",
-      payload: {
-        type: "error",
-        message: "Your session has expired, please sign-in again."
-      }
+    it("signs user out when wrapper exception is UnauthorizedError", () => {
+      executeTest(new UnauthorizedError());
     });
   });
 
@@ -57,6 +67,7 @@ describe("desktopClientErrorHandler", () => {
     afterEach(() => {
       process.env.NODE_ENV = "test";
     });
+
     it("logs to sentry only on production mode", () => {
       const scope = { setUser: jest.fn() };
       sentry.withScope.mockImplementation(_ => _(scope));
