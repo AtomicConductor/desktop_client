@@ -309,7 +309,7 @@ const submissionSelector = createSelector(
     instanceTypeNameSelector
   ) => {
     return {
-      jobTitle: jobTitleSelector,
+      job_title: jobTitleSelector,
       project: projectSelector,
       instance_type: instanceTypeNameSelector,
       upload_only: uploadOnly,
