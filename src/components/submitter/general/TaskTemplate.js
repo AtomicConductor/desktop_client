@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,6 +34,7 @@ import {
   selectPreset,
   deletePreset
 } from "../../../_actions/entities";
+import SaveSnippet from "./SaveSnippet";
 
 const useStyles = makeStyles(theme => ({
   dominantPaper: {
@@ -70,15 +71,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default props => {
-  const [tokensListAnchor, setTokensListAnchor] = React.useState(null);
-  const [taskTempaltesListAnchor, setTaskTempaltesListAnchor] = React.useState(
-    null
-  );
+export default () => {
+  const [tokensListAnchor, setTokensListAnchor] = useState(null);
+  const [taskTempaltesListAnchor, setTaskTempaltesListAnchor] = useState(null);
+  const [saveSnippetFormOpen, setSaveSnippetFormOpen] = useState(false);
   const taskTemplateInputRef = useRef(null);
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const { taskTemplate } = useSelector(state => state.submitter.submission);
   const taskTemplates = useSelector(presetsSelector);
   const selectedPreset = useSelector(selectedPresetSelector);
@@ -116,16 +115,7 @@ export default props => {
           <IconButton
             className={classes.icon}
             color="primary"
-            onClick={e => {
-              const name = prompt("Enter a name for you custom command:");
-              if (!name) return;
-              dispatch(
-                savePreset({
-                  name,
-                  command: taskTemplate
-                })
-              );
-            }}
+            onClick={() => setSaveSnippetFormOpen(true)}
           >
             <BookmarkRounded fontSize="small" />
           </IconButton>
@@ -200,6 +190,19 @@ export default props => {
           );
         })}
       </Menu>
+
+      <SaveSnippet
+        open={saveSnippetFormOpen}
+        onClose={() => setSaveSnippetFormOpen(false)}
+        onSave={name =>
+          dispatch(
+            savePreset({
+              name,
+              command: taskTemplate
+            })
+          )
+        }
+      />
     </Box>
   );
 };
