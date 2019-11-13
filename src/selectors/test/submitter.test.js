@@ -1,5 +1,4 @@
 import {
-  instanceTypesSelector,
   instanceTypeNameSelector,
   assetsSelector,
   assetFilenamesSelector,
@@ -12,6 +11,8 @@ import {
   outputPathSelector,
   submissionValidSelector
 } from "../submitter";
+
+import { instanceTypesSelector } from "../entities";
 
 const ss = (overrides = {}) => ({
   submitter: {

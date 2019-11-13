@@ -6,7 +6,7 @@ import { emailSelector, accountsSelector } from "../selectors/account";
 import * as Sentry from "@sentry/browser";
 import AppStorage from "../_helpers/storage";
 import { fetchJobs } from "../_actions/jobs";
-
+import { fetchProjects, fetchInstanceTypes } from "../_actions/submitter";
 import { pushEvent } from "../_actions/log";
 import DesktopClientError from "../errors/desktopClientError";
 
@@ -72,6 +72,8 @@ const selectAccount = (id, storage = new AppStorage()) => async (
 ) => {
   dispatch(switchAccount(id));
   dispatch(fetchJobs());
+  dispatch(fetchProjects());
+  dispatch(fetchInstanceTypes());
   const { selectedAccount, otherAccounts } = accountsSelector(getState());
   await storage.saveCredentials({
     accounts: [selectedAccount, ...otherAccounts]

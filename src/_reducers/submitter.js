@@ -13,7 +13,6 @@ import {
   setRetries,
   setInstanceType,
   setProject,
-  projectsSuccess,
   setOutputPath,
   addAssets,
   removeAssets,
@@ -98,24 +97,6 @@ export default createReducer(initialState, {
 
   [setTaskTemplate]: (state, { payload }) => {
     state.submission.taskTemplate = payload;
-  },
-  [projectsSuccess]: (state, { payload }) => {
-    /**
-     * If there is a project already set which is in the list of projects, just leave it.
-     * Otherwise, tryto set the default project. In the last resort, set to the first project in the list
-     *
-     */
-    if (payload.length) {
-      if (!payload.some(_ => state.submission.project === _)) {
-        if (!payload.some(_ => "default" === _)) {
-          state.submission.project = "default";
-        } else {
-          state.submission.project = payload.sort((a, b) =>
-            a.toLowerCase().localeCompare(b.toLowerCase())
-          )[0];
-        }
-      }
-    }
   },
   [addAssets]: (state, { payload }) => {
     state.submission.assets = {

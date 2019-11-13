@@ -20,7 +20,7 @@ import TaskTemplate from "./TaskTemplate";
 import {
   instanceTypesSelector,
   projectsSelector
-} from "../../../selectors/submitter";
+} from "../../../selectors/entities";
 import {
   setJobTitle,
   setFrameSpec,

@@ -72,12 +72,7 @@ function spanToDateFilters(key, span) {
         `${key}_lt_${lastyear.endOf("year").format(FMT)}`
       ];
     default:
-      return [
-        `${key}_gt_${moment
-          .utc()
-          .startOf("month")
-          .format(FMT)}`
-      ];
+      return [];
   }
 }
 

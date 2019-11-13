@@ -5,12 +5,6 @@ import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
 import path from "upath";
 
-import {
-  instanceTypesSelector,
-  instanceTypesMapSelector,
-  projectsSelector
-} from "./entities";
-
 const assetsMap = state => state.submitter.submission.assets;
 const taskTemplate = state => state.submitter.submission.taskTemplate;
 const chunkSize = state => state.submitter.submission.chunkSize;
@@ -337,9 +331,6 @@ const submissionValidSelector = createSelector(
 );
 
 export {
-  instanceTypesSelector,
-  instanceTypesMapSelector,
-  projectsSelector,
   scoutFramesSelector,
   taskDataSelector,
   assetFilenamesSelector,
