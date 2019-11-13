@@ -1,11 +1,13 @@
 import {
   fetchSoftwarePackages,
   insertTaskTemplateToken,
-  loadPythonLocation
+  loadPythonLocation,
+  submit
 } from "../submitter";
 import nock from "nock";
 import config from "../../config";
 import { settings } from "../../_helpers/constants";
+import { EventEmitter } from "events";
 
 describe("submitter", () => {
   let dispatch;
@@ -161,6 +163,146 @@ describe("submitter", () => {
       expect(dispatch).toHaveBeenCalledWith({
         type: "submitter/setPythonLocation",
         payload: "saved/path"
+      });
+    });
+  });
+
+  describe("submit", () => {
+    const getState = jest.fn().mockReturnValue({
+      submitter: {
+        pythonLocation: "python.location",
+        submission: {
+          taskTemplate: "",
+          assets: [],
+          softwarePackages: [],
+          environmentOverrides: [],
+          outputPath: "",
+          instanceType: "",
+          jobTitle: "my submission"
+        }
+      }
+    });
+
+    class PythonShellStub extends EventEmitter {
+      end(handler) {
+        handler(undefined);
+      }
+    }
+
+    let pythonShellStub;
+
+    beforeEach(() => {
+      pythonShellStub = new PythonShellStub();
+    });
+
+    it("throws when submission is not valid", async () => {
+      const validator = jest.fn().mockReturnValue(false);
+
+      await expect(submit(validator, null)(dispatch, getState)).rejects.toThrow(
+        "Invalid submission. Please check the preview tab for errors."
+      );
+    });
+
+    it("dispatched error notification when shell execution ends with error", async () => {
+      class PythonShellStubWithError extends EventEmitter {
+        end(handler) {
+          handler(new Error("process exited with error"));
+        }
+      }
+      const validator = jest.fn().mockReturnValueOnce(true);
+
+      await submit(validator, () => new PythonShellStubWithError())(
+        dispatch,
+        getState
+      );
+
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "notification/setNotification",
+        payload: {
+          message: "process exited with error",
+          type: "error"
+        }
+      });
+    });
+
+    describe("dispatches notification when submission is finished", () => {
+      it("returns no response code", async () => {
+        const validator = jest.fn().mockReturnValueOnce(true);
+
+        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        pythonShellStub.emit("message", "no response code");
+
+        expect(dispatch).toHaveBeenCalledTimes(3);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: "submitter/submissionRequested",
+          payload: undefined
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: "submitter/submissionFinished",
+          payload: undefined
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: "log/pushEvent",
+          payload: expect.objectContaining({
+            text: "no response code",
+            level: "info"
+          })
+        });
+      });
+
+      it("returns 201 accepted response code", async () => {
+        const validator = jest.fn().mockReturnValueOnce(true);
+
+        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        pythonShellStub.emit(
+          "message",
+          JSON.stringify({ response_code: 201, uri: "/jobs" })
+        );
+
+        expect(dispatch).toHaveBeenCalledTimes(4);
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: "notification/setNotification",
+          payload: {
+            buttonLabel: "view",
+            message: "Successfully submitted my submission",
+            type: "success",
+            url: `${config.dashboardUrl}/job`
+          }
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(4, {
+          type: "log/pushEvent",
+          payload: expect.objectContaining({
+            text: '{"response_code":201,"uri":"/jobs"}',
+            level: "info"
+          })
+        });
+      });
+
+      it("returns error for non 201 response codes", async () => {
+        const validator = jest.fn().mockReturnValueOnce(true);
+
+        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        pythonShellStub.emit("message", JSON.stringify({ response_code: 404 }));
+
+        expect(dispatch).toHaveBeenCalledTimes(4);
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: "notification/setNotification",
+          payload: {
+            message: "Submission failed with response code 404",
+            type: "error"
+          }
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(4, {
+          type: "log/pushEvent",
+          payload: expect.objectContaining({
+            text: '{"response_code":404}',
+            level: "error"
+          })
+        });
       });
     });
   });

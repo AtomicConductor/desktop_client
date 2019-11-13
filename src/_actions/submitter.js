@@ -55,23 +55,28 @@ const submissionRequested = createAction("submitter/submissionRequested");
 const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
 const submissionFinished = createAction("submitter/submissionFinished");
 
-const submit = () => async (dispatch, getState) => {
-  if (!submissionValidSelector(getState())) {
+const submit = (
+  validator = submissionValidSelector,
+  pythonShell = runPythonShell
+) => async (dispatch, getState) => {
+  const state = getState();
+
+  if (!validator(state)) {
     throw new DesktopClientError(
       "Invalid submission. Please check the preview tab for errors."
     );
   }
 
-  const pythonPath = pythonLocation(getState());
-  const args = [JSON.stringify(submissionSelector(getState()))];
+  const pythonPath = pythonLocation(state);
+  const args = [JSON.stringify(submissionSelector(state))];
 
-  const pyshell = await runPythonShell("submit.py", { pythonPath, args });
+  const pyshell = await pythonShell("submit.py", { pythonPath, args });
   dispatch(submissionRequested());
 
-  pyshell.on("message", function(message) {
+  pyshell.on("message", message => {
     if (message.match(/response_code/)) {
       const response = JSON.parse(message);
-      const title = jobTitleSelector(getState());
+      const title = jobTitleSelector(state);
       if (response.response_code === 201) {
         dispatch(
           setNotification({
@@ -101,11 +106,11 @@ const submit = () => async (dispatch, getState) => {
     }
   });
 
-  pyshell.on("stderr", function(message) {
+  pyshell.on("stderr", message => {
     dispatch(pushEvent(message, "error"));
   });
 
-  pyshell.end(function(error, code, signal) {
+  pyshell.end(error => {
     dispatch(submissionFinished());
     if (error) {
       dispatch(setNotification({ message: error.message, type: "error" }));

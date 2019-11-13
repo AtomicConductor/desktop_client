@@ -60,12 +60,7 @@ describe("python helper", () => {
       ...overrides
     });
 
-    let mockGetVersion = jest.fn(path => {
-      // if (path === "bad") {
-      //   throw new Error();
-      // }
-      return "2.7";
-    });
+    let mockGetVersion = jest.fn(() => "2.7");
     const PythonShell = jest.fn().mockImplementation(() => {
       return {
         childProcess: { pid: 1 }
