@@ -21,6 +21,12 @@ import {
   instanceTypesSelector,
   projectsSelector
 } from "../../../selectors/entities";
+
+import {
+  projectSelector,
+  instanceTypeSelector
+} from "../../../selectors/submitter";
+
 import {
   setJobTitle,
   setFrameSpec,
@@ -95,14 +101,16 @@ const General = () => {
     useScoutFrames,
     preemptible,
     retries,
-    instanceType,
-    project,
     outputPath
   } = useSelector(state => state.submitter.submission);
 
   const instanceTypes = useSelector(instanceTypesSelector);
 
+  const instanceType = useSelector(instanceTypeSelector);
+
   const projects = useSelector(projectsSelector);
+  let project = useSelector(projectSelector);
+  project = project.errors ? "" : project;
 
   const filename = useSelector(state => state.submitter.filename);
 

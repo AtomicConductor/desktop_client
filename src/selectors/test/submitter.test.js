@@ -1,5 +1,6 @@
 import {
   instanceTypeNameSelector,
+  instanceTypeSelector,
   assetsSelector,
   assetFilenamesSelector,
   taskDataSelector,
@@ -14,7 +15,7 @@ import {
 
 import { instanceTypesSelector } from "../entities";
 
-const ss = (overrides = {}) => ({
+const ss = (overrides = {}, entityOverrides = {}) => ({
   submitter: {
     submission: {
       jobTitle: "job",
@@ -36,6 +37,15 @@ const ss = (overrides = {}) => ({
       instanceType: { name: "test", description: "a test" },
       ...overrides
     }
+  },
+  entities: {
+    projects: ["p1", "p2", "p3", "default"],
+    instanceTypes: {
+      a: { name: "a", description: "a desc", cores: 2 },
+      b: { name: "b", description: "b desc", cores: 8 },
+      c: { name: "c", description: "c desc", cores: 16 }
+    },
+    ...entityOverrides
   }
 });
 
@@ -52,19 +62,41 @@ describe("submitter selectors", () => {
     });
   });
 
+  describe("instanceTypeSelector", () => {
+    it("returns the currently selected instance type if entity exists", () => {
+      const state = ss({ instanceType: { name: "b", description: "b desc" } });
+      expect(instanceTypeSelector(state)).toBe(state.entities.instanceTypes.b);
+    });
+
+    it("returns the weakest (cores) instance type if entity does not exist", () => {
+      const state = ss({ instanceType: { name: "d", description: "d desc" } });
+      expect(instanceTypeSelector(state)).toBe(state.entities.instanceTypes.a);
+    });
+
+    it("returns empty name and description if no instance types exist", () => {
+      const state = ss(
+        { instanceType: { name: "d", description: "d desc" } },
+        { instanceTypes: {} }
+      );
+      expect(instanceTypeSelector(state)).toEqual(
+        expect.objectContaining({ name: "", description: "" })
+      );
+    });
+  });
+
   describe("instanceTypeNameSelector", () => {
     it("returns name of the currently selected instance type", () => {
-      expect(instanceTypeNameSelector(ss())).toBe("test");
+      const state = ss({ instanceType: { name: "b", description: "b desc" } });
+      expect(instanceTypeNameSelector(state)).toBe("b");
     });
-    it("returns errors if no currently selected instance type", () => {
-      expect(
-        instanceTypeNameSelector(
-          ss({ instanceType: { name: "", description: "" } })
-        )
-      ).toEqual(
+
+    it("returns errors if no instance types exist", () => {
+      const state = ss({}, { instanceTypes: {} });
+
+      expect(instanceTypeNameSelector(state)).toEqual(
         expect.objectContaining({
           errors: expect.arrayContaining([
-            expect.stringMatching(/invalid instance/i)
+            expect.stringMatching(/No instance types/i)
           ])
         })
       );
@@ -72,14 +104,23 @@ describe("submitter selectors", () => {
   });
 
   describe("projectSelector", () => {
-    it("returns the project", () => {
-      expect(projectSelector(ss({ project: "foo" }))).toBe("foo");
+    it("returns the project if entity exists", () => {
+      expect(projectSelector(ss({ project: "p2" }))).toBe("p2");
     });
-    it("returns errors if project name empty", () => {
-      expect(projectSelector(ss({ project: " " }))).toEqual(
+    it("returns the default project if entity does not exists", () => {
+      expect(projectSelector(ss({ project: "p4" }))).toBe("default");
+    });
+    it("returns the first project if neither entity or default entity exists", () => {
+      const state = ss({ project: "p4" }, { projects: ["p1", "p2", "p3"] });
+      expect(projectSelector(state)).toBe("p1");
+    });
+
+    it("returns errors if no project entities exist", () => {
+      const state = ss({ project: "p4" }, { projects: [] });
+      expect(projectSelector(state)).toEqual(
         expect.objectContaining({
           errors: expect.arrayContaining([
-            expect.stringMatching(/invalid project/i)
+            expect.stringMatching(/No projects/i)
           ])
         })
       );
@@ -545,7 +586,7 @@ describe("submission selectors", () => {
       expect(submissionValidSelector(ss())).toBe(true);
     });
     it("returns false if some fields are invalid", () => {
-      expect(submissionValidSelector(ss({ project: "" }))).toBe(false);
+      expect(submissionValidSelector(ss({ jobTitle: "" }))).toBe(false);
     });
   });
 });

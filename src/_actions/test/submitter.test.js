@@ -180,6 +180,10 @@ describe("submitter", () => {
           instanceType: "",
           jobTitle: "my submission"
         }
+      },
+      entities: {
+        projects: [],
+        instanceTypes: {}
       }
     });
 

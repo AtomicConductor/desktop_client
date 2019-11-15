@@ -4,6 +4,7 @@ import { createSelector } from "reselect";
 import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
 import path from "upath";
+import { projectsSelector, instanceTypesSelector } from "./entities";
 
 const assetsMap = state => state.submitter.submission.assets;
 const taskTemplate = state => state.submitter.submission.taskTemplate;
@@ -116,8 +117,18 @@ const taskDataValidator = createSelector(
   ]
 );
 
+const instanceTypeSelector = createSelector(
+  instanceTypesSelector,
+  instanceType,
+  (instanceTypes, instanceType) =>
+    instanceTypes.length
+      ? instanceTypes.find(_ => instanceType.name === _.name) ||
+        instanceTypes[0]
+      : { name: "", description: "" }
+);
+
 /***
- * The Selectors below create the top level fields for the submission.
+ * The Selectors below create fields for the submission.
  * They should contain either:
  * 1. The computed value - e.g. object, string, number, array
  * OR
@@ -127,11 +138,8 @@ const taskDataValidator = createSelector(
  */
 
 const instanceTypeNameSelector = createSelector(
-  instanceType,
-  _ =>
-    _.name && _.name.trim() !== ""
-      ? _.name
-      : { errors: [`Invalid instance type`] }
+  instanceTypeSelector,
+  _ => _.name || { errors: [`No instance types. Please refresh the list.`] }
 );
 
 const jobTitleSelector = createSelector(
@@ -141,7 +149,23 @@ const jobTitleSelector = createSelector(
 
 const projectSelector = createSelector(
   project,
-  _ => (_ && _.trim() !== "" ? _ : { errors: ["Invalid project"] })
+  projectsSelector,
+  (project, projects) => {
+    if (!projects.length) {
+      return {
+        errors: [
+          "No projects. Please refresh or create some projects in the web UI"
+        ]
+      };
+    }
+    if (projects.some(_ => project === _)) {
+      return project;
+    }
+    if (projects.some(_ => "default" === _)) {
+      return "default";
+    }
+    return projects[0];
+  }
 );
 
 const outputPathSelector = createSelector(
@@ -338,6 +362,7 @@ export {
   softwarePackageIdsSelector,
   environmentSelector,
   instanceTypeNameSelector,
+  instanceTypeSelector,
   jobTitleSelector,
   projectSelector,
   outputPathSelector,

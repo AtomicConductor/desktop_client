@@ -7,23 +7,17 @@ import { tokenSelector } from "../selectors/account";
 import { pushEvent } from "../_actions/log";
 import { createRequestOptions } from "../_helpers/network";
 import {
-  instanceTypeNameSelector,
   submissionSelector,
   submissionValidSelector,
   pythonLocation,
-  jobTitleSelector,
-  projectSelector
+  jobTitleSelector
 } from "../selectors/submitter";
 
 import { signedInSelector, currentAccountSelector } from "../selectors/account";
 
 import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
-import {
-  instanceTypesMapSelector,
-  instanceTypesSelector,
-  projectsSelector
-} from "../selectors/entities";
+import { instanceTypesMapSelector } from "../selectors/entities";
 import { resolvePythonLocation, runPythonShell } from "../_helpers/python";
 import { settings } from "../_helpers/constants";
 
@@ -145,14 +139,6 @@ const fetchProjects = () => async (dispatch, getState) => {
     throw new DesktopClientError("Failed to fetch any active projects");
 
   dispatch(projectsSuccess(projects));
-
-  if (!projects.some(_ => projectSelector(getState()) === _)) {
-    if (projects.some(_ => "default" === _)) {
-      dispatch(setProject("default"));
-    } else {
-      dispatch(setProject(projectsSelector(getState())[0]));
-    }
-  }
 };
 
 const fetchInstanceTypes = () => async (dispatch, getState) => {
@@ -167,18 +153,6 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
     throw new DesktopClientError("Failed to fetch any instance types");
 
   dispatch(instanceTypesSuccess(instanceTypes));
-
-  const state = getState();
-  const currentInstanceTypeName = instanceTypeNameSelector(state);
-  const allInstanceTypes = instanceTypesSelector(state);
-  if (!currentInstanceTypeName.errors) {
-    const found = instanceTypes.find(_ => _.name === currentInstanceTypeName);
-    if (found) {
-      dispatch(setInstanceType(found));
-      return;
-    }
-  }
-  dispatch(setInstanceType(allInstanceTypes[0]));
 };
 
 const mapPackages = software => {
