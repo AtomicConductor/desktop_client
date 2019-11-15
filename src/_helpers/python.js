@@ -21,7 +21,7 @@ const resolvePythonLocation = async (
 ) => {
   const conductorLocation = await tryExecute(
     executor,
-    "echo $CONDUCTOR_LOCATION"
+    platform === "win32" ? "set CONDUCTOR_LOCATION" : "echo $CONDUCTOR_LOCATION"
   );
 
   if (platform === "win32") {

@@ -8,7 +8,7 @@ describe("python helper", () => {
     it("returns client tools' python path", async () => {
       const executorResult = { stdout: "conductor\\path" };
       exec.mockImplementationOnce((cmd, cb) => {
-        expect(cmd).toBe("echo $CONDUCTOR_LOCATION");
+        expect(cmd).toBe("set CONDUCTOR_LOCATION");
         cb(null, executorResult);
       });
 
