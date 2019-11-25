@@ -1,5 +1,7 @@
 /* globals chrome */
 
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
   // Make links work
   const links = document.getElementsByTagName('a');
@@ -8,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const ln = links[i];
       const location = ln.href;
       ln.onclick = function() {
-        chrome.tabs.create({ active: true, url: location });
+        chrome.tabs.create({active: true, url: location});
       };
     })();
   }
