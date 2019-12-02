@@ -1,6 +1,7 @@
 import errorHandler from "../desktopClientErrorHandler";
 import DesktopClientError from "../../errors/desktopClientError";
 import UnauthorizedError from "../../errors/unauthorizedError";
+import UnhandledApplicationError from "../../errors/unhandledApplicationError";
 
 describe("desktopClientErrorHandler", () => {
   let dispatch, getState, sentry;
@@ -87,6 +88,19 @@ describe("desktopClientErrorHandler", () => {
 
       expect(sentry.captureException).toHaveBeenCalledWith(
         new Error("inner error")
+      );
+    });
+
+    it("logs UnhandledApplicationError error when accessing store state fails", () => {
+      const scope = { setUser: jest.fn() };
+      sentry.withScope.mockImplementation(_ => _(scope));
+      getState.mockReturnValue({ invalidState: {} });
+
+      errorHandler(sentry)(new DesktopClientError())(dispatch, getState);
+
+      expect(scope.setUser).not.toHaveBeenCalledWith();
+      expect(sentry.captureException).toHaveBeenCalledWith(
+        new UnhandledApplicationError()
       );
     });
   });

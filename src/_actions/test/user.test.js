@@ -23,13 +23,26 @@ describe("user", () => {
   });
 
   describe("signInfromSaved", () => {
-    it("signs user in when credentials are in local storage", async () => {
-      appStorage.readCredentials.mockResolvedValueOnce({ accounts: [] });
+    it("signs user in when valid credentials are in local storage", async () => {
+      const validCredentials = [
+        {
+          id: 1,
+          name: "",
+          email: "",
+          token: "",
+          avatar: "",
+          selected: true
+        }
+      ];
+
+      appStorage.readCredentials.mockResolvedValueOnce({
+        accounts: validCredentials
+      });
 
       await signInFromSaved(appStorage)(dispatch);
 
       expect(dispatch).toHaveBeenNthCalledWith(1, {
-        payload: [],
+        payload: validCredentials,
         type: "user/signInSuccess"
       });
 
@@ -42,12 +55,38 @@ describe("user", () => {
       });
     });
 
-    it("does not sign in user when local storage is empty", async () => {
-      appStorage.readCredentials.mockResolvedValueOnce(undefined);
+    describe.each([
+      {},
+      { accounts: {} },
+      { accounts: [] },
+      {
+        accounts: [{ id: "", name: "", email: "", avatar: "", selected: true }]
+      },
+      {
+        accounts: [{ id: "", name: "", email: "", avatar: "", token: "" }]
+      },
+      {
+        accounts: [{ id: "", name: "", email: "", selected: true, token: "" }]
+      },
+      {
+        accounts: [{ id: "", name: "", avatar: "", selected: true, token: "" }]
+      },
+      {
+        accounts: [{ id: "", email: "", avatar: "", selected: true, token: "" }]
+      },
+      {
+        accounts: [
+          { name: "", email: "", avatar: "", selected: true, token: "" }
+        ]
+      }
+    ])("when credentials %j have invalid schema", credentials => {
+      it("does not sign in user", async () => {
+        appStorage.readCredentials.mockResolvedValueOnce(credentials);
 
-      await signInFromSaved(appStorage)(dispatch);
-
-      expect(dispatch).not.toHaveBeenCalled();
+        await expect(signInFromSaved(appStorage)(dispatch)).rejects.toThrow(
+          "Your session has expired, please sign-in again."
+        );
+      });
     });
   });
 

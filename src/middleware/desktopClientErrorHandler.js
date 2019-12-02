@@ -30,12 +30,16 @@ export default sentry => e => (dispatch, getState) => {
   }
 
   if (shouldCallSentry()) {
-    sentry.withScope(scope => {
-      if (signedInSelector(state)) {
-        scope.setUser(currentAccountSelector(state));
-      }
-      sentry.captureException(inner || error);
-    });
+    try {
+      sentry.withScope(scope => {
+        if (signedInSelector(state)) {
+          scope.setUser(currentAccountSelector(state));
+        }
+        sentry.captureException(inner || error);
+      });
+    } catch (e) {
+      sentry.captureException(new UnhandledApplicationError(e));
+    }
   }
 
   if (shouldLogToConsole()) {

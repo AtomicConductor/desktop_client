@@ -9,6 +9,8 @@ import { fetchJobs } from "../_actions/jobs";
 import { fetchProjects, fetchInstanceTypes } from "../_actions/submitter";
 import { pushEvent } from "../_actions/log";
 import DesktopClientError from "../errors/desktopClientError";
+import UnauthorizedError from "../errors/unauthorizedError";
+import validCredentialsSchema from "../_helpers/credentialsSchemaValidator";
 
 const signInSuccess = createAction("user/signInSuccess");
 const signInError = createAction("user/signInError");
@@ -60,10 +62,13 @@ const signIn = (credentials, storage = new AppStorage()) => async (
 
 const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
   const credentials = await storage.readCredentials();
-  if (credentials) {
-    dispatch(signInSuccess(credentials.accounts));
-    dispatch(pushEvent("Loaded saved credentials", "info"));
+
+  if (!validCredentialsSchema(credentials)) {
+    throw new UnauthorizedError();
   }
+
+  dispatch(signInSuccess(credentials.accounts));
+  dispatch(pushEvent("Loaded saved credentials", "info"));
 };
 
 const selectAccount = (id, storage = new AppStorage()) => async (
