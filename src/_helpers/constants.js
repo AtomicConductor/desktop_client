@@ -31,9 +31,15 @@ export const taskTemplateTokens = [
   "chunk_start",
   "chunk_end",
   "chunk_step",
-  "chunk_spec"
+  "chunk_spec",
+  "output_path",
+  "sequence_start",
+  "sequence_end",
+  "sequence_step",
+  "sequence_spec"
 ];
 
 export const settings = {
-  pythonLocation: "settings.pythonLocation"
+  pythonLocation: "settings.pythonLocation",
+  submitterNoticeClosed: "settings.submitterNoticeClosed"
 };

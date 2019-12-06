@@ -400,6 +400,28 @@ describe("submission selectors", () => {
         ])
       );
     });
+
+    it("resolves the output folder when its a posix path", () => {
+      const result = taskDataSelector(
+        ss({
+          taskTemplate: "command -o <output_path>",
+          frameSpec: "1",
+          outputPath: "/path/to/out"
+        })
+      );
+      expect(result[0]).toHaveProperty("command", "command -o /path/to/out");
+    });
+
+    it("resolves the output folder to posix when its a windows path", () => {
+      const result = taskDataSelector(
+        ss({
+          taskTemplate: "command -o <output_path>",
+          frameSpec: "1",
+          outputPath: "C:\\path\\to\\out"
+        })
+      );
+      expect(result[0]).toHaveProperty("command", "command -o /path/to/out");
+    });
   });
 
   describe("software packages", () => {

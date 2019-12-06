@@ -3,6 +3,8 @@
 import { createSelector } from "reselect";
 import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
+import { toPosix } from "../_helpers/paths";
+
 import path from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
 
@@ -191,7 +193,15 @@ const taskDataSelector = createSelector(
   frameSpec,
   tileSpec,
   chunkSize,
-  (taskDataValidator, taskTemplate, frameSpec, tileSpec, chunkSize) => {
+  outputPath,
+  (
+    taskDataValidator,
+    taskTemplate,
+    frameSpec,
+    tileSpec,
+    chunkSize,
+    outputPath
+  ) => {
     const errors = taskDataValidator;
     if (errors.length) {
       return { errors };
@@ -200,7 +210,8 @@ const taskDataSelector = createSelector(
     const mainSequence = Sequence(frameSpec);
     const tilesSequence = Sequence(tileSpec);
 
-    const sequence_context = {
+    const globalContext = {
+      output_path: toPosix(outputPath),
       sequence_start: mainSequence.first,
       sequence_end: mainSequence.last,
       sequence_step: mainSequence.step,
@@ -211,7 +222,7 @@ const taskDataSelector = createSelector(
     for (let eslIgnore_chunk of mainSequence.getChunks(chunkSize)) {
       for (let eslIgnore_tile of tilesSequence.getFrames()) {
         const context = {
-          ...sequence_context,
+          ...globalContext,
           tile: eslIgnore_tile,
           chunk_start: eslIgnore_chunk.first,
           chunk_end: eslIgnore_chunk.last,

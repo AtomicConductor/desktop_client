@@ -13,12 +13,14 @@ import AppBar from "./AppBar";
 import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import NoticeDialog from "./NoticeDialog";
 
 import {
   submit,
   fetchProjects,
   fetchInstanceTypes,
-  loadPythonLocation
+  loadPythonLocation,
+  readDialogNoticeState
 } from "../../_actions/submitter";
 
 import { loadPresets } from "../../_actions/entities";
@@ -93,6 +95,7 @@ const Submitter = props => {
     dispatch(fetchInstanceTypes());
     dispatch(loadPythonLocation());
     dispatch(loadPresets());
+    dispatch(readDialogNoticeState());
   }, [signedIn, dispatch]);
 
   if (!signedIn) {
@@ -151,6 +154,7 @@ const Submitter = props => {
             </Button>
           )}
         </Card>
+        <NoticeDialog />
       </Box>
     </React.Fragment>
   );

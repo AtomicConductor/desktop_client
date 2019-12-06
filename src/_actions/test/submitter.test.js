@@ -2,6 +2,8 @@ import {
   fetchSoftwarePackages,
   insertTaskTemplateToken,
   loadPythonLocation,
+  closeNoticeDialog,
+  readDialogNoticeState,
   submit
 } from "../submitter";
 import nock from "nock";
@@ -13,12 +15,11 @@ describe("submitter", () => {
   let dispatch;
   beforeEach(() => {
     dispatch = jest.fn();
+    global.localStorage.__proto__ = {
+      getItem: jest.fn(),
+      setItem: jest.fn()
+    };
   });
-
-  global.localStorage.__proto__ = {
-    getItem: jest.fn(),
-    setItem: jest.fn()
-  };
 
   describe("fetchSoftwarePackages", () => {
     it("retrieves software packages", async () => {
@@ -163,6 +164,64 @@ describe("submitter", () => {
       expect(dispatch).toHaveBeenCalledWith({
         type: "submitter/setPythonLocation",
         payload: "saved/path"
+      });
+    });
+  });
+
+  describe("show notice panel", () => {
+    it("closeNoticeDialog closes notice panel forever using localstorage", async () => {
+      await closeNoticeDialog(true)(dispatch);
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        settings.submitterNoticeClosed,
+        true
+      );
+    });
+
+    it("closeNoticeDialog doesn't touch localstorage if not closeForever", async () => {
+      await closeNoticeDialog(false)(dispatch);
+      expect(localStorage.setItem).not.toHaveBeenCalled();
+    });
+
+    it("closeNoticeDialog also calls showNoticeDialog with false", async () => {
+      await closeNoticeDialog(true)(dispatch);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showNoticeDialog",
+        payload: false
+      });
+    });
+
+    it("readDialogNoticeState gets an item value from localStorage", async () => {
+      localStorage.getItem.mockReturnValueOnce("false");
+      await readDialogNoticeState()(dispatch);
+      expect(localStorage.getItem).toHaveBeenCalledWith(
+        settings.submitterNoticeClosed
+      );
+    });
+
+    it("readDialogNoticeState calls showNoticeDialog with true when localStorage close is empty", async () => {
+      localStorage.getItem.mockReturnValueOnce(null);
+      await readDialogNoticeState()(dispatch);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showNoticeDialog",
+        payload: true
+      });
+    });
+
+    it("readDialogNoticeState calls showNoticeDialog with true when localStorage close is false", async () => {
+      localStorage.getItem.mockReturnValueOnce("false");
+      await readDialogNoticeState()(dispatch);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showNoticeDialog",
+        payload: true
+      });
+    });
+
+    it("readDialogNoticeState calls showNoticeDialog with true when localStorage close is true", async () => {
+      localStorage.getItem.mockReturnValueOnce("true");
+      await readDialogNoticeState()(dispatch);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showNoticeDialog",
+        payload: false
       });
     });
   });
