@@ -4,6 +4,7 @@
   https://www.npmjs.com/package/better-queue
   https://www.npmjs.com/package/node-downloader-helper
 */
+import DesktopClientError from "../errors/desktopClientError";
 
 import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
@@ -189,7 +190,9 @@ export function addToQueue(jobLabel) {
     // OutputDirectory must exist or be created.
     const { outputDirectory, files } = job;
     if (!ensureDirectoryReady(outputDirectory)) {
-      throw new Error(`Can't create or access directory: ${outputDirectory}`);
+      throw new DesktopClientError(
+        `Can't create or access directory: ${outputDirectory}`
+      );
     }
 
     /*
