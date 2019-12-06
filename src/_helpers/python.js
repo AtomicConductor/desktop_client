@@ -42,9 +42,19 @@ const runPythonShell = async (script, options, shell = PythonShell) => {
   const pythonPath = options.pythonPath;
 
   try {
-    await shell.getVersion(pythonPath);
+    let version = await shell.getVersion(pythonPath);
+    version = version.stdout || version.stderr;
+    if (
+      version
+        .split(" ")[1]
+        .split(".")
+        .slice(0, 2)
+        .join(".") !== "2.7"
+    ) {
+      throw new DesktopClientError("Invalid python 2.7 location");
+    }
   } catch (e) {
-    throw new DesktopClientError("Invalid python location", e);
+    throw new DesktopClientError("Invalid python 2.7 location", e);
   }
 
   if (!path.isAbsolute(scriptPath)) {

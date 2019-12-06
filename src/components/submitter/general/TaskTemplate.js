@@ -134,7 +134,6 @@ export default () => {
             multiline
             rows={6}
             className={classes.taskTemplateInput}
-            placeholder="kick -nstdin -i /path/to/myfile.<chunk_start>.ass -dw -dp -v 5"
           />
         </Box>
       </Paper>

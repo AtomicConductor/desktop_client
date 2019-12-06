@@ -60,7 +60,9 @@ describe("python helper", () => {
       ...overrides
     });
 
-    let mockGetVersion = jest.fn(() => "2.7");
+    let mockGetVersion = jest.fn(() => ({
+      stdout: "Python 2.7"
+    }));
     const PythonShell = jest.fn().mockImplementation(() => {
       return {
         childProcess: { pid: 1 }
@@ -82,6 +84,15 @@ describe("python helper", () => {
       PythonShell.getVersion.mockImplementationOnce(() => {
         throw new Error();
       });
+      await expect(
+        runPythonShell("script", defaultOpts(), PythonShell)
+      ).rejects.toThrow(DesktopClientError);
+    });
+
+    it("raises DesktopClientError when getVersion() returns the wrong version", async () => {
+      PythonShell.getVersion.mockImplementationOnce(() => ({
+        stdout: "Python 3.7.5"
+      }));
       await expect(
         runPythonShell("script", defaultOpts(), PythonShell)
       ).rejects.toThrow(DesktopClientError);

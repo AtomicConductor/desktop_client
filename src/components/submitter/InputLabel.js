@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   firstLabel: {
-    width: 160
+    width: theme.spacing(20)
   }
 }));
 

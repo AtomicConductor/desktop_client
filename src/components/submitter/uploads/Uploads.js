@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   scrollBox: {
+    minWidth: "100%",
     width: "max-content",
     overflow: "auto",
     height: "100%"

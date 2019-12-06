@@ -82,7 +82,7 @@ const AppBar = props => {
     <MuiAppBar position="fixed" className={classes.appBar}>
       <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
-          Submission toolkit
+          Submission Kit
         </Typography>
 
         <IconButton edge="end" color="inherit" onClick={handleMenuOpen}>

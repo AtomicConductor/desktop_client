@@ -5,8 +5,6 @@ import clsx from "clsx";
 import { isDeepStrictEqual } from "util";
 import {
   IconButton,
-  Grid,
-  Typography,
   Select,
   Box,
   Paper,
@@ -15,10 +13,12 @@ import {
 } from "@material-ui/core";
 import { DeleteOutlineRounded } from "@material-ui/icons";
 import { updateSelectedSoftware } from "../../../_actions/submitter";
+import InputRow from "../InputRow";
+import InputLabel from "../InputLabel";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: "20px 192px 20px 96px",
+    margin: "20px 32px",
     minWidth: 700
   },
   input: {
@@ -55,89 +55,76 @@ const Software = () => {
   return (
     <Box className={classes.container}>
       {packages.map(({ softwareKey, package: pkg }, softwareIndex) => (
-        <Grid
-          container
-          justify="flex-start"
-          alignItems="center"
-          key={softwareIndex}
-          spacing={1}
-        >
-          <Grid item xs={1}>
-            <Typography color="primary">Software:</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper className={clsx(classes.paper, classes.dominantPaper)}>
-              <Select
-                value={softwareKey}
-                input={<InputBase className={classes.input} />}
-                onChange={e => {
-                  dispatch(
-                    updateSelectedSoftware({
-                      index: softwareIndex,
-                      softwareKey: e.target.value,
-                      package: {}
-                    })
-                  );
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {Object.keys(softwarePackages).map((software, index) => (
-                  <MenuItem key={index} value={software}>
-                    {software}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Paper>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography color="primary">Version:</Typography>
-          </Grid>
-          <Grid item xs={5}>
-            <Paper className={clsx(classes.paper)}>
-              <Select
-                value={pkg}
-                input={<InputBase className={classes.input} />}
-                onChange={e => {
-                  dispatch(
-                    updateSelectedSoftware({
-                      index: softwareIndex,
-                      softwareKey,
-                      package: e.target.value
-                    })
-                  );
-                }}
-              >
-                <MenuItem value={{}}>
-                  <em>None</em>
-                </MenuItem>
-                {softwarePackages[softwareKey] &&
-                  softwarePackages[softwareKey].packages.map((pkg, index) => (
-                    <MenuItem key={index} value={pkg}>
-                      {pkg.version}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </Paper>
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton
-              disabled={softwareKey === "" && isDeepStrictEqual(pkg, {})}
-              onClick={() => {
+        <InputRow single key={softwareKey}>
+          <InputLabel label="Software" firstLabel />
+
+          <Paper className={clsx(classes.paper)}>
+            <Select
+              value={softwareKey}
+              input={<InputBase className={classes.input} />}
+              onChange={e => {
                 dispatch(
                   updateSelectedSoftware({
                     index: softwareIndex,
-                    softwareKey: "",
-                    package: ""
+                    softwareKey: e.target.value,
+                    package: {}
                   })
                 );
               }}
             >
-              <DeleteOutlineRounded />
-            </IconButton>
-          </Grid>
-        </Grid>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {Object.keys(softwarePackages).map((software, index) => (
+                <MenuItem key={index} value={software}>
+                  {software}
+                </MenuItem>
+              ))}
+            </Select>
+          </Paper>
+
+          <InputLabel label="Version" />
+
+          <Paper className={clsx(classes.paper)}>
+            <Select
+              value={pkg}
+              input={<InputBase className={classes.input} />}
+              onChange={e => {
+                dispatch(
+                  updateSelectedSoftware({
+                    index: softwareIndex,
+                    softwareKey,
+                    package: e.target.value
+                  })
+                );
+              }}
+            >
+              <MenuItem value={{}}>
+                <em>None</em>
+              </MenuItem>
+              {softwarePackages[softwareKey] &&
+                softwarePackages[softwareKey].packages.map((pkg, index) => (
+                  <MenuItem key={index} value={pkg}>
+                    {pkg.version}
+                  </MenuItem>
+                ))}
+            </Select>
+          </Paper>
+          <IconButton
+            disabled={softwareKey === "" && isDeepStrictEqual(pkg, {})}
+            onClick={() => {
+              dispatch(
+                updateSelectedSoftware({
+                  index: softwareIndex,
+                  softwareKey: "",
+                  package: ""
+                })
+              );
+            }}
+          >
+            <DeleteOutlineRounded />
+          </IconButton>
+        </InputRow>
       ))}
     </Box>
   );
