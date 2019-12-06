@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import FolderIcon from "@material-ui/icons/Folder";
-import Typography from "@material-ui/core/Typography";
 
 import {
   Tooltip,
@@ -114,8 +113,6 @@ const General = () => {
   let project = useSelector(projectSelector);
   project = project.errors ? "" : project;
 
-  const filename = useSelector(state => state.submitter.filename);
-
   const handleSelectOutputDirectory = e => {
     if (e.target.files && e.target.files[0]) {
       dispatch(setOutputPath(e.target.files[0].path));
@@ -124,18 +121,6 @@ const General = () => {
 
   return (
     <Box className={classes.container}>
-      <InputRow single>
-        <InputLabel label="" firstLabel />
-
-        <Typography
-          variant="body2"
-          color="primary"
-          className={classes.filename}
-        >
-          {filename || "This submission has not been saved"}
-        </Typography>
-      </InputRow>
-
       <InputRow single>
         <InputLabel label="Job title" firstLabel />
         <Tooltip

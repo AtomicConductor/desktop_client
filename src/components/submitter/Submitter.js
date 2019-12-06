@@ -14,6 +14,7 @@ import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import NoticeDialog from "./NoticeDialog";
+import LoadSaveMenu from "./LoadSaveMenu";
 
 import {
   submit,
@@ -55,8 +56,8 @@ const useStyles = makeStyles(theme => ({
   actionsCard: {
     height: theme.spacing(5),
     display: "flex",
-    justifyContent: "flex-end",
-    flexShrink: 0
+    flexShrink: 0,
+    alignItems: "center"
   },
   content: {
     display: "flex",
@@ -79,6 +80,12 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     marginRight: theme.spacing(3)
+  },
+  spacer: {
+    flexGrow: "1"
+  },
+  filename: {
+    paddingLeft: theme.spacing(1)
   }
 }));
 
@@ -87,6 +94,8 @@ const Submitter = props => {
   const [tabIndex, setTabIndex] = React.useState(0);
   const signedIn = useSelector(state => signedInSelector(state));
   const submitting = useSelector(state => state.submitter.submitting);
+  const filename = useSelector(state => state.submitter.filename);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -144,6 +153,16 @@ const Submitter = props => {
         </Box>
 
         <Card className={classes.actionsCard}>
+          <LoadSaveMenu />
+          <Typography
+            variant="body2"
+            color="primary"
+            className={classes.filename}
+          >
+            {filename || "This submission has not been saved"}
+          </Typography>
+
+          <div className={classes.spacer} />
           {submitting ? (
             <Box className={classes.progressBox}>
               <CircularProgress size={30} color="secondary" />
