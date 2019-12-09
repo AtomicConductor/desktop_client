@@ -43,7 +43,6 @@ export default async signInHandler => {
           } = await oauth2Client.getToken(code);
 
           signInHandler({ id_token });
-        } catch (e) {
         } finally {
           server.terminate();
         }

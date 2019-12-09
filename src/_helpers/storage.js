@@ -1,7 +1,8 @@
 import { credentialsFileName, presetsFileName } from "../_helpers/constants";
 import * as fs from "fs";
 import { promisify } from "util";
-import { join } from "path";
+import { join, dirname } from "path";
+import * as os from "os";
 
 export default class AppStorage {
   constructor(appProvider = nw, fileProvider = fs) {
@@ -57,5 +58,18 @@ export default class AppStorage {
     const templates = await this.loadPresets();
     delete templates[key];
     await this.saveData(templates, presetsFileName);
+  }
+
+  async writeClientToolsCredentials(credentials, { homedir } = os) {
+    const path = join(homedir(), ".config", "conductor", "credentials");
+    const directory = dirname(path);
+    const { exists, mkdir } = this.fileProvider;
+
+    const credentialsDirectoryExists = await promisify(exists)(directory);
+    if (!credentialsDirectoryExists) {
+      await promisify(mkdir)(directory);
+    }
+
+    await this.save(path, credentials);
   }
 }

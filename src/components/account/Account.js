@@ -22,6 +22,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 import { useSelector, useDispatch } from "react-redux";
 import { accountsSelector } from "../../selectors/account";
 import { signOut, selectAccount } from "../../_actions/user";
+import signInClientTools from "../../_actions/clientTools";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -56,9 +57,10 @@ const Account = () => {
 
   if (!isSignedIn) return null;
 
-  const handleSwitchAccount = accountId => {
+  const handleSwitchAccount = async accountId => {
     setAnchorEl(null);
-    dispatch(selectAccount(accountId));
+    await dispatch(selectAccount(accountId));
+    await dispatch(signInClientTools());
   };
 
   const handleSignOut = () => {

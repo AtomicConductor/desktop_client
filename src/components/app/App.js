@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { signInFromSaved } from "../../_actions/user";
 import { startDownloadQueue } from "../../_actions/files";
 import { fetchSoftwarePackages } from "../../_actions/submitter";
+import signInClientTools from "../../_actions/clientTools";
 
 const { home, downloader, submitter, log } = paths;
 
@@ -25,7 +26,11 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(signInFromSaved());
+    const signleSignIn = async () => {
+      await dispatch(signInFromSaved());
+      await dispatch(signInClientTools());
+    };
+    signleSignIn();
     dispatch(startDownloadQueue());
     dispatch(fetchSoftwarePackages());
   }, []);

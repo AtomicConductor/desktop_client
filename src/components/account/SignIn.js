@@ -18,6 +18,7 @@ import config from "../../config";
 import { drawerWidth } from "../../_helpers/constants";
 import { LockRounded } from "@material-ui/icons";
 import { signIn } from "../../_actions/user";
+import signInClientTools from "../../_actions/clientTools";
 import { useDispatch, useSelector } from "react-redux";
 
 const { onboarding } = config;
@@ -85,8 +86,9 @@ const SignIn = props => {
   });
 
   const dispatch = useDispatch();
-  const handleSignIn = () => {
-    dispatch(signIn(values));
+  const handleSignIn = async credentials => {
+    await dispatch(signIn(credentials));
+    await dispatch(signInClientTools());
   };
 
   const handleChange = name => event => {
@@ -139,7 +141,7 @@ const SignIn = props => {
           </FormControl>
           <FormControl className={classes.formControl}>
             <Button
-              onClick={handleSignIn}
+              onClick={() => handleSignIn(values)}
               variant="outlined"
               color="secondary"
               className={classes.signInButton}
@@ -166,7 +168,7 @@ const SignIn = props => {
             <GoogleButton
               className={classes.centered}
               type="dark"
-              onClick={() => googleSignIn(creds => dispatch(signIn(creds)))}
+              onClick={() => googleSignIn(handleSignIn)}
             />
           </FormControl>
           <FormControl className={classes.formControl}>
