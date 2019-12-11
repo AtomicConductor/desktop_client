@@ -2,7 +2,6 @@ import {
   instanceTypeNameSelector,
   instanceTypeSelector,
   assetsSelector,
-  taskTemplateTokensSelector,
   assetFilenamesSelector,
   taskDataSelector,
   scoutFramesSelector,
@@ -217,30 +216,6 @@ describe("submitter selectors", () => {
   });
 });
 
-describe("taskTemplateTokensSelector", () => {
-  it("returns empty array when no tokens", () => {
-    expect(taskTemplateTokensSelector(ss())).toEqual([]);
-  });
-
-  it("returns array containing a stripped token", () => {
-    expect(taskTemplateTokensSelector(ss({ taskTemplate: "A<num>B" }))).toEqual(
-      ["num"]
-    );
-  });
-
-  it("returns array containing many different tokens", () => {
-    expect(
-      taskTemplateTokensSelector(ss({ taskTemplate: "A<foo>B<bar>B" }))
-    ).toEqual(["foo", "bar"]);
-  });
-
-  it("returns array containing unique set of tokens", () => {
-    expect(
-      taskTemplateTokensSelector(ss({ taskTemplate: "A<foo>B<bar>B<foo>C" }))
-    ).toEqual(["foo", "bar"]);
-  });
-});
-
 describe("submission selectors", () => {
   describe("scoutFramesSelector", () => {
     it("returns empty string when useScoutFrames is off", () => {
@@ -451,7 +426,7 @@ describe("submission selectors", () => {
     it("creates padded versions of tokens", () => {
       const result = taskDataSelector(
         ss({
-          taskTemplate: "command -o file.<chunk_start2>.exr",
+          taskTemplate: "command -o file.<pad chunk_start 2>.exr",
           frameSpec: "1,537"
         })
       );
@@ -470,7 +445,7 @@ describe("submission selectors", () => {
     it("handles negative number padding", () => {
       const result = taskDataSelector(
         ss({
-          taskTemplate: "command -o file.<chunk_start4>.exr",
+          taskTemplate: "command -o file.<pad chunk_start 4>.exr",
           frameSpec: "-20"
         })
       );
@@ -487,7 +462,7 @@ describe("submission selectors", () => {
       const result = taskDataSelector(
         ss({
           taskTemplate:
-            "command -o <chunk_start4> <chunk_start2> <chunk_start>",
+            "command -o <pad chunk_start 4> <pad chunk_start 2> <chunk_start>",
           frameSpec: "123"
         })
       );

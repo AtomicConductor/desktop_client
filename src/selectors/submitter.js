@@ -1,16 +1,11 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "eslIgnore_" }]*/
 
 import { createSelector } from "reselect";
-import * as Sqrl from "squirrelly";
 import Sequence from "../_helpers/sequence";
-import { paddedContext } from "../_helpers/template";
-
+import { compile } from "../_helpers/template";
 import { toPosix } from "../_helpers/paths";
-
 import path from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
-
-const tokenExtractorRegex = new RegExp("<[a-z][a-z_]+[1-8]?>", "g");
 
 const assetsMap = state => state.submitter.submission.assets;
 const taskTemplate = state => state.submitter.submission.taskTemplate;
@@ -57,15 +52,6 @@ const assetsSelector = createSelector(
       size: assetsMap[_].size,
       type: assetsMap[_].type
     }))
-);
-
-const taskTemplateTokensSelector = createSelector(
-  taskTemplate,
-  taskTemplate => [
-    ...new Set(
-      (taskTemplate.match(tokenExtractorRegex) || []).map(_ => _.slice(1, -1))
-    )
-  ]
 );
 
 /**
@@ -203,7 +189,6 @@ const assetFilenamesSelector = createSelector(
 const taskDataSelector = createSelector(
   taskDataValidator,
   taskTemplate,
-  taskTemplateTokensSelector,
   frameSpec,
   tileSpec,
   chunkSize,
@@ -211,7 +196,6 @@ const taskDataSelector = createSelector(
   (
     taskDataValidator,
     taskTemplate,
-    taskTemplateTokensSelector,
     frameSpec,
     tileSpec,
     chunkSize,
@@ -221,7 +205,6 @@ const taskDataSelector = createSelector(
     if (errors.length) {
       return { errors };
     }
-    Sqrl.defaultTags(["<", ">"]);
     const mainSequence = Sequence(frameSpec);
     const tilesSequence = Sequence(tileSpec);
 
@@ -229,10 +212,8 @@ const taskDataSelector = createSelector(
       output_path: toPosix(outputPath),
       sequence_step: mainSequence.step,
       sequence_spec: mainSequence.spec,
-      ...paddedContext(taskTemplateTokensSelector, {
-        sequence_start: mainSequence.first,
-        sequence_end: mainSequence.last
-      })
+      sequence_start: mainSequence.first,
+      sequence_end: mainSequence.last
     };
 
     const result = [];
@@ -241,17 +222,15 @@ const taskDataSelector = createSelector(
       for (let eslIgnore_tile of tilesSequence.getFrames()) {
         const context = {
           ...globalContext,
-          ...paddedContext(taskTemplateTokensSelector, {
-            chunk_start: eslIgnore_chunk.first,
-            chunk_end: eslIgnore_chunk.last,
-            tile: eslIgnore_tile
-          }),
+          chunk_start: eslIgnore_chunk.first,
+          chunk_end: eslIgnore_chunk.last,
+          tile: eslIgnore_tile,
           chunk_step: eslIgnore_chunk.step,
           chunk_spec: eslIgnore_chunk.spec
         };
         result.push({
-          command: Sqrl.Render(taskTemplate, context),
-          frames: Sqrl.Render("<chunk_spec>", context)
+          command: compile(taskTemplate)(context),
+          frames: compile("<chunk_spec>")(context)
         });
       }
     }
@@ -388,7 +367,6 @@ export {
   taskDataSelector,
   assetFilenamesSelector,
   assetsSelector,
-  taskTemplateTokensSelector,
   softwarePackageIdsSelector,
   environmentSelector,
   instanceTypeNameSelector,
