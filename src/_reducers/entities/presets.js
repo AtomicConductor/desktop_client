@@ -12,6 +12,11 @@ const initialState = {
     command:
       "sfxcmd -log -range <chunk_start>-<chunk_end> -all /path/to/my_project/test.sfx",
     readonly: true
+  },
+  "simple blender": {
+    command:
+      "blender /path/to/myfile.blend --render-output <output_path>/render. --render-format EXR  --render-frame <chunk_start>  --background -noaudio",
+    readonly: true
   }
 };
 
