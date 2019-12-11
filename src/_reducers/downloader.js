@@ -41,6 +41,7 @@ const downloader = createReducer(initialState, {
     state.loadingJobs = false;
   },
 
+  //TODO: is this still used?
   [addFileToQueue]: (state, action) => {
     if (!state.queue.some(qel => qel.md5 === action.payload.md5)) {
       state.queue.push(action.payload);

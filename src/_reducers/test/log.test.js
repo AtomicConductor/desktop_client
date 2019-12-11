@@ -1,5 +1,5 @@
 import reducer from "../log";
-import { pushEvent, clearEvents, setLogLength } from "../../_actions/log";
+import { pushEvent } from "../../_actions/log";
 
 describe("log reducer", () => {
   describe("pushEvent", () => {

@@ -18,6 +18,7 @@ const signInRequest = createAction("user/signInRequest");
 const signOut = createAction("user/signOut");
 const switchAccount = createAction("user/switchAccount");
 
+//TODO: refactor into a normalizer
 const mapAccounts = accounts =>
   accounts
     .sort((a, b) => a.role - b.role)
@@ -85,6 +86,7 @@ const selectAccount = (id, storage = new AppStorage()) => async (
   });
 };
 
+// remove after beta phase
 const flagBetaUser = async (email, storage = localStorage) => {
   const betaUserFlagKey = "isBetaUser";
   if (storage.getItem(betaUserFlagKey)) return;
@@ -106,6 +108,7 @@ const flagBetaUser = async (email, storage = localStorage) => {
     );
     storage.setItem(betaUserFlagKey, true);
   } catch (e) {
+    //TODO: typo in below message
     // No need no propagate exception to the user
     Sentry.withScope(scope => {
       scope.setExtras({ source: "hubspot - flag beta user", email });

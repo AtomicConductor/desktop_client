@@ -33,8 +33,10 @@ const prepareForPlatform = directory => {
   return directory ? directory.replace(/^[a-zA-Z]:/, "") : "";
 };
 
+//TODO: unit test
 const jobs = createReducer(initialState, {
   [receiveJobs]: (state, action) => {
+    //TODO: move mapping logic into a normalizer
     const data = action.payload.data;
     const newJobs = Array.isArray(data) ? data : data ? [data] : [];
     // eslint-disable-next-line no-unused-vars

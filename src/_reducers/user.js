@@ -12,6 +12,7 @@ const initialState = {
   loading: false
 };
 
+//TODO: add unit test
 export default createReducer(initialState, {
   [signInRequest]: state => {
     state.loading = true;

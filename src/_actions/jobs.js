@@ -82,6 +82,8 @@ function spanToDateFilters(key, span) {
  * @param {redux} state
  * @returns {string} Query string with filters, fields and limit.
  */
+// TODO: remove comments
+// TODO: constructJobsQuery -> selector
 function constructJobsQuery(state) {
   const filter = [];
   const { id: accountId } = currentAccountSelector(state);
@@ -120,6 +122,7 @@ function constructJobsQuery(state) {
   return "";
 }
 
+//TODO: unit test
 export const fetchJobs = () => {
   return async function(dispatch, getState) {
     dispatch(requestJobs());
@@ -133,5 +136,6 @@ export const fetchJobs = () => {
     const { data } = response;
 
     dispatch(receiveJobs(data));
+    //TODO: invoke normalizer here
   };
 };

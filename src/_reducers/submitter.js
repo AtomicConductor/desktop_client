@@ -67,6 +67,7 @@ export default createReducer(initialState, {
     state.submission.frameSpec = payload;
   },
   [setChunkSize]: (state, { payload }) => {
+    //TODO: html5 min, max on input
     state.submission.chunkSize = Math.max(Math.trunc(payload), 1);
   },
   [setTileSpec]: (state, { payload }) => {
@@ -108,6 +109,7 @@ export default createReducer(initialState, {
   },
   [removeAssets]: (state, { payload }) => {
     payload.forEach(_ => {
+      //TODO: check if defensive check is necessary
       if (state.submission.assets.hasOwnProperty(_)) {
         delete state.submission.assets[_];
       }

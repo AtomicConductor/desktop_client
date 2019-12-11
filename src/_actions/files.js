@@ -41,6 +41,9 @@ export const setFileExists = createAction("downloader/setFileExists");
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
 
+//TODO: unit tests
+//TODO: possibly convert synch ops into async
+
 /**
  * Renames the file from the object-storage name to the original name.
  *
@@ -252,6 +255,9 @@ export function addToQueue(jobLabel) {
  * @returns Function that dispatches actions to start the fetch, fetch the data,
  * and update the entities in the store.
  */
+
+//TODO: use arrow functions instead of function keyword
+//TODO: unit test
 export function updateDownloadFiles(jobLabel) {
   return async function(dispatch, getState) {
     try {
@@ -261,6 +267,7 @@ export function updateDownloadFiles(jobLabel) {
 
       dispatch(receiveDownloadData({ files, jobLabel }));
 
+      //TODO: use await instead of setTimeout
       setTimeout(function() {
         dispatch(updateExistingFilesInfo());
       }, 0);
@@ -296,6 +303,7 @@ async function fetchDownloadData(jobLabel, state) {
   const { data } = response;
   const downloads = data.downloads || [];
   const files = {};
+  //TODO: mapping logic into a normalizer
   downloads.forEach(task => {
     return task.files.forEach(file => {
       const rp = file.relative_path;

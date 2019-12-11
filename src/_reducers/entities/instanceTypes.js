@@ -6,6 +6,7 @@ const initialState = {};
 
 const instanceTypes = createReducer(initialState, {
   [instanceTypesSuccess]: (state, action) => {
+    //TODO: remove into a normalizer
     action.payload.forEach(_ => {
       state[_.name] = _;
     });

@@ -6,3 +6,5 @@ export const resetInstallPathValue = createAction(
 );
 export const installPlugin = createAction("plugins/installPlugin");
 export const uninstallPlugin = createAction("plugins/uninstallPlugin");
+
+//TODO: remove all plugins related code

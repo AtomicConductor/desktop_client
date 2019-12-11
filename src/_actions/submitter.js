@@ -124,6 +124,7 @@ const submit = (
 const fetchProjects = () => async (dispatch, getState) => {
   const state = getState();
   const options = createRequestOptions(tokenSelector(state));
+  //TODO: accountFilterQuery -> accountFilterQuerySelector
   const accountFilterQuery = signedInSelector(state)
     ? `filter=account_id_eq_${currentAccountSelector(state).id}`
     : "";
@@ -132,6 +133,8 @@ const fetchProjects = () => async (dispatch, getState) => {
     `${config.projectUrl}/api/v1/projects?${accountFilterQuery}`,
     options
   );
+
+  //TODO: refactor into a normalizer
   const projects = response.data.data
     .filter(_ => _.status === "active")
     .map(_ => _.name);
@@ -156,6 +159,7 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
   dispatch(instanceTypesSuccess(instanceTypes));
 };
 
+//TODO: remove all mapping code into a normalizer
 const mapPackages = software => {
   const softwarePackagesProjection = ({
     product,
@@ -249,6 +253,7 @@ const loadSubmission = path => async (dispatch, getState) => {
   );
 };
 
+//TODO: investigate other options
 const syncStateWithLoadedSubmission = submission => async (
   dispatch,
   getState

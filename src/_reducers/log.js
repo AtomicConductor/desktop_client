@@ -10,6 +10,7 @@ const log = createReducer(initialState, {
   [pushEvent]: (state, { payload }) => {
     state.events.push(payload);
     if (state.events.length > state.maxLength) {
+      //TODO: consider using splice
       state.events = state.events.slice(-state.maxLength);
     }
   },
