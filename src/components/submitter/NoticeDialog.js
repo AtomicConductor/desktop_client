@@ -57,7 +57,7 @@ export default props => {
         <DialogContentText>
           For more information on native plugins:
           <br />
-          <Link onClick={browse(documentationUrl)} color="secondary">
+          <Link onClick={browse(documentationUrl)} href="#" color="secondary">
             Consult the documentation.
           </Link>
         </DialogContentText>
