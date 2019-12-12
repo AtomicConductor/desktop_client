@@ -10,7 +10,9 @@ import {
   submissionSelector,
   submissionValidSelector,
   pythonLocation,
-  jobTitleSelector
+  jobTitleSelector,
+  instanceTypeSelector,
+  projectSelector
 } from "../selectors/submitter";
 
 import { signedInSelector, currentAccountSelector } from "../selectors/account";
@@ -143,6 +145,7 @@ const fetchProjects = () => async (dispatch, getState) => {
     throw new DesktopClientError("Failed to fetch any active projects");
 
   dispatch(projectsSuccess(projects));
+  dispatch(setProject(projectSelector(getState())));
 };
 
 const fetchInstanceTypes = () => async (dispatch, getState) => {
@@ -157,6 +160,7 @@ const fetchInstanceTypes = () => async (dispatch, getState) => {
     throw new DesktopClientError("Failed to fetch any instance types");
 
   dispatch(instanceTypesSuccess(instanceTypes));
+  dispatch(setInstanceType(instanceTypeSelector(getState())));
 };
 
 //TODO: remove all mapping code into a normalizer
