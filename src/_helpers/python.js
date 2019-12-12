@@ -36,40 +36,20 @@ const resolvePythonLocation = async (
     : python27Location;
 };
 
-const validVersion = version =>
-  version
-    .split(" ")[1]
-    .split(".")
-    .slice(0, 2)
-    .join(".") === "2.7";
-
-const isPythonValid = async (pythonPath, shell = PythonShell) => {
+const isPythonPathValid = async (pythonPath, shell = PythonShell) => {
   try {
-    let version = await shell.getVersion(pythonPath);
-    version = version.stdout || version.stderr;
-    if (!validVersion(version)) {
-      return false;
-    }
+    let result = await shell.getVersion(pythonPath);
+    const { stdout, stderr } = result;
+    return (stdout || stderr).includes("2.7");
   } catch {
     return false;
   }
-  return true;
 };
 
 const runPythonShell = async (script, options, shell = PythonShell) => {
   const scriptName = path.basename(script);
   let scriptPath = path.dirname(script);
   const pythonPath = options.pythonPath;
-
-  try {
-    let version = await shell.getVersion(pythonPath);
-    version = version.stdout || version.stderr;
-    if (!validVersion(version)) {
-      throw new DesktopClientError("Invalid python 2.7 location");
-    }
-  } catch (e) {
-    throw new DesktopClientError("Invalid python 2.7 location", e);
-  }
 
   if (!path.isAbsolute(scriptPath)) {
     scriptPath = path.join(
@@ -96,4 +76,4 @@ const runPythonShell = async (script, options, shell = PythonShell) => {
   return pyshell;
 };
 
-export { isPythonValid, resolvePythonLocation, runPythonShell };
+export { isPythonPathValid, resolvePythonLocation, runPythonShell };

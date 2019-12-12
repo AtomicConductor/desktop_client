@@ -8,10 +8,19 @@ import {
   InputBase,
   Box,
   Divider,
-  Typography
+  Typography,
+  Tooltip
 } from "@material-ui/core";
-import { DeleteOutlineRounded, FolderRounded } from "@material-ui/icons";
-import { setEnvEntry, savePythonLocation } from "../../../_actions/submitter";
+import {
+  DeleteOutlineRounded,
+  FolderRounded,
+  SettingsBackupRestore
+} from "@material-ui/icons";
+import {
+  setEnvEntry,
+  savePythonLocation,
+  resetPythonLocation
+} from "../../../_actions/submitter";
 import {
   environmentOverrides,
   pythonLocation
@@ -48,7 +57,11 @@ const useStyles = makeStyles(theme => ({
     justify: "space-between",
     margin: theme.spacing(1)
   },
-  rowIcon: { marginLeft: theme.spacing(1), padding: 0 },
+  rowIcon: {
+    marginLeft: theme.spacing(1),
+    padding: 0,
+    alignSelf: "flex-start"
+  },
   label: {
     paddingTop: 5,
     flexShrink: 0,
@@ -91,6 +104,7 @@ const Advanced = () => {
 
         <Paper className={clsx(classes.paper, classes.value)}>
           <InputBase
+            disabled={true}
             onChange={e => dispatch(savePythonLocation(e.target.value))}
             value={pythonPath}
             className={classes.input}
@@ -121,6 +135,17 @@ const Advanced = () => {
             <FolderRounded />
           </IconButton>
         </label>
+        <Tooltip enterDelay={200} placement="top" title="Reset Python path">
+          <IconButton
+            color="primary"
+            className={classes.rowIcon}
+            component="span"
+            size="small"
+            onClick={() => dispatch(resetPythonLocation())}
+          >
+            <SettingsBackupRestore />
+          </IconButton>
+        </Tooltip>
       </Box>
       <Divider className={classes.divider} />
       <Typography

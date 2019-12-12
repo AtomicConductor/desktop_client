@@ -1,5 +1,5 @@
 import {
-  isPythonValid,
+  isPythonPathValid,
   resolvePythonLocation,
   runPythonShell
 } from "../python";
@@ -56,26 +56,25 @@ describe("python helper", () => {
     });
   });
 
-  describe("isPythonValid", () => {
-    let mockGetVersion = jest.fn(() => ({
-      stdout: "Python 2.7"
-    }));
-    const PythonShell = jest.fn().mockImplementation(() => {
-      return {
-        childProcess: { pid: 1 }
-      };
-    });
-    PythonShell.getVersion = mockGetVersion;
+  describe("isPythonPathValid", () => {
+    let PythonShell;
     beforeEach(() => {
-      PythonShell.mockClear();
-      mockGetVersion.mockClear();
+      PythonShell = jest.fn().mockImplementation(() => {
+        return {
+          childProcess: { pid: 1 }
+        };
+      });
+
+      PythonShell.getVersion = jest.fn(() => ({
+        stdout: "Python 2.7"
+      }));
     });
 
     it("returns false when getVersion() throws an error", async () => {
       PythonShell.getVersion.mockImplementationOnce(() => {
         throw new Error();
       });
-      const valid = await isPythonValid("/some/location", PythonShell);
+      const valid = await isPythonPathValid("/some/location", PythonShell);
       expect(valid).toBe(false);
     });
 
@@ -83,7 +82,7 @@ describe("python helper", () => {
       PythonShell.getVersion.mockImplementationOnce(() => ({
         stdout: "Python 3.7.5"
       }));
-      const valid = await isPythonValid("/some/location", PythonShell);
+      const valid = await isPythonPathValid("/some/location", PythonShell);
       expect(valid).toBe(false);
     });
 
@@ -91,7 +90,15 @@ describe("python helper", () => {
       PythonShell.getVersion.mockImplementationOnce(() => ({
         stdout: "Python 2.7.5"
       }));
-      const valid = await isPythonValid("/some/location", PythonShell);
+      const valid = await isPythonPathValid("/some/location", PythonShell);
+      expect(valid).toBe(true);
+    });
+
+    it("returns true when getVersion() returns result in stderr", async () => {
+      PythonShell.getVersion.mockImplementationOnce(() => ({
+        stderr: "Python 2.7"
+      }));
+      const valid = await isPythonPathValid("/some/location", PythonShell);
       expect(valid).toBe(true);
     });
   });
@@ -104,42 +111,14 @@ describe("python helper", () => {
       ...overrides
     });
 
-    let mockGetVersion = jest.fn(() => ({
-      stdout: "Python 2.7"
-    }));
     const PythonShell = jest.fn().mockImplementation(() => {
       return {
         childProcess: { pid: 1 }
       };
     });
-    PythonShell.getVersion = mockGetVersion;
 
     beforeEach(() => {
       PythonShell.mockClear();
-      mockGetVersion.mockClear();
-    });
-
-    it("calls getVersion to check the pythonpath", async () => {
-      await runPythonShell("script", defaultOpts(), PythonShell);
-      expect(PythonShell.getVersion).toHaveBeenCalledWith("/some/location");
-    });
-
-    it("raises DesktopClientError when getVersion() throws an error", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => {
-        throw new Error();
-      });
-      await expect(
-        runPythonShell("script", defaultOpts(), PythonShell)
-      ).rejects.toThrow(DesktopClientError);
-    });
-
-    it("raises DesktopClientError when getVersion() returns the wrong version", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => ({
-        stdout: "Python 3.7.5"
-      }));
-      await expect(
-        runPythonShell("script", defaultOpts(), PythonShell)
-      ).rejects.toThrow(DesktopClientError);
     });
 
     it("splits an absolute path", async () => {

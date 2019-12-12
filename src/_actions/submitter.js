@@ -20,7 +20,11 @@ import { signedInSelector, currentAccountSelector } from "../selectors/account";
 import { setNotification } from "./notification";
 import AppStorage from "../_helpers/storage";
 import { instanceTypesMapSelector } from "../selectors/entities";
-import { resolvePythonLocation, runPythonShell } from "../_helpers/python";
+import {
+  resolvePythonLocation,
+  runPythonShell,
+  isPythonPathValid
+} from "../_helpers/python";
 import { settings } from "../_helpers/constants";
 
 const setJobTitle = createAction("submitter/setJobTitle");
@@ -290,21 +294,38 @@ const insertTaskTemplateToken = payload => async (dispatch, getState) => {
   dispatch(setTaskTemplate(updatedTemplate));
 };
 
-const savePythonLocation = path => async dispatch => {
+const savePythonLocation = (
+  path,
+  pythonPathValidator = isPythonPathValid
+) => async dispatch => {
+  const isValid = await pythonPathValidator(path);
+  if (!isValid) {
+    throw new DesktopClientError("Invalid python 2.7 location");
+  }
+
   localStorage.setItem(settings.pythonLocation, path);
   dispatch(setPythonLocation(path));
 };
 
 const loadPythonLocation = (
-  pythonPathResolver = resolvePythonLocation
+  pythonPathResolver = resolvePythonLocation,
+  pythonPathValidator = isPythonPathValid
 ) => async dispatch => {
   let path = localStorage.getItem(settings.pythonLocation);
   if (!path) {
     path = await pythonPathResolver();
-    dispatch(savePythonLocation(path));
+    dispatch(savePythonLocation(path, pythonPathValidator));
   } else {
     dispatch(setPythonLocation(path));
   }
+};
+
+const resetPythonLocation = (
+  pythonPathResolver = resolvePythonLocation,
+  pythonPathValidator = isPythonPathValid
+) => async dispatch => {
+  const path = await pythonPathResolver();
+  dispatch(savePythonLocation(path, pythonPathValidator));
 };
 
 const closeNoticeDialog = closeForever => async dispatch => {
@@ -351,6 +372,7 @@ export {
   setPythonLocation,
   savePythonLocation,
   loadPythonLocation,
+  resetPythonLocation,
   submit,
   insertTaskTemplateToken,
   submissionRequested,
