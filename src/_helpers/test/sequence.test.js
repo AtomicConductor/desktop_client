@@ -32,6 +32,11 @@ describe("Sequence class", () => {
       expect(s.constructor.name).toBe("Progression");
     });
 
+    it("should generate Sequence from spec with spaces or commas", () => {
+      const s = Sequence("2-4x2,   8,,6   5");
+      expect([...s.getFrames()]).toEqual([2, 4, 5, 6, 8]);
+    });
+
     it("should generate Sequence from irregular sequence", () => {
       const s = Sequence("2,4,6,9");
       expect(s.constructor.name).toBe("Sequence");

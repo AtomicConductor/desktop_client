@@ -3,7 +3,7 @@
 // https://regex101.com/r/liES7S/2/
 const PROGRESSION_SPEC_REGEX = /^(?<first>-?\d+)(-(?<last>-?\d+)(x(?<step>[1-9][0-9]*))?)?$/;
 
-const SPLIT_SPEC_REGEX = /[\s,,]/;
+const SPLIT_SPEC_REGEX = /[\s,,]+/;
 
 const _range = (first, last, step = 1) => {
   [first, last] = [first, last].sort((a, b) => (a < b ? -1 : 1));
@@ -139,22 +139,19 @@ const SequenceFactory = spec => {
     return new Progression([]);
   }
 
-  let frames = spec
-    .split(SPLIT_SPEC_REGEX)
-    .filter(_ => _.length)
-    .reduce((accum, _) => {
-      const match = _.match(PROGRESSION_SPEC_REGEX);
-      if (match) {
-        let { first, last, step } = match.groups;
-        first = Math.trunc(first);
-        last = last === undefined ? first : Math.trunc(last);
-        step = step === undefined ? 1 : Math.trunc(step);
-        accum.push(..._range(first, last, step));
-      } else {
-        throw RangeError(errmsg);
-      }
-      return accum;
-    }, []);
+  let frames = spec.split(SPLIT_SPEC_REGEX).reduce((accum, _) => {
+    const match = _.match(PROGRESSION_SPEC_REGEX);
+    if (match) {
+      let { first, last, step } = match.groups;
+      first = Math.trunc(first);
+      last = last === undefined ? first : Math.trunc(last);
+      step = step === undefined ? 1 : Math.trunc(step);
+      accum.push(..._range(first, last, step));
+    } else {
+      throw RangeError(errmsg);
+    }
+    return accum;
+  }, []);
 
   frames = [...new Set(frames.sort((a, b) => a - b))];
   if (_isProgression(frames)) {

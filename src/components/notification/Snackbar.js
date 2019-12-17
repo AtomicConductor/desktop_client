@@ -11,6 +11,8 @@ import green from "@material-ui/core/colors/green";
 import amber from "@material-ui/core/colors/amber";
 import red from "@material-ui/core/colors/red";
 
+import grey from "@material-ui/core/colors/grey";
+
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
@@ -22,22 +24,26 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { clearNotification } from "../../_actions/notification";
 
+import clsx from "clsx";
 const useStyles = makeStyles(theme => ({
   close: {
     padding: theme.spacing(0.5),
     color: theme.palette.text.primary
   },
   success: {
-    backgroundColor: green[800]
+    color: green[800]
   },
   error: {
-    backgroundColor: red[900]
+    color: red[900]
   },
   info: {
-    backgroundColor: theme.palette.primary.dark
+    color: theme.palette.primary.dark
   },
   warning: {
-    backgroundColor: amber[900]
+    color: amber[900]
+  },
+  background: {
+    backgroundColor: grey[900]
   },
 
   iconVariant: {
@@ -76,6 +82,7 @@ const Snackbar = () => {
 
   function handleButtonClick(event) {
     nw.Shell.openExternal(url);
+    dispatch(clearNotification());
   }
 
   const Icon = variantIcon[type];
@@ -85,7 +92,7 @@ const Snackbar = () => {
     actions.push(
       <Button
         key="details"
-        color="inherit"
+        color="secondary"
         size="small"
         onClick={handleButtonClick}
       >
@@ -112,16 +119,16 @@ const Snackbar = () => {
         horizontal: "right"
       }}
       open={show}
-      autoHideDuration={6000}
+      autoHideDuration={url ? null : 6000}
       onClose={handleClose}
       message={<span id="message-id">{message}</span>}
     >
       <MUISnackbarContent
-        className={classes[type]}
+        className={classes.background}
         aria-describedby="client-snackbar"
         message={
           <span id="client-snackbar" className={classes.message}>
-            <Icon className={classes.iconVariant} />
+            <Icon className={clsx(classes.iconVariant, classes[type])} />
             {message}
           </span>
         }
