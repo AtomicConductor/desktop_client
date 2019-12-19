@@ -27,34 +27,31 @@ import { clearNotification } from "../../_actions/notification";
 import clsx from "clsx";
 const useStyles = makeStyles(theme => ({
   close: {
-    padding: theme.spacing(0.5),
-    color: theme.palette.text.primary
+    color: "rgba(0, 0, 0, 0.87)"
   },
   success: {
-    color: green[800]
+    color: green[900]
   },
   error: {
     color: red[900]
   },
   info: {
-    color: theme.palette.primary.dark
+    color: "rgba(0, 0, 0, 0.38)"
   },
   warning: {
-    color: amber[900]
+    color: amber[600]
   },
   background: {
-    backgroundColor: grey[900]
+    backgroundColor: grey[500]
   },
 
   iconVariant: {
-    fontSize: 20,
-    opacity: 0.9,
     marginRight: theme.spacing(1)
   },
   message: {
     display: "flex",
     alignItems: "center",
-    color: theme.palette.text.primary
+    color: "rgba(0, 0, 0, 0.87)"
   }
 }));
 
@@ -90,12 +87,7 @@ const Snackbar = () => {
   const actions = [];
   if (url !== "") {
     actions.push(
-      <Button
-        key="details"
-        color="secondary"
-        size="small"
-        onClick={handleButtonClick}
-      >
+      <Button key="details" size="small" onClick={handleButtonClick}>
         {buttonLabel}
       </Button>
     );
@@ -105,6 +97,7 @@ const Snackbar = () => {
       key="close"
       aria-label="Close"
       color="inherit"
+      fontSize="large"
       className={classes.close}
       onClick={handleClose}
     >
@@ -128,7 +121,10 @@ const Snackbar = () => {
         aria-describedby="client-snackbar"
         message={
           <span id="client-snackbar" className={classes.message}>
-            <Icon className={clsx(classes.iconVariant, classes[type])} />
+            <Icon
+              fontSize="large"
+              className={clsx(classes.iconVariant, classes[type])}
+            />
             {message}
           </span>
         }
