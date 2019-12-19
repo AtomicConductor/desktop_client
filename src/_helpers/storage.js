@@ -35,9 +35,7 @@ export default class AppStorage {
   }
 
   async saveCredentials(data) {
-    const credentials = await this.readCredentials();
-    const mergedCredentials = { ...credentials, ...data };
-    await this.saveData(mergedCredentials, credentialsFileName);
+    await this.saveData(data, credentialsFileName);
   }
 
   async readCredentials() {

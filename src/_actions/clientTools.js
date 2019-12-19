@@ -1,5 +1,5 @@
 import { decode } from "jwt-simple";
-import { tokenSelector } from "../selectors/account";
+import { tokenSelector, signedInSelector } from "../selectors/account";
 import AppStorage from "../_helpers/storage";
 import { pushEvent } from "../_actions/log";
 import DesktopClientError from "../errors/desktopClientError";
@@ -9,7 +9,11 @@ export default (storage = new AppStorage(), decoder = decode) => async (
   getState
 ) => {
   try {
-    const token = tokenSelector(getState());
+    const state = getState();
+
+    if (!signedInSelector(state)) return;
+
+    const token = tokenSelector(state);
     const secret = "";
     const noVerify = true;
     const { exp } = decoder(token, secret, noVerify);

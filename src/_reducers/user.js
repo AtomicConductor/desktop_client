@@ -3,7 +3,7 @@ import {
   signInRequest,
   signInError,
   signInSuccess,
-  signOut,
+  resetUserState,
   switchAccount
 } from "../_actions/user";
 
@@ -24,7 +24,7 @@ export default createReducer(initialState, {
     state.loading = false;
     state.accounts = action.payload;
   },
-  [signOut]: () => initialState,
+  [resetUserState]: () => initialState,
   [switchAccount]: (state, action) => {
     state.accounts.forEach(_ => (_.selected = _.id === action.payload));
   }

@@ -2,6 +2,8 @@ import errorHandler from "../desktopClientErrorHandler";
 import DesktopClientError from "../../errors/desktopClientError";
 import UnauthorizedError from "../../errors/unauthorizedError";
 import UnhandledApplicationError from "../../errors/unhandledApplicationError";
+import AppStorage from "../../_helpers/storage";
+jest.mock("../../_helpers/storage");
 
 describe("desktopClientErrorHandler", () => {
   let dispatch, getState, sentry;
@@ -16,10 +18,14 @@ describe("desktopClientErrorHandler", () => {
 
   describe("Token has expired", () => {
     const executeTest = wrappedError => {
-      errorHandler(sentry)(wrappedError)(dispatch, getState);
+      const dispatcher = jest
+        .fn(dispatch)
+        .mockImplementationOnce(_ => _(dispatch));
+
+      errorHandler(sentry)(wrappedError)(dispatcher, getState);
 
       expect(dispatch).toHaveBeenNthCalledWith(1, {
-        type: "user/signOut",
+        type: "user/resetUserState",
         payload: undefined
       });
 

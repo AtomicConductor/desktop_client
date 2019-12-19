@@ -40,20 +40,6 @@ describe("storage", () => {
     expect(credentials).toEqual({ accounts: [] });
   });
 
-  it("merges credentials if file already has data", async () => {
-    const savedCredentials = '{ "accounts": [] }';
-    fs.exists.mockImplementation((path, cb) => cb(null, true));
-    fs.readFile.mockImplementation((path, cb) => cb(null, savedCredentials));
-
-    await storage.saveCredentials({ additionalData: "test" });
-
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      expect.anything(),
-      '{"accounts":[],"additionalData":"test"}',
-      expect.anything()
-    );
-  });
-
   it("deletes a preset", async () => {
     const savedPresets = '{ "foo": {}, "bar": {} }';
     fs.exists.mockImplementation((path, cb) => cb(null, true));

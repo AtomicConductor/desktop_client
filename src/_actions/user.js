@@ -15,7 +15,7 @@ import validCredentialsSchema from "../_helpers/credentialsSchemaValidator";
 const signInSuccess = createAction("user/signInSuccess");
 const signInError = createAction("user/signInError");
 const signInRequest = createAction("user/signInRequest");
-const signOut = createAction("user/signOut");
+const resetUserState = createAction("user/resetUserState");
 const switchAccount = createAction("user/switchAccount");
 
 //TODO: refactor into a normalizer
@@ -86,7 +86,12 @@ const selectAccount = (id, storage = new AppStorage()) => async (
   });
 };
 
-// remove after beta phase
+const signOut = (storage = new AppStorage()) => async dispatch => {
+  storage.saveCredentials({});
+  dispatch(resetUserState());
+};
+
+// TODO: remove after beta phase
 const flagBetaUser = async (email, storage = localStorage) => {
   const betaUserFlagKey = "isBetaUser";
   if (storage.getItem(betaUserFlagKey)) return;
@@ -120,6 +125,7 @@ const flagBetaUser = async (email, storage = localStorage) => {
 export {
   signIn,
   signOut,
+  resetUserState,
   signInSuccess,
   signInError,
   signInRequest,
