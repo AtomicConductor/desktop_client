@@ -12,8 +12,8 @@ import {
 
 import {
   CloudDownloadRounded,
-  HomeRounded,
-  SettingsInputComponent
+  SettingsInputComponent,
+  LibraryBooksRounded
 } from "@material-ui/icons";
 
 import { appVersion } from "../../_helpers/constants";
@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 
 const Drawer = props => {
   const classes = useStyles();
-  const { home, downloader, submitter } = paths;
+  const { resources, downloader, submitter } = paths;
   const {
     location: { pathname }
   } = props;
@@ -71,18 +71,6 @@ const Drawer = props => {
     >
       <List className={classes.list}>
         <Account />
-
-        <ListItem
-          component={RouterLink}
-          to={home}
-          button
-          selected={pathname === home}
-        >
-          <ListItemIcon>
-            <HomeRounded />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
 
         <ListItem
           component={RouterLink}
@@ -106,6 +94,18 @@ const Drawer = props => {
             <SettingsInputComponent />
           </ListItemIcon>
           <ListItemText primary="Submission Kit" />
+        </ListItem>
+
+        <ListItem
+          component={RouterLink}
+          to={resources}
+          button
+          selected={pathname === resources}
+        >
+          <ListItemIcon>
+            <LibraryBooksRounded />
+          </ListItemIcon>
+          <ListItemText primary="Help & Feedback" />
         </ListItem>
       </List>
       <div className={classes.spacer} />

@@ -20,7 +20,7 @@ export const TIMESPANS = {
 export const appVersion = process.env.REACT_APP_VERSION;
 
 export const paths = {
-  home: "/home",
+  resources: "/resources",
   downloader: "/downloader",
   signIn: "/sign-in",
   submitter: "/submitter",

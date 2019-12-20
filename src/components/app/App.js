@@ -5,7 +5,7 @@ import DownloaderContainer from "../downloader/DownloaderContainer";
 import Submitter from "../submitter/Submitter";
 import Log from "../log/Log";
 
-import Home from "../home";
+import Resources from "../resources";
 import Layout from "./Layout";
 import { paths } from "../../_helpers/constants";
 import {
@@ -20,7 +20,7 @@ import { startDownloadQueue } from "../../_actions/files";
 import { fetchSoftwarePackages } from "../../_actions/submitter";
 import signInClientTools from "../../_actions/clientTools";
 
-const { home, downloader, submitter, log } = paths;
+const { resources, downloader, submitter, log } = paths;
 
 const App = () => {
   const dispatch = useDispatch();
@@ -39,11 +39,11 @@ const App = () => {
     <Router>
       <Layout>
         <Switch>
-          <Route path={home} component={Home} />
+          <Route path={resources} component={Resources} />
           <Route path={downloader} component={DownloaderContainer} />
           <Route path={submitter} component={Submitter} />
           <Route path={log} component={Log} />
-          <Redirect push to={home} />
+          <Redirect push to={resources} />
         </Switch>
       </Layout>
     </Router>
