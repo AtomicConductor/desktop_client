@@ -107,7 +107,7 @@ const Account = () => {
           <ListItemIcon>
             <ExitToAppRounded />
           </ListItemIcon>
-          <ListItemText>Sign Out</ListItemText>
+          <ListItemText>Sign out</ListItemText>
         </MenuItem>
       </Menu>
 
@@ -119,8 +119,6 @@ const Account = () => {
         text={selectedAccount.email}
         basedOn="letters"
       />
-
-      <Divider />
     </List>
   );
 };

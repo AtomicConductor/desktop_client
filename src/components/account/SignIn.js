@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -20,6 +20,9 @@ import { LockRounded } from "@material-ui/icons";
 import { signIn } from "../../_actions/user";
 import signInClientTools from "../../_actions/clientTools";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useHistory } from "react-router-dom";
+import { paths } from "../../_helpers/constants";
+import { signedInSelector } from "../../selectors/account";
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
@@ -77,7 +80,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SignIn = props => {
+const SignIn = () => {
   const classes = useStyles();
 
   const [values, setValues] = useState({
@@ -96,6 +99,17 @@ const SignIn = props => {
   };
 
   const isLoading = useSelector(state => state.user.loading);
+
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const isSignedIn = useSelector(state => signedInSelector(state));
+
+  useEffect(() => {
+    const { signIn } = paths;
+    if (pathname === signIn && isSignedIn) {
+      history.goBack();
+    }
+  }, [pathname, history, isSignedIn]);
 
   return (
     <React.Fragment>

@@ -19,8 +19,9 @@ import { signInFromSaved } from "../../_actions/user";
 import { startDownloadQueue } from "../../_actions/files";
 import { fetchSoftwarePackages } from "../../_actions/submitter";
 import signInClientTools from "../../_actions/clientTools";
+import SignIn from "../account/SignIn";
 
-const { resources, downloader, submitter, log } = paths;
+const { resources, downloader, submitter, log, signIn } = paths;
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App = () => {
           <Route path={downloader} component={DownloaderContainer} />
           <Route path={submitter} component={Submitter} />
           <Route path={log} component={Log} />
+          <Route path={signIn} component={SignIn} />
           <Redirect push to={resources} />
         </Switch>
       </Layout>

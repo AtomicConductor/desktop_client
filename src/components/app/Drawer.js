@@ -1,19 +1,22 @@
 import React from "react";
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import { signedInSelector } from "../../selectors/account";
 import {
   List,
   Typography,
   ListItemText,
   ListItem,
   ListItemIcon,
-  Drawer as MuiDrawer
+  Drawer as MuiDrawer,
+  Divider
 } from "@material-ui/core";
 
 import {
   CloudDownloadRounded,
   SettingsInputComponent,
-  LibraryBooksRounded
+  LibraryBooksRounded,
+  LockRounded
 } from "@material-ui/icons";
 
 import { appVersion } from "../../_helpers/constants";
@@ -22,6 +25,7 @@ import Account from "../account/Account";
 
 import "typeface-raleway";
 import { drawerWidth, paths } from "../../_helpers/constants";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -55,7 +59,8 @@ const useStyles = makeStyles(theme => ({
 
 const Drawer = props => {
   const classes = useStyles();
-  const { resources, downloader, submitter } = paths;
+  const isSignedIn = useSelector(state => signedInSelector(state));
+  const { resources, downloader, submitter, signIn } = paths;
   const {
     location: { pathname }
   } = props;
@@ -70,7 +75,22 @@ const Drawer = props => {
       anchor="left"
     >
       <List className={classes.list}>
-        <Account />
+        {isSignedIn ? (
+          <Account />
+        ) : (
+          <ListItem
+            component={RouterLink}
+            to={signIn}
+            button
+            selected={pathname === signIn}
+          >
+            <ListItemIcon>
+              <LockRounded />
+            </ListItemIcon>
+            <ListItemText primary="Sign in" />
+          </ListItem>
+        )}
+        <Divider />
 
         <ListItem
           component={RouterLink}
