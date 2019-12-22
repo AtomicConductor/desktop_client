@@ -64,3 +64,14 @@ export function humanFileSize(size) {
     ["B", "kB", "MB", "GB", "TB"][i]
   );
 }
+
+export const condenseArray = (arr, maxLength, message = null) =>
+  maxLength < arr.length
+    ? maxLength < 2
+      ? arr.slice(0, maxLength)
+      : [
+          ...arr.slice(0, Math.ceil(maxLength / 2)),
+          ...(message ? [message] : []),
+          ...arr.slice(Math.ceil(maxLength / 2) - maxLength)
+        ]
+    : arr;

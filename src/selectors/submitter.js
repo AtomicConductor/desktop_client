@@ -4,6 +4,8 @@ import { createSelector } from "reselect";
 import Sequence from "../_helpers/sequence";
 import { compile } from "../_helpers/template";
 import { toPosix } from "../_helpers/paths";
+import { condenseArray } from "../_helpers/presentation";
+
 import path from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
 
@@ -25,6 +27,7 @@ const uploadOnly = state => state.submitter.submission.uploadOnly;
 const force = state => state.submitter.submission.force;
 const localUpload = state => state.submitter.submission.localUpload;
 const pythonLocation = state => state.submitter.pythonLocation;
+const previewLimits = state => state.submitter.previewLimits;
 
 const environmentOverrides = state =>
   state.submitter.submission.environmentOverrides;
@@ -362,6 +365,40 @@ const submissionValidSelector = createSelector(
     )
 );
 
+const submissionPreviewSelector = createSelector(
+  submissionSelector,
+  previewLimits,
+  (submission, limits) => {
+    const { maxFiles, maxTasks } = limits;
+    const pathsToRemove = Math.max(
+      submission.upload_paths.length - maxFiles,
+      0
+    );
+    const tasksToRemove = Math.max(submission.tasks_data.length - maxTasks, 0);
+
+    let result = submission;
+    if (pathsToRemove || tasksToRemove) {
+      result = JSON.parse(JSON.stringify(submission));
+      if (pathsToRemove) {
+        result.upload_paths = condenseArray(
+          result.upload_paths,
+          maxFiles,
+          `For display performance reasons, ${pathsToRemove} path entries have been hidden...`
+        );
+      }
+      if (tasksToRemove) {
+        result.tasks_data = condenseArray(
+          result.tasks_data,
+          maxTasks,
+          `For display performance reasons, ${tasksToRemove} task entries have been hidden...`
+        );
+      }
+    }
+
+    return result;
+  }
+);
+
 export {
   scoutFramesSelector,
   taskDataSelector,
@@ -376,6 +413,7 @@ export {
   outputPathSelector,
   submissionValidSelector,
   submissionSelector,
+  submissionPreviewSelector,
   environmentOverrides,
   pythonLocation
 };

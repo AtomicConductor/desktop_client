@@ -10,12 +10,17 @@ import {
   projectSelector,
   jobTitleSelector,
   outputPathSelector,
-  submissionValidSelector
+  submissionValidSelector,
+  submissionPreviewSelector
 } from "../submitter";
 
 import { instanceTypesSelector } from "../entities";
 
-const ss = (overrides = {}, entityOverrides = {}) => ({
+const ss = (
+  submissionOverrides = {},
+  entityOverrides = {},
+  submitterOverrides = {}
+) => ({
   submitter: {
     submission: {
       jobTitle: "job",
@@ -35,8 +40,9 @@ const ss = (overrides = {}, entityOverrides = {}) => ({
       force: false,
       localUpload: true,
       instanceType: { name: "test", description: "a test" },
-      ...overrides
-    }
+      ...submissionOverrides
+    },
+    ...submitterOverrides
   },
   entities: {
     projects: ["p1", "p2", "p3", "default"],
@@ -661,6 +667,52 @@ describe("submission selectors", () => {
     });
     it("returns false if some fields are invalid", () => {
       expect(submissionValidSelector(ss({ jobTitle: "" }))).toBe(false);
+    });
+  });
+
+  describe("submissionPreviewSelector", () => {
+    it("returns the same submission if file and task counts are within the limits", () => {
+      const state = ss(
+        {
+          assets: { "/f1": {}, "/f2": {} },
+          frameSpec: "1-10"
+        },
+        {},
+        { previewLimits: { maxTasks: 20, maxFiles: 20 } }
+      );
+      const submission = submissionPreviewSelector(state);
+      expect(submission.upload_paths).toHaveLength(2);
+      expect(submission.tasks_data).toHaveLength(10);
+    });
+
+    it("returns submission with condensed task_data if tasks are limited", () => {
+      const state = ss(
+        { frameSpec: "1-10" },
+        {},
+        { previewLimits: { maxTasks: 4, maxFiles: 0 } }
+      );
+      const submission = submissionPreviewSelector(state);
+      expect(submission.tasks_data).toHaveLength(4 + 1);
+    });
+
+    it("returns submission with condensed upload_paths if files are limited", () => {
+      const state = ss(
+        {
+          assets: {
+            "/f1": {},
+            "/f2": {},
+            "/f3": {},
+            "/f4": {},
+            "/f5": {},
+            "/f6": {},
+            "/f7": {}
+          }
+        },
+        {},
+        { previewLimits: { maxTasks: 0, maxFiles: 4 } }
+      );
+      const submission = submissionPreviewSelector(state);
+      expect(submission.upload_paths).toHaveLength(4 + 1);
     });
   });
 });

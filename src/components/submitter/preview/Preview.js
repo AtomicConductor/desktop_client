@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { useSelector } from "react-redux";
-import { submissionSelector } from "../../../selectors/submitter";
+import { submissionPreviewSelector } from "../../../selectors/submitter";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { tomorrowNightEighties } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 const Preview = () => {
   const classes = useStyles();
 
-  const submission = useSelector(submissionSelector);
+  const submission = useSelector(submissionPreviewSelector);
 
   return (
     <Box className={classes.container}>
