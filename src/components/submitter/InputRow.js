@@ -8,7 +8,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(1),
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
+    alignItems: "flex-start"
   },
   single: {
     height: 36

@@ -15,6 +15,7 @@ import { DeleteOutlineRounded } from "@material-ui/icons";
 import { updateSelectedSoftware } from "../../../_actions/submitter";
 import InputRow from "../InputRow";
 import InputLabel from "../InputLabel";
+import HelpIcon from "../../app/HelpIcon";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -111,6 +112,7 @@ const Software = () => {
             </Select>
           </Paper>
           <IconButton
+            size="small"
             disabled={softwareKey === "" && isDeepStrictEqual(pkg, {})}
             onClick={() => {
               dispatch(
@@ -124,6 +126,23 @@ const Software = () => {
           >
             <DeleteOutlineRounded />
           </IconButton>
+          {softwareIndex === 0 && (
+            <HelpIcon
+              tooltip={
+                <React.Fragment>
+                  <p>
+                    Specify the application and plugin versions Conductor uses
+                    to process your job.
+                  </p>
+                  <p>
+                    Do not add any software versions that are not required for
+                    your submission as you are likely to incur unnecessary
+                    charges.
+                  </p>
+                </React.Fragment>
+              }
+            />
+          )}
         </InputRow>
       ))}
     </Box>

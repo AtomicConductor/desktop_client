@@ -8,8 +8,7 @@ import {
   InputBase,
   Box,
   Divider,
-  Typography,
-  Tooltip
+  Typography
 } from "@material-ui/core";
 import {
   DeleteOutlineRounded,
@@ -25,6 +24,8 @@ import {
   environmentOverrides,
   pythonLocation
 } from "../../../selectors/submitter";
+import HelpIcon from "../../app/HelpIcon";
+import Tooltip from "../../app/Tooltip";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -49,9 +50,6 @@ const useStyles = makeStyles(theme => ({
   value: {
     flexBasis: "70%"
   },
-  fabIcon: {
-    margin: theme.spacing(1)
-  },
   row: {
     display: "flex",
     justify: "space-between",
@@ -59,7 +57,6 @@ const useStyles = makeStyles(theme => ({
   },
   rowIcon: {
     marginLeft: theme.spacing(1),
-    padding: 0,
     alignSelf: "flex-start"
   },
   label: {
@@ -72,6 +69,15 @@ const useStyles = makeStyles(theme => ({
   sectionHeading: { paddingLeft: theme.spacing(1) },
   divider: {
     margin: theme.spacing(2)
+  },
+  spacer: {
+    display: "flex",
+    flexGrow: "1",
+    flexDirection: "column"
+  },
+  labelBox: {
+    display: "flex",
+    flexDirection: "row"
   }
 }));
 
@@ -84,14 +90,33 @@ const Advanced = () => {
 
   return (
     <Box className={classes.container}>
-      <Typography
-        className={classes.sectionHeading}
-        color="primary"
-        variant="h6"
-      >
-        Local settings
-      </Typography>
-
+      <Box className={classes.labelBox}>
+        <Typography
+          className={classes.sectionHeading}
+          color="primary"
+          variant="h6"
+        >
+          Local settings
+        </Typography>
+        <div className={classes.spacer} />
+        <HelpIcon
+          tooltip={
+            <React.Fragment>
+              <p>Set the location of Python 2.7.</p>
+              <p>
+                The Conductor Client Python API is used to submit jobs, and for
+                this reason, the submitter needs to know about the location of
+                Python 2.7 on your computer. It should have been set correctly
+                already, so you probably don't need to touch this.
+              </p>
+              <p>
+                Use the reset button below to set the Python location
+                automatically, and youse the folder icon to browse.
+              </p>
+            </React.Fragment>
+          }
+        />
+      </Box>
       <Box className={classes.row}>
         <Typography
           color="primary"
@@ -126,16 +151,18 @@ const Advanced = () => {
             }}
           />
 
-          <IconButton
-            color="primary"
-            className={classes.rowIcon}
-            component="span"
-            size="small"
-          >
-            <FolderRounded />
-          </IconButton>
+          <Tooltip title="Browse for a Python 2.7 location">
+            <IconButton
+              color="primary"
+              className={classes.rowIcon}
+              component="span"
+              size="small"
+            >
+              <FolderRounded />
+            </IconButton>
+          </Tooltip>
         </label>
-        <Tooltip enterDelay={200} placement="top" title="Reset Python path">
+        <Tooltip title="Reset Python path">
           <IconButton
             color="primary"
             className={classes.rowIcon}
@@ -148,14 +175,50 @@ const Advanced = () => {
         </Tooltip>
       </Box>
       <Divider className={classes.divider} />
-      <Typography
-        className={classes.sectionHeading}
-        color="primary"
-        variant="h6"
-      >
-        Remote environment overrides
-      </Typography>
-
+      <Box className={classes.labelBox}>
+        <Typography
+          className={classes.sectionHeading}
+          color="primary"
+          variant="h6"
+        >
+          Remote environment overrides
+        </Typography>
+        <div className={classes.spacer} />
+        <HelpIcon
+          tooltip={
+            <React.Fragment>
+              <p>Set extra environment variables, or override existing ones.</p>
+              <p>
+                When you select software versions in the <b>Software</b> tab, a
+                number of environment variables are configured to be available
+                on the render nodes. Use the fields below to override them with
+                new values, or to unset them. Three examples follow.
+                <ol>
+                  <li>
+                    You want to replace the value for a license server.
+                    <pre>foundry_LICENSE : "4101@other-license-host"</pre>
+                  </li>
+                  <li>
+                    The PATH variable is set already by Nuke, but you want to
+                    append your local scripts folder. You'll have to enter your
+                    new path joined to the existing path. Note the colon
+                    separator.
+                    <pre>
+                      PATH :
+                      "/opt/thefoundry/nuke/11/nuke11.3v5:/Users/me/scripts"
+                    </pre>
+                  </li>
+                  <li>
+                    You want to unset a variable that was set by some software
+                    package. Just leave the value empty.
+                    <pre>MAYA_DEBUG : ""</pre>
+                  </li>
+                </ol>
+              </p>
+            </React.Fragment>
+          }
+        />
+      </Box>
       {overrides.map((entry, i) => (
         <Box
           className={classes.row}
@@ -190,6 +253,7 @@ const Advanced = () => {
           </Paper>
 
           <IconButton
+            size="small"
             disabled={entry.key.trim() === "" && entry.value.trim() === ""}
             className={classes.rowIcon}
             onClick={() => {
