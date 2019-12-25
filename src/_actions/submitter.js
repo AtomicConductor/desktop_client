@@ -63,18 +63,23 @@ const submissionRequested = createAction("submitter/submissionRequested");
 const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
 const submissionFinished = createAction("submitter/submissionFinished");
 const showNoticeDialog = createAction("submitter/showNoticeDialog");
+const showSubmissionShield = createAction("submitter/showSubmissionShield");
 
-const submit = (
-  validator = submissionValidSelector,
-  pythonShell = runPythonShell
-) => async (dispatch, getState) => {
+const submitShield = (validator = submissionValidSelector) => (
+  dispatch,
+  getState
+) => {
   const state = getState();
-
-  if (!validator(state)) {
-    throw new DesktopClientError(
-      "Invalid submission. Please check the preview tab for errors."
-    );
+  const { errors, alerts } = validator(state);
+  if (errors.length || alerts.length) {
+    dispatch(showSubmissionShield(true));
+  } else {
+    dispatch(submit());
   }
+};
+
+const submit = (pythonShell = runPythonShell) => async (dispatch, getState) => {
+  const state = getState();
 
   const pythonPath = pythonLocation(state);
   const args = [JSON.stringify(submissionSelector(state))];
@@ -374,11 +379,13 @@ export {
   loadPythonLocation,
   resetPythonLocation,
   submit,
+  submitShield,
   insertTaskTemplateToken,
   submissionRequested,
   submissionFinished,
   setSubmissionResponse,
   closeNoticeDialog,
   showNoticeDialog,
-  readDialogNoticeState
+  readDialogNoticeState,
+  showSubmissionShield
 };

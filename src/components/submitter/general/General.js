@@ -263,13 +263,24 @@ const General = () => {
         <HelpIcon
           tooltip={
             <React.Fragment>
-              <p>Specifies the tasks to be rendered first. </p>
               <p>
-                Scout frame spec is the same as for frame numbers. Example:
-                0-200x50 would start tasks 0,50,100,150,200. Other tasks will be
-                in a holding state until you visit the web dashboard to start
-                them.
+                Specifies the tasks to be rendered first. Other tasks will be
+                started in a holding state until you visit the web dashboard to
+                un-hold them.
               </p>
+              <p>
+                You can enter individual frames, a range, or several ranges
+                separated by commas.
+                <br />
+                For example:
+              </p>
+              <pre>
+                0,50,100
+                <br />
+                0-100x50
+                <br />
+                1-4, 97-100
+              </pre>
             </React.Fragment>
           }
         />
@@ -392,17 +403,17 @@ const General = () => {
                 to 4 with a chunk size of 2, you'll generate 2 tasks of 2 frames
                 each. You can use the tokens <b>chunk_start</b> and
                 <b>chunk_end</b> to substitute the first and last frame of each
-                chunk into the task template. If the template is
-                <pre>
-                  Render -s &lt;chunk_start&gt; -e &lt;chunk_end&gt; myfile
-                </pre>
-                then the commands will be
-                <pre>
-                  Render -s 1 -e 2 myfile
-                  <br />
-                  Render -s 3 -e 4 myfile
-                </pre>
+                chunk into the task template. If the template is:
               </p>
+              <pre>
+                Render -s &lt;chunk_start&gt; -e &lt;chunk_end&gt; myfile
+              </pre>
+              then the commands will resolve to:
+              <pre>
+                Render -s 1 -e 2 myfile
+                <br />
+                Render -s 3 -e 4 myfile
+              </pre>
               <p>
                 Check the preview tab any time to see how task commands are
                 resolved.

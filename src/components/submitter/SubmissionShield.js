@@ -1,0 +1,105 @@
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from "@material-ui/core";
+
+import ErrorIcon from "@material-ui/icons/Error";
+import WarningIcon from "@material-ui/icons/Warning";
+
+import { makeStyles } from "@material-ui/core/styles";
+
+import { showSubmissionShield, submit } from "../../_actions/submitter";
+import { submissionValidSelector } from "../../selectors/submitter";
+import amber from "@material-ui/core/colors/amber";
+import red from "@material-ui/core/colors/red";
+
+const useStyles = makeStyles(theme => ({
+  dialogTitle: {
+    color: theme.palette.secondary.main,
+    borderBottom: `1px solid ${theme.palette.divider}`
+  },
+  actionRow: {
+    borderTop: `1px solid ${theme.palette.divider}`
+  },
+  error: {
+    color: red[600]
+  },
+  warning: {
+    color: amber[600]
+  }
+}));
+
+export default () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const submissionShieldOpen = useSelector(
+    state => state.submitter.submissionShieldOpen
+  );
+
+  const { errors, alerts } = useSelector(submissionValidSelector);
+
+  const hasErrors = errors.length;
+
+  const handleSubmit = () => {
+    dispatch(showSubmissionShield(false));
+    dispatch(submit());
+  };
+
+  const handleClose = () => {
+    dispatch(showSubmissionShield(false));
+  };
+
+  const messages = hasErrors ? errors : alerts;
+
+  const title = hasErrors ? "Submission is invalid!" : "Are you sure?";
+  const instruction = hasErrors
+    ? "Please fix the issues listed below and try to resubmit."
+    : "There are potential problems with your submission. Please review the alerts listed below. Press SUBMIT to continue.";
+
+  const icon = hasErrors ? (
+    <ErrorIcon className={classes.error} />
+  ) : (
+    <WarningIcon className={classes.warning} />
+  );
+
+  return (
+    <Dialog open={submissionShieldOpen} onClose={handleClose}>
+      <DialogTitle className={classes.dialogTitle}>{title}</DialogTitle>
+
+      <DialogContent>
+        <DialogContentText>{instruction}</DialogContentText>
+      </DialogContent>
+      <List>
+        {messages.map((message, i) => (
+          <ListItem dense key={i}>
+            <ListItemIcon>{icon}</ListItemIcon>
+
+            <ListItemText primary={message} />
+          </ListItem>
+        ))}
+      </List>
+
+      <DialogActions className={classes.actionRow}>
+        <Button onClick={handleClose} color="secondary">
+          Close
+        </Button>
+        {!hasErrors && (
+          <Button onClick={handleSubmit} color="secondary">
+            Submit
+          </Button>
+        )}
+      </DialogActions>
+    </Dialog>
+  );
+};

@@ -14,10 +14,12 @@ import SignIn from "../account/SignIn";
 import { appBarHeight } from "../../_helpers/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import NoticeDialog from "./NoticeDialog";
+import SubmissionShield from "./SubmissionShield";
+
 import LoadSaveMenu from "./LoadSaveMenu";
 
 import {
-  submit,
+  submitShield,
   fetchProjects,
   fetchInstanceTypes,
   loadPythonLocation,
@@ -116,7 +118,7 @@ const Submitter = props => {
   }
 
   function handleSubmit(event) {
-    dispatch(submit());
+    dispatch(submitShield());
   }
 
   const labels = ["General", "Files", "Software", "Advanced", "Preview"];
@@ -174,6 +176,7 @@ const Submitter = props => {
           )}
         </Card>
         <NoticeDialog />
+        <SubmissionShield />
       </Box>
     </React.Fragment>
   );

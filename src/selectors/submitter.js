@@ -61,12 +61,12 @@ const assetsSelector = createSelector(
  * Validator selectors (or helpers) should return an array of errors.
  * If the array is empty, then the input is valid.
  */
-const _specValidator = spec => {
+const _specValidator = (spec, prefix) => {
   try {
     Sequence(spec);
     return [];
   } catch (e) {
-    return [e.message];
+    return [`${prefix}: ${e.message}`];
   }
 };
 
@@ -81,7 +81,9 @@ const assetsValidator = createSelector(
 const taskTemplateValidator = createSelector(
   taskTemplate,
   template =>
-    template && template.trim() !== "" ? [] : ["Invalid task template"]
+    template && template.trim() !== ""
+      ? []
+      : ["Invalid task template. Task commands cannot be empty."]
 );
 
 const progressionsValidator = createSelector(
@@ -114,8 +116,8 @@ const taskDataValidator = createSelector(
   frameSpec,
   tileSpec,
   (progressionsValidator, taskTemplateValidator, frameSpec, tileSpec) => [
-    ..._specValidator(frameSpec),
-    ..._specValidator(tileSpec),
+    ..._specValidator(frameSpec, "Frames"),
+    ..._specValidator(tileSpec, "Tiles"),
     ...taskTemplateValidator,
     ...progressionsValidator
   ]
@@ -137,8 +139,6 @@ const instanceTypeSelector = createSelector(
  * 1. The computed value - e.g. object, string, number, array
  * OR
  * 2. An object with the key "errors" which points to an array of messages.
- *
- *
  */
 
 const instanceTypeNameSelector = createSelector(
@@ -251,7 +251,7 @@ const retryPolicySelector = createSelector(
 const scoutFramesSelector = createSelector(
   scoutFrameSpec,
   scoutFrameSpec => {
-    const errors = _specValidator(scoutFrameSpec);
+    const errors = _specValidator(scoutFrameSpec, "Scout frames");
     return errors.length
       ? { errors }
       : [...Sequence(scoutFrameSpec).getFrames()].join(",");
@@ -354,15 +354,49 @@ const submissionSelector = createSelector(
   }
 );
 
-const submissionValidSelector = createSelector(
-  submissionSelector,
-  submission =>
-    !Object.keys(submission).some(
-      _ =>
-        typeof submission[_] === "object" &&
-        submission[_] !== null &&
-        submission[_].hasOwnProperty("errors")
+/** Alert selectors warn about, but do not block, the submission.*/
+const softwareAlertSelector = createSelector(
+  softwarePackages,
+  packages =>
+    packages.some(
+      _ => _.softwareKey && _.package.hasOwnProperty("id") && _.package.id
     )
+      ? []
+      : [
+          "No software packages specified. Your submission will fail if tasks rely on any software packages provided by Conductor."
+        ]
+);
+
+const assetsAlertSelector = createSelector(
+  assetsSelector,
+  assets =>
+    assets.length === 0
+      ? [
+          "No files selected for upload. If your tasks operate on some assets, you'll need to add them in the files tab."
+        ]
+      : []
+);
+///////////////////////////////
+
+const submissionValidSelector = createSelector(
+  softwareAlertSelector,
+  assetsAlertSelector,
+  submissionSelector,
+  (softwareAlerts, assetsAlerts, submission) => {
+    const errors = Object.keys(submission)
+      .filter(
+        _ =>
+          typeof submission[_] === "object" &&
+          submission[_] !== null &&
+          submission[_].hasOwnProperty("errors")
+      )
+      .map(_ => submission[_].errors)
+      .flat();
+
+    const alerts = [...softwareAlerts, ...assetsAlerts];
+
+    return { errors, alerts };
+  }
 );
 
 const submissionPreviewSelector = createSelector(

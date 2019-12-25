@@ -4,6 +4,7 @@ import {
   closeNoticeDialog,
   readDialogNoticeState,
   submit,
+  submitShield,
   loadPythonLocation,
   savePythonLocation,
   resetPythonLocation
@@ -261,6 +262,41 @@ describe("submitter", () => {
     });
   });
 
+  describe("submitShield", () => {
+    const getState = jest.fn();
+
+    it("shows shield when submission is not valid", async () => {
+      const validator = jest
+        .fn()
+        .mockReturnValue({ errors: ["Some error"], alerts: [] });
+      submitShield(validator)(dispatch, getState);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showSubmissionShield",
+        payload: true
+      });
+    });
+
+    it("shows shield when submission contains alerts", async () => {
+      const validator = jest
+        .fn()
+        .mockReturnValue({ errors: [], alerts: ["Some alert"] });
+      submitShield(validator)(dispatch, getState);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "submitter/showSubmissionShield",
+        payload: true
+      });
+    });
+
+    it("doesn't show shield when submission contains no problems", async () => {
+      const validator = jest.fn().mockReturnValue({ errors: [], alerts: [] });
+      submitShield(validator)(dispatch, getState);
+      expect(dispatch).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalledWith(
+        expect.objectContaining({ type: "submitter/showSubmissionShield" })
+      );
+    });
+  });
+
   describe("submit", () => {
     const getState = jest.fn().mockReturnValue({
       submitter: {
@@ -293,26 +329,14 @@ describe("submitter", () => {
       pythonShellStub = new PythonShellStub();
     });
 
-    it("throws when submission is not valid", async () => {
-      const validator = jest.fn().mockReturnValue(false);
-
-      await expect(submit(validator, null)(dispatch, getState)).rejects.toThrow(
-        "Invalid submission. Please check the preview tab for errors."
-      );
-    });
-
     it("dispatched error notification when shell execution ends with error", async () => {
       class PythonShellStubWithError extends EventEmitter {
         end(handler) {
           handler(new Error("process exited with error"));
         }
       }
-      const validator = jest.fn().mockReturnValueOnce(true);
 
-      await submit(validator, () => new PythonShellStubWithError())(
-        dispatch,
-        getState
-      );
+      await submit(() => new PythonShellStubWithError())(dispatch, getState);
 
       expect(dispatch).toHaveBeenCalledWith({
         type: "notification/setNotification",
@@ -325,9 +349,7 @@ describe("submitter", () => {
 
     describe("dispatches notification when submission is finished", () => {
       it("returns no response code", async () => {
-        const validator = jest.fn().mockReturnValueOnce(true);
-
-        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        await submit(() => pythonShellStub)(dispatch, getState);
         pythonShellStub.emit("message", "no response code");
 
         expect(dispatch).toHaveBeenCalledTimes(3);
@@ -351,9 +373,7 @@ describe("submitter", () => {
       });
 
       it("returns 201 accepted response code", async () => {
-        const validator = jest.fn().mockReturnValueOnce(true);
-
-        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        await submit(() => pythonShellStub)(dispatch, getState);
         pythonShellStub.emit(
           "message",
           JSON.stringify({ response_code: 201, uri: "/jobs" })
@@ -380,9 +400,7 @@ describe("submitter", () => {
       });
 
       it("returns error for non 201 response codes", async () => {
-        const validator = jest.fn().mockReturnValueOnce(true);
-
-        await submit(validator, () => pythonShellStub)(dispatch, getState);
+        await submit(() => pythonShellStub)(dispatch, getState);
         pythonShellStub.emit("message", JSON.stringify({ response_code: 404 }));
 
         expect(dispatch).toHaveBeenCalledTimes(4);

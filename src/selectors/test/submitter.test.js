@@ -662,11 +662,59 @@ describe("submission selectors", () => {
   });
 
   describe("submissionValidSelector", () => {
-    it("returns true if all fields are valid", () => {
-      expect(submissionValidSelector(ss())).toBe(true);
+    it("returns empty errors array if no fields have errors", () => {
+      const { errors } = submissionValidSelector(ss());
+      expect(errors).toEqual([]);
     });
-    it("returns false if some fields are invalid", () => {
-      expect(submissionValidSelector(ss({ jobTitle: "" }))).toBe(false);
+
+    it("returns  errors array if some fields are invalid", () => {
+      const { errors } = submissionValidSelector(ss({ jobTitle: "" }));
+      expect(errors).toHaveLength(1);
+    });
+
+    it("collects errors from many fields", () => {
+      const { errors } = submissionValidSelector(
+        ss({ jobTitle: "", taskTemplate: "" })
+      );
+      expect(errors).toHaveLength(2);
+    });
+
+    it("returns alerts if no software selected", () => {
+      const { alerts } = submissionValidSelector(
+        ss({
+          softwarePackages: [
+            {
+              softwareKey: "",
+              package: {}
+            }
+          ]
+        })
+      );
+      expect(alerts).toEqual(
+        expect.arrayContaining([expect.stringMatching("No software")])
+      );
+    });
+
+    it("returns alerts if no files selected", () => {
+      const { alerts } = submissionValidSelector(ss({ assets: {} }));
+      expect(alerts).toEqual(
+        expect.arrayContaining([expect.stringMatching("No files")])
+      );
+    });
+
+    it("returns many alerts if many fields are found to be alert worthy", () => {
+      const { alerts } = submissionValidSelector(
+        ss({
+          assets: {},
+          softwarePackages: [
+            {
+              softwareKey: "",
+              package: {}
+            }
+          ]
+        })
+      );
+      expect(alerts).toHaveLength(2);
     });
   });
 

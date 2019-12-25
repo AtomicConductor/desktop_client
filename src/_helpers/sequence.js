@@ -134,7 +134,7 @@ class Progression extends Sequence {
 
 const SequenceFactory = spec => {
   const errmsg =
-    "Please provide a valid frame spec string. Example: 1,2-5,10-20x2";
+    "Please provide a valid set of frames. Example: 1, 2-5, 10-20x2";
   if (!spec) {
     return new Progression([]);
   }
