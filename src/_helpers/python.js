@@ -19,21 +19,10 @@ const resolvePythonLocation = async (
   executor = exec,
   platform = process.platform
 ) => {
-  const conductorLocation = await tryExecute(
-    executor,
-    platform === "win32" ? "set CONDUCTOR_LOCATION" : "echo $CONDUCTOR_LOCATION"
-  );
-
   if (platform === "win32") {
-    return conductorLocation
-      ? `${conductorLocation}\\python\\python2.7.exe`
-      : "C:\\Python27\\python.exe";
+    return "C:\\Python27\\python.exe";
   }
-
-  const python27Location = await tryExecute(executor, "which python2.7");
-  return conductorLocation
-    ? `${conductorLocation}/python/bin/python2.7`
-    : python27Location;
+  return await tryExecute(executor, "which python2.7");
 };
 
 const isPythonPathValid = async (pythonPath, shell = PythonShell) => {
