@@ -78,6 +78,7 @@
   },
   "chromium-args": "--disable-web-security --enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/4.2.0_0'",
   "devDependencies": {
+    "@testing-library/react-hooks": "^3.2.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.2",
@@ -94,5 +95,5 @@
   },
   "resolutions": {
     "nw-react-scripts/**/serialize-javascript": "^2.1.1"
- }
+  }
 }

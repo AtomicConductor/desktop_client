@@ -20,11 +20,15 @@ import { startDownloadQueue } from "../../_actions/files";
 import { fetchSoftwarePackages } from "../../_actions/submitter";
 import signInClientTools from "../../_actions/clientTools";
 import SignIn from "../account/SignIn";
+import Welcome from "../welcome";
+import { useLocalStorage } from "../../hooks/localStorage";
+import { settings } from "../../_helpers/constants";
 
-const { resources, downloader, submitter, log, signIn } = paths;
+const { resources, downloader, submitter, log, signIn, welcome } = paths;
 
 const App = () => {
   const dispatch = useDispatch();
+  const [showWelcomePage] = useLocalStorage(settings.showWelcomePage, true);
 
   useEffect(() => {
     const signleSignIn = async () => {
@@ -45,7 +49,8 @@ const App = () => {
           <Route path={submitter} component={Submitter} />
           <Route path={log} component={Log} />
           <Route path={signIn} component={SignIn} />
-          <Redirect push to={resources} />
+          <Route path={welcome} component={Welcome} />
+          <Redirect push to={showWelcomePage ? welcome : resources} />
         </Switch>
       </Layout>
     </Router>

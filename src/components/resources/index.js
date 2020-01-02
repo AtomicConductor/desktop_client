@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Typography, Box, Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   LibraryBooksRounded,
@@ -15,15 +15,8 @@ import IndexCard from "./IndexCard";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(8, 12),
+    margin: theme.spacing(12, 8),
     flexGrow: 1
-  },
-  headerText: {
-    fontWeight: "bold",
-    marginBottom: theme.spacing(4)
-  },
-  subheader: {
-    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -35,19 +28,6 @@ export default () => {
 
   return (
     <Box className={classes.container}>
-      <Typography variant="h4" className={classes.headerText}>
-        Get Started!
-      </Typography>
-
-      <Typography
-        variant="h6"
-        className={classes.subheader}
-        color="textSecondary"
-      >
-        Conductor tools are installed and you are ready to go. Use the links
-        below to get specific info for your platform or to contact us for help.
-      </Typography>
-
       <Grid container spacing={8}>
         <IndexCard
           onClick={browse(documentationUrl)}

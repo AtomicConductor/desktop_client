@@ -24,7 +24,8 @@ export const paths = {
   downloader: "/downloader",
   signIn: "/sign-in",
   submitter: "/submitter",
-  log: "/log"
+  log: "/log",
+  welcome: "/welcome"
 };
 
 export const taskTemplateTokens = [
@@ -41,5 +42,6 @@ export const taskTemplateTokens = [
 
 export const settings = {
   pythonLocation: "settings.pythonLocation",
-  submitterNoticeClosed: "settings.submitterNoticeClosed"
+  submitterNoticeClosed: "settings.submitterNoticeClosed",
+  showWelcomePage: "settings.showWelcomePage"
 };
