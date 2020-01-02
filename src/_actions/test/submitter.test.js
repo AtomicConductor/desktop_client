@@ -262,41 +262,6 @@ describe("submitter", () => {
     });
   });
 
-  describe("submitShield", () => {
-    const getState = jest.fn();
-
-    it("shows shield when submission is not valid", async () => {
-      const validator = jest
-        .fn()
-        .mockReturnValue({ errors: ["Some error"], alerts: [] });
-      submitShield(validator)(dispatch, getState);
-      expect(dispatch).toHaveBeenCalledWith({
-        type: "submitter/showSubmissionShield",
-        payload: true
-      });
-    });
-
-    it("shows shield when submission contains alerts", async () => {
-      const validator = jest
-        .fn()
-        .mockReturnValue({ errors: [], alerts: ["Some alert"] });
-      submitShield(validator)(dispatch, getState);
-      expect(dispatch).toHaveBeenCalledWith({
-        type: "submitter/showSubmissionShield",
-        payload: true
-      });
-    });
-
-    it("doesn't show shield when submission contains no problems", async () => {
-      const validator = jest.fn().mockReturnValue({ errors: [], alerts: [] });
-      submitShield(validator)(dispatch, getState);
-      expect(dispatch).toHaveBeenCalled();
-      expect(dispatch).not.toHaveBeenCalledWith(
-        expect.objectContaining({ type: "submitter/showSubmissionShield" })
-      );
-    });
-  });
-
   describe("submit", () => {
     const getState = jest.fn().mockReturnValue({
       submitter: {

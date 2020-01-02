@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogTitle,
@@ -18,8 +17,6 @@ import WarningIcon from "@material-ui/icons/Warning";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { showSubmissionShield, submit } from "../../_actions/submitter";
-import { submissionValidSelector } from "../../selectors/submitter";
 import amber from "@material-ui/core/colors/amber";
 import red from "@material-ui/core/colors/red";
 
@@ -39,26 +36,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
+export default props => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const submissionShieldOpen = useSelector(
-    state => state.submitter.submissionShieldOpen
-  );
-
-  const { errors, alerts } = useSelector(submissionValidSelector);
+  const {
+    submissionShieldOpen,
+    handleSubmit,
+    handleClose,
+    validationResult: { errors, alerts }
+  } = props;
 
   const hasErrors = errors.length;
-
-  const handleSubmit = () => {
-    dispatch(showSubmissionShield(false));
-    dispatch(submit());
-  };
-
-  const handleClose = () => {
-    dispatch(showSubmissionShield(false));
-  };
 
   const messages = hasErrors ? errors : alerts;
 

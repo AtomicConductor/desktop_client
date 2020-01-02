@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,9 +17,10 @@ import NoticeDialog from "./NoticeDialog";
 import SubmissionShield from "./SubmissionShield";
 
 import LoadSaveMenu from "./LoadSaveMenu";
+import { submissionValidSelector } from "../../selectors/submitter";
 
 import {
-  submitShield,
+  submit,
   fetchProjects,
   fetchInstanceTypes,
   loadPythonLocation,
@@ -97,6 +98,8 @@ const Submitter = props => {
   const signedIn = useSelector(state => signedInSelector(state));
   const submitting = useSelector(state => state.submitter.submitting);
   const filename = useSelector(state => state.submitter.filename);
+  const { errors, alerts } = useSelector(submissionValidSelector);
+  const [submissionShieldOpen, setSubmissionShieldOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -117,8 +120,12 @@ const Submitter = props => {
     setTabIndex(newTabIndex);
   }
 
-  function handleSubmit(event) {
-    dispatch(submitShield());
+  function handleSubmit() {
+    if (errors.length || alerts.length) {
+      setSubmissionShieldOpen(true);
+    } else {
+      dispatch(submit());
+    }
   }
 
   const labels = ["General", "Files", "Software", "Advanced", "Preview"];
@@ -176,7 +183,15 @@ const Submitter = props => {
           )}
         </Card>
         <NoticeDialog />
-        <SubmissionShield />
+        <SubmissionShield
+          submissionShieldOpen={submissionShieldOpen}
+          validationResult={{ errors, alerts }}
+          handleSubmit={() => {
+            setSubmissionShieldOpen(false);
+            dispatch(submit());
+          }}
+          handleClose={() => setSubmissionShieldOpen(false)}
+        />
       </Box>
     </React.Fragment>
   );

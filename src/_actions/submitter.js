@@ -8,7 +8,6 @@ import { pushEvent } from "../_actions/log";
 import { createRequestOptions } from "../_helpers/network";
 import {
   submissionSelector,
-  submissionValidSelector,
   pythonLocation,
   jobTitleSelector,
   instanceTypeSelector,
@@ -63,20 +62,6 @@ const submissionRequested = createAction("submitter/submissionRequested");
 const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
 const submissionFinished = createAction("submitter/submissionFinished");
 const showNoticeDialog = createAction("submitter/showNoticeDialog");
-const showSubmissionShield = createAction("submitter/showSubmissionShield");
-
-const submitShield = (validator = submissionValidSelector) => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const { errors, alerts } = validator(state);
-  if (errors.length || alerts.length) {
-    dispatch(showSubmissionShield(true));
-  } else {
-    dispatch(submit());
-  }
-};
 
 const submit = (pythonShell = runPythonShell) => async (dispatch, getState) => {
   const state = getState();
@@ -381,13 +366,11 @@ export {
   loadPythonLocation,
   resetPythonLocation,
   submit,
-  submitShield,
   insertTaskTemplateToken,
   submissionRequested,
   submissionFinished,
   setSubmissionResponse,
   closeNoticeDialog,
   showNoticeDialog,
-  readDialogNoticeState,
-  showSubmissionShield
+  readDialogNoticeState
 };
