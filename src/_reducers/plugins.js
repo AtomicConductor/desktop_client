@@ -1,6 +1,6 @@
 import os from "os";
 import path from "upath";
-import { createReducer } from "redux-starter-kit";
+import { createReducer } from "@reduxjs/toolkit";
 
 import {
   setInstallPathValue,

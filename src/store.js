@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "redux-starter-kit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import ctReducer from "./_reducers/root";
 import createThunkErrorHandlerMiddleware from "redux-thunk-error-handler";
 import * as Sentry from "@sentry/browser";
