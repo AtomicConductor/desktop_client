@@ -1,5 +1,4 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -11,8 +10,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import config from "../../config";
-
-import { closeNoticeDialog } from "../../_actions/submitter";
+import { useLocalStorage } from "../../hooks/localStorage";
+import { settings } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   formTitle: {
@@ -20,21 +19,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default props => {
+export default () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const browse = url => () => nw.Shell.openExternal(url);
   const { documentationUrl } = config;
-  const noticeDialogOpen = useSelector(
-    state => state.submitter.noticeDialogOpen
+
+  const [showSubmitterNotice, setShowSubmitterNotice] = useLocalStorage(
+    settings.showSubmitterNotice,
+    true
   );
 
+  const [isOpen, setIsOpen] = useState(showSubmitterNotice);
+
   return (
-    <Dialog
-      open={noticeDialogOpen}
-      onClose={() => dispatch(closeNoticeDialog(false))}
-    >
+    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
       <DialogTitle id="form-dialog-title" className={classes.formTitle}>
         Important Notice!
       </DialogTitle>
@@ -64,15 +63,15 @@ export default props => {
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => dispatch(closeNoticeDialog(true))}
+          onClick={() => {
+            setIsOpen(false);
+            setShowSubmitterNotice(false);
+          }}
           color="secondary"
         >
           Close forever
         </Button>
-        <Button
-          onClick={() => dispatch(closeNoticeDialog(false))}
-          color="secondary"
-        >
+        <Button onClick={() => setIsOpen(false)} color="secondary">
           Close
         </Button>
       </DialogActions>

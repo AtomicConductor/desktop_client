@@ -23,8 +23,7 @@ import {
   setEnvEntry,
   setPythonLocation,
   submissionRequested,
-  submissionFinished,
-  showNoticeDialog
+  submissionFinished
 } from "../_actions/submitter";
 
 const initialState = {
@@ -32,7 +31,6 @@ const initialState = {
   loading: false,
   pythonLocation: "",
   submitting: false,
-  noticeDialogOpen: false,
   previewLimits: { maxFiles: 200, maxTasks: 200 },
   submission: {
     retries: 3,
@@ -181,9 +179,5 @@ export default createReducer(initialState, {
 
   [submissionFinished]: (state, action) => {
     state.submitting = false;
-  },
-
-  [showNoticeDialog]: (state, { payload }) => {
-    state.noticeDialogOpen = payload;
   }
 });

@@ -61,7 +61,6 @@ const setPythonLocation = createAction("submitter/setPythonLocation");
 const submissionRequested = createAction("submitter/submissionRequested");
 const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
 const submissionFinished = createAction("submitter/submissionFinished");
-const showNoticeDialog = createAction("submitter/showNoticeDialog");
 
 const submit = (pythonShell = runPythonShell) => async (dispatch, getState) => {
   const state = getState();
@@ -320,18 +319,6 @@ const resetPythonLocation = (
   dispatch(savePythonLocation(path, pythonPathValidator));
 };
 
-const closeNoticeDialog = closeForever => async dispatch => {
-  if (closeForever) {
-    localStorage.setItem(settings.submitterNoticeClosed, true);
-  }
-  dispatch(showNoticeDialog(false));
-};
-
-const readDialogNoticeState = () => async dispatch => {
-  const hide = JSON.parse(localStorage.getItem(settings.submitterNoticeClosed));
-  dispatch(showNoticeDialog(!hide));
-};
-
 export {
   fetchProjects,
   fetchInstanceTypes,
@@ -369,8 +356,5 @@ export {
   insertTaskTemplateToken,
   submissionRequested,
   submissionFinished,
-  setSubmissionResponse,
-  closeNoticeDialog,
-  showNoticeDialog,
-  readDialogNoticeState
+  setSubmissionResponse
 };

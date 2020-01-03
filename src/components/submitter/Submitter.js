@@ -23,8 +23,7 @@ import {
   submit,
   fetchProjects,
   fetchInstanceTypes,
-  loadPythonLocation,
-  readDialogNoticeState
+  loadPythonLocation
 } from "../../_actions/submitter";
 
 import { loadPresets } from "../../_actions/entities";
@@ -109,7 +108,6 @@ const Submitter = props => {
     dispatch(fetchInstanceTypes());
     dispatch(loadPythonLocation());
     dispatch(loadPresets());
-    dispatch(readDialogNoticeState());
   }, [signedIn, dispatch]);
 
   if (!signedIn) {
