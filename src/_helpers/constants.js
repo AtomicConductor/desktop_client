@@ -2,6 +2,7 @@ export const drawerWidth = 240;
 export const statusLineHeight = 24;
 export const appBarHeight = 48;
 export const filterDrawerWidth = 210;
+export const maxItemsPreviewLimit = 200;
 
 export const credentialsFileName = "credentials.json";
 export const presetsFileName = "presets.json";

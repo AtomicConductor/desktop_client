@@ -1,3 +1,5 @@
+import { maxItemsPreviewLimit } from "./constants";
+
 export function capitalize(str) {
   if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -65,13 +67,18 @@ export function humanFileSize(size) {
   );
 }
 
-export const condenseArray = (arr, maxLength, message = null) =>
-  maxLength < arr.length
-    ? maxLength < 2
-      ? arr.slice(0, maxLength)
-      : [
-          ...arr.slice(0, Math.ceil(maxLength / 2)),
-          ...(message ? [message] : []),
-          ...arr.slice(Math.ceil(maxLength / 2) - maxLength)
-        ]
-    : arr;
+export const condenseArray = (arr, maxLength = maxItemsPreviewLimit) => {
+  const length = arr.length;
+
+  if (length <= maxLength || !arr.length) return arr;
+  if (maxLength < 2) return arr.slice(0, maxLength);
+
+  const delta = length - maxLength;
+  const message = `For display performance reasons, ${delta} entries have been hidden...`;
+
+  return [
+    ...arr.slice(0, Math.ceil(maxLength / 2)),
+    message,
+    ...arr.slice(-Math.floor(maxLength / 2))
+  ];
+};

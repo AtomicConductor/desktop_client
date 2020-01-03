@@ -720,47 +720,40 @@ describe("submission selectors", () => {
 
   describe("submissionPreviewSelector", () => {
     it("returns the same submission if file and task counts are within the limits", () => {
-      const state = ss(
-        {
-          assets: { "/f1": {}, "/f2": {} },
-          frameSpec: "1-10"
-        },
-        {},
-        { previewLimits: { maxTasks: 20, maxFiles: 20 } }
-      );
+      const state = ss({
+        assets: { "/f1": {}, "/f2": {} },
+        frameSpec: "1-10"
+      });
+
       const submission = submissionPreviewSelector(state);
+
       expect(submission.upload_paths).toHaveLength(2);
       expect(submission.tasks_data).toHaveLength(10);
     });
 
     it("returns submission with condensed task_data if tasks are limited", () => {
-      const state = ss(
-        { frameSpec: "1-10" },
-        {},
-        { previewLimits: { maxTasks: 4, maxFiles: 0 } }
-      );
+      const state = ss({ frameSpec: "1-1000" });
+
       const submission = submissionPreviewSelector(state);
-      expect(submission.tasks_data).toHaveLength(4 + 1);
+
+      expect(submission.tasks_data).toHaveLength(201);
     });
 
     it("returns submission with condensed upload_paths if files are limited", () => {
-      const state = ss(
-        {
-          assets: {
-            "/f1": {},
-            "/f2": {},
-            "/f3": {},
-            "/f4": {},
-            "/f5": {},
-            "/f6": {},
-            "/f7": {}
-          }
-        },
-        {},
-        { previewLimits: { maxTasks: 0, maxFiles: 4 } }
-      );
+      const oneThousandFiles = new Array(1000)
+        .fill("/f")
+        .reduce((acc, curr, i) => {
+          acc[`${curr}${i}`] = {};
+          return acc;
+        }, {});
+
+      const state = ss({
+        assets: oneThousandFiles
+      });
+
       const submission = submissionPreviewSelector(state);
-      expect(submission.upload_paths).toHaveLength(4 + 1);
+
+      expect(submission.upload_paths).toHaveLength(201);
     });
   });
 });

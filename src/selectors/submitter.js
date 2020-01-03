@@ -27,7 +27,6 @@ const uploadOnly = state => state.submitter.submission.uploadOnly;
 const force = state => state.submitter.submission.force;
 const localUpload = state => state.submitter.submission.localUpload;
 const pythonLocation = state => state.submitter.pythonLocation;
-const previewLimits = state => state.submitter.previewLimits;
 
 const environmentOverrides = state =>
   state.submitter.submission.environmentOverrides;
@@ -47,14 +46,12 @@ const scoutFrameSpec = state =>
 
 const _packageIsValid = _ => _.package && Object.keys(_.package).length;
 
-const assetsSelector = createSelector(
-  assetsMap,
-  assetsMap =>
-    Object.keys(assetsMap).map(_ => ({
-      path: _,
-      size: assetsMap[_].size,
-      type: assetsMap[_].type
-    }))
+const assetsSelector = createSelector(assetsMap, assetsMap =>
+  Object.keys(assetsMap).map(_ => ({
+    path: _,
+    size: assetsMap[_].size,
+    type: assetsMap[_].type
+  }))
 );
 
 /**
@@ -70,20 +67,16 @@ const _specValidator = (spec, prefix) => {
   }
 };
 
-const assetsValidator = createSelector(
-  assetsMap,
-  assetsMap =>
-    Object.keys(assetsMap)
-      .filter(_ => !path.isAbsolute(_))
-      .map(_ => `${_} is not an absolute path`)
+const assetsValidator = createSelector(assetsMap, assetsMap =>
+  Object.keys(assetsMap)
+    .filter(_ => !path.isAbsolute(_))
+    .map(_ => `${_} is not an absolute path`)
 );
 
-const taskTemplateValidator = createSelector(
-  taskTemplate,
-  template =>
-    template && template.trim() !== ""
-      ? []
-      : ["Invalid task template. Task commands cannot be empty."]
+const taskTemplateValidator = createSelector(taskTemplate, template =>
+  template && template.trim() !== ""
+    ? []
+    : ["Invalid task template. Task commands cannot be empty."]
 );
 
 const progressionsValidator = createSelector(
@@ -146,9 +139,8 @@ const instanceTypeNameSelector = createSelector(
   _ => _.name || { errors: [`No instance types. Please refresh the list.`] }
 );
 
-const jobTitleSelector = createSelector(
-  jobTitle,
-  _ => (_ && _.trim() !== "" ? _ : { errors: [`Invalid job title`] })
+const jobTitleSelector = createSelector(jobTitle, _ =>
+  _ && _.trim() !== "" ? _ : { errors: [`Invalid job title`] }
 );
 
 const projectSelector = createSelector(
@@ -172,9 +164,8 @@ const projectSelector = createSelector(
   }
 );
 
-const outputPathSelector = createSelector(
-  outputPath,
-  _ => (path.isAbsolute(_) ? _ : { errors: [`${_} is not an absolute path`] })
+const outputPathSelector = createSelector(outputPath, _ =>
+  path.isAbsolute(_) ? _ : { errors: [`${_} is not an absolute path`] }
 );
 
 const assetFilenamesSelector = createSelector(
@@ -248,15 +239,12 @@ const retryPolicySelector = createSelector(
     preemptible ? { preempted: { max_retries: Math.trunc(retries) } } : null
 );
 
-const scoutFramesSelector = createSelector(
-  scoutFrameSpec,
-  scoutFrameSpec => {
-    const errors = _specValidator(scoutFrameSpec, "Scout frames");
-    return errors.length
-      ? { errors }
-      : [...Sequence(scoutFrameSpec).getFrames()].join(",");
-  }
-);
+const scoutFramesSelector = createSelector(scoutFrameSpec, scoutFrameSpec => {
+  const errors = _specValidator(scoutFrameSpec, "Scout frames");
+  return errors.length
+    ? { errors }
+    : [...Sequence(scoutFrameSpec).getFrames()].join(",");
+});
 
 const softwarePackageIdsSelector = createSelector(
   softwarePackages,
@@ -265,20 +253,18 @@ const softwarePackageIdsSelector = createSelector(
   ]
 );
 
-const softwareEnvironmentSelector = createSelector(
-  softwarePackages,
-  packages =>
-    packages
-      .filter(_packageIsValid)
-      .reduce((env, { package: { environment } }) => {
-        return environment.reduce((acc, { merge_policy, name, value }) => {
-          if (merge_policy === "exclusive") env[name] = value;
-          if (merge_policy === "append") {
-            env[name] = env[name] ? `${env[name]}:${value}` : value;
-          }
-          return acc;
-        }, env);
-      }, {})
+const softwareEnvironmentSelector = createSelector(softwarePackages, packages =>
+  packages
+    .filter(_packageIsValid)
+    .reduce((env, { package: { environment } }) => {
+      return environment.reduce((acc, { merge_policy, name, value }) => {
+        if (merge_policy === "exclusive") env[name] = value;
+        if (merge_policy === "append") {
+          env[name] = env[name] ? `${env[name]}:${value}` : value;
+        }
+        return acc;
+      }, env);
+    }, {})
 );
 
 const environmentOverridesSelector = createSelector(
@@ -355,26 +341,20 @@ const submissionSelector = createSelector(
 );
 
 /** Alert selectors warn about, but do not block, the submission.*/
-const softwareAlertSelector = createSelector(
-  softwarePackages,
-  packages =>
-    packages.some(
-      _ => _.softwareKey && _.package.hasOwnProperty("id") && _.package.id
-    )
-      ? []
-      : [
-          "No software packages specified. Your submission will fail if tasks rely on any software packages provided by Conductor."
-        ]
+const softwareAlertSelector = createSelector(softwarePackages, packages =>
+  packages.some(_ => _.softwareKey && _.package.id)
+    ? []
+    : [
+        "No software packages specified. Your submission will fail if tasks rely on any software packages provided by Conductor."
+      ]
 );
 
-const assetsAlertSelector = createSelector(
-  assetsSelector,
-  assets =>
-    assets.length === 0
-      ? [
-          "No files selected for upload. If your tasks operate on some assets, you'll need to add them in the files tab."
-        ]
-      : []
+const assetsAlertSelector = createSelector(assetsSelector, assets =>
+  assets.length === 0
+    ? [
+        "No files selected for upload. If your tasks operate on some assets, you'll need to add them in the files tab."
+      ]
+    : []
 );
 ///////////////////////////////
 
@@ -388,7 +368,7 @@ const submissionValidSelector = createSelector(
         _ =>
           typeof submission[_] === "object" &&
           submission[_] !== null &&
-          submission[_].hasOwnProperty("errors")
+          submission[_].errors
       )
       .map(_ => submission[_].errors)
       .flat();
@@ -401,35 +381,12 @@ const submissionValidSelector = createSelector(
 
 const submissionPreviewSelector = createSelector(
   submissionSelector,
-  previewLimits,
-  (submission, limits) => {
-    const { maxFiles, maxTasks } = limits;
-    const pathsToRemove = Math.max(
-      submission.upload_paths.length - maxFiles,
-      0
-    );
-    const tasksToRemove = Math.max(submission.tasks_data.length - maxTasks, 0);
-
-    let result = submission;
-    if (pathsToRemove || tasksToRemove) {
-      result = JSON.parse(JSON.stringify(submission));
-      if (pathsToRemove) {
-        result.upload_paths = condenseArray(
-          result.upload_paths,
-          maxFiles,
-          `For display performance reasons, ${pathsToRemove} path entries have been hidden...`
-        );
-      }
-      if (tasksToRemove) {
-        result.tasks_data = condenseArray(
-          result.tasks_data,
-          maxTasks,
-          `For display performance reasons, ${tasksToRemove} task entries have been hidden...`
-        );
-      }
-    }
-
-    return result;
+  submission => {
+    return {
+      ...submission,
+      upload_paths: condenseArray(submission.upload_paths),
+      tasks_data: condenseArray(submission.tasks_data)
+    };
   }
 );
 

@@ -31,7 +31,6 @@ const initialState = {
   loading: false,
   pythonLocation: "",
   submitting: false,
-  previewLimits: { maxFiles: 200, maxTasks: 200 },
   submission: {
     retries: 3,
     preemptible: true,
