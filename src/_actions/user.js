@@ -64,6 +64,8 @@ const signIn = (credentials, storage = new AppStorage()) => async (
 const signInFromSaved = (storage = new AppStorage()) => async dispatch => {
   const credentials = await storage.readCredentials();
 
+  if (credentials === undefined) return;
+
   if (!validCredentialsSchema(credentials)) {
     throw new UnauthorizedError();
   }

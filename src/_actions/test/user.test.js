@@ -55,6 +55,14 @@ describe("user", () => {
       });
     });
 
+    it("does not sign user in when no credentials file is present", async () => {
+      appStorage.readCredentials.mockResolvedValueOnce(undefined);
+
+      await signInFromSaved(appStorage)(dispatch);
+
+      expect(dispatch).not.toHaveBeenCalled();
+    });
+
     describe.each([
       {},
       { accounts: {} },
