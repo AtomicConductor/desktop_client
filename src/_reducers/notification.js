@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "redux-starter-kit";
 import { clearNotification, setNotification } from "../_actions/notification";
 
 const initialState = {

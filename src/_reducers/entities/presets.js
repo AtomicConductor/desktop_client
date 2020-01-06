@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "redux-starter-kit";
 
 import { loadPresetsSuccess, selectPreset } from "../../_actions/entities";
 

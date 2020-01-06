@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "redux-starter-kit";
 import { softwarePackagesSuccess } from "../../_actions/submitter";
 
 const initialState = {};

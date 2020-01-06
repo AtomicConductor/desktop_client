@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from "redux-starter-kit";
 
 export const toggleDrawer = createAction("downloader/toggleDrawer");
 

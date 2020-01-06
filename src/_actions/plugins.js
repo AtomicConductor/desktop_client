@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from "redux-starter-kit";
 
 export const setInstallPathValue = createAction("plugins/setInstallPathValue");
 export const resetInstallPathValue = createAction(

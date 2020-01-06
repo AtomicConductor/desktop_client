@@ -6,7 +6,7 @@
 */
 import DesktopClientError from "../errors/desktopClientError";
 
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from "redux-starter-kit";
 import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";

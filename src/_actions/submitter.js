@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from "redux-starter-kit";
 import axios from "../_helpers/axios";
 import config from "../config";
 import DesktopClientError from "../errors/desktopClientError";

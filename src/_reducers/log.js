@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "redux-starter-kit";
 import { pushEvent, clearEvents, setLogLength } from "../_actions/log";
 
 const initialState = {
