@@ -1,4 +1,4 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
 import AppStorage from "../_helpers/storage";
 import { selectedPresetSelector } from "../selectors/entities";
 import { setNotification } from "../_actions/notification";

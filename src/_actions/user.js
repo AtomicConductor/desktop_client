@@ -1,4 +1,4 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
 import config from "../config";
 import axios from "../_helpers/axios";
 import { avatarInitials } from "../_helpers/presentation";

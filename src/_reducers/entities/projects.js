@@ -1,4 +1,4 @@
-import { createReducer } from "redux-starter-kit";
+import { createReducer } from "@reduxjs/toolkit";
 
 import { projectsSuccess } from "../../_actions/submitter";
 

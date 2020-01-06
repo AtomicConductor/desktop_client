@@ -1,4 +1,4 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
 
 //TODO: unit test
 export const pushEvent = createAction("log/pushEvent", (text, level) => ({
