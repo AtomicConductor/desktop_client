@@ -4,10 +4,7 @@ const signedIn = state => state.user.accounts.length !== 0;
 const otherAccounts = state => state.user.accounts.filter(_ => !_.selected);
 const currentAccount = state => state.user.accounts.find(_ => _.selected);
 
-const signedInSelector = createSelector(
-  signedIn,
-  _ => _
-);
+const signedInSelector = createSelector(signedIn, _ => _);
 
 const emailSelector = createSelector(
   signedIn,
@@ -35,10 +32,7 @@ const currentAccountSelector = createSelector(
   ({ email, id }) => ({ email, id })
 );
 
-const tokenSelector = createSelector(
-  currentAccount,
-  ({ token }) => token
-);
+const tokenSelector = createSelector(currentAccount, ({ token }) => token);
 
 export {
   signedInSelector,

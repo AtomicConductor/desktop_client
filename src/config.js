@@ -2,7 +2,8 @@ const commonConfig = {
   feedbackHookUrl: "https://hooks.zapier.com/hooks/catch/5792407/o2s3554/",
   supportUrl: "https://support.conductortech.com/hc/en-us",
   documentationUrl: "https://docs.conductortech.com",
-  sentryDns: "https://ef2daab1370e4d619f35684888e36ff4@sentry.io/1766140"
+  sentryDns: "https://ef2daab1370e4d619f35684888e36ff4@sentry.io/1766140",
+  logRocketAppId: "drz6zu/companion-app-production"
 };
 
 export default {

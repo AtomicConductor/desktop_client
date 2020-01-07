@@ -36,6 +36,9 @@ describe("desktopClientErrorHandler", () => {
           message: "Your session has expired, please sign-in again."
         }
       });
+
+      const mockAppStorage = AppStorage.mock.instances[0];
+      expect(mockAppStorage.saveCredentials).toHaveBeenCalledWith({});
     };
 
     it("signs user out when inner exception is UnauthorizedError", () => {
