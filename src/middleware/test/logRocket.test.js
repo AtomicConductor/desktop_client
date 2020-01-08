@@ -1,6 +1,10 @@
 import { sanitizers } from "../logRocket";
 import { createAction } from "@reduxjs/toolkit";
 import LogRocket from "logrocket";
+import { configureStore } from "@reduxjs/toolkit";
+import root from "../../_reducers/root";
+import { signInSuccess } from "../../_actions/user";
+
 jest.mock("logrocket");
 
 describe("LogRocket Sanitizers", () => {
@@ -8,19 +12,36 @@ describe("LogRocket Sanitizers", () => {
 
   describe("stateSanitizer", () => {
     it("exclude state that should not be captured", () => {
-      const state = {
-        entities: {},
-        notification: {},
-        plugins: {},
-        accounts: [{ selected: true, id: "1234", email: "joe2email.com" }]
-      };
+      const store = configureStore({ reducer: root });
+      store.dispatch(
+        signInSuccess([
+          {
+            selected: true,
+            name: "my account",
+            id: "1234",
+            email: "joe@email.com",
+            token: "do not capture"
+          }
+        ])
+      );
 
-      expect(stateSanitizer(state)).toEqual({
-        accounts: [{ selected: true, id: "1234", email: "joe2email.com" }],
-        entities: null,
-        notification: null,
-        plugins: null
-      });
+      expect(stateSanitizer(store.getState())).toEqual(
+        expect.objectContaining({
+          user: {
+            accounts: [
+              {
+                selected: true,
+                id: "1234",
+                email: "joe@email.com",
+                name: "my account"
+              }
+            ]
+          },
+          entities: null,
+          notification: null,
+          plugins: null
+        })
+      );
     });
   });
 

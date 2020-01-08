@@ -3,11 +3,21 @@ import { currentAccountSelector } from "../selectors/account";
 
 export const sanitizers = {
   stateSanitizer: state => {
+    const accounts = state.user.accounts.map(
+      ({ id, name, email, selected }) => ({
+        id,
+        name,
+        email,
+        selected
+      })
+    );
+
     return {
       ...state,
       entities: null,
       plugins: null,
-      notification: null
+      notification: null,
+      user: { accounts }
     };
   },
   actionSanitizer: action => {
