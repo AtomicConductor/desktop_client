@@ -33,7 +33,7 @@ const store = configureStore({
   reducer: ctReducer,
   middleware: [
     createThunkErrorHandlerMiddleware({
-      onError: desktopClientErrorHandler(Sentry)
+      onError: desktopClientErrorHandler
     }),
     ...getDefaultMiddleware(),
     LogRocket.reduxMiddleware({ ...sanitizers })

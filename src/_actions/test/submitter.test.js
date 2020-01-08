@@ -145,9 +145,10 @@ describe("submitter", () => {
         .mockReturnValueOnce("/saved/path/python");
 
       const dispatcher = _ => _(dispatch);
-      await loadPythonLocation(pythonPathResolver, pythonPathValidator)(
-        dispatcher
-      );
+      await loadPythonLocation(
+        pythonPathResolver,
+        pythonPathValidator
+      )(dispatcher);
 
       expect(localStorage.setItem).toHaveBeenCalledWith(
         settings.pythonLocation,
@@ -190,9 +191,10 @@ describe("submitter", () => {
       const pythonPathResolver = jest.fn(() => "default/python/path");
 
       const dispatcher = _ => _(dispatch);
-      await resetPythonLocation(pythonPathResolver, pythonPathValidator)(
-        dispatcher
-      );
+      await resetPythonLocation(
+        pythonPathResolver,
+        pythonPathValidator
+      )(dispatcher);
 
       expect(dispatch).toHaveBeenCalledWith({
         type: "submitter/setPythonLocation",
@@ -233,97 +235,83 @@ describe("submitter", () => {
       pythonShellStub = new PythonShellStub();
     });
 
-    it("dispatched error notification when shell execution ends with error", async () => {
+    it("succeeds with no response code", async () => {
+      await submit(() => pythonShellStub)(dispatch, getState);
+      pythonShellStub.emit("message", "no response code");
+
+      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
+        type: "submitter/submissionRequested",
+        payload: undefined
+      });
+
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: "submitter/submissionFinished",
+        payload: undefined
+      });
+
+      expect(dispatch).toHaveBeenNthCalledWith(3, {
+        type: "log/pushEvent",
+        payload: expect.objectContaining({
+          text: "no response code",
+          level: "info"
+        })
+      });
+    });
+
+    it("returns 201 accepted response code", async () => {
+      await submit(() => pythonShellStub)(dispatch, getState);
+      pythonShellStub.emit(
+        "message",
+        JSON.stringify({ response_code: 201, uri: "/jobs" })
+      );
+
+      expect(dispatch).toHaveBeenCalledTimes(4);
+      expect(dispatch).toHaveBeenNthCalledWith(3, {
+        type: "notification/setNotification",
+        payload: {
+          buttonLabel: "view",
+          message: "Successfully submitted my submission",
+          type: "success",
+          url: `${config.dashboardUrl}/job`
+        }
+      });
+
+      expect(dispatch).toHaveBeenNthCalledWith(4, {
+        type: "log/pushEvent",
+        payload: expect.objectContaining({
+          text: '{"response_code":201,"uri":"/jobs"}',
+          level: "info"
+        })
+      });
+    });
+
+    it("dispatches middleware error handler when shell execution ends with error", async () => {
+      const errorHandler = jest.fn();
       class PythonShellStubWithError extends EventEmitter {
         end(handler) {
           handler(new Error("process exited with error"));
         }
       }
 
-      await submit(() => new PythonShellStubWithError())(dispatch, getState);
+      await submit(() => new PythonShellStubWithError(), errorHandler)(
+        dispatch,
+        getState
+      );
 
-      expect(dispatch).toHaveBeenCalledWith({
-        type: "notification/setNotification",
-        payload: {
-          message: "process exited with error",
-          type: "error"
-        }
-      });
+      expect(errorHandler).toHaveBeenCalledWith(
+        new Error("process exited with error")
+      );
     });
 
-    describe("dispatches notification when submission is finished", () => {
-      it("returns no response code", async () => {
-        await submit(() => pythonShellStub)(dispatch, getState);
-        pythonShellStub.emit("message", "no response code");
+    it("dispatches middleware error handler for non 201 response codes", async () => {
+      const errorHandler = jest.fn();
+      await submit(() => pythonShellStub, errorHandler)(dispatch, getState);
+      pythonShellStub.emit("message", JSON.stringify({ response_code: 404 }));
 
-        expect(dispatch).toHaveBeenCalledTimes(3);
-        expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: "submitter/submissionRequested",
-          payload: undefined
-        });
-
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: "submitter/submissionFinished",
-          payload: undefined
-        });
-
-        expect(dispatch).toHaveBeenNthCalledWith(3, {
-          type: "log/pushEvent",
-          payload: expect.objectContaining({
-            text: "no response code",
-            level: "info"
-          })
-        });
-      });
-
-      it("returns 201 accepted response code", async () => {
-        await submit(() => pythonShellStub)(dispatch, getState);
-        pythonShellStub.emit(
-          "message",
-          JSON.stringify({ response_code: 201, uri: "/jobs" })
-        );
-
-        expect(dispatch).toHaveBeenCalledTimes(4);
-        expect(dispatch).toHaveBeenNthCalledWith(3, {
-          type: "notification/setNotification",
-          payload: {
-            buttonLabel: "view",
-            message: "Successfully submitted my submission",
-            type: "success",
-            url: `${config.dashboardUrl}/job`
-          }
-        });
-
-        expect(dispatch).toHaveBeenNthCalledWith(4, {
-          type: "log/pushEvent",
-          payload: expect.objectContaining({
-            text: '{"response_code":201,"uri":"/jobs"}',
-            level: "info"
-          })
-        });
-      });
-
-      it("returns error for non 201 response codes", async () => {
-        await submit(() => pythonShellStub)(dispatch, getState);
-        pythonShellStub.emit("message", JSON.stringify({ response_code: 404 }));
-
-        expect(dispatch).toHaveBeenCalledTimes(4);
-        expect(dispatch).toHaveBeenNthCalledWith(3, {
-          type: "notification/setNotification",
-          payload: {
-            message: "Submission failed with response code 404",
-            type: "error"
-          }
-        });
-
-        expect(dispatch).toHaveBeenNthCalledWith(4, {
-          type: "log/pushEvent",
-          payload: expect.objectContaining({
-            text: '{"response_code":404}',
-            level: "error"
-          })
-        });
-      });
+      expect(errorHandler).toHaveBeenCalledWith(
+        new Error("Submission failed with response code 404")
+      );
     });
   });
 });

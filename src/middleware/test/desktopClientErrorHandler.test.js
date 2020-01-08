@@ -1,19 +1,17 @@
+import * as Sentry from "@sentry/browser";
 import errorHandler from "../desktopClientErrorHandler";
 import DesktopClientError from "../../errors/desktopClientError";
 import UnauthorizedError from "../../errors/unauthorizedError";
 import UnhandledApplicationError from "../../errors/unhandledApplicationError";
 import AppStorage from "../../_helpers/storage";
+jest.mock("@sentry/browser");
 jest.mock("../../_helpers/storage");
 
 describe("desktopClientErrorHandler", () => {
-  let dispatch, getState, sentry;
+  let dispatch, getState;
   beforeEach(() => {
     dispatch = jest.fn();
     getState = jest.fn();
-    sentry = {
-      captureException: jest.fn(),
-      withScope: jest.fn()
-    };
   });
 
   describe("Token has expired", () => {
@@ -22,7 +20,7 @@ describe("desktopClientErrorHandler", () => {
         .fn(dispatch)
         .mockImplementationOnce(_ => _(dispatch));
 
-      errorHandler(sentry)(wrappedError)(dispatcher, getState);
+      errorHandler(wrappedError)(dispatcher, getState);
 
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: "user/resetUserState",
@@ -58,14 +56,22 @@ describe("desktopClientErrorHandler", () => {
   it("wraps unhandled exceptions with UnhandledApplicationError", () => {
     const unhandledError = new Error("unhandled!");
 
-    errorHandler(sentry)(unhandledError)(dispatch, getState);
+    errorHandler(unhandledError)(dispatch, getState);
 
-    expect(dispatch).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: "notification/setNotification",
       payload: {
         message: "Can't perform action",
         type: "error"
       }
+    });
+
+    expect(dispatch).toHaveBeenNthCalledWith(2, {
+      type: "log/pushEvent",
+      payload: expect.objectContaining({
+        text: "Can't perform action",
+        level: "error"
+      })
     });
   });
 
@@ -80,7 +86,7 @@ describe("desktopClientErrorHandler", () => {
 
     it("logs to sentry only on production mode", () => {
       const scope = { setUser: jest.fn() };
-      sentry.withScope.mockImplementation(_ => _(scope));
+      Sentry.withScope.mockImplementation(_ => _(scope));
       getState.mockReturnValue({
         user: { accounts: [{ selected: true, email: "user@email.com" }] }
       });
@@ -89,26 +95,26 @@ describe("desktopClientErrorHandler", () => {
         new Error("inner error")
       );
 
-      errorHandler(sentry)(wrappedError)(dispatch, getState);
+      errorHandler(wrappedError)(dispatch, getState);
 
       expect(scope.setUser).toHaveBeenCalledWith({
         email: "user@email.com"
       });
 
-      expect(sentry.captureException).toHaveBeenCalledWith(
+      expect(Sentry.captureException).toHaveBeenCalledWith(
         new Error("inner error")
       );
     });
 
     it("logs UnhandledApplicationError error when accessing store state fails", () => {
       const scope = { setUser: jest.fn() };
-      sentry.withScope.mockImplementation(_ => _(scope));
+      Sentry.withScope.mockImplementation(_ => _(scope));
       getState.mockReturnValue({ invalidState: {} });
 
-      errorHandler(sentry)(new DesktopClientError())(dispatch, getState);
+      errorHandler(new DesktopClientError())(dispatch, getState);
 
       expect(scope.setUser).not.toHaveBeenCalledWith();
-      expect(sentry.captureException).toHaveBeenCalledWith(
+      expect(Sentry.captureException).toHaveBeenCalledWith(
         new UnhandledApplicationError()
       );
     });

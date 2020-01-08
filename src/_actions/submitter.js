@@ -25,6 +25,7 @@ import {
   isPythonPathValid
 } from "../_helpers/python";
 import { settings } from "../_helpers/constants";
+import desktopClientErrorHandler from "../middleware/desktopClientErrorHandler";
 
 const setJobTitle = createAction("submitter/setJobTitle");
 const setFrameSpec = createAction("submitter/setFrameSpec");
@@ -62,46 +63,41 @@ const submissionRequested = createAction("submitter/submissionRequested");
 const setSubmissionResponse = createAction("submitter/setSubmissionResponse");
 const submissionFinished = createAction("submitter/submissionFinished");
 
-const submit = (pythonShell = runPythonShell) => async (dispatch, getState) => {
+const submit = (
+  pythonShell = runPythonShell,
+  errorHandler = desktopClientErrorHandler
+) => async (dispatch, getState) => {
   const state = getState();
 
   const pythonPath = pythonLocation(state);
   const args = [JSON.stringify(submissionSelector(state))];
+  const title = jobTitleSelector(state);
 
   const pyshell = await pythonShell("submit.py", { pythonPath, args });
   dispatch(submissionRequested());
 
   pyshell.on("message", message => {
-    if (message.match(/response_code/)) {
-      const response = JSON.parse(message);
-      const title = jobTitleSelector(state);
-      if (response.response_code === 201) {
-        dispatch(
-          setNotification({
-            message: `Successfully submitted ${title}`,
-            type: "success",
-            url: `${config.dashboardUrl}${response.uri.replace(
-              "/jobs",
-              "/job"
-            )}`,
-            buttonLabel: "view"
-          })
-        );
-        dispatch(pushEvent(message, "info"));
-      } else {
-        dispatch(
-          setNotification({
-            message: `Submission failed with response code ${
-              response.response_code
-            }`,
-            type: "error"
-          })
-        );
-        dispatch(pushEvent(message, "error"));
-      }
-    } else {
+    if (!message.match(/response_code/)) {
       dispatch(pushEvent(message, "info"));
+      return;
     }
+
+    const response = JSON.parse(message);
+    if (response.response_code !== 201) {
+      const error = `Submission failed with response code ${response.response_code}`;
+      dispatch(errorHandler(new DesktopClientError(error)));
+      return;
+    }
+
+    dispatch(
+      setNotification({
+        message: `Successfully submitted ${title}`,
+        type: "success",
+        url: `${config.dashboardUrl}${response.uri.replace("/jobs", "/job")}`,
+        buttonLabel: "view"
+      })
+    );
+    dispatch(pushEvent(message, "info"));
   });
 
   pyshell.on("stderr", message => {
@@ -111,7 +107,7 @@ const submit = (pythonShell = runPythonShell) => async (dispatch, getState) => {
   pyshell.end(error => {
     dispatch(submissionFinished());
     if (error) {
-      dispatch(setNotification({ message: error.message, type: "error" }));
+      dispatch(errorHandler(new DesktopClientError(error.message)));
     }
   });
 };

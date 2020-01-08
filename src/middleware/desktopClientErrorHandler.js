@@ -1,16 +1,18 @@
+import * as Sentry from "@sentry/browser";
 import { currentAccountSelector, signedInSelector } from "../selectors/account";
 import UnhandledApplicationError from "../errors/unhandledApplicationError";
 import DesktopClientError from "../errors/desktopClientError";
 import { setNotification } from "../_actions/notification";
 import UnauthorizedError from "../errors/unauthorizedError";
 import { signOut } from "../_actions/user";
+import { pushEvent } from "../_actions/log";
 
 const shouldCallSentry = () => process.env.NODE_ENV === "production";
 const shouldLogToConsole = () => process.env.NODE_ENV === "development";
 const getUnauthorizedError = error =>
   [error, error.inner].find(_ => _ instanceof UnauthorizedError);
 
-export default sentry => e => (dispatch, getState) => {
+export default e => (dispatch, getState) => {
   const state = getState();
   const error =
     e instanceof DesktopClientError ? e : new UnhandledApplicationError(e);
@@ -31,14 +33,14 @@ export default sentry => e => (dispatch, getState) => {
 
   if (shouldCallSentry()) {
     try {
-      sentry.withScope(scope => {
+      Sentry.withScope(scope => {
         if (signedInSelector(state)) {
           scope.setUser(currentAccountSelector(state));
         }
-        sentry.captureException(inner || error);
+        Sentry.captureException(inner || error);
       });
     } catch (e) {
-      sentry.captureException(new UnhandledApplicationError(e));
+      Sentry.captureException(new UnhandledApplicationError(e));
     }
   }
 
@@ -52,4 +54,6 @@ export default sentry => e => (dispatch, getState) => {
       message
     })
   );
+
+  dispatch(pushEvent(message, "error"));
 };

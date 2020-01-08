@@ -90,7 +90,7 @@
     "json": "^9.0.6",
     "nock": "^11.3.5",
     "nw-react-scripts": "^3.3.0",
-    "prettier": "^1.17.1",
+    "prettier": "^1.19.1",
     "react-test-renderer": "^16.10.1",
     "redux-mock-store": "^1.5.3"
   },
