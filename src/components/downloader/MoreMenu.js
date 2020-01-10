@@ -62,7 +62,7 @@ const MoreMenu = props => {
           disabled={!directoryResettable}
           onClick={handleResetOutputDirectory}
         >
-          Reset output directory
+          Reset output path
         </MenuItem>
         <MenuItem onClick={handleViewInFinder}>View in finder</MenuItem>
       </Menu>

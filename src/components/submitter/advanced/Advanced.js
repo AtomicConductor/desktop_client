@@ -102,16 +102,17 @@ const Advanced = () => {
         <HelpIcon
           tooltip={
             <React.Fragment>
-              <p>Set the location of Python 2.7.</p>
+              <p>The location of the Python 2.7 executable on this machine.</p>
               <p>
                 The Conductor Client Python API is used to submit jobs, and for
                 this reason, the submitter needs to know about the location of
-                Python 2.7 on your computer. It should have been set correctly
-                already, so you probably don't need to touch this.
+                Python 2.7 on your computer. The default value was
+                automatically detected and should be sufficient unless you
+                have a custom installation of Python.
               </p>
               <p>
                 Use the reset button below to set the Python location
-                automatically, and youse the folder icon to browse.
+                automatically, and use the folder icon to browse to a location.
               </p>
             </React.Fragment>
           }
@@ -190,19 +191,14 @@ const Advanced = () => {
               <p>Set extra environment variables, or override existing ones.</p>
               <p>
                 When you select software versions in the <b>Software</b> tab, a
-                number of environment variables are configured to be available
-                on the render nodes. Use the fields below to override them with
-                new values, or to unset them. Three examples follow.
+                number of environment variables are made available to the render
+                nodes. Use the fields below to override them with new values, or
+                to unset them. For example,
                 <ol>
                   <li>
-                    You want to replace the value for a license server.
-                    <pre>foundry_LICENSE : "4101@other-license-host"</pre>
-                  </li>
-                  <li>
-                    The PATH variable is set already by Nuke, but you want to
-                    append your local scripts folder. You'll have to enter your
-                    new path joined to the existing path. Note the colon
-                    separator.
+                    The PATH variable gets set by Nuke, but you want to append
+                    your local scripts folder. You'll have to enter your new
+                    path joined to the existing path. Note the colon separator.
                     <pre>
                       PATH :
                       "/opt/thefoundry/nuke/11/nuke11.3v5:/Users/me/scripts"
