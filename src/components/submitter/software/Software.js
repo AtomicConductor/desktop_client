@@ -131,13 +131,12 @@ const Software = () => {
               tooltip={
                 <React.Fragment>
                   <p>
-                    Specify the application and plugin versions Conductor uses
-                    to process your job.
+                    Specify the application and plugin versions Conductor will
+                    require to process your job.
                   </p>
                   <p>
                     Do not add any software versions that are not required for
-                    your submission as you are likely to incur unnecessary
-                    charges.
+                    your submission as you may incur unexpected license charges.
                   </p>
                 </React.Fragment>
               }

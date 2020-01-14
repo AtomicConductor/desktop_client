@@ -91,7 +91,7 @@ const submit = (
 
     dispatch(
       setNotification({
-        message: `Successfully submitted ${title}`,
+        message: `Successfully submitted job '${title}' to Conductor.`,
         type: "success",
         url: `${config.dashboardUrl}${response.uri.replace("/jobs", "/job")}`,
         buttonLabel: "view"
