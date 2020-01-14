@@ -377,7 +377,7 @@ const General = () => {
         <HelpIcon
           tooltip={
             <React.Fragment>
-              <p>Specify the location where files will be written to.</p>
+              <p>Specify the location where files will be written.</p>
               <p>
                 All files produced by the submission must be written into this
                 directory. Also note that none of the assets in the files tab
