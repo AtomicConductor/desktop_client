@@ -235,7 +235,7 @@ const General = () => {
                 size of 1, and 4 tiles, you'll get 40 tasks.
               </p>
               <p>
-                Tile numbers are available to the task template an the token
+                Tile numbers are available to the task template as the token
                 named <b>tile</b>.
               </p>
             </React.Fragment>
