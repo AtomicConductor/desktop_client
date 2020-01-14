@@ -271,7 +271,7 @@ describe("submitter", () => {
         type: "notification/setNotification",
         payload: {
           buttonLabel: "view",
-          message: "Successfully submitted my submission",
+          message: "Successfully submitted job 'my submission' to Conductor.",
           type: "success",
           url: `${config.dashboardUrl}/job`
         }
