@@ -30,15 +30,16 @@ export const paths = {
 };
 
 export const taskTemplateTokens = [
-  "chunk_start",
   "chunk_end",
-  "chunk_step",
   "chunk_spec",
+  "chunk_start",
+  "chunk_step",
   "output_path",
-  "sequence_start",
   "sequence_end",
+  "sequence_spec",
+  "sequence_start",
   "sequence_step",
-  "sequence_spec"
+  "tile"
 ];
 
 export const settings = {

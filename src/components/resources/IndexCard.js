@@ -38,11 +38,10 @@ const useStyles = makeStyles(theme => ({
 
 const IndexCard = props => {
   const classes = useStyles();
-
-  const { onClick, title, body, icon } = props;
+  const { onClick, title, body, icon, sm = 12, lg = 6 } = props;
 
   return (
-    <Grid item sm={12} lg={6}>
+    <Grid item sm={sm} lg={lg}>
       <Card className={classes.card}>
         <CardActionArea className={classes.ctaActionArea} onClick={onClick}>
           <CardHeader
@@ -66,7 +65,9 @@ IndexCard.propTypes = {
   onClick: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  icon: PropTypes.element.isRequired
+  icon: PropTypes.element.isRequired,
+  lg: PropTypes.number,
+  sm: PropTypes.number
 };
 
 export default IndexCard;

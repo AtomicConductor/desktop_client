@@ -11,6 +11,9 @@ export default createMuiTheme({
       main: "#3597f2",
       dark: "#3597f2"
     },
-    error: red
+    error: red,
+    success: { main: grey[500] },
+    info: { main: grey[500] },
+    warning: { main: grey[500] }
   }
 });
