@@ -64,7 +64,7 @@ export default () => {
             setFeedbackFormOpen(true);
           }}
           title="Beta Feedback"
-          body="Thanks for trying out the Conductor desktop agent. If you find an
+          body="Thanks for trying out Conductor Companion. If you find an
           issue or have a suggestion, please click here to let us know."
           icon={<FeedbackRounded className={classes.avatar} />}
         />
