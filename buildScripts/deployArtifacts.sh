@@ -1,5 +1,8 @@
 #!/bin/sh
-cd /release/build/companion
+
+set -e
+
+cd /release/build/conductor-companion
 
 aws s3 cp ./ s3://${AWS_S3_BUCKET_NAME}/companion --recursive --acl public-read --exclude '*' --include '*.zip'
 

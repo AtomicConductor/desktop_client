@@ -1,5 +1,8 @@
 #!/bin/sh
-cd /release/build/companion
+
+set -e
+
+cd /release/build/conductor-companion
 
 if [[ "$CI_BRANCH" == "master" ]]; then
     releaseSuffix=latest
