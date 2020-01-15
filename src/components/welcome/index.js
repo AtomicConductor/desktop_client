@@ -45,8 +45,8 @@ export default () => {
       </Typography>
 
       <Typography className={classes.subheader} color="textSecondary">
-        Once signed in, the downloader tab will automatically populate with a
-        log of your account's downloadable files.
+        Once signed in, the <strong>Downloader</strong> tab will automatically
+        populate with a log of your account's downloadable files.
       </Typography>
 
       <Typography className={classes.subheader} color="textSecondary">
