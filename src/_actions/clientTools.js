@@ -29,6 +29,6 @@ export default (storage = new AppStorage(), decoder = decode) => async (
 
     dispatch(pushEvent("Signed in to client tools", "info"));
   } catch (e) {
-    throw new DesktopClientError("Can't sign in to client tools");
+    throw new DesktopClientError("Can't sign in to client tools", e);
   }
 };
