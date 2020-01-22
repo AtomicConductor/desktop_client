@@ -15,6 +15,8 @@ import {
 } from "../submitter";
 
 import { instanceTypesSelector } from "../entities";
+import upath from "upath";
+jest.mock("upath");
 
 const ss = (
   submissionOverrides = {},
@@ -56,7 +58,7 @@ const ss = (
 });
 
 describe("submitter selectors", () => {
-  describe("instanceTypesSelector", () => {
+  describe("instanceTypeSelector", () => {
     it("returns an array of instance types sorted by cores", () => {
       expect(
         instanceTypesSelector({
@@ -66,9 +68,6 @@ describe("submitter selectors", () => {
         })[0].cores
       ).toBe(1);
     });
-  });
-
-  describe("instanceTypeSelector", () => {
     it("returns the currently selected instance type if entity exists", () => {
       const state = ss({ instanceType: { name: "b", description: "b desc" } });
       expect(instanceTypeSelector(state)).toBe(state.entities.instanceTypes.b);
@@ -149,12 +148,26 @@ describe("submitter selectors", () => {
   });
 
   describe("outputPathSelector", () => {
+    beforeEach(() => {
+      upath.normalize.mockImplementation(_ => _);
+      upath.isAbsolute.mockReturnValue(true);
+    });
+
     it("returns the output path", () => {
       expect(outputPathSelector(ss({ outputPath: "/foo/bar" }))).toBe(
         "/foo/bar"
       );
     });
+
+    it("normalizes windows paths", () => {
+      outputPathSelector(ss({ outputPath: "C:\\foo\\bar" }));
+
+      expect(upath.normalize).toHaveBeenCalledWith("C:\\foo\\bar");
+    });
+
     it("returns errors if outputPath is not an absolute path", () => {
+      upath.isAbsolute.mockReturnValueOnce(false);
+
       expect(outputPathSelector(ss({ outputPath: "some/path" }))).toEqual(
         expect.objectContaining({
           errors: expect.arrayContaining([
@@ -201,6 +214,11 @@ describe("submitter selectors", () => {
     });
 
     it("assetFilenamesSelector gives errors object when not all paths are absolute", () => {
+      upath.isAbsolute
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true);
+
       const result = assetFilenamesSelector(
         ss({
           assets: {
@@ -426,7 +444,9 @@ describe("submission selectors", () => {
           outputPath: "C:\\path\\to\\out"
         })
       );
-      expect(result[0]).toHaveProperty("command", "command -o /path/to/out");
+
+      expect(upath.normalize).toHaveBeenCalledWith("C:\\path\\to\\out");
+      expect(result[0].command).not.toEqual(expect.stringMatching("C:"));
     });
 
     it("creates padded versions of tokens", () => {

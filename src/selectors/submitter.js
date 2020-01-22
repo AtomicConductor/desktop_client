@@ -6,7 +6,7 @@ import { compile } from "../_helpers/template";
 import { toPosix } from "../_helpers/paths";
 import { condenseArray } from "../_helpers/presentation";
 
-import path from "upath";
+import { isAbsolute, normalize } from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
 
 const assetsMap = state => state.submitter.submission.assets;
@@ -69,7 +69,7 @@ const _specValidator = (spec, prefix) => {
 
 const assetsValidator = createSelector(assetsMap, assetsMap =>
   Object.keys(assetsMap)
-    .filter(_ => !path.isAbsolute(_))
+    .filter(_ => !isAbsolute(_))
     .map(_ => `${_} is not an absolute path`)
 );
 
@@ -164,8 +164,10 @@ const projectSelector = createSelector(
   }
 );
 
-const outputPathSelector = createSelector(outputPath, _ =>
-  path.isAbsolute(_) ? _ : { errors: [`${_} is not an absolute path`] }
+const outputPathSelector = createSelector(outputPath, path =>
+  isAbsolute(path)
+    ? normalize(path)
+    : { errors: [`${path} is not an absolute path`] }
 );
 
 const assetFilenamesSelector = createSelector(
