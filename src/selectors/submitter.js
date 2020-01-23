@@ -6,7 +6,7 @@ import { compile } from "../_helpers/template";
 import { toPosix } from "../_helpers/paths";
 import { condenseArray } from "../_helpers/presentation";
 
-import { isAbsolute, normalize } from "upath";
+import { isAbsolute, toUnix } from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
 
 const assetsMap = state => state.submitter.submission.assets;
@@ -166,7 +166,7 @@ const projectSelector = createSelector(
 
 const outputPathSelector = createSelector(outputPath, path =>
   isAbsolute(path)
-    ? normalize(path)
+    ? toUnix(path)
     : { errors: [`${path} is not an absolute path`] }
 );
 
@@ -203,7 +203,6 @@ const taskDataSelector = createSelector(
     }
     const mainSequence = Sequence(frameSpec);
     const tilesSequence = Sequence(tileSpec);
-
     const globalContext = {
       output_path: toPosix(outputPath),
       sequence_step: mainSequence.step,

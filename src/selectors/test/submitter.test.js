@@ -149,7 +149,7 @@ describe("submitter selectors", () => {
 
   describe("outputPathSelector", () => {
     beforeEach(() => {
-      upath.normalize.mockImplementation(_ => _);
+      upath.toUnix.mockImplementation(_ => _);
       upath.isAbsolute.mockReturnValue(true);
     });
 
@@ -162,7 +162,7 @@ describe("submitter selectors", () => {
     it("normalizes windows paths", () => {
       outputPathSelector(ss({ outputPath: "C:\\foo\\bar" }));
 
-      expect(upath.normalize).toHaveBeenCalledWith("C:\\foo\\bar");
+      expect(upath.toUnix).toHaveBeenCalledWith("C:\\foo\\bar");
     });
 
     it("returns errors if outputPath is not an absolute path", () => {
@@ -445,7 +445,7 @@ describe("submission selectors", () => {
         })
       );
 
-      expect(upath.normalize).toHaveBeenCalledWith("C:\\path\\to\\out");
+      expect(upath.toUnix).toHaveBeenCalledWith("C:\\path\\to\\out");
       expect(result[0].command).not.toEqual(expect.stringMatching("C:"));
     });
 
