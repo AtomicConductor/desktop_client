@@ -51,7 +51,6 @@ const runPythonShell = async (script, options, shell = PythonShell) => {
 
   const opts = {
     mode: "text",
-    pythonOptions: ["-u"],
     scriptPath,
     pythonPath,
     ...options

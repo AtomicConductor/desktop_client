@@ -235,22 +235,18 @@ describe("submitter", () => {
       pythonShellStub = new PythonShellStub();
     });
 
-    it("succeeds with no response code", async () => {
+    it("handles a message with no response code", async () => {
       await submit(() => pythonShellStub)(dispatch, getState);
       pythonShellStub.emit("message", "no response code");
 
-      expect(dispatch).toHaveBeenCalledTimes(3);
+      expect(dispatch).toHaveBeenCalledTimes(2);
+
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: "submitter/submissionRequested",
         payload: undefined
       });
 
       expect(dispatch).toHaveBeenNthCalledWith(2, {
-        type: "submitter/submissionFinished",
-        payload: undefined
-      });
-
-      expect(dispatch).toHaveBeenNthCalledWith(3, {
         type: "log/pushEvent",
         payload: expect.objectContaining({
           text: "no response code",
@@ -271,7 +267,7 @@ describe("submitter", () => {
         type: "notification/setNotification",
         payload: {
           buttonLabel: "view",
-          message: "Successfully submitted job 'my submission' to Conductor.",
+          message: expect.stringMatching(/Success.*submit.*/),
           type: "success",
           url: `${config.dashboardUrl}/job`
         }
@@ -280,24 +276,28 @@ describe("submitter", () => {
       expect(dispatch).toHaveBeenNthCalledWith(4, {
         type: "log/pushEvent",
         payload: expect.objectContaining({
-          text: '{"response_code":201,"uri":"/jobs"}',
+          text: expect.stringMatching(/Success.*submit.*/),
           level: "info"
         })
       });
     });
 
+    it("dispatches finished action on close event", async () => {
+      await submit(() => pythonShellStub)(dispatch, getState);
+      pythonShellStub.emit("close", "process exited with error");
+
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: "submitter/submissionFinished",
+        payload: undefined
+      });
+    });
+
     it("dispatches middleware error handler when shell execution ends with error", async () => {
       const errorHandler = jest.fn();
-      class PythonShellStubWithError extends EventEmitter {
-        end(handler) {
-          handler(new Error("process exited with error"));
-        }
-      }
 
-      await submit(() => new PythonShellStubWithError(), errorHandler)(
-        dispatch,
-        getState
-      );
+      await submit(() => pythonShellStub, errorHandler)(dispatch, getState);
+      pythonShellStub.emit("error", "process exited with error");
 
       expect(errorHandler).toHaveBeenCalledWith(
         new Error("process exited with error")
