@@ -26,12 +26,11 @@ export default class AppStorage {
 
   async loadData(filename) {
     const path = join(this.dataPath, filename);
-
-    const { exists } = this.fileProvider;
-    if (!(await promisify(exists)(path))) {
+    try {
+      return await this.load(path);
+    } catch {
       return undefined;
     }
-    return await this.load(path);
   }
 
   async saveCredentials(data) {
@@ -61,13 +60,9 @@ export default class AppStorage {
   async writeClientToolsCredentials(credentials, { homedir } = os) {
     const path = join(homedir(), ".config", "conductor", "credentials");
     const directory = dirname(path);
-    const { exists, mkdir } = this.fileProvider;
+    const { mkdir } = this.fileProvider;
 
-    const credentialsDirectoryExists = await promisify(exists)(directory);
-    if (!credentialsDirectoryExists) {
-      await promisify(mkdir)(directory);
-    }
-
+    await promisify(mkdir)(directory, { recursive: true });
     await this.save(path, credentials);
   }
 }
