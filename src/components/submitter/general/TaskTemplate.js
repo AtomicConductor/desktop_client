@@ -19,10 +19,8 @@ import {
   ListItemText
 } from "@material-ui/core";
 
-import {
-  setTaskTemplate,
-  insertTaskTemplateToken
-} from "../../../_actions/submitter";
+import { insertTaskTemplateToken } from "../../../_actions/submitter/taskTemplate";
+import { setTaskTemplate } from "../../../_actions/submitter/taskTemplate";
 import clsx from "clsx";
 import { taskTemplateTokens } from "../../../_helpers/constants";
 import {

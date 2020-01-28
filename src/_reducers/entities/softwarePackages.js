@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { softwarePackagesSuccess } from "../../_actions/submitter";
+import { softwarePackagesSuccess } from "../../_actions/submitter/fetchSoftwarePackages";
 
 const initialState = {};
 

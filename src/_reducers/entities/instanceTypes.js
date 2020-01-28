@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { instanceTypesSuccess } from "../../_actions/submitter";
+import { instanceTypesSuccess } from "../../_actions/submitter/fetchInstanceTypes";
 
 const initialState = {};
 

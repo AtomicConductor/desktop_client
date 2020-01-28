@@ -1,5 +1,5 @@
 import entities from "../root";
-import { softwarePackagesSuccess } from "../../../_actions/submitter";
+import { softwarePackagesSuccess } from "../../../_actions/submitter/fetchSoftwarePackages";
 import { loadPresetsSuccess, selectPreset } from "../../../_actions/entities";
 
 describe("entities reducer", () => {

@@ -6,11 +6,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 import MoreIcon from "@material-ui/icons/MoreVert";
 
+import { applyResetSubmission } from "../../_actions/submitter";
+
 import {
   saveSubmission,
-  loadSubmission,
-  applyResetSubmission
-} from "../../_actions/submitter";
+  loadSubmission
+} from "../../_actions/submitter/submissionPersistence";
 
 const useStyles = makeStyles(theme => ({
   root: {

@@ -8,23 +8,28 @@ import {
   setScoutFrameSpec,
   setUseTiles,
   setUseScoutFrames,
-  setTaskTemplate,
   setPreemptible,
   setRetries,
-  setInstanceType,
-  setProject,
   setOutputPath,
   addAssets,
   removeAssets,
   updateSelectedSoftware,
-  saveSubmissionSuccess,
-  loadSubmissionSuccess,
   applyResetSubmission,
-  setEnvEntry,
-  setPythonLocation,
+  setEnvEntry
+} from "../_actions/submitter";
+
+import { setProject } from "../_actions/submitter/fetchProjects";
+import { setInstanceType } from "../_actions/submitter/fetchInstanceTypes";
+import {
   submissionRequested,
   submissionFinished
-} from "../_actions/submitter";
+} from "../_actions/submitter/submit";
+import {
+  saveSubmissionSuccess,
+  loadSubmissionSuccess
+} from "../_actions/submitter/submissionPersistence";
+import { setPythonLocation } from "../_actions/submitter/pythonLocation";
+import { setTaskTemplate } from "../_actions/submitter/taskTemplate";
 
 const initialState = {
   filename: "",

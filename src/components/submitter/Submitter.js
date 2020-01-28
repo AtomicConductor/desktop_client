@@ -15,17 +15,12 @@ import { appBarHeight } from "../../_helpers/constants";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import NoticeDialog from "./NoticeDialog";
 import SubmissionShield from "./SubmissionShield";
-
 import LoadSaveMenu from "./LoadSaveMenu";
 import { submissionValidSelector } from "../../selectors/submitter";
-
-import {
-  submit,
-  fetchProjects,
-  fetchInstanceTypes,
-  loadPythonLocation
-} from "../../_actions/submitter";
-
+import fetchProjects from "../../_actions/submitter/fetchProjects";
+import fetchInstanceTypes from "../../_actions/submitter/fetchInstanceTypes";
+import submit from "../../_actions/submitter/submit";
+import { loadPythonLocation } from "../../_actions/submitter/pythonLocation";
 import { loadPresets } from "../../_actions/entities";
 import { signedInSelector } from "../../selectors/account";
 

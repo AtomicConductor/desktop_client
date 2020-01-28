@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { projectsSuccess } from "../../_actions/submitter";
+import { projectsSuccess } from "../../_actions/submitter/fetchProjects";
 
 const initialState = [];
 

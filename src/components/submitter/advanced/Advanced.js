@@ -15,11 +15,11 @@ import {
   FolderRounded,
   SettingsBackupRestore
 } from "@material-ui/icons";
+import { setEnvEntry } from "../../../_actions/submitter";
 import {
-  setEnvEntry,
-  savePythonLocation,
-  resetPythonLocation
-} from "../../../_actions/submitter";
+  resetPythonLocation,
+  savePythonLocation
+} from "../../../_actions/submitter/pythonLocation";
 import {
   environmentOverrides,
   pythonLocation
@@ -106,9 +106,9 @@ const Advanced = () => {
               <p>
                 The Conductor Client Python API is used to submit jobs, and for
                 this reason, the submitter needs to know about the location of
-                Python 2.7 on your computer. The default value was
-                automatically detected and should be sufficient unless you
-                have a custom installation of Python.
+                Python 2.7 on your computer. The default value was automatically
+                detected and should be sufficient unless you have a custom
+                installation of Python.
               </p>
               <p>
                 Use the reset button below to set the Python location

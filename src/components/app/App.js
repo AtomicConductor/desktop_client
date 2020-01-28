@@ -17,7 +17,7 @@ import {
 import { useDispatch } from "react-redux";
 import { signInFromSaved } from "../../_actions/user";
 import { startDownloadQueue } from "../../_actions/files";
-import { fetchSoftwarePackages } from "../../_actions/submitter";
+import fetchSoftwarePackages from "../../_actions/submitter/fetchSoftwarePackages";
 import signInClientTools from "../../_actions/clientTools";
 import SignIn from "../account/SignIn";
 import Welcome from "../welcome";

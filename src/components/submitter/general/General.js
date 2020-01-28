@@ -39,10 +39,11 @@ import {
   setUseScoutFrames,
   setPreemptible,
   setRetries,
-  setInstanceType,
-  setProject,
   setOutputPath
 } from "../../../_actions/submitter";
+
+import { setInstanceType } from "../../../_actions/submitter/fetchInstanceTypes";
+import { setProject } from "../../../_actions/submitter/fetchProjects";
 
 import clsx from "clsx";
 const useStyles = makeStyles(theme => ({
