@@ -40,12 +40,21 @@ const useStyles = makeStyles(theme => ({
 const Uploads = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const [selectedTriState, setSelectedTriState] = useState("none");
-
   const selectableGroupRef = useRef(null);
-
   const assets = useSelector(state => assetsSelector(state));
+  const missingAssets = useSelector(
+    state => state.submitter.validationResult.missingAssets
+  );
+
+  //used for faster O(1) lookups for missing assets
+  const missingAssetsMap = missingAssets.reduce(
+    (acc, asset) => ({
+      ...acc,
+      [asset]: {}
+    }),
+    {}
+  );
 
   const handleSelectionFinish = e => {
     if (selectableGroupRef.current) {
@@ -70,7 +79,7 @@ const Uploads = () => {
       addAssets(
         // filelist is not an array, hence the [...]
         [...filelist].reduce(
-          (obj, _) => ({ ...obj, [_.path]: { size: _.size, type: _.type } }),
+          (acc, _) => ({ ...acc, [_.path]: { size: _.size, type: _.type } }),
           {}
         )
       )
@@ -110,6 +119,8 @@ const Uploads = () => {
         onRemoveEntries={handleRemoveFiles}
         selectionState={selectedTriState}
         onClickCheckbox={handleTristateSelection}
+        missingAssets={missingAssets.length > 0}
+        onRemoveMissingAssets={() => dispatch(removeAssets(missingAssets))}
       />
       {assets.length === 0 ? (
         <Box className={classes.centeredBox}>
@@ -133,7 +144,7 @@ const Uploads = () => {
                 key={i}
                 odd={i % 2 === 0}
                 path={_.path}
-                size={_.size}
+                missing={missingAssetsMap[_.path] !== undefined}
               />
             ))}
           </SelectableGroup>

@@ -5,18 +5,48 @@ import { pushEvent } from "../../_actions/log";
 import {
   submissionSelector,
   pythonLocation,
-  jobTitleSelector
+  jobTitleSelector,
+  submissionValidSelector,
+  assetsMap
 } from "../../selectors/submitter";
 import { setNotification } from "../notification";
 import DesktopClientError from "../../errors/desktopClientError";
 import config from "../../config";
+import { pathExists } from "../../_helpers/fileSystem";
 
 const submissionRequested = createAction("submitter/submissionRequested");
 const submissionFinished = createAction("submitter/submissionFinished");
+const validationRequested = createAction("submitter/validationRequested");
+const validationFinished = createAction("submitter/validationFinished");
+const clearValidationResult = createAction("submitter/clearValidationResult");
 
-export { submissionRequested, submissionFinished };
+const submitWithValidation = () => async (dispatch, getState) => {
+  dispatch(validationRequested());
+  const state = getState();
+  const { errors: validationErrors, alerts } = submissionValidSelector(state);
+  const errors = [...validationErrors];
 
-export default (
+  const missingAssets = [];
+  for (const path in assetsMap(state)) {
+    if (!(await pathExists(path))) missingAssets.push(path);
+  }
+
+  if (missingAssets.length) {
+    errors.push(
+      "Some assets no longer exist on disk, please remove them from the files tab."
+    );
+  }
+
+  dispatch(validationFinished({ errors, alerts, missingAssets }));
+
+  if (errors.length || alerts.length) {
+    return;
+  }
+
+  dispatch(submit());
+};
+
+const submit = (
   pythonShell = runPythonShell,
   errorHandler = desktopClientErrorHandler
 ) => async (dispatch, getState) => {
@@ -68,4 +98,14 @@ export default (
   pyshell.on("error", message => {
     dispatch(errorHandler(new DesktopClientError(message)));
   });
+};
+
+export {
+  submissionRequested,
+  submissionFinished,
+  submitWithValidation,
+  submit,
+  validationRequested,
+  validationFinished,
+  clearValidationResult
 };

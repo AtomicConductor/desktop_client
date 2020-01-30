@@ -407,5 +407,6 @@ export {
   submissionSelector,
   submissionPreviewSelector,
   environmentOverrides,
-  pythonLocation
+  pythonLocation,
+  assetsMap
 };

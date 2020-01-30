@@ -1,9 +1,11 @@
-import fs from "fs";
+import { statSync, access, accessSync, mkdirSync, constants } from "fs";
+import { promisify } from "util";
 import md5File from "md5-file";
+import DesktopClientError from "../errors/desktopClientError";
 
 export const exactFileExistsSync = (filePath, md5) => {
   try {
-    fs.statSync(filePath).isFile();
+    statSync(filePath).isFile();
   } catch (err) {
     return false;
   }
@@ -13,13 +15,13 @@ export const exactFileExistsSync = (filePath, md5) => {
 
 export const ensureDirectoryReady = directory => {
   try {
-    fs.accessSync(directory, fs.constants.W_OK);
+    accessSync(directory, constants.W_OK);
     return true;
   } catch (err) {
     try {
-      fs.mkdirSync(directory, { recursive: true });
+      mkdirSync(directory, { recursive: true });
       // make sure mkdir worked
-      fs.accessSync(directory, fs.constants.W_OK);
+      accessSync(directory, constants.W_OK);
       return true;
     } catch (err) {
       return false;
@@ -30,9 +32,20 @@ export const ensureDirectoryReady = directory => {
 export const directoryExistsSync = directory => {
   /** exists and is writable */
   try {
-    fs.accessSync(directory, fs.constants.W_OK);
+    accessSync(directory, constants.W_OK);
     return true;
   } catch (err) {
     return false;
+  }
+};
+
+export const pathExists = async path => {
+  try {
+    await promisify(access)(path, constants.F_OK);
+    return true;
+  } catch (e) {
+    const { code } = e;
+    if (code === "ENOENT") return false;
+    throw new DesktopClientError("File check failed.", e);
   }
 };

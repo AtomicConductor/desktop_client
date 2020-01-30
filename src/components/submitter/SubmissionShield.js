@@ -46,6 +46,7 @@ export default props => {
   } = props;
 
   const hasErrors = errors.length;
+  const hasAlerts = alerts.length;
 
   const messages = hasErrors ? errors : alerts;
 
@@ -59,6 +60,8 @@ export default props => {
   ) : (
     <WarningIcon className={classes.warning} />
   );
+
+  if (!hasAlerts && !hasErrors) return null;
 
   return (
     <Dialog open={submissionShieldOpen} onClose={handleClose}>

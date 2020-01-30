@@ -22,7 +22,10 @@ import { setProject } from "../_actions/submitter/fetchProjects";
 import { setInstanceType } from "../_actions/submitter/fetchInstanceTypes";
 import {
   submissionRequested,
-  submissionFinished
+  submissionFinished,
+  validationRequested,
+  validationFinished,
+  clearValidationResult
 } from "../_actions/submitter/submit";
 import {
   saveSubmissionSuccess,
@@ -30,12 +33,12 @@ import {
 } from "../_actions/submitter/submissionPersistence";
 import { setPythonLocation } from "../_actions/submitter/pythonLocation";
 import { setTaskTemplate } from "../_actions/submitter/taskTemplate";
-
 const initialState = {
   filename: "",
   loading: false,
   pythonLocation: "",
   submitting: false,
+  validationResult: { errors: [], alerts: [], missingAssets: [] },
   submission: {
     retries: 3,
     preemptible: true,
@@ -183,5 +186,16 @@ export default createReducer(initialState, {
 
   [submissionFinished]: (state, action) => {
     state.submitting = false;
+  },
+  [validationRequested]: state => {
+    state.submitting = true;
+  },
+  [validationFinished]: (state, { payload }) => {
+    state.submitting = false;
+    state.validationResult = payload;
+  },
+  [clearValidationResult]: state => {
+    state.validationResult.errors = [];
+    state.validationResult.alerts = [];
   }
 });

@@ -16,10 +16,13 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import NoticeDialog from "./NoticeDialog";
 import SubmissionShield from "./SubmissionShield";
 import LoadSaveMenu from "./LoadSaveMenu";
-import { submissionValidSelector } from "../../selectors/submitter";
 import fetchProjects from "../../_actions/submitter/fetchProjects";
 import fetchInstanceTypes from "../../_actions/submitter/fetchInstanceTypes";
-import submit from "../../_actions/submitter/submit";
+import {
+  submit,
+  submitWithValidation,
+  clearValidationResult
+} from "../../_actions/submitter/submit";
 import { loadPythonLocation } from "../../_actions/submitter/pythonLocation";
 import { loadPresets } from "../../_actions/entities";
 import { signedInSelector } from "../../selectors/account";
@@ -86,15 +89,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Submitter = props => {
+const labels = ["General", "Files", "Software", "Advanced", "Preview"];
+
+const Submitter = () => {
   const classes = useStyles();
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
   const signedIn = useSelector(state => signedInSelector(state));
   const submitting = useSelector(state => state.submitter.submitting);
   const filename = useSelector(state => state.submitter.filename);
-  const { errors, alerts } = useSelector(submissionValidSelector);
   const [submissionShieldOpen, setSubmissionShieldOpen] = useState(false);
-
+  const { errors, alerts } = useSelector(
+    state => state.submitter.validationResult
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -105,23 +111,17 @@ const Submitter = props => {
     dispatch(loadPresets());
   }, [signedIn, dispatch]);
 
+  useEffect(() => {
+    setSubmissionShieldOpen(errors.length > 0 || alerts.length > 0);
+  }, [errors, alerts]);
+
   if (!signedIn) {
     return <SignIn />;
   }
 
-  function handleChange(event, newTabIndex) {
+  const handleChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
-  }
-
-  function handleSubmit() {
-    if (errors.length || alerts.length) {
-      setSubmissionShieldOpen(true);
-    } else {
-      dispatch(submit());
-    }
-  }
-
-  const labels = ["General", "Files", "Software", "Advanced", "Preview"];
+  };
 
   return (
     <React.Fragment>
@@ -170,7 +170,10 @@ const Submitter = props => {
               <CircularProgress size={30} color="secondary" />
             </Box>
           ) : (
-            <Button color="secondary" onClick={handleSubmit}>
+            <Button
+              color="secondary"
+              onClick={() => dispatch(submitWithValidation())}
+            >
               Submit
             </Button>
           )}
@@ -180,10 +183,12 @@ const Submitter = props => {
           submissionShieldOpen={submissionShieldOpen}
           validationResult={{ errors, alerts }}
           handleSubmit={() => {
-            setSubmissionShieldOpen(false);
+            dispatch(clearValidationResult());
             dispatch(submit());
           }}
-          handleClose={() => setSubmissionShieldOpen(false)}
+          handleClose={() => {
+            dispatch(clearValidationResult());
+          }}
         />
       </Box>
     </React.Fragment>
