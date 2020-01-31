@@ -90,16 +90,18 @@ const Uploads = () => {
   };
 
   const handleRemoveFiles = () => {
-    if (selectableGroupRef.current) {
-      dispatch(
-        removeAssets(
-          [...selectableGroupRef.current.selectedItems].map(_ => _.props.path)
-        )
-      );
+    if (!selectableGroupRef.current) return;
+
+    if (Object.keys(missingAssetsMap).length) {
+      dispatch(removeAssets(missingAssets));
     }
-    if (selectableGroupRef.current) {
-      selectableGroupRef.current.clearSelection();
-    }
+
+    dispatch(
+      removeAssets(
+        [...selectableGroupRef.current.selectedItems].map(_ => _.props.path)
+      )
+    );
+    selectableGroupRef.current.clearSelection();
   };
 
   const handleTristateSelection = () => {
@@ -119,8 +121,6 @@ const Uploads = () => {
         onRemoveEntries={handleRemoveFiles}
         selectionState={selectedTriState}
         onClickCheckbox={handleTristateSelection}
-        missingAssets={missingAssets.length > 0}
-        onRemoveMissingAssets={() => dispatch(removeAssets(missingAssets))}
       />
       {assets.length === 0 ? (
         <Box className={classes.centeredBox}>
@@ -130,12 +130,10 @@ const Uploads = () => {
         <Box className={classes.scrollBox} id="scroll-box">
           <SelectableGroup
             ref={selectableGroupRef}
-            className="main"
             clickClassName="tick"
             scrollContainer="#scroll-box"
             enableDeselect
             tolerance={6}
-            // globalMouse={true}
             allowClickWithoutSelected={false}
             onSelectionFinish={handleSelectionFinish}
           >

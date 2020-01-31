@@ -13,7 +13,6 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Paper from "@material-ui/core/Paper";
 import clsx from "clsx";
 import Tooltip from "../../app/Tooltip";
-import { WarningRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,10 +40,6 @@ const useStyles = makeStyles(theme => ({
     borderLeft: `2px solid ${theme.palette.divider}`,
     paddingLeft: theme.spacing(2)
   },
-  dividerRight: {
-    borderRight: `2px solid ${theme.palette.divider}`,
-    paddingRight: theme.spacing(2)
-  },
   customWidth: {
     maxWidth: 800
   }
@@ -57,9 +52,7 @@ const UploadsHeader = props => {
     onBrowseEntries,
     onRemoveEntries,
     onClickCheckbox,
-    selectionState,
-    missingAssets,
-    onRemoveMissingAssets
+    selectionState
   } = props;
 
   const handleAddFiles = e => {
@@ -69,21 +62,6 @@ const UploadsHeader = props => {
   return (
     <Box className={classes.container}>
       <Paper className={classes.header}>
-        {missingAssets && (
-          <Tooltip title="Remove missing assets">
-            <IconButton
-              color="primary"
-              className={clsx(classes.icon, classes.dividerRight)}
-              aria-label="remove missing assets"
-              component="span"
-              size="small"
-              onClick={onRemoveMissingAssets}
-            >
-              <WarningRounded />
-            </IconButton>
-          </Tooltip>
-        )}
-
         <Tooltip title="Select or deselect all assets in the list.">
           <Checkbox
             color="primary"
