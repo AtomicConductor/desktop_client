@@ -2507,20 +2507,6 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-better-queue-memory@^1.0.1, better-queue-memory@^1.0.3:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/better-queue-memory/-/better-queue-memory-1.0.4.tgz#f390d6b30bb3b36aaf2ce52b37a483e8a7a81a22"
-  integrity sha512-SWg5wFIShYffEmJpI6LgbL8/3Dqhku7xI1oEiy6FroP9DbcZlG0ZDjxvPdP9t7hTGW40IpIcC6zVoGT1oxjOuA==
-
-better-queue@^3.8.10:
-  version "3.8.10"
-  resolved "https://registry.yarnpkg.com/better-queue/-/better-queue-3.8.10.tgz#1c93b9ec4cb3d1b72eb91d0efcb84fc80e8c6835"
-  integrity sha512-e3gwNZgDCnNWl0An0Tz6sUjKDV9m6aB+K9Xg//vYeo8+KiH8pWhLFxkawcXhm6FpM//GfD9IQv/kmvWCAVVpKA==
-  dependencies:
-    better-queue-memory "^1.0.1"
-    node-eta "^0.9.0"
-    uuid "^3.0.0"
-
 big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
@@ -4170,11 +4156,6 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
-
-easy-promise-queue@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/easy-promise-queue/-/easy-promise-queue-0.5.7.tgz#a23d1491a0bc1ca6919e163b5f7f9ff6aa767485"
-  integrity sha512-3VwTIcryQVDOzw7UDR9D1DA9Utb4MbJTTxaWO6rokMXjTg6ouS1b4jZI5BQOKZnpe8E6UaJy2EhdcgMv7ki8tA==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -8075,11 +8056,6 @@ node-downloader-helper@^1.0.10:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/node-downloader-helper/-/node-downloader-helper-1.0.11.tgz#fd0bdf57d16fd4837b6151ac0107f0bee49413d6"
   integrity sha512-43vhEpmyTdU2OyVUHlOMqKUYbA8ryzpDdlqg4l2/AHhrl+EgRdEv+fAcH4Fk+KfEHPyx+uYK0OH9nJMC40pSDQ==
-
-node-eta@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/node-eta/-/node-eta-0.9.0.tgz#9fb0b099bcd2a021940e603c64254dc003d9a7a8"
-  integrity sha1-n7CwmbzSoCGUDmA8ZCVNwAPZp6g=
 
 node-fetch@^2.3.0:
   version "2.6.0"
@@ -11992,7 +11968,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.0.0, uuid@^3.0.1, uuid@^3.3.2:
+uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==

@@ -14,7 +14,7 @@ import config from "../config";
 import { tokenSelector } from "../selectors/account";
 import axios from "../_helpers/axios";
 import { pushEvent } from "./log";
-import PromiseQueue from "easy-promise-queue";
+import PromiseQueue from "../_helpers/promiseQueue";
 
 export const requestDownloadData = createAction(
   "downloader/requestDownloadData"
