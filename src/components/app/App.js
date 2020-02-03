@@ -16,7 +16,6 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInFromSaved } from "../../_actions/user";
-import { startDownloadQueue } from "../../_actions/files";
 import fetchSoftwarePackages from "../../_actions/submitter/fetchSoftwarePackages";
 import signInClientTools from "../../_actions/clientTools";
 import SignIn from "../account/SignIn";
@@ -36,7 +35,6 @@ const App = () => {
       await dispatch(signInClientTools());
     };
     signleSignIn();
-    dispatch(startDownloadQueue());
     dispatch(fetchSoftwarePackages());
   }, []);
 
