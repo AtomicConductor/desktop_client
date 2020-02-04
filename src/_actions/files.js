@@ -5,9 +5,9 @@ import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
 import {
-  exactFileExistsSync,
+  exactFileExists,
   ensureDirectoryReady,
-  directoryExistsSync
+  pathExists
 } from "../_helpers/fileSystem";
 import { DownloaderHelper } from "node-downloader-helper";
 import config from "../config";
@@ -27,15 +27,16 @@ export const receiveExistingFilesInfo = createAction(
 );
 export const setFileExists = createAction("downloader/setFileExists");
 //TODO: unit tests
-//TODO: possibly convert synch ops into async
-
 let downloadQueue = new PromiseQueue({ concurrency: 16 });
 
 const downloadFileTask = (file, dispatch) => async () => {
   const { jobLabel, relativePath, url, fullPath, md5 } = file;
   const directory = path.dirname(fullPath);
 
-  if (!ensureDirectoryReady(directory) || exactFileExistsSync(fullPath, md5))
+  if (
+    !(await ensureDirectoryReady(directory)) ||
+    (await exactFileExists(fullPath, md5))
+  )
     return;
 
   let startTime = new Date();
@@ -68,7 +69,7 @@ export const addToQueue = jobLabel => async (dispatch, getState) => {
   const job = getState().entities.jobs[jobLabel];
 
   const { outputDirectory, files } = job;
-  if (!ensureDirectoryReady(outputDirectory)) {
+  if (!(await ensureDirectoryReady(outputDirectory))) {
     throw new DesktopClientError(
       `Can't create or access directory: ${outputDirectory}`
     );
@@ -172,14 +173,15 @@ export const updateExistingFilesInfo = () => async (dispatch, getState) => {
 
   const { outputDirectory, files } = job;
 
-  if (directoryExistsSync(outputDirectory) && files) {
-    Object.values(files).forEach(f => {
+  if (await pathExists(outputDirectory)) {
+    for (const file in files) {
+      const f = files[file];
       const fullPath = path.join(outputDirectory, f.relativePath);
       const md5 = f.md5;
-      if (exactFileExistsSync(fullPath, md5)) {
+      if (await exactFileExists(fullPath, md5)) {
         existing.push(f.relativePath);
       }
-    });
+    }
   }
   dispatch(receiveExistingFilesInfo({ jobLabel, existing }));
 };

@@ -7,7 +7,7 @@ import desktopClientErrorHandler from "./middleware/desktopClientErrorHandler";
 import LogRocket from "logrocket";
 import { appVersion } from "./_helpers/constants";
 import { sanitizers } from "./middleware/logRocket";
-console.log("process.versions['node-webkit'] ", process.versions['node-webkit']);
+
 Sentry.init({
   dsn: config.sentryDns,
   environment: process.env.NODE_ENV,
