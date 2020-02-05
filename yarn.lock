@@ -8052,10 +8052,10 @@ nock@^11.3.5:
     mkdirp "^0.5.0"
     propagate "^2.0.0"
 
-node-downloader-helper@^1.0.10:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/node-downloader-helper/-/node-downloader-helper-1.0.11.tgz#fd0bdf57d16fd4837b6151ac0107f0bee49413d6"
-  integrity sha512-43vhEpmyTdU2OyVUHlOMqKUYbA8ryzpDdlqg4l2/AHhrl+EgRdEv+fAcH4Fk+KfEHPyx+uYK0OH9nJMC40pSDQ==
+node-downloader-helper@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/node-downloader-helper/-/node-downloader-helper-1.0.12.tgz#9b11d5fbde2923d17a662ddc819e36ae262edf71"
+  integrity sha512-2t3h3g3xK5kxhRbwD+0WgKotHyoVEQlE+V93rn97tqzUtbw8cFpHn0uhsc2LeKkDlsQI1iy5XZoS3vACzBdW8A==
 
 node-fetch@^2.3.0:
   version "2.6.0"

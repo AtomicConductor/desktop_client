@@ -1,7 +1,6 @@
 import DesktopClientError from "../errors/desktopClientError";
 import DesktopClientErrorHandler from "../middleware/desktopClientErrorHandler";
 import { createAction } from "@reduxjs/toolkit";
-import { setNotification } from "./notification";
 import { createRequestOptions } from "../_helpers/network";
 import path from "upath";
 import {
@@ -13,7 +12,6 @@ import { DownloaderHelper } from "node-downloader-helper";
 import config from "../config";
 import { tokenSelector } from "../selectors/account";
 import axios from "../_helpers/axios";
-import { pushEvent } from "./log";
 import PromiseQueue from "../_helpers/promiseQueue";
 
 export const requestDownloadData = createAction(
@@ -26,11 +24,13 @@ export const receiveExistingFilesInfo = createAction(
   "downloader/receiveExistingFilesInfo"
 );
 export const setFileExists = createAction("downloader/setFileExists");
-//TODO: unit tests
+
 let downloadQueue = new PromiseQueue({ concurrency: 16 });
 
+//TODO: unit tests
 const downloadFileTask = (file, dispatch) => async () => {
-  const { jobLabel, relativePath, url, fullPath, md5 } = file;
+  const { jobLabel, relativePath, url, outputDirectory, md5 } = file;
+  const fullPath = path.join(outputDirectory, relativePath);
   const directory = path.dirname(fullPath);
 
   if (
@@ -42,7 +42,8 @@ const downloadFileTask = (file, dispatch) => async () => {
   let startTime = new Date();
   await new DownloaderHelper(url, directory, {
     override: true,
-    fileName: relativePath
+    fileName: relativePath,
+    retry: { maxRetries: 3, delay: 1000 }
   })
     .on("progress", stats => {
       const percentage = parseInt(stats.progress, 10);
@@ -55,7 +56,6 @@ const downloadFileTask = (file, dispatch) => async () => {
       }
     })
     .on("end", () => {
-      dispatch(pushEvent(`downloaded ${relativePath}`, "info"));
       dispatch(setFileExists({ jobLabel, relativePath, percentage: 100 }));
     })
     .on("error", e => {
@@ -75,12 +75,8 @@ export const addToQueue = jobLabel => async (dispatch, getState) => {
     );
   }
 
-  // TODO: should be part of normalizing response (i.e. map and sort)
+  // TODO: Sorting should be part of normalizing response
   Object.values(files)
-    .map(f => ({
-      ...f,
-      fullPath: path.join(outputDirectory, f.relativePath)
-    }))
     .filter(f => !(f.exists && f.exists === 100))
     .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
     .forEach(file => {
@@ -88,31 +84,14 @@ export const addToQueue = jobLabel => async (dispatch, getState) => {
         downloadFileTask(
           {
             ...file,
-            jobLabel
+            jobLabel,
+            outputDirectory
           },
           dispatch
         )
       );
     });
 };
-
-/**
- * Fetches a list of available download files for a job, and then updates the
- * list of files in the store.
- *
-
- * Also important to note that updateExistingFiles() determines the expanded
- * (visible) job by looking up the expandedJob entry in the store. This may not
- * necessarily be the same job we just fetched download information for. This is
- * a good thing, because if the user closed the panel while fetching, we don't
- * need to update its UI yet anyway. Any newly expanded job will have it's files
- * checked for existence instead.
- *
- * @export updateDownloadFiles
- * @param {string} jobLabel The job whose data to work on.
- * @returns Function that dispatches actions to start the fetch, fetch the data,
- * and update the entities in the store.
- */
 
 //TODO: unit test
 export const updateDownloadFiles = jobLabel => async (dispatch, getState) => {
@@ -126,15 +105,13 @@ export const updateDownloadFiles = jobLabel => async (dispatch, getState) => {
     await dispatch(updateExistingFilesInfo());
   } catch (error) {
     dispatch(
-      setNotification({
-        type: "info",
-        message: "Can't fetch download data for this job."
-      })
-    );
-    dispatch(
       receiveDownloadData({
         jobLabel
       })
+    );
+    throw new DesktopClientError(
+      "Can't fetch download data for this job.",
+      error
     );
   }
 };
