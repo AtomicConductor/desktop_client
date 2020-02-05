@@ -27,8 +27,7 @@ export const setFileExists = createAction("downloader/setFileExists");
 
 let downloadQueue = new PromiseQueue({ concurrency: 16 });
 
-//TODO: unit tests
-const downloadFileTask = (file, dispatch) => async () => {
+export const downloadFileTask = (file, dispatch) => async () => {
   const { jobLabel, relativePath, url, outputDirectory, md5 } = file;
   const fullPath = path.join(outputDirectory, relativePath);
   const directory = path.dirname(fullPath);
@@ -39,15 +38,15 @@ const downloadFileTask = (file, dispatch) => async () => {
   )
     return;
 
-  let startTime = new Date();
+  let startTime = Date.now();
   await new DownloaderHelper(url, directory, {
     override: true,
     fileName: relativePath,
     retry: { maxRetries: 3, delay: 1000 }
   })
-    .on("progress", stats => {
-      const percentage = parseInt(stats.progress, 10);
-      const currentTime = new Date();
+    .on("progress", ({ progress }) => {
+      const percentage = parseInt(progress, 10);
+      const currentTime = Date.now();
       const elaspsedTime = currentTime - startTime;
       //dispatch only once per second
       if (elaspsedTime > 1000) {
