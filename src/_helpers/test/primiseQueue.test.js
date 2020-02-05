@@ -1,4 +1,3 @@
-import assert from "assert";
 import PromiseQueue from "../promiseQueue";
 
 const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout));
@@ -9,15 +8,15 @@ describe("Promise Queue", () => {
 
     const task = async () => {
       await sleep(50);
-      assert.strictEqual(promiseQueue.runningTasksCount, 1);
+      expect(promiseQueue.runningTasksCount).toBe(1);
     };
 
     promiseQueue.add(task);
     promiseQueue.add(task);
     promiseQueue.add(task);
 
-    assert.strictEqual(promiseQueue.waitingCount, 2);
-    assert.strictEqual(promiseQueue.runningTasksCount, 1);
+    expect(promiseQueue.waitingCount).toBe(2);
+    expect(promiseQueue.runningTasksCount).toBe(1);
   });
 
   it("executes n promises at a time when concurrency is set to n", async () => {
@@ -25,7 +24,7 @@ describe("Promise Queue", () => {
 
     const task = async () => {
       await sleep(50);
-      assert.strictEqual(promiseQueue.runningTasksCount, 2);
+      expect(promiseQueue.runningTasksCount).toBe(2);
     };
 
     promiseQueue.add(task);
@@ -34,25 +33,25 @@ describe("Promise Queue", () => {
     promiseQueue.add(task);
     promiseQueue.add(async () => {
       await sleep(50);
-      assert.ok([1, 2].includes(promiseQueue.runningTasksCount), 2);
+      expect([1, 2]).toContain(promiseQueue.runningTasksCount);
     });
 
-    assert.strictEqual(promiseQueue.runningTasksCount, 2);
-    assert.strictEqual(promiseQueue.waitingCount, 3);
+    expect(promiseQueue.runningTasksCount).toBe(2);
+    expect(promiseQueue.waitingCount).toBe(3);
   });
 
   it("add calls are chainable", async () => {
     const q = new PromiseQueue({ concurrency: 1 });
 
     const task = async () => {
-      assert.strictEqual(q.runningTasksCount, 1);
+      expect(q.runningTasksCount).toBe(1);
       await sleep(50);
-      assert.strictEqual(q.waitingCount, 1);
-      assert.strictEqual(q.runningTasksCount, 1);
+      expect(q.waitingCount).toBe(1);
+      expect(q.runningTasksCount).toBe(1);
     };
 
     const qInstance = q.add(task).add(task);
 
-    assert.ok(qInstance instanceof PromiseQueue);
+    expect(qInstance).toBeInstanceOf(PromiseQueue);
   });
 });
