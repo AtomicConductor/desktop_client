@@ -21,13 +21,13 @@ if (process.env.NODE_ENV === "production") {
       isEnabled: false
     }
   });
-}
 
-LogRocket.getSessionURL(sessionURL => {
-  Sentry.configureScope(scope => {
-    scope.setExtra("sessionURL", sessionURL);
+  LogRocket.getSessionURL(sessionURL => {
+    Sentry.configureScope(scope => {
+      scope.setExtra("sessionURL", sessionURL);
+    });
   });
-});
+}
 
 const store = configureStore({
   reducer: ctReducer,

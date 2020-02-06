@@ -4,6 +4,7 @@ import DesktopClientError from "../../errors/desktopClientError";
 import UnauthorizedError from "../../errors/unauthorizedError";
 import UnhandledApplicationError from "../../errors/unhandledApplicationError";
 import AppStorage from "../../_helpers/storage";
+import { appVersion } from "../../_helpers/constants";
 jest.mock("@sentry/browser");
 jest.mock("../../_helpers/storage");
 
@@ -85,7 +86,7 @@ describe("desktopClientErrorHandler", () => {
     });
 
     it("logs to sentry only on production mode", () => {
-      const scope = { setUser: jest.fn() };
+      const scope = { setUser: jest.fn(), setExtra: jest.fn() };
       Sentry.withScope.mockImplementation(_ => _(scope));
       getState.mockReturnValue({
         user: { accounts: [{ selected: true, email: "user@email.com" }] }
@@ -100,7 +101,7 @@ describe("desktopClientErrorHandler", () => {
       expect(scope.setUser).toHaveBeenCalledWith({
         email: "user@email.com"
       });
-
+      expect(scope.setExtra).toHaveBeenCalledWith("app version", appVersion);
       expect(Sentry.captureException).toHaveBeenCalledWith(
         new Error("inner error")
       );

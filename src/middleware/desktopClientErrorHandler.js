@@ -6,6 +6,7 @@ import { setNotification } from "../_actions/notification";
 import UnauthorizedError from "../errors/unauthorizedError";
 import { signOut } from "../_actions/user";
 import { pushEvent } from "../_actions/log";
+import { appVersion } from "../_helpers/constants";
 
 const shouldCallSentry = () => process.env.NODE_ENV === "production";
 const shouldLogToConsole = () => process.env.NODE_ENV === "development";
@@ -37,6 +38,7 @@ export default e => (dispatch, getState) => {
         if (signedInSelector(state)) {
           scope.setUser(currentAccountSelector(state));
         }
+        scope.setExtra("app version", appVersion);
         Sentry.captureException(inner || error);
       });
     } catch (e) {
