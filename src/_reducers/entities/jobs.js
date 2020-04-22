@@ -3,14 +3,14 @@ import { createReducer } from "@reduxjs/toolkit";
 import {
   receiveJobs,
   setOutputPathValue,
-  resetOutputPathValue,
+  resetOutputPathValue
 } from "../../_actions/jobs";
 
 import {
   receiveDownloadData,
   receiveExistingFilesInfo,
   setFileExists,
-  requestDownloadData,
+  requestDownloadData
 } from "../../_actions/files";
 
 import os from "os";
@@ -18,7 +18,7 @@ import os from "os";
 export const LOADING_KEYS = {
   NONE: 0,
   DOWNLOAD_DETAILS: 1,
-  EXISTING_FILES: 2,
+  EXISTING_FILES: 2
 };
 
 const PLATFORM = os.platform();
@@ -65,7 +65,7 @@ const jobs = createReducer(initialState, {
         outputDirectory:
           (state[jobLabel] && state[jobLabel].outputDirectory) ||
           outputDirectory,
-        owner: job.owner || job.user || "anon",
+        owner: job.owner || job.user || "anon"
       };
 
       state[jobLabel] = jobSummary;
@@ -80,7 +80,7 @@ const jobs = createReducer(initialState, {
       Object.assign(state[jobLabel], {
         files,
         tasks,
-        loadingKey: LOADING_KEYS.NONE,
+        loadingKey: LOADING_KEYS.NONE
       });
     }
   },
@@ -111,9 +111,14 @@ const jobs = createReducer(initialState, {
   },
 
   [setFileExists]: (state, action) => {
-    const { jobLabel, relativePath, percentage } = action.payload;
+    const { jobLabel, relativePath, percentage, downloadId } = action.payload;
+
     if (jobLabel in state && relativePath in state[jobLabel].files) {
       state[jobLabel].files[relativePath].exists = percentage;
+    }
+    if (downloadId !== undefined) {
+      /** downloadId is provided only when a file successfully completes */
+      state[jobLabel].tasks[downloadId].downloaded += 1;
     }
   },
 
@@ -134,7 +139,7 @@ const jobs = createReducer(initialState, {
     if (jobLabel in state) {
       state[jobLabel].outputDirectory = state[jobLabel].originalOutputDirectory;
     }
-  },
+  }
 });
 
 export default jobs;

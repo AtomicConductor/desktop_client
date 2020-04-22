@@ -38,6 +38,10 @@ export const receiveExistingFilesInfo = createAction(
 
 export const setFileExists = createAction("downloader/setFileExists");
 
+// export const incrementTaskDownloads = createAction(
+//   "downloader/incrementTaskDownloads"
+// );
+
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
 
@@ -63,52 +67,24 @@ const rename = file => {
   fs.renameSync(existingPath, file.fullPath);
 };
 
-async function updateServerStatus(file) {}
-/**
- * 
- * '/downloads/status'
- * 
- *  endpoint_downloads_next = '/downloads/next'
-    endpoint_downloads_job = '/downloads/%s'
-    endpoint_downloads_status = '/downloads/status'
+export function reportDownloadedState(jobLabel, downloadId) {
+  return async function(dispatch, getState) {
+    const state = getState();
+    const task = state.entities.jobs[jobLabel].tasks[downloadId];
+    if (task.downloaded === task.files) {
+      const options = createRequestOptions(tokenSelector(state));
 
-
- * 
- * 
- * 
- * 
- * 
-#     @dec_random_exception(percentage_chance=0.05)
-    def report_download_status(self, task_download_state):
-        download_id = task_download_state.task_download.get("download_id")
-        if not download_id:
-            return None, None
-
-
-            {'status': 'downloaded', 'bytes_to_download': 6029293, 'download_id': 6229233560977408, 'bytes_downloaded': 6029293}
-
-        data = {'download_id': download_id,
-                'status': task_download_state.get_entity_status(),
-                'bytes_downloaded': task_download_state.get_bytes_downloaded(),
-                'bytes_to_download': task_download_state.task_download.get('size') or 0}
-
-#         logger.debug("data: %s", data)
-#         if data["status"] == "downloaded":
-#             print "********DOWNLOADED: %s ********************" % download_id
-        return self.api_client.make_request(self.endpoint_downloads_status,
-                                            data=json.dumps(data), use_api_key=True)
-
- */
-
-/**
- * Determine if this file is to be downloded. This function is given as a filter
- * while adding files to the queue and is responsible for only adding files that
- * should be downloaded.
- *
- * If the file already exists, we don't want to add it. And if we can't prepare
- * a directory, then we dont want to add it either.
- 
- */
+      const url = `${config.projectUrl}/downloads/status`;
+      const data = {
+        download_id: downloadId,
+        status: "downloaded",
+        bytes_downloaded: 0,
+        bytes_to_download: 0
+      };
+      axios.post(url, data, options);
+    }
+  };
+}
 
 const canAndShouldDownload = (file, callback) => {
   if (exactFileExistsSync(file.fullPath, file.md5)) {
@@ -142,7 +118,7 @@ const canAndShouldDownload = (file, callback) => {
  *    until it has failed (maxRetries+1) times.
  * */
 const queueOptions = {
-  concurrent: 16,
+  concurrent: 4,
   setImmediate: fn => {
     setTimeout(fn, 0);
   },
@@ -180,6 +156,7 @@ export const startDownloadQueue = () => {
       trigger the event.
       */
       dh.on("progress", stats => {
+        // console.log(`progress event: ${stats.progress}`);
         const percentage = parseInt(stats.progress, 10);
         dispatch(setFileExists({ jobLabel, relativePath, percentage }));
       });
@@ -242,7 +219,7 @@ export function addToQueue(jobLabel) {
       .filter(f => !(f.exists && f.exists === 100))
       .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
       .forEach((file, i) => {
-        const { relativePath } = file;
+        const { relativePath, downloadId } = file;
 
         /*
           The object we add to the download queue needs to contain the fullPath
@@ -259,8 +236,14 @@ export function addToQueue(jobLabel) {
         TheDownloadQueue.push(fileDownload, (err, result) => {})
           .on("finish", function(result) {
             dispatch(
-              setFileExists({ jobLabel, relativePath, percentage: 100 })
+              setFileExists({
+                jobLabel,
+                relativePath,
+                percentage: 100,
+                downloadId
+              })
             );
+            dispatch(reportDownloadedState(jobLabel, downloadId));
           })
           .on("failed", function(err) {
             dispatch(setFileExists({ jobLabel, relativePath, percentage: -1 }));
