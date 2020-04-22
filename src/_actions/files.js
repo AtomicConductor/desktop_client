@@ -133,7 +133,7 @@ const canAndShouldDownload = (file, callback) => {
  *    until it has failed (maxRetries+1) times.
  * */
 const queueOptions = {
-  concurrent: 4,
+  concurrent: 8,
   setImmediate: fn => {
     setTimeout(fn, 0);
   },
