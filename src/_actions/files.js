@@ -63,6 +63,11 @@ const rename = file => {
   fs.renameSync(existingPath, file.fullPath);
 };
 
+/**
+ * Set the downloaded state of the task entity on the web app.
+ * @param {string} jobLabel
+ * @param {string} downloadId
+ */
 export function reportDownloadedState(jobLabel, downloadId) {
   return async function(dispatch, getState) {
     const state = getState();
@@ -81,6 +86,20 @@ export function reportDownloadedState(jobLabel, downloadId) {
     }
   };
 }
+
+/**
+ * Determine if this file is to be downloded. This function is given as a filter
+ * while adding files to the queue and is responsible for only adding files that
+ * should be downloaded.
+ *
+ * If the file already exists, we don't want to add it. And if we can't prepare
+ * a directory, then we dont want to add it either.
+ *
+ * @param {*} file The object representing a file that may be added to the
+ * queue.
+ * @param {*} callback A callback to run with an error message or the file.
+ * @returns The result of the callback.
+ */
 
 const canAndShouldDownload = (file, callback) => {
   if (exactFileExistsSync(file.fullPath, file.md5)) {
