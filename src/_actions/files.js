@@ -74,7 +74,6 @@ export function reportDownloadedState(jobLabel, downloadId) {
     const task = state.entities.jobs[jobLabel].tasks[downloadId];
     if (task.downloaded === task.files) {
       const options = createRequestOptions(tokenSelector(state));
-
       const url = `${config.projectUrl}/downloads/status`;
       const data = {
         download_id: downloadId,
