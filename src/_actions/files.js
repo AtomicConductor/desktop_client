@@ -38,10 +38,6 @@ export const receiveExistingFilesInfo = createAction(
 
 export const setFileExists = createAction("downloader/setFileExists");
 
-// export const incrementTaskDownloads = createAction(
-//   "downloader/incrementTaskDownloads"
-// );
-
 const Queue = require("better-queue");
 const MemoryStore = require("better-queue-memory");
 
