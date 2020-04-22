@@ -3,14 +3,14 @@ import { createReducer } from "@reduxjs/toolkit";
 import {
   receiveJobs,
   setOutputPathValue,
-  resetOutputPathValue
+  resetOutputPathValue,
 } from "../../_actions/jobs";
 
 import {
   receiveDownloadData,
   receiveExistingFilesInfo,
   setFileExists,
-  requestDownloadData
+  requestDownloadData,
 } from "../../_actions/files";
 
 import os from "os";
@@ -18,7 +18,7 @@ import os from "os";
 export const LOADING_KEYS = {
   NONE: 0,
   DOWNLOAD_DETAILS: 1,
-  EXISTING_FILES: 2
+  EXISTING_FILES: 2,
 };
 
 const PLATFORM = os.platform();
@@ -65,7 +65,7 @@ const jobs = createReducer(initialState, {
         outputDirectory:
           (state[jobLabel] && state[jobLabel].outputDirectory) ||
           outputDirectory,
-        owner: job.owner || job.user || "anon"
+        owner: job.owner || job.user || "anon",
       };
 
       state[jobLabel] = jobSummary;
@@ -73,12 +73,14 @@ const jobs = createReducer(initialState, {
   },
 
   [receiveDownloadData]: (state, action) => {
-    const { files, jobLabel } = action.payload;
+    const { downloadData, jobLabel } = action.payload;
 
     if (jobLabel in state) {
+      const { files, tasks } = downloadData;
       Object.assign(state[jobLabel], {
         files,
-        loadingKey: LOADING_KEYS.NONE
+        tasks,
+        loadingKey: LOADING_KEYS.NONE,
       });
     }
   },
@@ -132,7 +134,7 @@ const jobs = createReducer(initialState, {
     if (jobLabel in state) {
       state[jobLabel].outputDirectory = state[jobLabel].originalOutputDirectory;
     }
-  }
+  },
 });
 
 export default jobs;

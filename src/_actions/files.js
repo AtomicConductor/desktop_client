@@ -63,6 +63,43 @@ const rename = file => {
   fs.renameSync(existingPath, file.fullPath);
 };
 
+async function updateServerStatus(file) {}
+/**
+ * 
+ * '/downloads/status'
+ * 
+ *  endpoint_downloads_next = '/downloads/next'
+    endpoint_downloads_job = '/downloads/%s'
+    endpoint_downloads_status = '/downloads/status'
+
+
+ * 
+ * 
+ * 
+ * 
+ * 
+#     @dec_random_exception(percentage_chance=0.05)
+    def report_download_status(self, task_download_state):
+        download_id = task_download_state.task_download.get("download_id")
+        if not download_id:
+            return None, None
+
+
+            {'status': 'downloaded', 'bytes_to_download': 6029293, 'download_id': 6229233560977408, 'bytes_downloaded': 6029293}
+
+        data = {'download_id': download_id,
+                'status': task_download_state.get_entity_status(),
+                'bytes_downloaded': task_download_state.get_bytes_downloaded(),
+                'bytes_to_download': task_download_state.task_download.get('size') or 0}
+
+#         logger.debug("data: %s", data)
+#         if data["status"] == "downloaded":
+#             print "********DOWNLOADED: %s ********************" % download_id
+        return self.api_client.make_request(self.endpoint_downloads_status,
+                                            data=json.dumps(data), use_api_key=True)
+
+ */
+
 /**
  * Determine if this file is to be downloded. This function is given as a filter
  * while adding files to the queue and is responsible for only adding files that
@@ -70,11 +107,9 @@ const rename = file => {
  *
  * If the file already exists, we don't want to add it. And if we can't prepare
  * a directory, then we dont want to add it either.
- *
- * @param {*} file The object representing a file that may be added to the queue.
- * @param {*} callback A callback to run with an error message or the file.
- * @returns The result of the callback.
+ 
  */
+
 const canAndShouldDownload = (file, callback) => {
   if (exactFileExistsSync(file.fullPath, file.md5)) {
     return callback("file already exists");
@@ -263,9 +298,9 @@ export function updateDownloadFiles(jobLabel) {
     try {
       dispatch(requestDownloadData(jobLabel));
 
-      const files = await fetchDownloadData(jobLabel, getState());
+      const downloadData = await fetchDownloadData(jobLabel, getState());
 
-      dispatch(receiveDownloadData({ files, jobLabel }));
+      dispatch(receiveDownloadData({ downloadData, jobLabel }));
 
       //TODO: use await instead of setTimeout
       setTimeout(function() {
@@ -302,12 +337,16 @@ async function fetchDownloadData(jobLabel, state) {
   let response = await axios.get(url, options);
   const { data } = response;
   const downloads = data.downloads || [];
-  const files = {};
+  const result = { tasks: {}, files: {} };
   //TODO: mapping logic into a normalizer
+
   downloads.forEach(task => {
+    const downloadId = task.download_id;
+    result.tasks[downloadId] = { files: task.files.length, downloaded: 0 };
     return task.files.forEach(file => {
       const rp = file.relative_path;
-      files[rp] = {
+      result.files[rp] = {
+        downloadId: downloadId,
         relativePath: rp,
         md5: file.md5,
         url: file.url,
@@ -315,7 +354,7 @@ async function fetchDownloadData(jobLabel, state) {
       };
     });
   });
-  return files;
+  return result;
 }
 
 /**
