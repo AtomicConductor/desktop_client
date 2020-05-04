@@ -11,6 +11,7 @@ import {
   jobTitleSelector,
   outputPathSelector,
   submissionValidSelector,
+  submissionSelector,
   submissionPreviewSelector
 } from "../submitter";
 
@@ -774,6 +775,73 @@ describe("submission selectors", () => {
       const submission = submissionPreviewSelector(state);
 
       expect(submission.upload_paths).toHaveLength(201);
+    });
+  });
+
+  describe("submissionSelector", () => {
+    let submission;
+    beforeEach(() => {
+      submission = submissionSelector(ss());
+    });
+
+    it("has upload_paths property", () => {
+      expect(submission).toHaveProperty("upload_paths");
+    });
+
+    it("has job_title property", () => {
+      expect(submission).toHaveProperty("job_title");
+    });
+
+    it("has project property", () => {
+      expect(submission).toHaveProperty("project");
+    });
+
+    it("has instance_type property", () => {
+      expect(submission).toHaveProperty("instance_type");
+    });
+
+    it("has software_package_ids property", () => {
+      expect(submission).toHaveProperty("software_package_ids");
+    });
+
+    it("has upload_only property", () => {
+      expect(submission).toHaveProperty("upload_only");
+    });
+
+    it("has force property", () => {
+      expect(submission).toHaveProperty("force");
+    });
+
+    it("has local_upload property", () => {
+      expect(submission).toHaveProperty("local_upload");
+    });
+
+    it("has preemptible property", () => {
+      expect(submission).toHaveProperty("preemptible");
+    });
+
+    it("has autoretry_policy property", () => {
+      expect(submission).toHaveProperty("autoretry_policy");
+    });
+
+    it("has output_path property", () => {
+      expect(submission).toHaveProperty("output_path");
+    });
+
+    it("has environment property", () => {
+      expect(submission).toHaveProperty("environment");
+    });
+
+    it("has upload_paths property", () => {
+      expect(submission).toHaveProperty("upload_paths");
+    });
+
+    it("has scout_frames property", () => {
+      expect(submission).toHaveProperty("scout_frames");
+    });
+
+    it("has tasks_data property", () => {
+      expect(submission).toHaveProperty("tasks_data");
     });
   });
 });
