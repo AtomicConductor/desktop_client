@@ -58,8 +58,10 @@ describe("pythonLocation", () => {
       await expect(
         savePythonLocation("/python/path", pythonPathValidator)(null)
       ).rejects.toThrow("Invalid python 2.7 location");
-
-      expect(pythonPathValidator).toHaveBeenCalledWith("/python/path");
+      expect(pythonPathValidator).toHaveBeenCalledWith(
+        "/python/path",
+        expect.anything()
+      );
     });
   });
 

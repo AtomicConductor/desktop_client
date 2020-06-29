@@ -25,14 +25,18 @@ const resolvePythonLocation = async (
   return await tryExecute(executor, "which python2.7");
 };
 
-const isPythonPathValid = async (pythonPath, shell = PythonShell) => {
-  try {
-    let result = await shell.getVersion(pythonPath);
-    const { stdout, stderr } = result;
-    return (stdout || stderr).includes("2.7");
-  } catch {
-    return false;
+const isPythonPathValid = async (pythonPath, executor = exec) => {
+  if (path.basename(pythonPath).includes("python")) {
+    const version = await tryExecute(
+      executor,
+      `"${pythonPath}" -c "import platform; print(platform.python_version())"`
+    );
+
+    if (version && version.includes("2.7")) {
+      return true;
+    }
   }
+  return false;
 };
 
 const runPythonShell = async (script, options, shell = PythonShell) => {
