@@ -29,48 +29,36 @@ describe("python helper", () => {
   });
 
   describe("isPythonPathValid", () => {
-    let PythonShell;
-    beforeEach(() => {
-      PythonShell = jest.fn().mockImplementation(() => {
-        return {
-          childProcess: { pid: 1 }
-        };
-      });
+    let exec = jest.fn();
 
-      PythonShell.getVersion = jest.fn(() => ({
-        stdout: "Python 2.7"
-      }));
+    it("returns false when python not in basename", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "3.7.5" }));
+      const valid = await isPythonPathValid("/some/location/foo.bar", exec);
+      expect(valid).toBe(false);
     });
 
-    it("returns false when getVersion() throws an error", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => {
+    it("returns false when exec throws an error", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce(() => {
         throw new Error();
       });
-      const valid = await isPythonPathValid("/some/location", PythonShell);
+      const valid = await isPythonPathValid("/some/location/python.exe", exec);
       expect(valid).toBe(false);
     });
 
-    it("returns false when getVersion() returns wrong version", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => ({
-        stdout: "Python 3.7.5"
-      }));
-      const valid = await isPythonPathValid("/some/location", PythonShell);
+    it("returns false when exec returns wrong version", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "3.7.5" }));
+      const valid = await isPythonPathValid("/some/location/python.exe", exec);
       expect(valid).toBe(false);
     });
 
-    it("returns true when getVersion() returns 2.7.?", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => ({
-        stdout: "Python 2.7.5"
-      }));
-      const valid = await isPythonPathValid("/some/location", PythonShell);
-      expect(valid).toBe(true);
-    });
+    it("returns true when exec returns 2.7.?", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "2.7.5" }));
+      const valid = await isPythonPathValid("/some/location/python.exe", exec);
 
-    it("returns true when getVersion() returns result in stderr", async () => {
-      PythonShell.getVersion.mockImplementationOnce(() => ({
-        stderr: "Python 2.7"
-      }));
-      const valid = await isPythonPathValid("/some/location", PythonShell);
       expect(valid).toBe(true);
     });
   });
