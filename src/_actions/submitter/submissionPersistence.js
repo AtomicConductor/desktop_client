@@ -1,9 +1,12 @@
 import { createAction } from "@reduxjs/toolkit";
 import { setNotification } from "../notification";
 import AppStorage from "../../_helpers/storage";
-import { instanceTypesMapSelector } from "../../selectors/entities";
+import {
+  instanceTypesMapSelector,
+  instanceTypesSelector
+} from "../../selectors/entities";
 import { setInstanceType } from "../submitter/fetchInstanceTypes";
-
+import { pushEvent } from "../../_actions/log";
 const saveSubmissionSuccess = createAction("submitter/saveSubmissionSuccess");
 const loadSubmissionSuccess = createAction("submitter/loadSubmissionSuccess");
 const updateSelectedSoftware = createAction("submitter/updateSelectedSoftware");
@@ -41,11 +44,19 @@ const syncStateWithLoadedSubmission = submission => async (
   getState
 ) => {
   const state = getState();
-  dispatch(
-    setInstanceType(
-      instanceTypesMapSelector(state)[submission.instanceType.name]
-    )
-  );
+  const instanceTypesMap = instanceTypesMapSelector(state);
+
+  let instanceType = instanceTypesSelector(state)[0];
+  if (instanceTypesMap.hasOwnProperty(submission.instanceType.name)) {
+    instanceType = instanceTypesMap[submission.instanceType.name];
+  } else {
+    dispatch(
+      pushEvent(
+        `Loaded instance type ${submission.instanceType.name} not available, resetting to ${instanceType.name}.`
+      )
+    );
+  }
+  dispatch(setInstanceType(instanceType));
 
   const { softwarePackages } = state.entities;
   submission.softwarePackages.forEach(
