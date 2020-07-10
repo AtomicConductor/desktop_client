@@ -15,4 +15,3 @@
     - name: deploy
       service: aws
       command: "./deployArtifacts.sh"
-    
