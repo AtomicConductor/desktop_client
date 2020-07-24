@@ -7,7 +7,8 @@ import {
   pythonLocation,
   jobTitleSelector,
   submissionValidSelector,
-  assetsMap
+  assetsMap,
+  packageLocation
 } from "../../selectors/submitter";
 import { setNotification } from "../notification";
 import DesktopClientError from "../../errors/desktopClientError";
@@ -53,7 +54,11 @@ const submit = (
   const state = getState();
 
   const pythonPath = pythonLocation(state);
-  const args = [JSON.stringify(submissionSelector(state))];
+  const args = [
+    JSON.stringify(submissionSelector(state)),
+    packageLocation(state)
+  ].filter(_ => _);
+
   const title = jobTitleSelector(state);
 
   const pyshell = await pythonShell("submit.py", { pythonPath, args });
