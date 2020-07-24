@@ -27,6 +27,7 @@ const uploadOnly = state => state.submitter.submission.uploadOnly;
 const force = state => state.submitter.submission.force;
 const localUpload = state => state.submitter.submission.localUpload;
 const pythonLocation = state => state.submitter.pythonLocation;
+const packageLocation = state => state.submitter.packageLocation;
 
 const environmentOverrides = state =>
   state.submitter.submission.environmentOverrides;
@@ -411,5 +412,6 @@ export {
   submissionPreviewSelector,
   environmentOverrides,
   pythonLocation,
+  packageLocation,
   assetsMap
 };

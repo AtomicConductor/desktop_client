@@ -44,6 +44,7 @@ export const taskTemplateTokens = [
 
 export const settings = {
   pythonLocation: "settings.pythonLocation",
+  packageLocation: "settings.packageLocation",
   showSubmitterNotice: "settings.showSubmitterNotice",
   showWelcomePage: "settings.showWelcomePage"
 };

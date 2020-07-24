@@ -21,8 +21,14 @@ import {
   savePythonLocation
 } from "../../../_actions/submitter/pythonLocation";
 import {
+  resetPackageLocation,
+  savePackageLocation
+} from "../../../_actions/submitter/packageLocation";
+
+import {
   environmentOverrides,
-  pythonLocation
+  pythonLocation,
+  packageLocation
 } from "../../../selectors/submitter";
 import HelpIcon from "../../app/HelpIcon";
 import Tooltip from "../../app/Tooltip";
@@ -87,6 +93,7 @@ const Advanced = () => {
 
   const overrides = useSelector(environmentOverrides);
   const pythonPath = useSelector(pythonLocation);
+  const packageLoc = useSelector(packageLocation);
 
   return (
     <Box className={classes.container}>
@@ -102,18 +109,24 @@ const Advanced = () => {
         <HelpIcon
           tooltip={
             <React.Fragment>
-              <p>The location of the Python 2.7 executable on this machine.</p>
               <p>
-                The Conductor Client Python API is used to submit jobs, and for
-                this reason, the submitter needs to know about the location of
-                Python 2.7 on your computer. The default value was automatically
-                detected and should be sufficient unless you have a custom
-                installation of Python.
+                Conductor Companion makes use of the Conductor Core Python API,
+                which may be distributed separately. For this reason, the
+                submitter needs to know where Python 2.7 is installed on your
+                computer, and where to find the Conductor Core libraries.
               </p>
-              <p>
-                Use the reset button below to set the Python location
-                automatically, and use the folder icon to browse to a location.
-              </p>
+              <ol>
+                <li>
+                  Python 2.7 Executable Location: If this field doesn't point to
+                  a valid Python executable, you should browse for one. Use the
+                  reset button to try to set it automatically.
+                </li>
+                <li>
+                  Conductor Python Package Location: Location of the Conductor
+                  Core libraries in case the PYTHONPATH has not been set. Use
+                  the reset button to clear the entry
+                </li>
+              </ol>
             </React.Fragment>
           }
         />
@@ -125,7 +138,7 @@ const Advanced = () => {
           display="block"
           className={classes.label}
         >
-          Python Location:
+          Python Executable Location:
         </Typography>
 
         <Paper className={clsx(classes.paper, classes.value)}>
@@ -175,6 +188,66 @@ const Advanced = () => {
           </IconButton>
         </Tooltip>
       </Box>
+      {/* CONDUTOR MODULE  */}
+      <Box className={classes.row}>
+        <Typography
+          color="primary"
+          align="right"
+          display="block"
+          className={classes.label}
+        >
+          Conductor Python Package Location:
+        </Typography>
+
+        <Paper className={clsx(classes.paper, classes.value)}>
+          <InputBase
+            disabled={true}
+            onChange={e => dispatch(savePackageLocation(e.target.value))}
+            value={packageLoc}
+            className={classes.input}
+          />
+        </Paper>
+        <label htmlFor="package-location">
+          <input
+            hidden
+            className={classes.input}
+            id="package-location"
+            type="file"
+            nwdirectory="true"
+            nwdirectorydesc="Choose package location"
+            onChange={e => {
+              const { files } = e.target;
+              const file = files[0];
+              if (files) {
+                dispatch(savePackageLocation(file.path));
+              }
+            }}
+          />
+
+          <Tooltip title="Browse for Conductor python package location">
+            <IconButton
+              color="primary"
+              className={classes.rowIcon}
+              component="span"
+              size="small"
+            >
+              <FolderRounded />
+            </IconButton>
+          </Tooltip>
+        </label>
+        <Tooltip title="Reset package location">
+          <IconButton
+            color="primary"
+            className={classes.rowIcon}
+            component="span"
+            size="small"
+            onClick={() => dispatch(resetPackageLocation())}
+          >
+            <SettingsBackupRestore />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
       <Divider className={classes.divider} />
       <Box className={classes.labelBox}>
         <Typography

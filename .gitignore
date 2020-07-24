@@ -29,3 +29,6 @@ cnw.code-workspace
 # keys and tokens
 codeship.aes
 env
+
+
+fake_submit.py

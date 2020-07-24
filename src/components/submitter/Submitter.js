@@ -24,6 +24,8 @@ import {
   clearValidationResult
 } from "../../_actions/submitter/submit";
 import { loadPythonLocation } from "../../_actions/submitter/pythonLocation";
+import { loadPackageLocation } from "../../_actions/submitter/packageLocation";
+
 import { loadPresets } from "../../_actions/entities";
 import { signedInSelector } from "../../selectors/account";
 
@@ -108,6 +110,7 @@ const Submitter = () => {
     dispatch(fetchProjects());
     dispatch(fetchInstanceTypes());
     dispatch(loadPythonLocation());
+    dispatch(loadPackageLocation());
     dispatch(loadPresets());
   }, [signedIn, dispatch]);
 
