@@ -4,7 +4,7 @@ import AppStorage from "../../_helpers/storage";
 import {
   instanceTypesMapSelector,
   instanceTypesSelector
-} from "../../selectors/entities";
+} from "../../_selectors/entities";
 import { setInstanceType } from "../submitter/fetchInstanceTypes";
 import { pushEvent } from "../../_actions/log";
 const saveSubmissionSuccess = createAction("submitter/saveSubmissionSuccess");

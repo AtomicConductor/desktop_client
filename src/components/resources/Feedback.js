@@ -12,7 +12,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import submitFeedback from "../../_actions/feedback";
-import { emailSelector } from "../../selectors/account";
+import { emailSelector } from "../../_selectors/account";
 
 const useStyles = makeStyles(theme => ({
   formTitle: {

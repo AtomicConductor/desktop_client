@@ -1,6 +1,8 @@
 .dockerignore
 .git
 .gitignore
+cache
 codeship.aes
 Dockerfile
 env
+node_modules

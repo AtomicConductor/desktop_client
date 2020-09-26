@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import Downloader from "./Downloader";
 import { fetchJobs } from "../../_actions/jobs";
 import moment from "moment";
-import { signedInSelector } from "../../selectors/account";
+import { signedInSelector } from "../../_selectors/account";
 
 const matches = (text, job) => {
   if (job.jobLabel.toLowerCase().includes(text)) {

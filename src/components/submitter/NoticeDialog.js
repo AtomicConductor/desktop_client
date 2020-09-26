@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import config from "../../config";
 import { useLocalStorage } from "../../hooks/localStorage";
-import { settings } from "../../_helpers/constants";
+import { settings as kSettings } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
   formTitle: {
@@ -26,7 +26,7 @@ export default () => {
   const { documentationUrl } = config;
 
   const [showSubmitterNotice, setShowSubmitterNotice] = useLocalStorage(
-    settings.showSubmitterNotice,
+    kSettings.showSubmitterNotice,
     true
   );
 

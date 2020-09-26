@@ -1,13 +1,13 @@
 import {
   signedInSelector,
   currentAccountSelector
-} from "../../selectors/account";
+} from "../../_selectors/account";
 import { createRequestOptions } from "../../_helpers/network";
-import { tokenSelector } from "../../selectors/account";
+import { tokenSelector } from "../../_selectors/account";
 import axios from "../../_helpers/axios";
 import config from "../../config";
 import DesktopClientError from "../../errors/desktopClientError";
-import { projectSelector } from "../../selectors/submitter";
+import { projectSelector } from "../../_selectors/submitter";
 import { createAction } from "@reduxjs/toolkit";
 
 const projectsSuccess = createAction("submitter/projectsSuccess");

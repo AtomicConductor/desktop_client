@@ -4,12 +4,13 @@ import { runPythonShell } from "../../_helpers/python";
 import { pushEvent } from "../../_actions/log";
 import {
   submissionSelector,
-  pythonLocation,
   jobTitleSelector,
   submissionValidSelector,
-  assetsMap,
-  packageLocation
-} from "../../selectors/submitter";
+  assetsMap
+} from "../../_selectors/submitter";
+
+import { pythonLocation, packageLocation } from "../../_selectors/settings";
+
 import { setNotification } from "../notification";
 import DesktopClientError from "../../errors/desktopClientError";
 import config from "../../config";
@@ -61,7 +62,12 @@ const submit = (
 
   const title = jobTitleSelector(state);
 
-  const pyshell = await pythonShell("submit.py", { pythonPath, args });
+  const env = {
+    CONDUCTOR_AUTH_URL: config.dashboardUrl,
+    CONDUCTOR_PROJECT_URL: config.projectUrl
+  };
+
+  const pyshell = await pythonShell("submit.py", { env, pythonPath, args });
 
   dispatch(submissionRequested());
 

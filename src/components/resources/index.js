@@ -44,7 +44,7 @@ export default () => {
 
         <IndexCard
           onClick={browse(supportUrl)}
-          title="Support center"
+          title="Get support"
           body="Have questions about the service or need some guidance? Submit
           a support ticket and you'll get a response from one of our
           developers within the hour."

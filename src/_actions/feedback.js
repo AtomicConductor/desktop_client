@@ -2,7 +2,10 @@ import { setNotification } from "./notification";
 import axios from "../_helpers/axios";
 import { platform, release } from "os";
 import config from "../config";
-import { currentAccountSelector, signedInSelector } from "../selectors/account";
+import {
+  currentAccountSelector,
+  signedInSelector
+} from "../_selectors/account";
 
 export default (
   feedback,

@@ -3,7 +3,7 @@ import { createRequestOptions } from "../_helpers/network";
 import moment from "moment";
 import { TIMESPANS } from "../_helpers/constants";
 import config from "../config";
-import { currentAccountSelector, tokenSelector } from "../selectors/account";
+import { currentAccountSelector, tokenSelector } from "../_selectors/account";
 import axios from "../_helpers/axios";
 
 export const requestJobs = createAction("downloader/requestJobs");

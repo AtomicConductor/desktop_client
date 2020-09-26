@@ -22,7 +22,7 @@ import { DownloaderHelper } from "node-downloader-helper";
 
 import config from "../config";
 
-import { tokenSelector } from "../selectors/account";
+import { tokenSelector } from "../_selectors/account";
 import axios from "../_helpers/axios";
 import { pushEvent } from "../_actions/log";
 export const requestDownloadData = createAction(

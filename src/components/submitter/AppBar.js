@@ -6,10 +6,6 @@ import MuiAppBar from "@material-ui/core/AppBar";
 import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-
   title: {
     flexGrow: 1
   },

@@ -26,7 +26,7 @@ import { taskTemplateTokens } from "../../../_helpers/constants";
 import {
   presetsSelector,
   selectedPresetSelector
-} from "../../../selectors/entities";
+} from "../../../_selectors/entities";
 import {
   savePreset,
   selectPreset,

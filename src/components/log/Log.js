@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, Box } from "@material-ui/core";
-import { WrapText } from "@material-ui/icons";
+import { Close, WrapText } from "@material-ui/icons";
+
 import AppBar from "./AppBar";
-import SignIn from "../account/SignIn";
+
 import { appBarHeight } from "../../_helpers/constants";
 import IconButton from "@material-ui/core/IconButton";
 import { Virtuoso } from "react-virtuoso";
-import { signedInSelector } from "../../selectors/account";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 import clsx from "clsx";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles(theme => ({
   container: {
     marginTop: appBarHeight,
@@ -69,7 +71,7 @@ const useStyles = makeStyles(theme => ({
 
 const Log = () => {
   const [wrap, setWrap] = useState(false);
-
+  let history = useHistory();
   const events = useSelector(state => state.log.events);
 
   const toggleWrap = () => {
@@ -96,12 +98,11 @@ const Log = () => {
     </pre>
   );
 
-  const classes = useStyles();
-  const signedIn = useSelector(state => signedInSelector(state));
-
-  if (!signedIn) {
-    return <SignIn />;
+  function handleClick() {
+    history.goBack();
   }
+
+  const classes = useStyles();
 
   return (
     <React.Fragment>
@@ -115,6 +116,13 @@ const Log = () => {
             size="small"
           >
             <WrapText color={wrap ? "secondary" : "primary"} />
+          </IconButton>
+          <IconButton
+            className={classes.iconButton}
+            color="primary"
+            onClick={handleClick}
+          >
+            <Close className={classes.icon} />
           </IconButton>
         </Card>
         <Box className={classes.content}>

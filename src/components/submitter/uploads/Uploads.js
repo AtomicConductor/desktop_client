@@ -10,7 +10,7 @@ import { SelectableGroup } from "react-selectable-fast";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 
-import { assetsSelector } from "../../../selectors/submitter";
+import { assetsSelector } from "../../../_selectors/submitter";
 
 import UploadsHeader from "./UploadsHeader";
 import { addAssets, removeAssets } from "../../../_actions/submitter";

@@ -1,5 +1,5 @@
 import LogRocket from "logrocket";
-import { currentAccountSelector } from "../selectors/account";
+import { currentAccountSelector } from "../_selectors/account";
 
 export const sanitizers = {
   stateSanitizer: state => {

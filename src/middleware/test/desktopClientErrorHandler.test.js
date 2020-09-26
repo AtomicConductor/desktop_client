@@ -32,7 +32,7 @@ describe("desktopClientErrorHandler", () => {
         type: "notification/setNotification",
         payload: {
           type: "error",
-          message: "Your session has expired, please sign-in again."
+          message: "You are not signed in. Some features may be unavailable.."
         }
       });
 

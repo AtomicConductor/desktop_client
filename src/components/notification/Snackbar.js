@@ -18,7 +18,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
 import WarningIcon from "@material-ui/icons/Warning";
 
-import { snackbarSelector } from "../../selectors/snackbar";
+import { snackbarSelector } from "../../_selectors/snackbar";
 
 import { useSelector, useDispatch } from "react-redux";
 

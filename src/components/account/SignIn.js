@@ -22,7 +22,7 @@ import signInClientTools from "../../_actions/clientTools";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
 import { paths } from "../../_helpers/constants";
-import { signedInSelector } from "../../selectors/account";
+import { signedInSelector } from "../../_selectors/account";
 
 const { onboarding } = config;
 const useStyles = makeStyles(theme => ({
