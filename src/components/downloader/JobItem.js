@@ -6,10 +6,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
+
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  AccordionActions
+} from "@material-ui/core";
+
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
@@ -76,12 +80,12 @@ const JobItem = props => {
   const classes = useStyles();
 
   return (
-    <ExpansionPanel
+    <Accordion
       TransitionProps={{ mountOnEnter: true }}
       expanded={expanded === job.jobLabel}
       onChange={onPanelClick(job.jobLabel)}
     >
-      <ExpansionPanelSummary
+      <AccordionSummary
         expandIcon={<ExpandMoreIcon color="secondary" />}
         className={classes.summary}
         id={`${job.jobLabel}-header`}
@@ -133,13 +137,13 @@ const JobItem = props => {
             ) : null}
           </Box>
         </Box>
-      </ExpansionPanelSummary>
+      </AccordionSummary>
 
-      <ExpansionPanelDetails>
+      <AccordionDetails>
         <JobItemDetailsContainer job={job} />
-      </ExpansionPanelDetails>
+      </AccordionDetails>
       <Divider />
-      <ExpansionPanelActions>
+      <AccordionActions>
         <Button
           disabled={!downloadable}
           size="small"
@@ -148,8 +152,8 @@ const JobItem = props => {
         >
           Download
         </Button>
-      </ExpansionPanelActions>
-    </ExpansionPanel>
+      </AccordionActions>
+    </Accordion>
   );
 };
 

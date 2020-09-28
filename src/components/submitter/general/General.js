@@ -22,12 +22,12 @@ import TaskTemplate from "./TaskTemplate";
 import {
   instanceTypesSelector,
   projectsSelector
-} from "../../../selectors/entities";
+} from "../../../_selectors/entities";
 
 import {
   projectSelector,
   instanceTypeSelector
-} from "../../../selectors/submitter";
+} from "../../../_selectors/submitter";
 
 import {
   setJobTitle,

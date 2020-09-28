@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Box, Paper, Typography, IconButton } from "@material-ui/core";
 import { Notes } from "@material-ui/icons";
 import { useSelector } from "react-redux";
-import { lastEventsSelector } from "../../selectors/log";
+import { lastEventsSelector } from "../../_selectors/log";
 import "typeface-raleway";
 import { drawerWidth, statusLineHeight } from "../../_helpers/constants";
 import { paths } from "../../_helpers/constants";

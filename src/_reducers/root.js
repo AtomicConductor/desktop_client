@@ -4,6 +4,7 @@ import notification from "./notification";
 import plugins from "./plugins";
 import user from "./user";
 import submitter from "./submitter";
+import settings from "./settings";
 import log from "./log";
 
 import entities from "./entities/root";
@@ -15,6 +16,7 @@ const conductorReducer = combineReducers({
   entities,
   user,
   submitter,
+  settings,
   log
 });
 export default conductorReducer;

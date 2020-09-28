@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { useSelector } from "react-redux";
-import { submissionPreviewSelector } from "../../../selectors/submitter";
+import { submissionPreviewSelector } from "../../../_selectors/submitter";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { tomorrowNightEighties } from "react-syntax-highlighter/dist/esm/styles/hljs";
 

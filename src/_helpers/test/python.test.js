@@ -22,14 +22,27 @@ describe("python helper", () => {
   describe("on linux and mac", () => {
     it("returns default python path", async () => {
       exec = jest.fn();
-      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "/usr/bin" }));
+      exec.mockImplementationOnce((_, cb) =>
+        cb(null, { stdout: "/usr/bin/python2.7" })
+      );
       const path = await resolvePythonLocation(exec, "linux");
-      expect(path).toBe("/usr/bin");
+      expect(path).toBe("/usr/bin/python2.7");
     });
   });
 
   describe("isPythonPathValid", () => {
     let exec = jest.fn();
+
+    it("passes trimmed path to exec", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "2.7.10" }));
+      await isPythonPathValid("/some/location/python ", exec);
+
+      expect(exec).toHaveBeenCalledWith(
+        expect.stringContaining('"/some/location/python"'),
+        expect.any(Function)
+      );
+    });
 
     it("returns false when python not in basename", async () => {
       exec = jest.fn();
@@ -54,9 +67,17 @@ describe("python helper", () => {
       expect(valid).toBe(false);
     });
 
-    it("returns true when exec returns 2.7.?", async () => {
+    it("returns false when exec returns less than 2.7.10", async () => {
       exec = jest.fn();
       exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "2.7.5" }));
+      const valid = await isPythonPathValid("/some/location/python.exe", exec);
+
+      expect(valid).toBe(false);
+    });
+
+    it("returns true when exec returns >= 2.7.10", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((_, cb) => cb(null, { stdout: "2.7.10" }));
       const valid = await isPythonPathValid("/some/location/python.exe", exec);
 
       expect(valid).toBe(true);

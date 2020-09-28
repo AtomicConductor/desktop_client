@@ -92,7 +92,7 @@ describe("user", () => {
         appStorage.readCredentials.mockResolvedValueOnce(credentials);
 
         await expect(signInFromSaved(appStorage)(dispatch)).rejects.toThrow(
-          "Your session has expired, please sign-in again."
+          "You are not signed in. Some features may be unavailable.."
         );
       });
     });
@@ -107,9 +107,10 @@ describe("user", () => {
         .reply(200, {
           accounts: [
             {
+              status: "active",
               account: 1234567890,
               accountName: "my account",
-              token: "token",
+              token: "eyJ",
               email: "joe@email.com",
               role: 1
             }
@@ -129,7 +130,7 @@ describe("user", () => {
         {
           id: 1234567890,
           name: "my account",
-          token: "token",
+          token: "eyJ",
           email: "joe@email.com",
           selected: true,
           avatar: "J"
@@ -143,7 +144,60 @@ describe("user", () => {
       expect(appStorage.saveCredentials).toHaveBeenCalledWith({
         accounts: mappedAccounts
       });
-      expect(localStorage.setItem).toHaveBeenCalledWith("isBetaUser", true);
+      // expect(localStorage.setItem).toHaveBeenCalledWith("isBetaUser", true);
+      expect(dispatch.mock.calls[1][0]).toEqual({
+        type: "user/signInSuccess",
+        payload: mappedAccounts
+      });
+    });
+
+    it("filters out invalid accounts", async () => {
+      const credentials = { email: "joe@email.com", password: "secret" };
+
+      nock(config.apiServer)
+        .post("/api/auth", credentials)
+        .reply(200, {
+          accounts: [
+            {
+              status: "inactive",
+              account: 1,
+              accountName: "my account 1",
+              token: "eyJ1",
+              email: "joe@email.com",
+              role: 1
+            },
+            {
+              status: "active",
+              account: 2,
+              accountName: "my account 2",
+              token: "eyJ2",
+              email: "joe@email.com",
+              role: 1
+            },
+            {
+              status: "active",
+              account: 3,
+              accountName: "my account 3",
+              token: "bad token",
+              email: "joe@email.com",
+              role: 1
+            }
+          ]
+        });
+
+      await signIn(credentials, appStorage)(dispatch, getState);
+
+      const mappedAccounts = [
+        {
+          id: 2,
+          name: "my account 2",
+          token: "eyJ2",
+          email: "joe@email.com",
+          selected: true,
+          avatar: "J"
+        }
+      ];
+
       expect(dispatch.mock.calls[1][0]).toEqual({
         type: "user/signInSuccess",
         payload: mappedAccounts

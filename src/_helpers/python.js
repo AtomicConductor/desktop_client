@@ -5,12 +5,13 @@ import DesktopClientError from "../errors/desktopClientError";
 import path from "upath";
 import config from "../config";
 
+const PYTHON_VERSION_REGEX = /^2\.7\.(\d+)$/i;
+
 const tryExecute = async (executor, cmd) => {
   try {
     let { stdout } = await promisify(executor)(cmd);
     return stdout.trim() || null;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
@@ -26,17 +27,29 @@ const resolvePythonLocation = async (
 };
 
 const isPythonPathValid = async (pythonPath, executor = exec) => {
-  if (path.basename(pythonPath).includes("python")) {
-    const version = await tryExecute(
-      executor,
-      `"${pythonPath}" -c "import platform; print(platform.python_version())"`
-    );
-
-    if (version && version.includes("2.7")) {
-      return true;
-    }
+  pythonPath = pythonPath.trim();
+  if (!path.basename(pythonPath).includes("python")) {
+    return false;
   }
-  return false;
+
+  const version = await tryExecute(
+    executor,
+    `"${pythonPath}" -c "import platform; print(platform.python_version())"`
+  );
+
+  if (!version) {
+    return false;
+  }
+
+  const match = version.match(PYTHON_VERSION_REGEX);
+  if (!match) {
+    return false;
+  }
+  if (Number(match[1]) < 10) {
+    return false;
+  }
+
+  return true;
 };
 
 const runPythonShell = async (script, options, shell = PythonShell) => {

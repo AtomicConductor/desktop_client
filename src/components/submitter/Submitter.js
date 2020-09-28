@@ -23,11 +23,13 @@ import {
   submitWithValidation,
   clearValidationResult
 } from "../../_actions/submitter/submit";
-import { loadPythonLocation } from "../../_actions/submitter/pythonLocation";
-import { loadPackageLocation } from "../../_actions/submitter/packageLocation";
-
+import { loadPythonLocation } from "../../_actions/settings/pythonLocation";
+import { loadPackageLocation } from "../../_actions/settings/packageLocation";
+import { pythonLocationValid } from "../../_selectors/settings";
 import { loadPresets } from "../../_actions/entities";
-import { signedInSelector } from "../../selectors/account";
+import { signedInSelector } from "../../_selectors/account";
+
+import PythonAlert from "../../components/settings/PythonAlert";
 
 function TabContainer(props) {
   return (
@@ -91,7 +93,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const labels = ["General", "Files", "Software", "Advanced", "Preview"];
+const labels = ["General", "Files", "Software", "Environment", "Preview"];
 
 const Submitter = () => {
   const classes = useStyles();
@@ -99,10 +101,12 @@ const Submitter = () => {
   const signedIn = useSelector(state => signedInSelector(state));
   const submitting = useSelector(state => state.submitter.submitting);
   const filename = useSelector(state => state.submitter.filename);
+  const pythonValid = useSelector(pythonLocationValid);
   const [submissionShieldOpen, setSubmissionShieldOpen] = useState(false);
   const { errors, alerts } = useSelector(
     state => state.submitter.validationResult
   );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -156,7 +160,10 @@ const Submitter = () => {
             ]
           }
         </Box>
-
+        <PythonAlert
+          message="In order to submit jobs with the Submission kit, you'll need to select a supported Python version on the settings page."
+          button
+        />
         <Card className={classes.actionsCard}>
           <LoadSaveMenu />
           <Typography
@@ -176,6 +183,7 @@ const Submitter = () => {
             <Button
               color="secondary"
               onClick={() => dispatch(submitWithValidation())}
+              disabled={!pythonValid}
             >
               Submit
             </Button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { signedInSelector } from "../../selectors/account";
+import { signedInSelector } from "../../_selectors/account";
 import {
   List,
   Typography,
@@ -14,9 +14,11 @@ import {
 
 import {
   CloudDownloadRounded,
-  SettingsInputComponent,
+  BuildRounded,
+  SettingsApplicationsRounded,
   LibraryBooksRounded,
-  LockRounded
+  LockRounded,
+  Power
 } from "@material-ui/icons";
 
 import { appVersion } from "../../_helpers/constants";
@@ -60,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 const Drawer = props => {
   const classes = useStyles();
   const isSignedIn = useSelector(state => signedInSelector(state));
-  const { resources, downloader, submitter, signIn } = paths;
+  const { resources, downloader, submitter, plugins, settings, signIn } = paths;
   const {
     location: { pathname }
   } = props;
@@ -91,6 +93,17 @@ const Drawer = props => {
           </ListItem>
         )}
         <Divider />
+        <ListItem
+          component={RouterLink}
+          to={plugins}
+          button
+          selected={pathname === plugins}
+        >
+          <ListItemIcon>
+            <Power />
+          </ListItemIcon>
+          <ListItemText primary="Plugins" />
+        </ListItem>
 
         <ListItem
           component={RouterLink}
@@ -111,7 +124,7 @@ const Drawer = props => {
           selected={pathname === submitter}
         >
           <ListItemIcon>
-            <SettingsInputComponent />
+            <BuildRounded />
           </ListItemIcon>
           <ListItemText primary="Submission Kit" />
         </ListItem>
@@ -126,6 +139,18 @@ const Drawer = props => {
             <LibraryBooksRounded />
           </ListItemIcon>
           <ListItemText primary="Help & Feedback" />
+        </ListItem>
+
+        <ListItem
+          component={RouterLink}
+          to={settings}
+          button
+          selected={pathname === settings}
+        >
+          <ListItemIcon>
+            <SettingsApplicationsRounded />
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
         </ListItem>
       </List>
       <div className={classes.spacer} />

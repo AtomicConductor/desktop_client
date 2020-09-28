@@ -7,31 +7,14 @@ import {
   Paper,
   InputBase,
   Box,
-  Divider,
   Typography
 } from "@material-ui/core";
-import {
-  DeleteOutlineRounded,
-  FolderRounded,
-  SettingsBackupRestore
-} from "@material-ui/icons";
+import { DeleteOutlineRounded } from "@material-ui/icons";
 import { setEnvEntry } from "../../../_actions/submitter";
-import {
-  resetPythonLocation,
-  savePythonLocation
-} from "../../../_actions/submitter/pythonLocation";
-import {
-  resetPackageLocation,
-  savePackageLocation
-} from "../../../_actions/submitter/packageLocation";
 
-import {
-  environmentOverrides,
-  pythonLocation,
-  packageLocation
-} from "../../../selectors/submitter";
+import { environmentOverrides } from "../../../_selectors/submitter";
+
 import HelpIcon from "../../app/HelpIcon";
-import Tooltip from "../../app/Tooltip";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -92,163 +75,9 @@ const Advanced = () => {
   const dispatch = useDispatch();
 
   const overrides = useSelector(environmentOverrides);
-  const pythonPath = useSelector(pythonLocation);
-  const packageLoc = useSelector(packageLocation);
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.labelBox}>
-        <Typography
-          className={classes.sectionHeading}
-          color="primary"
-          variant="h6"
-        >
-          Local settings
-        </Typography>
-        <div className={classes.spacer} />
-        <HelpIcon
-          tooltip={
-            <React.Fragment>
-              <p>
-                Conductor Companion makes use of the Conductor Core Python API,
-                which may be distributed separately. For this reason, the
-                submitter needs to know where Python 2.7 is installed on your
-                computer, and where to find the Conductor Core libraries.
-              </p>
-              <ol>
-                <li>
-                  Python 2.7 Executable Location: If this field doesn't point to
-                  a valid Python executable, you should browse for one. Use the
-                  reset button to try to set it automatically.
-                </li>
-                <li>
-                  Conductor Python Package Location: Location of the Conductor
-                  Core libraries in case the PYTHONPATH has not been set. Use
-                  the reset button to clear the entry
-                </li>
-              </ol>
-            </React.Fragment>
-          }
-        />
-      </Box>
-      <Box className={classes.row}>
-        <Typography
-          color="primary"
-          align="right"
-          display="block"
-          className={classes.label}
-        >
-          Python Executable Location:
-        </Typography>
-
-        <Paper className={clsx(classes.paper, classes.value)}>
-          <InputBase
-            disabled={true}
-            onChange={e => dispatch(savePythonLocation(e.target.value))}
-            value={pythonPath}
-            className={classes.input}
-          />
-        </Paper>
-        <label htmlFor="python-path-file">
-          <input
-            hidden
-            className={classes.input}
-            id="python-path-file"
-            type="file"
-            nwdirectorydesc="Choose python path"
-            onChange={e => {
-              const { files } = e.target;
-              const file = files[0];
-              if (files) {
-                dispatch(savePythonLocation(file.path));
-              }
-            }}
-          />
-
-          <Tooltip title="Browse for a Python 2.7 location">
-            <IconButton
-              color="primary"
-              className={classes.rowIcon}
-              component="span"
-              size="small"
-            >
-              <FolderRounded />
-            </IconButton>
-          </Tooltip>
-        </label>
-        <Tooltip title="Reset Python path">
-          <IconButton
-            color="primary"
-            className={classes.rowIcon}
-            component="span"
-            size="small"
-            onClick={() => dispatch(resetPythonLocation())}
-          >
-            <SettingsBackupRestore />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      {/* CONDUTOR MODULE  */}
-      <Box className={classes.row}>
-        <Typography
-          color="primary"
-          align="right"
-          display="block"
-          className={classes.label}
-        >
-          Conductor Python Package Location:
-        </Typography>
-
-        <Paper className={clsx(classes.paper, classes.value)}>
-          <InputBase
-            disabled={true}
-            onChange={e => dispatch(savePackageLocation(e.target.value))}
-            value={packageLoc}
-            className={classes.input}
-          />
-        </Paper>
-        <label htmlFor="package-location">
-          <input
-            hidden
-            className={classes.input}
-            id="package-location"
-            type="file"
-            nwdirectory="true"
-            nwdirectorydesc="Choose package location"
-            onChange={e => {
-              const { files } = e.target;
-              const file = files[0];
-              if (files) {
-                dispatch(savePackageLocation(file.path));
-              }
-            }}
-          />
-
-          <Tooltip title="Browse for Conductor python package location">
-            <IconButton
-              color="primary"
-              className={classes.rowIcon}
-              component="span"
-              size="small"
-            >
-              <FolderRounded />
-            </IconButton>
-          </Tooltip>
-        </label>
-        <Tooltip title="Reset package location">
-          <IconButton
-            color="primary"
-            className={classes.rowIcon}
-            component="span"
-            size="small"
-            onClick={() => dispatch(resetPackageLocation())}
-          >
-            <SettingsBackupRestore />
-          </IconButton>
-        </Tooltip>
-      </Box>
-
-      <Divider className={classes.divider} />
       <Box className={classes.labelBox}>
         <Typography
           className={classes.sectionHeading}

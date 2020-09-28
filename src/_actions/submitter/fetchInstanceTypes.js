@@ -1,6 +1,6 @@
-import { tokenSelector } from "../../selectors/account";
+import { tokenSelector } from "../../_selectors/account";
 import { createRequestOptions } from "../../_helpers/network";
-import { instanceTypeSelector } from "../../selectors/submitter";
+import { instanceTypeSelector } from "../../_selectors/submitter";
 import axios from "../../_helpers/axios";
 import config from "../../config";
 import DesktopClientError from "../../errors/desktopClientError";

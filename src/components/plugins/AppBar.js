@@ -7,17 +7,12 @@ import Typography from "@material-ui/core/Typography";
 import { drawerWidth } from "../../_helpers/constants";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-
   title: {
     flexGrow: 1
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    zIndex: 1301
+    marginLeft: drawerWidth
   }
 }));
 

@@ -1,5 +1,5 @@
 import { decode } from "jwt-simple";
-import { tokenSelector, signedInSelector } from "../selectors/account";
+import { tokenSelector, signedInSelector } from "../_selectors/account";
 import AppStorage from "../_helpers/storage";
 import { pushEvent } from "../_actions/log";
 import DesktopClientError from "../errors/desktopClientError";

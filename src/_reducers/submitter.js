@@ -31,14 +31,12 @@ import {
   saveSubmissionSuccess,
   loadSubmissionSuccess
 } from "../_actions/submitter/submissionPersistence";
-import { setPythonLocation } from "../_actions/submitter/pythonLocation";
-import { setPackageLocation } from "../_actions/submitter/packageLocation";
+
 import { setTaskTemplate } from "../_actions/submitter/taskTemplate";
 const initialState = {
   filename: "",
   loading: false,
-  pythonLocation: "",
-  packageLocation: "",
+
   submitting: false,
   validationResult: { errors: [], alerts: [], missingAssets: [] },
   submission: {
@@ -179,12 +177,6 @@ export default createReducer(initialState, {
     ];
   },
 
-  [setPythonLocation]: (state, { payload }) => {
-    state.pythonLocation = payload;
-  },
-  [setPackageLocation]: (state, { payload }) => {
-    state.packageLocation = payload;
-  },
   [submissionRequested]: (state, action) => {
     state.submitting = true;
   },

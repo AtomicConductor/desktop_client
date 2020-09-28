@@ -20,7 +20,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import LinesEllipsis from "react-lines-ellipsis";
 import { useSelector, useDispatch } from "react-redux";
-import { accountsSelector } from "../../selectors/account";
+import { accountsSelector } from "../../_selectors/account";
 import { signOut, selectAccount } from "../../_actions/user";
 import signInClientTools from "../../_actions/clientTools";
 

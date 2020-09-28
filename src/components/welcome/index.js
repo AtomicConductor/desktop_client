@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, Box, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocalStorage } from "../../hooks/localStorage";
-import { settings } from "../../_helpers/constants";
+import { settings as kSettings } from "../../_helpers/constants";
 import { useEffect } from "react";
 import IndexCard from "../resources/IndexCard";
 import { PlayCircleFilledWhiteRounded } from "@material-ui/icons";
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles();
-  const [, setShowWelcomePage] = useLocalStorage(settings.showWelcomePage);
+  const [, setShowWelcomePage] = useLocalStorage(kSettings.showWelcomePage);
 
   useEffect(() => {
     return () => setShowWelcomePage(false);
@@ -39,23 +39,19 @@ export default () => {
       </Typography>
 
       <Typography className={classes.subheader} color="textSecondary">
-        Thank you for downloading <strong>Conductor Companion</strong>! Through
-        this app, you can submit your jobs and download rendered files directly
-        to your workstation or laptop more conveniently than ever before.
-      </Typography>
-
-      <Typography className={classes.subheader} color="textSecondary">
-        Once signed in, the <strong>Downloader</strong> tab will automatically
-        populate with a log of your account's downloadable files.
-      </Typography>
-
-      <Typography className={classes.subheader} color="textSecondary">
-        Submissions can now be easily managed in the{" "}
-        <strong>Submission Kit</strong>, which contains a series of tabs that
-        allow you to manage the details and settings for jobs in a simple GUI.
-        While Conductor integrates directly into the Maya, Nuke and Clarisse
-        applications, Companion enables submission from all other supported
-        software without the need to write a command line.
+        Thank you for downloading <strong>Conductor Companion</strong>! Use it
+        for the following tasks:
+        <ul>
+          <li>
+            Install our beta submitters and classic client tools from the
+            Plugins Page.
+          </li>
+          <li>Download finished renders in the Download Manager.</li>
+          <li>
+            Experiment with the Submission Kit for situations where none of our
+            custom submitters fit the bill.
+          </li>
+        </ul>
       </Typography>
 
       <Grid container spacing={8}>

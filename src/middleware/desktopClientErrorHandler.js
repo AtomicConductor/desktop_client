@@ -1,5 +1,8 @@
 import * as Sentry from "@sentry/browser";
-import { currentAccountSelector, signedInSelector } from "../selectors/account";
+import {
+  currentAccountSelector,
+  signedInSelector
+} from "../_selectors/account";
 import UnhandledApplicationError from "../errors/unhandledApplicationError";
 import DesktopClientError from "../errors/desktopClientError";
 import { setNotification } from "../_actions/notification";

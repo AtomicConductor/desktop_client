@@ -25,6 +25,8 @@ export const paths = {
   downloader: "/downloader",
   signIn: "/sign-in",
   submitter: "/submitter",
+  plugins: "/plugins",
+  settings: "/settings",
   log: "/log",
   welcome: "/welcome"
 };

@@ -5,9 +5,10 @@ import { pathExists } from "../../../_helpers/fileSystem";
 import {
   submissionValidSelector,
   assetsMap
-} from "../../../selectors/submitter";
+} from "../../../_selectors/submitter";
 jest.mock("../../../_helpers/fileSystem");
-jest.mock("../../../selectors/submitter");
+jest.mock("../../../_selectors/submitter");
+jest.mock("../../../_selectors/settings");
 
 describe("submitter actions", () => {
   describe("submitWithValidation", () => {

@@ -2,7 +2,7 @@ import { createAction } from "@reduxjs/toolkit";
 import config from "../config";
 import axios from "../_helpers/axios";
 import { avatarInitials } from "../_helpers/presentation";
-import { emailSelector, accountsSelector } from "../selectors/account";
+import { accountsSelector, emailSelector } from "../_selectors/account";
 import * as Sentry from "@sentry/browser";
 import AppStorage from "../_helpers/storage";
 import { fetchJobs } from "../_actions/jobs";
@@ -22,6 +22,7 @@ const switchAccount = createAction("user/switchAccount");
 //TODO: refactor into a normalizer
 const mapAccounts = accounts =>
   accounts
+    .filter(_ => _.status === "active" && _.token.startsWith("eyJ"))
     .sort((a, b) => a.role - b.role)
     .map((_, index) => ({
       id: _.account,
@@ -47,14 +48,16 @@ const signIn = (credentials, storage = new AppStorage()) => async (
       data: { accounts }
     } = response;
 
+    const mappedAccounts = mapAccounts(accounts);
+
     if (!accounts) throw new Error("No active accounts");
 
-    const mappedAccounts = mapAccounts(accounts);
     await storage.saveCredentials({ accounts: mappedAccounts });
     dispatch(signInSuccess(mappedAccounts));
     dispatch(pushEvent("Successfully signed in", "info"));
 
     // remove after beta phase
+
     await flagBetaUser(emailSelector(getState()));
   } catch (e) {
     dispatch(signInError());
