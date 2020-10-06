@@ -69,6 +69,7 @@ const installPlugin = pluginName => async (dispatch, getState) => {
   }
   dispatch(pushEvent(`Package is valid: ${packageName}`, "info"));
 
+
   // for PIP
   const env = {
     PYTHONPATH: path.join(process.cwd(), ...config.public, "python")
@@ -150,11 +151,19 @@ const postInstallSetup = (pluginName, packageName) => (dispatch, getState) => {
     PYTHONPATH: installLoc
   };
 
+
+
   const postinstall = spawn(pythonLoc, [script], { env });
 
   postinstall.stdout.on("data", data => {
+
     dispatch(pushEvent(`${data}`, "info"));
   });
+  
+  postinstall.stderr.on("data", data => {
+    dispatch(pushEvent(`${data}`, "error"));
+  });
+
 
   postinstall.on("close", code => {
     let msg = `postinstall process closed with code ${code}. Success!`;
