@@ -22,7 +22,8 @@ export default {
       contactApiUrl: "https://api.hubapi.com/contacts/v1/contact"
     },
     public: ["."],
-    extraPipFlags: []
+    extraPipFlags: [],
+    pypi: "https://pypi.org"
   },
   development: {
     ...commonConfig,
@@ -39,7 +40,8 @@ export default {
       contactApiUrl: "https://api.hubapi.com/contacts/v1/contact"
     },
     public: ["..", "public"],
-    extraPipFlags: ["--extra-index-url", "https://test.pypi.org/simple/"]
+    extraPipFlags: ["--extra-index-url", "https://test.pypi.org/simple"],
+    pypi: "https://test.pypi.org"
   },
   test: {
     googleClientId: "",
@@ -53,6 +55,7 @@ export default {
       contactApiUrl: "https://hubspot"
     },
     public: ["test"],
-    extraPipFlags: []
+    extraPipFlags: [],
+    pypi: "https://pypi.test.org"
   }
 }[process.env.NODE_ENV];

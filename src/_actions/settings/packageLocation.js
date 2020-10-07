@@ -2,7 +2,7 @@ import { settings as kSettings } from "../../_helpers/constants";
 import { createAction } from "@reduxjs/toolkit";
 import os from "os";
 import path from "upath";
-import { getInstalledInfo } from "../plugins";
+import { getInstalledInfo } from "../plugins/install";
 
 const DEFAULT_INSTALL_DIR = path.join(os.homedir(), "Conductor");
 const setPackageLocation = createAction("settings/setPackageLocation");

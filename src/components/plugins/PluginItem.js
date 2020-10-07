@@ -2,17 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles, fade } from "@material-ui/core/styles";
 import HelpIcon from "@material-ui/icons/HelpOutline";
-
-import { installPlugin, openPluginHelp } from "../../_actions/plugins";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { installPlugin, openPluginHelp } from "../../_actions/plugins/install";
 import { useSelector, useDispatch } from "react-redux";
 import { packageLocation } from "../../_selectors/settings";
-
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { itemsSelector, packageNameSelector } from "../../_selectors/plugins";
 import { Alert } from "@material-ui/lab";
 import { blue, indigo } from "@material-ui/core/colors";
-
 import InfoIcon from "@material-ui/icons/InfoOutlined";
-import os from "os";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+
+import Fade from "@material-ui/core/Fade";
+
 import { pythonLocationValid } from "../../_selectors/settings";
 import {
   Button,
@@ -85,6 +88,9 @@ const useStyles = makeStyles(theme => ({
   secondaryActions: {
     display: "flex",
     flexDirection: "row"
+  },
+  button: {
+    textTransform: "none"
   }
 }));
 
@@ -113,11 +119,12 @@ const PluginItem = props => {
     packageName,
     phase,
     available,
-    darwin_url,
-    linux_url,
-    win32_url
+    versions
   } = useSelector(itemsSelector)[pluginName];
 
+  const versionCount = versions.length;
+
+  console.log(`versionCount ${versionCount}`);
   const pkgLocation = useSelector(packageLocation);
 
   const installing = useSelector(packageNameSelector);
@@ -125,21 +132,15 @@ const PluginItem = props => {
   const installingThis = installing === packageName;
 
   const dim = Boolean(installing) || !pythonValid;
-
   const [openConfirm, setOpenConfirm] = React.useState(false);
 
-  const platform = os.platform();
+  const anchorRef = React.useRef(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  let url = null;
-  let tooltip = `Install the Conductor ${pluginName} Pip package from PyPi`;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
-  if (
-    available === "github" &&
-    ["linux", "darwin", "win32"].includes(platform)
-  ) {
-    url = { darwin_url, linux_url, win32_url }[`${platform}_url`];
-    tooltip = `Download ${url} from Github`;
-  }
+  let tooltip = `Install version ${versions[selectedIndex]} of the Conductor ${pluginName} package from PyPi`;
 
   const onOpenConfirm = () => {
     setOpenConfirm(true);
@@ -151,18 +152,31 @@ const PluginItem = props => {
 
   const install = async () => {
     setOpenConfirm(false);
-    dispatch(installPlugin(pluginName));
-  };
 
-  const onDownload = async () => {
-    nw.Shell.openExternal(url);
+    dispatch(installPlugin(pluginName, versions[selectedIndex]));
   };
 
   const openHelp = () => {
     dispatch(openPluginHelp(pluginName));
   };
 
-  const confirmText = `${title} will be installed at:<br>
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+  };
+  const handleToggle = event => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const confirmText = `Version ${versions[selectedIndex]} of the ${title} will be installed at:<br>
 <strong>${pkgLocation}/${packageName}</strong><br>
 To change the install location, press 'CANCEL' and edit the Conductor Package Location on the Settings page.`;
 
@@ -203,28 +217,61 @@ To change the install location, press 'CANCEL' and edit the Conductor Package Lo
               />
             ) : null}
           </div>
-          <Tooltip title={tooltip}>
-            <Button
-              size="small"
-              color="secondary"
-              onClick={available === "github" ? onDownload : onOpenConfirm}
-              disabled={dim}
-            >
-              {available === "pip"
-                ? installed
-                  ? "Upgrade"
-                  : "Install"
-                : available === "github"
-                ? "Download"
-                : ""}
-            </Button>
-          </Tooltip>
+
+          {available === "pip" && versionCount > 0 ? (
+            <Tooltip title={tooltip}>
+              <ButtonGroup
+                disabled={dim}
+                variant="outlined"
+                size="small"
+                ref={anchorRef}
+                aria-label="split button"
+              >
+                <Button
+                  onClick={onOpenConfirm}
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  className={classes.button}
+                >{`INSTALL v${versions[selectedIndex]}`}</Button>
+                {versionCount > 1 ? (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                    onClick={handleToggle}
+                  >
+                    <ArrowDropDownIcon />
+                  </Button>
+                ) : null}
+              </ButtonGroup>
+            </Tooltip>
+          ) : null}
         </CardActions>
 
         {installingThis ? (
           <InstallProgress color="secondary" variant="indeterminate" />
         ) : null}
       </Card>
+
+      <Menu
+        id="fade-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Fade}
+      >
+        {versions.map((version, index) => (
+          <MenuItem
+            key={version}
+            selected={index === selectedIndex}
+            onClick={event => handleMenuItemClick(event, index)}
+          >
+            {version}
+          </MenuItem>
+        ))}
+      </Menu>
 
       <Dialog
         open={openConfirm}

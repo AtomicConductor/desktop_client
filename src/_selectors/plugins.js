@@ -4,7 +4,6 @@ import { packageLocation } from "../_selectors/settings";
 
 // const platform = os.platform();
 const itemsSelector = state => state.plugins.items;
-
 const installingSelector = state => state.plugins.installing;
 const helpOpenSelector = state => state.plugins.helpOpen;
 

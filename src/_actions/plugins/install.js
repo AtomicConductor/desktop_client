@@ -1,18 +1,21 @@
 import { createAction } from "@reduxjs/toolkit";
 
-import { pushEvent } from "../_actions/log";
-import { isPythonPathValid } from "../_helpers/python";
+import { pushEvent } from "../../_actions/log";
+import { isPythonPathValid } from "../../_helpers/python";
 import { spawn, exec } from "child_process";
 
-import { packageLocation } from "../_selectors/settings";
-import { pythonLocation } from "../_selectors/settings";
+import { packageLocation } from "../../_selectors/settings";
+import { pythonLocation } from "../../_selectors/settings";
 
-import { packageNameSelector, pkgsArraySelector } from "../_selectors/plugins";
+import {
+  packageNameSelector,
+  pkgsArraySelector
+} from "../../_selectors/plugins";
 import path from "upath";
 
-import { ensureDirectoryReady } from "../_helpers/fileSystem";
+import { ensureDirectoryReady } from "../../_helpers/fileSystem";
 import { existsSync, readFile } from "fs";
-import config from "../config";
+import config from "../../config";
 
 const installationRequested = createAction("plugins/installationRequested");
 const installationFinished = createAction("plugins/installationFinished");
@@ -20,7 +23,7 @@ const setInstalledVersion = createAction("plugins/setInstalledVersion");
 const openPluginHelp = createAction("plugins/openPluginHelp");
 const closePluginHelp = createAction("plugins/closePluginHelp");
 
-const getInstalledInfo = () => (dispatch, getState) => {
+const getInstalledInfo = (reader = readFile) => (dispatch, getState) => {
   const state = getState();
   const pkgLocation = packageLocation(state);
   const allPackages = pkgsArraySelector(state);
@@ -28,7 +31,7 @@ const getInstalledInfo = () => (dispatch, getState) => {
     const pkgPath = path.join(pkgLocation, pkg.packageName);
     const versionFile = path.join(pkgPath, "VERSION");
 
-    readFile(versionFile, "utf-8", (err, version) => {
+    reader(versionFile, "utf-8", (err, version) => {
       dispatch(
         setInstalledVersion({
           name: pkg.name,
@@ -39,7 +42,10 @@ const getInstalledInfo = () => (dispatch, getState) => {
   });
 };
 
-const installPlugin = pluginName => async (dispatch, getState) => {
+const installPlugin = (pluginName, pluginVersion) => async (
+  dispatch,
+  getState
+) => {
   dispatch(installationRequested(pluginName));
 
   const state = getState();
@@ -80,9 +86,10 @@ const installPlugin = pluginName => async (dispatch, getState) => {
     "pip",
     "install",
     "--upgrade",
+    "--force-reinstall",
     "--prefer-binary",
     ...config.extraPipFlags,
-    packageName,
+    `${packageName}==${pluginVersion}`,
     "--target",
     target
   ];

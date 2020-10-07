@@ -10,6 +10,9 @@ import { packageLocation } from "../../_selectors/settings";
 
 import { loadPackageLocation } from "../../_actions/settings/packageLocation";
 import { loadPythonLocation } from "../../_actions/settings/pythonLocation";
+
+import fetchAvailableVersions from "../../_actions/plugins/fetchAvailableVersions";
+
 import { pythonLocationValid } from "../../_selectors/settings";
 import { helpOpenSelector } from "../../_selectors/plugins";
 
@@ -55,6 +58,7 @@ const Plugins = () => {
   useEffect(() => {
     dispatch(loadPackageLocation());
     dispatch(loadPythonLocation());
+    dispatch(fetchAvailableVersions());
   }, [dispatch]);
 
   const pluginNames = useSelector(state => pkgNamesArraySelector(state));

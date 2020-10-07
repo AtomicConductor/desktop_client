@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogActions, Button } from "@material-ui/core";
-import { closePluginHelp } from "../../_actions/plugins";
+import { closePluginHelp } from "../../_actions/plugins/install";
 import { useSelector, useDispatch } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
