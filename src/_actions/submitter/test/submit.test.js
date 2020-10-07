@@ -17,7 +17,7 @@ describe("submitter actions", () => {
       dispatch = jest.fn();
       getState = jest.fn();
     });
-
+    // TODO: Split into smaller tests
     it("creates a validation report with errors, alerts and missing assets", async () => {
       assetsMap.mockReturnValueOnce({
         "/exists asset": {},

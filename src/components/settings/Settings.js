@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tabs, Tab, Typography, Card, Box } from "@material-ui/core";
 import Python from "./python/Python";
@@ -8,7 +8,7 @@ import Python from "./python/Python";
 import AppBar from "./AppBar";
 
 import { appBarHeight } from "../../_helpers/constants";
-
+import { pythonLocationValid } from "../../_selectors/settings";
 import { loadPythonLocation } from "../../_actions/settings/pythonLocation";
 import { loadPackageLocation } from "../../_actions/settings/packageLocation";
 import PythonAlert from "./PythonAlert";
@@ -81,6 +81,7 @@ const Settings = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
   const dispatch = useDispatch();
+  const pythonValid = useSelector(pythonLocationValid);
 
   useEffect(() => {
     dispatch(loadPythonLocation());
@@ -95,11 +96,13 @@ const Settings = () => {
     <React.Fragment>
       <AppBar />
       <Box className={classes.container}>
-        <PythonAlert
-          message={`If you wish to install plugins or use the Submission Kit you'll need Python from the 2.7 branch. 
+        {pythonValid ? null : (
+          <PythonAlert
+            message={`If you wish to install plugins or use the Submission Kit you'll need Python from the 2.7 branch. 
 We recommend getting the latest release version of Python 2.7. Our support team may ask you to upgrade your Python version should you require technical support.`}
-          overlay="bottom"
-        />
+            overlay="bottom"
+          />
+        )}
         <Card className={classes.tabsCard}>
           <Tabs
             value={tabIndex}

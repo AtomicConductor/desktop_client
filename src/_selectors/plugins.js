@@ -7,6 +7,8 @@ const itemsSelector = state => state.plugins.items;
 const installingSelector = state => state.plugins.installing;
 const helpOpenSelector = state => state.plugins.helpOpen;
 
+const coreInstalledSelector = state => !!state.plugins.items.core.installed;
+
 const pkgsArraySelector = createSelector(itemsSelector, itemsSelector =>
   Object.values(itemsSelector).sort((a, b) => (a.order < b.order ? -1 : 1))
 );
@@ -44,5 +46,6 @@ export {
   pkgNamesArraySelector,
   packageNameSelector,
   helpOpenSelector,
-  helpItemSelector
+  helpItemSelector,
+  coreInstalledSelector
 };

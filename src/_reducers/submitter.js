@@ -53,7 +53,7 @@ const initialState = {
     tileSpec: "1-9",
     scoutFrameSpec: "1",
     useTiles: false,
-    useScoutFrames: false,
+    useScoutFrames: true,
     softwarePackages: [{ softwareKey: "", package: {} }],
     taskTemplate: "",
     uploadPaths: [],

@@ -359,13 +359,26 @@ const assetsAlertSelector = createSelector(assetsSelector, assets =>
       ]
     : []
 );
+
+const scoutFramesAlertSelector = createSelector(
+  scoutFrameSpec,
+  frameSpec,
+  (scoutFrameSpec, frameSpec) =>
+    scoutFrameSpec === "" && [...Sequence(frameSpec).getFrames()].length > 10
+      ? [
+          "You are rendering several frames with no scout frames. All tasks will start rendering immediately. To avoid incurring a significant cost, we strongly recommend you turn on scout frames and check them before you commit to a whole sequence."
+        ]
+      : []
+);
+
 ///////////////////////////////
 
 const submissionValidSelector = createSelector(
   softwareAlertSelector,
   assetsAlertSelector,
+  scoutFramesAlertSelector,
   submissionSelector,
-  (softwareAlerts, assetsAlerts, submission) => {
+  (softwareAlerts, assetsAlerts, scoutFramesAlerts, submission) => {
     const errors = Object.keys(submission)
       .filter(
         _ =>
@@ -376,7 +389,7 @@ const submissionValidSelector = createSelector(
       .map(_ => submission[_].errors)
       .flat();
 
-    const alerts = [...softwareAlerts, ...assetsAlerts];
+    const alerts = [...softwareAlerts, ...assetsAlerts, ...scoutFramesAlerts];
 
     return { errors, alerts };
   }

@@ -26,6 +26,8 @@ import {
 import { loadPythonLocation } from "../../_actions/settings/pythonLocation";
 import { loadPackageLocation } from "../../_actions/settings/packageLocation";
 import { pythonLocationValid } from "../../_selectors/settings";
+import { coreInstalledSelector } from "../../_selectors/plugins";
+
 import { loadPresets } from "../../_actions/entities";
 import { signedInSelector } from "../../_selectors/account";
 
@@ -102,6 +104,7 @@ const Submitter = () => {
   const submitting = useSelector(state => state.submitter.submitting);
   const filename = useSelector(state => state.submitter.filename);
   const pythonValid = useSelector(pythonLocationValid);
+  const coreInstalled = useSelector(coreInstalledSelector);
   const [submissionShieldOpen, setSubmissionShieldOpen] = useState(false);
   const { errors, alerts } = useSelector(
     state => state.submitter.validationResult
@@ -160,10 +163,20 @@ const Submitter = () => {
             ]
           }
         </Box>
-        <PythonAlert
-          message="In order to submit jobs with the Submission kit, you'll need to select a supported Python version on the settings page."
-          button
-        />
+        {pythonValid ? (
+          coreInstalled ? null : (
+            <PythonAlert
+              message="CORE NOT INSTALLED: In order to submit jobs with the Submission kit, you'll need to install Conductor Core on the plugins page."
+              button="plugins"
+            />
+          )
+        ) : (
+          <PythonAlert
+            message="INVALID PYTHON: In order to submit jobs with the Submission kit, you'll need to select a supported Python version on the settings page."
+            button="settings"
+          />
+        )}
+
         <Card className={classes.actionsCard}>
           <LoadSaveMenu />
           <Typography
@@ -183,7 +196,7 @@ const Submitter = () => {
             <Button
               color="secondary"
               onClick={() => dispatch(submitWithValidation())}
-              disabled={!pythonValid}
+              disabled={!(pythonValid && coreInstalled)}
             >
               Submit
             </Button>
