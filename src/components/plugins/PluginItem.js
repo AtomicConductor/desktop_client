@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles, fade } from "@material-ui/core/styles";
 import HelpIcon from "@material-ui/icons/HelpOutline";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { installPlugin, openPluginHelp } from "../../_actions/plugins/install";
 import { useSelector, useDispatch } from "react-redux";
 import { packageLocation } from "../../_selectors/settings";
@@ -11,14 +10,13 @@ import { itemsSelector, packageNameSelector } from "../../_selectors/plugins";
 import { Alert } from "@material-ui/lab";
 import { blue, indigo } from "@material-ui/core/colors";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 
 import Fade from "@material-ui/core/Fade";
 
 import { pythonLocationValid } from "../../_selectors/settings";
 import {
   Button,
+  ButtonGroup,
   LinearProgress,
   CardActions,
   Chip,
@@ -30,8 +28,12 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  Tooltip
+  Tooltip,
+  MenuItem,
+  Menu,
+  IconButton
 } from "@material-ui/core";
+import config from "../../config";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -91,6 +93,9 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     textTransform: "none"
+  },
+  spacer: {
+    flexGrow: "1"
   }
 }));
 
@@ -176,6 +181,10 @@ const PluginItem = props => {
     setAnchorEl(null);
   };
 
+  const handleGoPyPi = event => {
+    nw.Shell.openExternal(`${config.pypi}/project/${packageName}`);
+  };
+
   const confirmText = `Version ${versions[selectedIndex]} of the ${title} will be installed at:<br>
 <strong>${pkgLocation}/${packageName}</strong><br>
 To change the install location, press 'CANCEL' and edit the Conductor Package Location on the Settings page.`;
@@ -203,8 +212,20 @@ To change the install location, press 'CANCEL' and edit the Conductor Package Lo
         </Box>
 
         <CardActions className={classes.actionRow}>
-          <div className={classes.secondaryActions}>
-            {installed ? (
+          {available === "pip" ? (
+            <Tooltip
+              title={`See the changelog and other info for the ${packageName} package on PyPy.`}
+            >
+              <IconButton edge="end" color="secondary" onClick={handleGoPyPi}>
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
+          ) : null}
+
+          {installed ? (
+            <Tooltip
+              title={`Click to see information about the installed version of ${packageName}.`}
+            >
               <Chip
                 onDelete={openHelp}
                 onClick={openHelp}
@@ -215,9 +236,10 @@ To change the install location, press 'CANCEL' and edit the Conductor Package Lo
                 label={`Installed v${installed}`}
                 className={classes.chip}
               />
-            ) : null}
-          </div>
+            </Tooltip>
+          ) : null}
 
+          <div className={classes.spacer} />
           {available === "pip" && versionCount > 0 ? (
             <Tooltip title={tooltip}>
               <ButtonGroup

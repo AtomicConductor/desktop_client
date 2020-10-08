@@ -1,6 +1,4 @@
 import { createAction } from "@reduxjs/toolkit";
-
-import { pushEvent } from "../../_actions/log";
 import { pkgsArraySelector } from "../../_selectors/plugins";
 import config from "../../config";
 import axios from "../../_helpers/axios";
@@ -47,14 +45,6 @@ export default () => async (dispatch, getState) => {
             if (response.status === 200) {
               const normalized = normalizeVersions(pkg.name, response.data);
               dispatch(receivePyPiVersions(normalized));
-              dispatch(
-                pushEvent(
-                  `Found ${
-                    pkg.packageName
-                  } versions: ${normalized.versions.join(", ")}`,
-                  "info"
-                )
-              );
             }
           })
           .catch(err => {

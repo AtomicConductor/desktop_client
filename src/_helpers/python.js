@@ -81,4 +81,22 @@ const runPythonShell = async (script, options, shell = PythonShell) => {
   return pyshell;
 };
 
-export { isPythonPathValid, resolvePythonLocation, runPythonShell };
+const pluginInstallPipArgs = (packageName, packageVersion, target) => [
+  "-m",
+  "pip",
+  "install",
+  "--upgrade",
+  "--force-reinstall",
+  "--prefer-binary",
+  ...config.extraPipFlags,
+  `${packageName}==${packageVersion}`,
+  "--target",
+  target
+];
+
+export {
+  isPythonPathValid,
+  resolvePythonLocation,
+  runPythonShell,
+  pluginInstallPipArgs
+};

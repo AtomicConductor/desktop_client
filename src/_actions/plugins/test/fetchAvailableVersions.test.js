@@ -55,15 +55,7 @@ describe("fetchAvailableVersions", () => {
 
   it("calls dispatch twice for each of the 2 plugins that are available through pip", async () => {
     await fetchAvailableVersions()(dispatch, getState);
-    expect(dispatch).toHaveBeenCalledTimes(4);
-  });
-
-  it("calls dispatch with pushEvent", async () => {
-    await fetchAvailableVersions()(dispatch, getState);
-    expect(dispatch).toHaveBeenNthCalledWith(2, {
-      type: "log/pushEvent",
-      payload: expect.anything()
-    });
+    expect(dispatch).toHaveBeenCalledTimes(2);
   });
 
   it("retrieves the 3 versions for which a wheel is present", async () => {

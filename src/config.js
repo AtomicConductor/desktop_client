@@ -55,7 +55,7 @@ export default {
       contactApiUrl: "https://hubspot"
     },
     public: ["test"],
-    extraPipFlags: [],
+    extraPipFlags: ["--extra-index-url", "https://pypi.test.org/simple"],
     pypi: "https://pypi.test.org"
   }
 }[process.env.NODE_ENV];

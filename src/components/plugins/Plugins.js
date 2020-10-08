@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import PluginItem from "./PluginItem";
 import AppBar from "./AppBar";
-import { Box, Card, Typography } from "@material-ui/core";
+import { Box, Card, Typography, Tooltip } from "@material-ui/core";
 import { appBarHeight } from "../../_helpers/constants";
 import { useDispatch } from "react-redux";
 import { pkgNamesArraySelector } from "../../_selectors/plugins";
@@ -79,14 +79,16 @@ const Plugins = () => {
         </Box>
         {pythonValid ? (
           <Card className={classes.actionsCard}>
-            <Typography
-              color={"primary"}
-              className={classes.locationText}
-              variant="body2"
-            >
-              {`Conductor location: ${installLocation ||
-                "EMPTY - Please set the Conductor location in the Settings page"}`}
-            </Typography>
+            <Tooltip title="The installation directory for Conductor plugins and other tools.">
+              <Typography
+                color={"primary"}
+                className={classes.locationText}
+                variant="body2"
+              >
+                {`Conductor location: ${installLocation ||
+                  "EMPTY - Please set the Conductor location in the Settings page"}`}
+              </Typography>
+            </Tooltip>
           </Card>
         ) : (
           <PythonAlert

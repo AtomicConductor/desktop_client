@@ -1,103 +1,102 @@
 {
-    "name": "conductor-companion",
-    "version": "0.4.20",
-    "private": true,
-    "dependencies": {
-        "@material-ui/core": "^4.0.1",
-        "@material-ui/icons": "^4.0.1",
-        "@material-ui/lab": "^4.0.0-alpha.56",
-        "@reduxjs/toolkit": "^1.2.1",
-        "@sentry/browser": "^5.12.1",
-        "axios": "^0.19.0",
-        "better-queue": "^3.8.10",
-        "better-queue-memory": "^1.0.3",
-        "get-port": "^5.0.0",
-        "googleapis": "^59.0.0",
-        "handlebars": "^4.5.3",
-        "handlebars-delimiters": "^1.0.0",
-        "jwt-simple": "^0.5.6",
-        "logrocket": "^1.0.5",
-        "md5-file": "^4.0.0",
-        "moment": "^2.24.0",
-        "node-downloader-helper": "1.0.10",
-        "python-shell": "^1.0.8",
-        "react": "^16.10.1",
-        "react-dom": "^16.10.1",
-        "react-google-button": "^0.7.0",
-        "react-lines-ellipsis": "^0.14.1",
-        "react-logger": "^1.1.0",
-        "react-redux": "^7.1.1",
-        "react-router-dom": "^5.1.2",
-        "react-selectable-fast": "^3.0.0",
-        "react-syntax-highlighter": "^11.0.2",
-        "react-virtuoso": "^0.12.3",
-        "redux": "^4.0.4",
-        "redux-logger": "^3.0.6",
-        "redux-thunk-error-handler": "^1.1.3",
-        "reselect": "^4.0.0",
-        "server-terminate": "^1.5.0",
-        "typeface-raleway": "^0.0.54",
-        "typeface-roboto": "^0.0.54"
-    },
-    "scripts": {
-        "start": "nw-react-scripts start",
-        "prebuild": "./buildScripts/preBuild.sh",
-        "build": "nw-react-scripts build",
-        "postbuild": "./buildScripts/postBuild.sh",
-        "test": "nw-react-scripts test",
-        "eject": "nw-react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": [
-            "nw-react-app",
-            "plugin:prettier/recommended"
-        ]
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
+  "name": "conductor-companion",
+  "version": "0.4.21",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.0.1",
+    "@material-ui/icons": "^4.0.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@reduxjs/toolkit": "^1.2.1",
+    "@sentry/browser": "^5.12.1",
+    "axios": "^0.19.0",
+    "better-queue": "^3.8.10",
+    "better-queue-memory": "^1.0.3",
+    "get-port": "^5.0.0",
+    "googleapis": "^59.0.0",
+    "handlebars": "^4.5.3",
+    "handlebars-delimiters": "^1.0.0",
+    "jwt-simple": "^0.5.6",
+    "logrocket": "^1.0.5",
+    "md5-file": "^4.0.0",
+    "moment": "^2.24.0",
+    "node-downloader-helper": "1.0.10",
+    "python-shell": "^1.0.8",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-google-button": "^0.7.0",
+    "react-lines-ellipsis": "^0.14.1",
+    "react-logger": "^1.1.0",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-selectable-fast": "^3.0.0",
+    "react-syntax-highlighter": "^11.0.2",
+    "react-virtuoso": "^0.12.3",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
+    "redux-thunk-error-handler": "^1.1.3",
+    "reselect": "^4.0.0",
+    "server-terminate": "^1.5.0",
+    "typeface-raleway": "^0.0.54",
+    "typeface-roboto": "^0.0.54"
+  },
+  "scripts": {
+    "start": "nw-react-scripts start",
+    "prebuild": "./buildScripts/preBuild.sh",
+    "build": "nw-react-scripts build",
+    "postbuild": "./buildScripts/postBuild.sh",
+    "test": "nw-react-scripts test",
+    "eject": "nw-react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "nw-react-app",
+      "plugin:prettier/recommended"
+    ]
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "main": "index.html",
+  "nwBuilder": {
+    "//": "https://github.com/nwjs-community/nw-builder",
+    "platforms": [
+      "osx64",
+      "win64",
+      "linux64"
     ],
-    "main": "index.html",
-    "nwBuilder": {
-        "//": "https://github.com/nwjs-community/nw-builder",
-        "platforms": [
-            "osx64",
-            "win64",
-            "linux64"
-        ],
-        "version": "0.47.3",
-        "flavor": "normal",
-        "buildDir": "./build",
-        "cacheDir": "./cache",
-        "macIcns": "./conductor.icns"
-    },
-    "window": {
-        "width": 1366,
-        "height": 768,
-        "resizable": true,
-        "icon": "logo.png"
-    },
-    "chromium-args": "--disable-web-security --enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/4.2.0_0'",
-
-    "devDependencies": {
-        "@testing-library/react-hooks": "^3.2.1",
-        "enzyme": "^3.10.0",
-        "enzyme-adapter-react-16": "^1.14.0",
-        "enzyme-to-json": "^3.4.2",
-        "eslint-config-prettier": "^6.4.0",
-        "eslint-plugin-prettier": "^3.1.1",
-        "jest-environment-enzyme": "^7.0.2",
-        "jest-enzyme": "^7.1.1",
-        "json": "^9.0.6",
-        "nock": "^11.3.5",
-        "nw-react-scripts": "^3.3.0",
-        "prettier": "^1.19.1",
-        "react-test-renderer": "^16.10.1",
-        "redux-mock-store": "^1.5.3"
-    },
-    "resolutions": {
-        "nw-react-scripts/**/serialize-javascript": "^2.1.1"
-    }
+    "version": "0.47.3",
+    "flavor": "normal",
+    "buildDir": "./build",
+    "cacheDir": "./cache",
+    "macIcns": "./conductor.icns"
+  },
+  "window": {
+    "width": 1366,
+    "height": 768,
+    "resizable": true,
+    "icon": "logo.png"
+  },
+  "chromium-args": "--disable-web-security --enable-logging=stderr --load-extension='./chrome_extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0,./chrome_extensions/fmkadmapgofadopljbjfkapdkoienihi/4.2.0_0'",
+  "devDependencies": {
+    "@testing-library/react-hooks": "^3.2.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.2",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "jest-environment-enzyme": "^7.0.2",
+    "jest-enzyme": "^7.1.1",
+    "json": "^9.0.6",
+    "nock": "^11.3.5",
+    "nw-react-scripts": "^3.3.0",
+    "prettier": "^1.19.1",
+    "react-test-renderer": "^16.10.1",
+    "redux-mock-store": "^1.5.3"
+  },
+  "resolutions": {
+    "nw-react-scripts/**/serialize-javascript": "^2.1.1"
+  }
 }

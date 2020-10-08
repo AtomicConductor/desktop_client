@@ -1,7 +1,8 @@
 import {
   isPythonPathValid,
   resolvePythonLocation,
-  runPythonShell
+  runPythonShell,
+  pluginInstallPipArgs
 } from "../python";
 import DesktopClientError from "../../errors/desktopClientError";
 
@@ -149,5 +150,23 @@ describe("python helper", () => {
         runPythonShell("script", defaultOpts(), PythonShell)
       ).resolves.toEqual({ childProcess: { pid: 1 } });
     });
+  });
+});
+
+describe("pluginInstallPipArgs", () => {
+  it("provides a pip args for given name, version, and target", () => {
+    expect(pluginInstallPipArgs("name", "1.0.0", "/some/path")).toEqual([
+      "-m",
+      "pip",
+      "install",
+      "--upgrade",
+      "--force-reinstall",
+      "--prefer-binary",
+      "--extra-index-url",
+      "https://pypi.test.org/simple",
+      "name==1.0.0",
+      "--target",
+      "/some/path"
+    ]);
   });
 });

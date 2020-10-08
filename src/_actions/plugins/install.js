@@ -1,7 +1,8 @@
 import { createAction } from "@reduxjs/toolkit";
 
 import { pushEvent } from "../../_actions/log";
-import { isPythonPathValid } from "../../_helpers/python";
+
+import { isPythonPathValid, pluginInstallPipArgs } from "../../_helpers/python";
 import { spawn, exec } from "child_process";
 
 import { packageLocation } from "../../_selectors/settings";
@@ -75,25 +76,12 @@ const installPlugin = (pluginName, pluginVersion) => async (
   }
   dispatch(pushEvent(`Package is valid: ${packageName}`, "info"));
 
-
   // for PIP
   const env = {
     PYTHONPATH: path.join(process.cwd(), ...config.public, "python")
   };
   const shell = true;
-  const pipArgs = [
-    "-m",
-    "pip",
-    "install",
-    "--upgrade",
-    "--force-reinstall",
-    "--prefer-binary",
-    ...config.extraPipFlags,
-    `${packageName}==${pluginVersion}`,
-    "--target",
-    target
-  ];
-
+  const pipArgs = pluginInstallPipArgs(packageName, pluginVersion, target);
   const install = spawn(pythonLoc, pipArgs, { env, shell });
 
   // EVENT HANDLERS
@@ -158,19 +146,15 @@ const postInstallSetup = (pluginName, packageName) => (dispatch, getState) => {
     PYTHONPATH: installLoc
   };
 
-
-
   const postinstall = spawn(pythonLoc, [script], { env });
 
   postinstall.stdout.on("data", data => {
-
     dispatch(pushEvent(`${data}`, "info"));
   });
-  
+
   postinstall.stderr.on("data", data => {
     dispatch(pushEvent(`${data}`, "error"));
   });
-
 
   postinstall.on("close", code => {
     let msg = `postinstall process closed with code ${code}. Success!`;
