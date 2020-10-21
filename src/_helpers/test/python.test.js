@@ -9,18 +9,27 @@ import DesktopClientError from "../../errors/desktopClientError";
 describe("python helper", () => {
   let exec = jest.fn();
 
-  describe("on windows", () => {
-    it("returns default python path", async () => {
+  describe("resolvePythonLocation on windows", () => {
+    it("returns default python path when file exists", async () => {
       exec = jest.fn();
       exec.mockImplementationOnce((cmd, cb) => cb(null, { stdout: "" }));
-
-      const path = await resolvePythonLocation(exec, "win32");
-
+      const exist = jest.fn();
+      exist.mockReturnValueOnce(true);
+      const path = await resolvePythonLocation(exec, "win32", exist);
       expect(path).toBe("C:\\Python27\\python.exe");
+    });
+
+    it("returns false when file not exists", async () => {
+      exec = jest.fn();
+      exec.mockImplementationOnce((cmd, cb) => cb(null, { stdout: "" }));
+      const exist = jest.fn();
+      exist.mockReturnValueOnce(false);
+      const path = await resolvePythonLocation(exec, "win32", exist);
+      expect(path).toBe(false);
     });
   });
 
-  describe("on linux and mac", () => {
+  describe("resolvePythonLocation on linux and mac", () => {
     it("returns default python path", async () => {
       exec = jest.fn();
       exec.mockImplementationOnce((_, cb) =>

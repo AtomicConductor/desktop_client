@@ -1,6 +1,6 @@
 {
   "name": "conductor-companion",
-  "version": "0.4.21",
+  "version": "0.4.22",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.0.1",

@@ -93,7 +93,7 @@ const Plugins = () => {
         ) : (
           <PythonAlert
             message="In order to install plugins you'll need to select a supported Python version on the settings page."
-            button
+            button="settings"
           />
         )}
 

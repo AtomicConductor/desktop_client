@@ -4,7 +4,7 @@ import { PythonShell } from "python-shell";
 import DesktopClientError from "../errors/desktopClientError";
 import path from "upath";
 import config from "../config";
-
+import { existsSync } from "fs";
 const PYTHON_VERSION_REGEX = /^2\.7\.(\d+)$/i;
 
 const tryExecute = async (executor, cmd) => {
@@ -18,10 +18,12 @@ const tryExecute = async (executor, cmd) => {
 
 const resolvePythonLocation = async (
   executor = exec,
-  platform = process.platform
+  platform = process.platform,
+  existsExec = existsSync
 ) => {
   if (platform === "win32") {
-    return "C:\\Python27\\python.exe";
+    const pyexe = "C:\\Python27\\python.exe";
+    return existsExec(pyexe) && pyexe;
   }
   return await tryExecute(executor, "which python2.7");
 };
