@@ -1,6 +1,6 @@
 {
   "name": "conductor-companion",
-  "version": "0.4.23",
+  "version": "0.4.24",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.0.1",
@@ -37,7 +37,8 @@
     "reselect": "^4.0.0",
     "server-terminate": "^1.5.0",
     "typeface-raleway": "^0.0.54",
-    "typeface-roboto": "^0.0.54"
+    "typeface-roboto": "^0.0.54",
+    "upath": "^2.0.0"
   },
   "scripts": {
     "start": "nw-react-scripts start",
