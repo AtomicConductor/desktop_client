@@ -64,6 +64,32 @@ const rename = file => {
 };
 
 /**
+ * Set the downloaded state of the task entity on the web app.
+ * We are here because a file got downloaded, but only update the status
+ * if it was the last file in the task. Hence the count check.
+ *
+ * @param {string} jobLabel
+ * @param {string} downloadId
+ */
+export function reportDownloadedState(jobLabel, downloadId) {
+  return async function(dispatch, getState) {
+    const state = getState();
+    const task = state.entities.jobs[jobLabel].tasks[downloadId];
+    if (task.downloaded === task.files) {
+      const options = createRequestOptions(tokenSelector(state));
+      const url = `${config.projectUrl}/downloads/status`;
+      const data = {
+        download_id: downloadId,
+        status: "downloaded",
+        bytes_downloaded: 0,
+        bytes_to_download: 0
+      };
+      axios.post(url, data, options);
+    }
+  };
+}
+
+/**
  * Determine if this file is to be downloded. This function is given as a filter
  * while adding files to the queue and is responsible for only adding files that
  * should be downloaded.
@@ -203,11 +229,15 @@ export function addToQueue(jobLabel) {
       downloading directly to a thumb drive or something.
       */
 
+    /*
+      Any files that are not 100% downloaded when the user clicked the download
+      button, are added to the queue. 
+      */
     Object.values(files)
       .filter(f => !(f.exists && f.exists === 100))
       .sort((a, b) => (a.taskId > b.taskId ? 1 : -1))
-      .forEach((file, i) => {
-        const { relativePath } = file;
+      .forEach(file => {
+        const { relativePath, downloadId } = file;
 
         /*
           The object we add to the download queue needs to contain the fullPath
@@ -215,6 +245,9 @@ export function addToQueue(jobLabel) {
           update in the redux store. We add them here, on the fly, in order to
           keep the store DRY. i.e. The file entries shouldn't need to store
           stuff that the job already stores.
+
+          It also needs the downloadId so that when the finished event is fired,
+          we can send a request to the server to update the task's status.
           */
         const fileDownload = {
           ...file,
@@ -224,8 +257,14 @@ export function addToQueue(jobLabel) {
         TheDownloadQueue.push(fileDownload, (err, result) => {})
           .on("finish", function(result) {
             dispatch(
-              setFileExists({ jobLabel, relativePath, percentage: 100 })
+              setFileExists({
+                jobLabel,
+                relativePath,
+                percentage: 100,
+                downloadId
+              })
             );
+            dispatch(reportDownloadedState(jobLabel, downloadId));
           })
           .on("failed", function(err) {
             dispatch(setFileExists({ jobLabel, relativePath, percentage: -1 }));
@@ -263,9 +302,9 @@ export function updateDownloadFiles(jobLabel) {
     try {
       dispatch(requestDownloadData(jobLabel));
 
-      const files = await fetchDownloadData(jobLabel, getState());
+      const downloadData = await fetchDownloadData(jobLabel, getState());
 
-      dispatch(receiveDownloadData({ files, jobLabel }));
+      dispatch(receiveDownloadData({ downloadData, jobLabel }));
 
       //TODO: use await instead of setTimeout
       setTimeout(function() {
@@ -302,12 +341,15 @@ async function fetchDownloadData(jobLabel, state) {
   let response = await axios.get(url, options);
   const { data } = response;
   const downloads = data.downloads || [];
-  const files = {};
+  const result = { tasks: {}, files: {} };
   //TODO: mapping logic into a normalizer
   downloads.forEach(task => {
+    const downloadId = task.download_id;
+    result.tasks[downloadId] = { files: task.files.length, downloaded: 0 };
     return task.files.forEach(file => {
       const rp = file.relative_path;
-      files[rp] = {
+      result.files[rp] = {
+        downloadId: downloadId,
         relativePath: rp,
         md5: file.md5,
         url: file.url,
@@ -315,7 +357,7 @@ async function fetchDownloadData(jobLabel, state) {
       };
     });
   });
-  return files;
+  return result;
 }
 
 /**

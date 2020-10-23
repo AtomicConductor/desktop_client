@@ -73,11 +73,13 @@ const jobs = createReducer(initialState, {
   },
 
   [receiveDownloadData]: (state, action) => {
-    const { files, jobLabel } = action.payload;
+    const { downloadData, jobLabel } = action.payload;
 
     if (jobLabel in state) {
+      const { files, tasks } = downloadData;
       Object.assign(state[jobLabel], {
         files,
+        tasks,
         loadingKey: LOADING_KEYS.NONE
       });
     }
@@ -109,9 +111,15 @@ const jobs = createReducer(initialState, {
   },
 
   [setFileExists]: (state, action) => {
-    const { jobLabel, relativePath, percentage } = action.payload;
+    const { jobLabel, relativePath, percentage, downloadId } = action.payload;
     if (jobLabel in state && relativePath in state[jobLabel].files) {
       state[jobLabel].files[relativePath].exists = percentage;
+    }
+    if (downloadId !== undefined) {
+      /**
+       * downloadId is provided only when a file successfully completes.
+       * */
+      state[jobLabel].tasks[downloadId].downloaded += 1;
     }
   },
 
