@@ -93,7 +93,7 @@ const pluginInstallPipArgs = (packageName, packageVersion, target) => [
   ...config.extraPipFlags,
   `${packageName}==${packageVersion}`,
   "--target",
-  target
+  `"${target}"`
 ];
 
 export {

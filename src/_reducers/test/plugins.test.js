@@ -122,22 +122,4 @@ describe("plugins reducer", () => {
       );
     });
   });
-
-  //   describe("setPackageLocation", () => {
-  //     it("updates an existing package", () => {
-  //       const initialState = {
-  //         pythonLocation: "",
-  //         packageLocation: "",
-  //         pythonLocationValid: false
-  //       };
-
-  //       const state = reducer(initialState, setPackageLocation("/some/path"));
-
-  //       expect(state).toEqual({
-  //         pythonLocation: "",
-  //         pythonLocationValid: false,
-  //         packageLocation: "/some/path"
-  //       });
-  //     });
-  //   });
 });

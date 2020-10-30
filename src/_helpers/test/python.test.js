@@ -164,7 +164,7 @@ describe("python helper", () => {
 
 describe("pluginInstallPipArgs", () => {
   it("provides a pip args for given name, version, and target", () => {
-    expect(pluginInstallPipArgs("name", "1.0.0", "/some/path")).toEqual([
+    expect(pluginInstallPipArgs("name", "1.0.0", "/some/pa th")).toEqual([
       "-m",
       "pip",
       "install",
@@ -175,7 +175,7 @@ describe("pluginInstallPipArgs", () => {
       "https://pypi.test.org/simple",
       "name==1.0.0",
       "--target",
-      "/some/path"
+      '"/some/pa th"'
     ]);
   });
 });
