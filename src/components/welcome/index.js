@@ -42,10 +42,7 @@ export default () => {
         Thank you for downloading <strong>Conductor Companion</strong>! Use it
         for the following tasks:
         <ul>
-          <li>
-            Install our beta submitters and classic client tools from the
-            Plugins Page.
-          </li>
+          <li>Install submitters from the Plugins Page.</li>
           <li>Download finished renders in the Download Manager.</li>
           <li>
             Experiment with the Submission Kit for situations where none of our
