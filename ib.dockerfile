@@ -15,5 +15,7 @@ COPY ./installer ./installer
 COPY ./buildScripts/makeInstallers.sh ./
 RUN chmod +x ./makeInstallers.sh
 
+RUN cp ./license.xml /opt/
+
 ENV PATH /cli:/opt/installbuilder-$INSTALLBUILDER_VERSION/bin/:$PATH
 

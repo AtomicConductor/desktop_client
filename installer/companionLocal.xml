@@ -1,7 +1,7 @@
 <project>
     <shortName>companion</shortName>
     <fullName>Conductor Companion</fullName>
-    <version>unversioned</version>
+    <version>0.5.2</version>
     <wrapLicenseFileText>0</wrapLicenseFileText>
     <leftImage>left.png</leftImage>
     <splashImage>splash.png</splashImage>
@@ -25,7 +25,7 @@
                     <runInTerminal>0</runInTerminal>
                     <windowsExec>${installdir}/conductor-companion.exe</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/conductor.ico</windowsIcon>
+                    <windowsIcon>${installdir}/favicon.ico</windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
                 </shortcut>
             </desktopShortcutList>
@@ -59,34 +59,34 @@
                     <platforms>linux</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/v8_context_snapshot.bin</origin>
+                            <origin>../build/conductor-companion/linux64/v8_context_snapshot.bin</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/resources.pak</origin>
+                            <origin>../build/conductor-companion/linux64/resources.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/nw_200_percent.pak</origin>
+                            <origin>../build/conductor-companion/linux64/nw_200_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/nw_100_percent.pak</origin>
+                            <origin>../build/conductor-companion/linux64/nw_100_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/icudtl.dat</origin>
+                            <origin>../build/conductor-companion/linux64/icudtl.dat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/crashpad_handler</origin>
+                            <origin>../build/conductor-companion/linux64/crashpad_handler</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/linux64/conductor-companion</origin>
+                            <origin>../build/conductor-companion/linux64/conductor-companion</origin>
                         </distributionFile>
                         <distributionDirectory>
-                            <origin>/artifacts/build/conductor-companion/linux64/swiftshader</origin>
+                            <origin>../build/conductor-companion/linux64/swiftshader</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>/artifacts/build/conductor-companion/linux64/locales</origin>
+                            <origin>../build/conductor-companion/linux64/locales</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>/artifacts/build/conductor-companion/linux64/lib</origin>
+                            <origin>../build/conductor-companion/linux64/lib</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
@@ -103,58 +103,58 @@
                     <platforms>windows</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/v8_context_snapshot.bin</origin>
+                            <origin>../build/conductor-companion/win64/v8_context_snapshot.bin</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/resources.pak</origin>
+                            <origin>../build/conductor-companion/win64/resources.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/nw.dll</origin>
+                            <origin>../build/conductor-companion/win64/nw.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/nw_elf.dll</origin>
+                            <origin>../build/conductor-companion/win64/nw_elf.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/nw_200_percent.pak</origin>
+                            <origin>../build/conductor-companion/win64/nw_200_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/nw_100_percent.pak</origin>
+                            <origin>../build/conductor-companion/win64/nw_100_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/notification_helper.exe</origin>
+                            <origin>../build/conductor-companion/win64/notification_helper.exe</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/node.dll</origin>
+                            <origin>../build/conductor-companion/win64/node.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/libGLESv2.dll</origin>
+                            <origin>../build/conductor-companion/win64/libGLESv2.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/libEGL.dll</origin>
+                            <origin>../build/conductor-companion/win64/libEGL.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/icudtl.dat</origin>
+                            <origin>../build/conductor-companion/win64/icudtl.dat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/ffmpeg.dll</origin>
+                            <origin>../build/conductor-companion/win64/ffmpeg.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/d3dcompiler_47.dll</origin>
+                            <origin>../build/conductor-companion/win64/d3dcompiler_47.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/credits.html</origin>
+                            <origin>../build/conductor-companion/win64/credits.html</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/conductor-companion.exe</origin>
+                            <origin>../build/conductor-companion/win64/conductor-companion.exe</origin>
                         </distributionFile>
                         <distributionDirectory>
-                            <origin>/artifacts/build/conductor-companion/win64/swiftshader</origin>
+                            <origin>../build/conductor-companion/win64/swiftshader</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>/artifacts/build/conductor-companion/win64/locales</origin>
+                            <origin>../build/conductor-companion/win64/locales</origin>
                         </distributionDirectory>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/win64/conductor.ico</origin>
+                            <origin>../build/conductor-companion/win64/favicon.ico</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -171,7 +171,7 @@
                     <platforms>osx</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>/artifacts/build/conductor-companion/osx64/conductor-companion.app</origin>
+                            <origin>../build/conductor-companion/macos64/conductor-companion.app</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -184,7 +184,7 @@
                     <runInTerminal>0</runInTerminal>
                     <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/conductor.ico</windowsIcon>
+                    <windowsIcon>${installdir}/favicon.ico</windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
                 </startMenuShortcut>
                 <startMenuShortcut>
@@ -194,7 +194,7 @@
                     <runInTerminal>0</runInTerminal>
                     <windowsExec>${installdir}/conductor-companion.exe</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/conductor.ico</windowsIcon>
+                    <windowsIcon>${installdir}/favicon.ico</windowsIcon>
                     <windowsPath>${installdir}/</windowsPath>
                 </startMenuShortcut>
             </startMenuShortcutList>

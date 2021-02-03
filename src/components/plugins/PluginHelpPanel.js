@@ -9,6 +9,8 @@ import { helpItemSelector } from "../../_selectors/plugins";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
 import MayaHelpContent from "./MayaHelpContent";
 import C4dHelpContent from "./C4dHelpContent";
+import MaxHelpContent from "./MaxHelpContent";
+
 import CoreHelpContent from "./CoreHelpContent";
 import ClarisseHelpContent from "./ClarisseHelpContent";
 
@@ -73,6 +75,14 @@ export default props => {
       case "c4d":
         return (
           <C4dHelpContent
+            packageLocation={packageLocation}
+            installed={installed}
+            packageName={packageName}
+          />
+        );
+      case "max":
+        return (
+          <MaxHelpContent
             packageLocation={packageLocation}
             installed={installed}
             packageName={packageName}

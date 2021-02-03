@@ -24,7 +24,7 @@ export default props => {
       </Typography>
 
       <DialogContentText variant="body2">
-        It is recommended to add the conductor bin location to your PATH
+        It is recommended to add the Conductor bin location to your PATH
         variable (if you haven't already done so). You can do this in ~/.bashrc
         on Mac and Linux, or use the Environment Variables panel on Windows.
       </DialogContentText>

@@ -129,7 +129,6 @@ const PluginItem = props => {
 
   const versionCount = versions.length;
 
-  console.log(`versionCount ${versionCount}`);
   const pkgLocation = useSelector(packageLocation);
 
   const installing = useSelector(packageNameSelector);

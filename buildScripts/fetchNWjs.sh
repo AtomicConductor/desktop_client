@@ -8,7 +8,10 @@ set -e
 nwjs_version="$(jq -r .nwBuilder.version  ./package.json)"
 
 # Fetch, unzip, and move
-url=https://dl.nwjs.io/v${nwjs_version}
+# url=https://dl.nwjs.io/v${nwjs_version}
+
+# Try mirror
+url=https://cnpmjs.org/mirrors/nwjs/v${nwjs_version}
 
 win_folder=nwjs-v${nwjs_version}-win-x64
 mac_folder=nwjs-v${nwjs_version}-osx-x64

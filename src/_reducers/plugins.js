@@ -66,14 +66,13 @@ const initialState = {
     },
     max: {
       order: 7,
-      title: "3Ds Max Submitter",
+      title: "3ds Max Submitter",
       packageName: "ciomax",
       name: "max",
-      description:
-        "Native 3dsMax submitter UI coming later this year, Watch this space.",
-      available: false,
+      description: "New native submitter for Autodesk's 3ds Max!",
+      available: "pip",
       installed: false,
-      phase: "soon",
+      phase: "beta",
       versions: []
     },
     c4d: {

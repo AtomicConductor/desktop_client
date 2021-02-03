@@ -8,7 +8,6 @@ const receivePyPiVersions = createAction("plugins/receivePyPiVersions");
 const normalizeVersions = (name, data) => {
   const payload = {
     name,
-    description: data.info.description.trim(),
     packageName: data.info.name,
     versions: []
   };

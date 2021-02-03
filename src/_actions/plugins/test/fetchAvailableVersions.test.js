@@ -31,7 +31,6 @@ describe("fetchAvailableVersions", () => {
       .times(2)
       .reply(200, {
         info: {
-          description: "Some plugin.\n\n\n",
           name: "pkga",
           release_url: "someUrl",
           version: "0.1.35"
@@ -80,14 +79,13 @@ describe("fetchAvailableVersions", () => {
     });
   });
 
-  it("includes name, trimmed descriptionm and package name in the payload", async () => {
+  it("includes name, and package name in the payload", async () => {
     await fetchAvailableVersions()(dispatch, getState);
 
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: "plugins/receivePyPiVersions",
       payload: expect.objectContaining({
         name: "a",
-        description: "Some plugin.",
         packageName: "pkga"
       })
     });

@@ -9,34 +9,21 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { tomorrowNightEighties } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export default props => {
-  const { packageLocation } = props;
+  const { packageLocation, packageName } = props;
 
   return (
     <DialogContent>
       <DialogContentText variant="body1">
-        Almost there! You just need to tell Clarisse where to find the Conductor
-        plugin.
+        Congratulations! You're now all set to start submitting renders to
+        Conductor from within 3d Studio Max.
       </DialogContentText>
-      <DialogContentText variant="body1">
-        Open Clarisse and go to Edit-&gt;Preferences-&gt;General tab, then enter
-        the following in the Startup Script field.
-      </DialogContentText>
-
-      <SyntaxHighlighter
-        language="bash"
-        style={tomorrowNightEighties}
-        customStyle={{
-          fontSize: "14px",
-          padding: "20px",
-          margin: 0,
-          height: "100%"
-        }}
-      >
-        $CIO_DIR/cioclarisse/startup.py
-      </SyntaxHighlighter>
-      <DialogContentText variant="body1">
-        Now restart Clarisse and find ConductorJob in the Create menu.
-      </DialogContentText>
+      <ul>
+        <DialogContentText variant="body2">
+          <li>
+            Open Max and choose <b>Rendering-&gt;Render With Conductor.</b>
+          </li>
+        </DialogContentText>
+      </ul>
 
       <Typography variant="body1" color="secondary">
         Conductor command-line tools
@@ -67,6 +54,34 @@ export PATH=${packageLocation}/bin:$PATH`}
           card.
         </i>
       </Typography>
+
+      <Typography variant="body1" color="secondary">
+        Shared installation
+      </Typography>
+      <DialogContentText variant="body2">
+        To make the 3ds Max Conductor plugin accessible to others on your
+        network, they should create a file called ciomax_startup.ms in one of
+        their 3ds Max startup folders with the contents below.
+      </DialogContentText>
+
+      <SyntaxHighlighter
+        language="bash"
+        style={tomorrowNightEighties}
+        customStyle={{
+          fontSize: "14px",
+          padding: "20px",
+          margin: 0,
+          height: "100%"
+        }}
+      >
+        {`
+-- Calls the Conductor 3DS Max plugin.
+(
+  include "${packageLocation}/${packageName}"
+)
+`}
+      </SyntaxHighlighter>
+      <p></p>
     </DialogContent>
   );
 };

@@ -48,3 +48,10 @@ fake_submit.py
 
 # Auto-generated file from installBuilder
 Thumbs.db
+*.backup
+*.backup
+
+Thumbs.db
+
+/tmp/artifacts
+/tmp/cache
