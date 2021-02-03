@@ -14,8 +14,18 @@
 # caching
 /cache
 
+
+
+
 # production
 /build
+
+# Keep /tmp/artifacts but dont commit subdirs
+/tmp/artifacts/build
+/tmp/artifacts/installers
+
+# Keep /tmp/cache but dont commit nwjs version directories 
+/tmp/cache/0*
 
 # misc
 .DS_Store

@@ -1,7 +1,20 @@
-conductor:
+conductor: 
   build: .
   volumes:
-    - ./.tmp/release:/release
+    - ./tmp/artifacts:/artifacts
+    - ./tmp/cache:/cache
+
+prefetch:
+  build:
+    dockerfile: prefetch.dockerfile
+  volumes_from:
+    - conductor
+
+ib:
+  build:
+    dockerfile: ib.dockerfile
+  volumes_from:
+    - conductor
 
 aws:
   encrypted_env_file: env.encrypted
@@ -9,3 +22,4 @@ aws:
     dockerfile: awscli.dockerfile
   volumes_from:
     - conductor
+

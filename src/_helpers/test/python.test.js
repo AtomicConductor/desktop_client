@@ -170,7 +170,6 @@ describe("pluginInstallPipArgs", () => {
       "install",
       "--upgrade",
       "--force-reinstall",
-      "--prefer-binary",
       "--extra-index-url",
       "https://pypi.test.org/simple",
       "name==1.0.0",

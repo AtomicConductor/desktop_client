@@ -1,0 +1,16 @@
+{
+	"dockerFile": "../Dockerfile",
+	"context": "..",
+	"settings": {
+		"terminal.integrated.shell.linux": null
+	},
+	"workspaceFolder": "/code",
+	"remoteEnv": {
+	
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder}/.tmp/release,target=/release,type=bind,consistency=delegated"
+	],
+	"name": "desktop_client",
+
+}

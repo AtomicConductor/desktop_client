@@ -1,12 +1,10 @@
 <project>
     <shortName>companion</shortName>
     <fullName>Conductor Companion</fullName>
-    <version>0.4.24</version>
-    <readmeFile>../README.md</readmeFile>
-    <licenseFile>../LICENSE.md</licenseFile>
+    <version>unversioned</version>
     <wrapLicenseFileText>0</wrapLicenseFileText>
-    <leftImage>../left.png</leftImage>
-    <splashImage>../splash.png</splashImage>
+    <leftImage>./left.png</leftImage>
+    <splashImage>./splash.png</splashImage>
     <componentList>
         <component>
             <name>default</name>
@@ -44,34 +42,34 @@
                     <platforms>linux</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/v8_context_snapshot.bin</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/v8_context_snapshot.bin</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/resources.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/resources.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/nw_200_percent.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/nw_200_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/nw_100_percent.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/nw_100_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/icudtl.dat</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/icudtl.dat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/crashpad_handler</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/crashpad_handler</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/linux64/conductor-companion</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/conductor-companion</origin>
                         </distributionFile>
                         <distributionDirectory>
-                            <origin>../build/conductor-companion/linux64/swiftshader</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/swiftshader</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>../build/conductor-companion/linux64/locales</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/locales</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>../build/conductor-companion/linux64/lib</origin>
+                            <origin>/artifacts/build/conductor-companion/linux64/lib</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
@@ -88,55 +86,55 @@
                     <platforms>windows</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/v8_context_snapshot.bin</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/v8_context_snapshot.bin</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/resources.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/resources.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/nw.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/nw.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/nw_elf.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/nw_elf.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/nw_200_percent.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/nw_200_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/nw_100_percent.pak</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/nw_100_percent.pak</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/notification_helper.exe</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/notification_helper.exe</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/node.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/node.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/libGLESv2.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/libGLESv2.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/libEGL.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/libEGL.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/icudtl.dat</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/icudtl.dat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/ffmpeg.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/ffmpeg.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/d3dcompiler_47.dll</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/d3dcompiler_47.dll</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/credits.html</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/credits.html</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../build/conductor-companion/win64/conductor-companion.exe</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/conductor-companion.exe</origin>
                         </distributionFile>
                         <distributionDirectory>
-                            <origin>../build/conductor-companion/win64/swiftshader</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/swiftshader</origin>
                         </distributionDirectory>
                         <distributionDirectory>
-                            <origin>../build/conductor-companion/win64/locales</origin>
+                            <origin>/artifacts/build/conductor-companion/win64/locales</origin>
                         </distributionDirectory>
                     </distributionFileList>
                 </folder>
@@ -153,7 +151,7 @@
                     <platforms>osx</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>../build/conductor-companion/macos64/conductor-companion.app</origin>
+                            <origin>/artifacts/build/conductor-companion/osx64/conductor-companion.app</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>

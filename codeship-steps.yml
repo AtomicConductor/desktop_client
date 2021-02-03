@@ -1,17 +1,34 @@
 - type: serial
   steps:
-    - name: test
+
+    - name: Fetch nwjs
+      service: prefetch
+      command: ./fetchNWjs.sh
+
+    - name: Unit tests
       service: conductor
       command: yarn test
 
-    - name: build
+       
+    - name: Build
       service: conductor
-      command: bash -c "yarn build && mv build /release"
+      command: bash -c "yarn build && rm -rf /artifacts/build* && mv build /artifacts"
+       
+    - type: serial
+      steps:
+      - name: Install builder Mac Os
+        service: ib
+        command: ./makeInstallers.sh osx
+  
+      - name: Install builder Windows
+        service: ib
+        command: ./makeInstallers.sh windows
+  
+      - name: Install builder Linux
+        service: ib
+        command: ./makeInstallers.sh linux-x64
 
-    - name: compress artifacts
+    - name: Deploy to AWS
       service: aws
-      command: "./compressArtifacts.sh" 
+      command: ./deployArtifacts.sh
 
-    - name: deploy
-      service: aws
-      command: "./deployArtifacts.sh"

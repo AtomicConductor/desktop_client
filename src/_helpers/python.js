@@ -89,7 +89,6 @@ const pluginInstallPipArgs = (packageName, packageVersion, target) => [
   "install",
   "--upgrade",
   "--force-reinstall",
-  "--prefer-binary",
   ...config.extraPipFlags,
   `${packageName}==${packageVersion}`,
   "--target",
