@@ -2,7 +2,7 @@ conductor:
   build: .
   volumes:
     - ./tmp/artifacts:/artifacts
-    - ./tmp/cache:/cache
+    - ./tmp/cache:/work/cache
 
 prefetch:
   build:

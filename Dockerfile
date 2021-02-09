@@ -5,10 +5,22 @@ ENV NODE_OPTIONS "--max-old-space-size=8192"
 # 10 minutes network timeout to help with NWjs.
 RUN yarn config set network-timeout 600000 -g
 
-RUN mkdir /code
-WORKDIR /code
+RUN mkdir /work
+WORKDIR /work
 
-COPY . .
+COPY ./src ./src
+COPY ./public ./public
+COPY ./buildScripts ./buildScripts
+COPY ./package.json ./
+COPY ./README.md ./
+COPY ./yarn.lock ./
+COPY ./conductor.icns ./
+COPY ./conductor.ico ./
+
+
+
+
+
 
 RUN yarn
 

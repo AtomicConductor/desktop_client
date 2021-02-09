@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,10 +8,10 @@ set -e
 nwjs_version="$(jq -r .nwBuilder.version  ./package.json)"
 
 # Fetch, unzip, and move
-# url=https://dl.nwjs.io/v${nwjs_version}
+url=https://dl.nwjs.io/v${nwjs_version}
 
 # Try mirror
-url=https://cnpmjs.org/mirrors/nwjs/v${nwjs_version}
+# url=https://cnpmjs.org/mirrors/nwjs/v${nwjs_version}
 
 win_folder=nwjs-v${nwjs_version}-win-x64
 mac_folder=nwjs-v${nwjs_version}-osx-x64
@@ -39,7 +39,7 @@ echo "Done downloading, cleaning up"
 rm *.tar.gz *.zip
 echo "Removed archives"
 
-version_dir=/cache/${nwjs_version}-normal/
+version_dir=/work/cache/${nwjs_version}-normal/
 
 echo "Ensure version dir exists in /cache"
 rm -rf $version_dir

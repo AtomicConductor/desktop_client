@@ -1,6 +1,6 @@
 FROM debian:latest
 
-WORKDIR /cli
+WORKDIR /work
 
 RUN  apt-get update && apt-get install -y  wget  curl unzip jq
 

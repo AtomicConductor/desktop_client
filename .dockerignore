@@ -1,11 +1,14 @@
 .dockerignore
 .git
 .gitignore
+.vscode
+.devcontainer
+build
+cache
+chrome_extensions
 codeship.aes
 Dockerfile
 env
 node_modules
-build
 README.node_modules
 codeship-*
-/cache
