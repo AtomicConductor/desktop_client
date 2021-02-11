@@ -3,8 +3,11 @@ FROM python:alpine
 WORKDIR /cli
 
 RUN pip3 install --upgrade --user awscli
-RUN apk add zip
-RUN apk add jq
+# util-linux installs `rename`.
+RUN apk add \
+    jq \
+    util-linux \
+    zip
 
 COPY buildScripts .
 

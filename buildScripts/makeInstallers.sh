@@ -16,11 +16,10 @@ else
     version="${version}-dev-$(echo $CI_BRANCH | tr '/' '-')"
 fi
 
+# Delete leftovers from prior runs.
+rm /artifacts/installers/companion*
+
 builder build ./installer/companion.xml ${platform} --setvars project.version=${version} project.outputDirectory=/artifacts/installers --license /opt/license.xml
 
 # builder makes both dmg and app, but we don't want the app because it is seen as a folder in aws.
 rm -rf /artifacts/installers/*.app
-
-
-
- 
