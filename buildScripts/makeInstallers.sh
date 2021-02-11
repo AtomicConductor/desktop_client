@@ -17,7 +17,7 @@ else
 fi
 
 # Delete leftovers from prior runs.
-rm /artifacts/installers/companion*
+rm -f /artifacts/installers/companion*
 
 builder build ./installer/companion.xml ${platform} --setvars project.version=${version} project.outputDirectory=/artifacts/installers --license /opt/license.xml
 
