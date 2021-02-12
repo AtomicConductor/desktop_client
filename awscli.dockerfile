@@ -6,7 +6,6 @@ RUN pip3 install --upgrade --user awscli
 # util-linux installs `rename`.
 RUN apk add \
     jq \
-    util-linux \
     zip
 
 COPY buildScripts .
