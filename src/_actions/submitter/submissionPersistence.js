@@ -5,11 +5,20 @@ import {
   instanceTypesMapSelector,
   instanceTypesSelector
 } from "../../_selectors/entities";
+
+import {
+  submissionScriptSelector,
+  submissionSelector
+} from "../../_selectors/submitter";
+
 import { setInstanceType } from "../submitter/fetchInstanceTypes";
 import { pushEvent } from "../../_actions/log";
 const saveSubmissionSuccess = createAction("submitter/saveSubmissionSuccess");
 const loadSubmissionSuccess = createAction("submitter/loadSubmissionSuccess");
 const updateSelectedSoftware = createAction("submitter/updateSelectedSoftware");
+const exportSubmissionScriptSuccess = createAction(
+  "submitter/exportSubmissionScriptSuccess"
+);
 
 const saveSubmission = path => async (dispatch, getState) => {
   const storage = new AppStorage();
@@ -36,6 +45,25 @@ const loadSubmission = path => async dispatch => {
       type: "success"
     })
   );
+};
+
+const exportSubmissionScript = path => async (dispatch, getState) => {
+  const storage = new AppStorage();
+  const state = getState();
+  const payload = submissionSelector(state);
+  const script = submissionScriptSelector(state);
+
+  await storage.exportSubmissionScript(path, script, payload);
+
+  dispatch(exportSubmissionScriptSuccess(path));
+  const message = `Successfully exported script ${path}. Now open a terminal and enter "python ${path}"`;
+  dispatch(
+    setNotification({
+      message,
+      type: "success"
+    })
+  );
+  dispatch(pushEvent(message, "info"));
 };
 
 //TODO: investigate other options
@@ -70,6 +98,8 @@ const syncStateWithLoadedSubmission = submission => async (
 export {
   saveSubmission,
   loadSubmission,
+  exportSubmissionScript,
   saveSubmissionSuccess,
-  loadSubmissionSuccess
+  loadSubmissionSuccess,
+  exportSubmissionScriptSuccess
 };

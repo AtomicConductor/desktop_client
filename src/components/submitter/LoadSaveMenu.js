@@ -10,7 +10,8 @@ import { applyResetSubmission } from "../../_actions/submitter";
 
 import {
   saveSubmission,
-  loadSubmission
+  loadSubmission,
+  exportSubmissionScript
 } from "../../_actions/submitter/submissionPersistence";
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +49,15 @@ const LoadSaveMenu = () => {
       dispatch(saveSubmission(e.target.files[0].path));
     }
     // We reset the value because otherwise the second and subsequent times
-    // we browse, nothing will happen, because nothing chnaged.
+    // we browse, nothing will happen, because nothing chasnged.
+    e.target.value = "";
+  };
+
+  const handleExportAs = e => {
+    if (e.target.files && e.target.files[0]) {
+      dispatch(exportSubmissionScript(e.target.files[0].path));
+    }
+    // See handleSaveAs() notes
     e.target.value = "";
   };
 
@@ -98,6 +107,7 @@ const LoadSaveMenu = () => {
         </MenuItem>
         <input
           nwsaveas="filename.json"
+          accept=".json"
           className={classes.input}
           style={{ display: "none" }}
           id="save-submission-file"
@@ -107,6 +117,20 @@ const LoadSaveMenu = () => {
         <label htmlFor="save-submission-file">
           <MenuItem onClick={handleMenuClose}>Save As</MenuItem>
         </label>
+
+        <input
+          nwsaveas="submission.py"
+          accept=".py"
+          className={classes.input}
+          style={{ display: "none" }}
+          id="export-submission-script"
+          type="file"
+          onChange={handleExportAs}
+        />
+        <label htmlFor="export-submission-script">
+          <MenuItem onClick={handleMenuClose}>Export script</MenuItem>
+        </label>
+
         <Divider />
         <MenuItem onClick={handleReset}>Reset</MenuItem>
       </Menu>
