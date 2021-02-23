@@ -17,12 +17,8 @@ COPY ./yarn.lock ./
 COPY ./conductor.icns ./
 COPY ./conductor.ico ./
 
-
-
-
-
-
 RUN yarn
 
 RUN apt-get update
-RUN apt-get install xmlstarlet
+RUN apt-get install \
+    xmlstarlet
