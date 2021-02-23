@@ -5,7 +5,7 @@ set -e
 cd /artifacts/installers
 ls -lrt
 
-# All installers are made available with an identifier version-branch
+# All installers are made available with an identifier: version-branch
 # Examples:
 # companion-0.4.1-my_fix-osx-installer.dmg
 # companion-0.4.2-master-osx-installer.dmg
@@ -17,7 +17,7 @@ mv companion*exe companion-${identifier}-windows-installer.exe
 mv companion*run companion-${identifier}-linux-installer.run
 aws s3 cp ./ s3://${AWS_S3_BUCKET_NAME}/companion --recursive --acl public-read
 
-# If master, copy the same files, renamed to latest.
+# If on master, copy the files, with identifier latest.
 if [ "$CI_BRANCH" == "master" ]; then
 
     mv companion*dmg companion-latest-osx-installer.dmg
@@ -25,6 +25,7 @@ if [ "$CI_BRANCH" == "master" ]; then
     mv companion*run companion-latest-linux-installer.run
     aws s3 cp companion-latest-* / s3://${AWS_S3_BUCKET_NAME}/companion --recursive --acl public-read
 
+    # Place current-version.txt alongside the build so we can reference it in the docs.
     echo "$version @ `date`" > current-version.txt
     aws s3 cp current-version.txt s3://${AWS_S3_BUCKET_NAME}/companion/current-version.txt --acl public-read
 fi
