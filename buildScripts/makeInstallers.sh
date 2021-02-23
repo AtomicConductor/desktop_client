@@ -7,9 +7,6 @@ platform=$1
 
 version="$(jq -r .version  /artifacts/build/package.json)"
 
-# Delete leftovers from prior runs.
-rm -f /artifacts/installers/companion*
-
 # Build: Override the version and destination
 builder build ./installer/companion.xml ${platform} --setvars project.version=${version} project.outputDirectory=/artifacts/installers --license /opt/license.xml
 
