@@ -8,6 +8,7 @@ import { condenseArray } from "../_helpers/presentation";
 
 import { isAbsolute, toUnix } from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
+import { packageLocation } from "./settings";
 
 const assetsMap = state => state.submitter.submission.assets;
 const taskTemplate = state => state.submitter.submission.taskTemplate;
@@ -343,6 +344,30 @@ const submissionSelector = createSelector(
   }
 );
 
+const submissionScriptSelector = createSelector(
+  packageLocation,
+  packageLocation => {
+    let script = "";
+    script += "import sys\n";
+    script += "import json\n";
+    script += "import os\n";
+
+    script += `sys.path.insert(0, "${packageLocation}")\n`;
+    script += "from ciocore import conductor_submit\n";
+    script += `filename =  "{}.json".format(os.path.splitext(os.path.abspath(__file__))[0])\n`;
+
+    script += "with open(filename) as f:\n";
+    script += "   data = json.load(f)\n";
+
+    script += "submission = conductor_submit.Submit(data)\n";
+    script += "response, response_code = submission.main()\n";
+    script += "print response_code\n";
+    script += "print json.dumps(response)\n";
+
+    return script;
+  }
+);
+
 /** Alert _selectors warn about, but do not block, the submission.*/
 const softwareAlertSelector = createSelector(softwarePackages, packages =>
   packages.some(_ => _.softwareKey && _.package.id)
@@ -420,6 +445,7 @@ export {
   outputPathSelector,
   submissionValidSelector,
   submissionSelector,
+  submissionScriptSelector,
   submissionPreviewSelector,
   environmentOverrides,
   assetsMap

@@ -1,7 +1,7 @@
 import { credentialsFileName, presetsFileName } from "../_helpers/constants";
 import * as fs from "fs";
 import { promisify } from "util";
-import { join, dirname } from "path";
+import { join, dirname, basename } from "path";
 import * as os from "os";
 
 export default class AppStorage {
@@ -10,8 +10,19 @@ export default class AppStorage {
     this.fileProvider = fileProvider;
   }
 
+  async saveRaw(path, content) {
+    await promisify(this.fileProvider.writeFile)(path, content);
+  }
+
   async save(path, data) {
     await promisify(this.fileProvider.writeFile)(path, JSON.stringify(data));
+  }
+
+  async savePretty(path, data) {
+    await promisify(this.fileProvider.writeFile)(
+      path,
+      JSON.stringify(data, null, "\t")
+    );
   }
 
   async load(path) {
@@ -31,6 +42,12 @@ export default class AppStorage {
     } catch {
       return undefined;
     }
+  }
+
+  async exportSubmissionScript(path, script, payload) {
+    const payloadPath = `${join(dirname(path), basename(path, ".py"))}.json`;
+    await this.savePretty(payloadPath, payload);
+    await this.saveRaw(path, script);
   }
 
   async saveCredentials(data) {
