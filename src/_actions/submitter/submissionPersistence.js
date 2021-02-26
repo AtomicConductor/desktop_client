@@ -56,7 +56,7 @@ const exportSubmissionScript = path => async (dispatch, getState) => {
   await storage.exportSubmissionScript(path, script, payload);
 
   dispatch(exportSubmissionScriptSuccess(path));
-  const message = `Successfully exported script ${path}. Now open a terminal and enter "python ${path}"`;
+  const message = `Successfully exported script "${path}". Now open a terminal and enter "python ${path}"`;
   dispatch(
     setNotification({
       message,

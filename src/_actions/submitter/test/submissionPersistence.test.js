@@ -106,7 +106,9 @@ describe("submission persistence", () => {
     expect(dispatch).toHaveBeenNthCalledWith(2, {
       type: "notification/setNotification",
       payload: {
-        message: expect.stringContaining("Successfully exported script /path"),
+        message: expect.stringContaining(
+          `Successfully exported script "/path"`
+        ),
         type: "success"
       }
     });
