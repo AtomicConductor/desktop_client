@@ -1,3 +1,5 @@
+import packageJson from "../../package.json";
+
 export const drawerWidth = 240;
 export const statusLineHeight = 24;
 export const appBarHeight = 48;
@@ -18,7 +20,7 @@ export const TIMESPANS = {
   ALLTIME: "All Time"
 };
 
-export const appVersion = process.env.REACT_APP_VERSION;
+export const appVersion = packageJson.version;
 
 export const paths = {
   resources: "/resources",

@@ -160,6 +160,17 @@ describe("submitter _selectors", () => {
       );
     });
 
+    it("returns the output path when an asset begins with output path but is not an ancestor", () => {
+      const state = {
+        outputPath: "/some/aaa/bbb/path",
+        assets: {
+          "/some/aa": { size: "1", type: "a" }
+        }
+      };
+
+      expect(outputPathSelector(ss(state))).toBe("/some/aaa/bbb/path");
+    });
+
     it("normalizes windows paths", () => {
       outputPathSelector(ss({ outputPath: "C:\\foo\\bar" }));
 
@@ -173,6 +184,39 @@ describe("submitter _selectors", () => {
         expect.objectContaining({
           errors: expect.arrayContaining([
             expect.stringMatching(/not an absolute path/i)
+          ])
+        })
+      );
+    });
+    it("returns errors if outputPath is ancestor of any upload file", () => {
+      const state = {
+        outputPath: "/some/path",
+        assets: {
+          "/some/path/foo": { size: "1", type: "a" }
+        }
+      };
+
+      expect(outputPathSelector(ss(state))).toEqual(
+        expect.objectContaining({
+          errors: expect.arrayContaining([
+            expect.stringMatching(/cannot contain upload assets/i)
+          ])
+        })
+      );
+    });
+
+    it("returns errors if outputPath is descendent of any upload directory", () => {
+      const state = {
+        outputPath: "/some/aaa/bbb/path",
+        assets: {
+          "/some/aaa": { size: "1", type: "a" }
+        }
+      };
+
+      expect(outputPathSelector(ss(state))).toEqual(
+        expect.objectContaining({
+          errors: expect.arrayContaining([
+            expect.stringMatching(/cannot contain the output path/i)
           ])
         })
       );

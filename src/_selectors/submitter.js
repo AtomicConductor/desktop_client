@@ -5,7 +5,6 @@ import Sequence from "../_helpers/sequence";
 import { compile } from "../_helpers/template";
 import { toPosix } from "../_helpers/paths";
 import { condenseArray } from "../_helpers/presentation";
-
 import { isAbsolute, toUnix } from "upath";
 import { projectsSelector, instanceTypesSelector } from "./entities";
 import { packageLocation } from "./settings";
@@ -27,6 +26,8 @@ const retries = state => state.submitter.submission.retries;
 const uploadOnly = state => state.submitter.submission.uploadOnly;
 const force = state => state.submitter.submission.force;
 const localUpload = state => state.submitter.submission.localUpload;
+
+const asDir = path => (path.slice(-1) === "/" ? path : `${path}/`);
 
 const environmentOverrides = state =>
   state.submitter.submission.environmentOverrides;
@@ -164,10 +165,36 @@ const projectSelector = createSelector(
   }
 );
 
-const outputPathSelector = createSelector(outputPath, path =>
-  isAbsolute(path)
-    ? toUnix(path)
-    : { errors: [`${path} is not an absolute path`] }
+const outputPathSelector = createSelector(
+  outputPath,
+  assetsMap,
+  (path, assets) => {
+    path = toUnix(path);
+
+    const pathAsDir = asDir(path);
+    if (!isAbsolute(pathAsDir)) {
+      return { errors: [`${path} is not an absolute path`] };
+    }
+
+    for (const asset in assets) {
+      const assetAsDir = asDir(toUnix(asset));
+      if (assetAsDir.startsWith(pathAsDir)) {
+        return {
+          errors: [
+            `Output path "${path}" cannot contain upload assets: "${asset}".`
+          ]
+        };
+      }
+      if (pathAsDir.startsWith(assetAsDir)) {
+        return {
+          errors: [
+            `An asset directory "${assetAsDir}" cannot contain the output path "${path}".`
+          ]
+        };
+      }
+    }
+    return path;
+  }
 );
 
 const assetFilenamesSelector = createSelector(
